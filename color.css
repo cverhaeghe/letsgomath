@@ -1,0 +1,36 @@
+html{
+    background-color:white;
+}
+
+header {
+    background-color: whitesmoke;
+    }
+
+nav{
+    background-color: whitesmoke;
+    }
+
+nav a{
+    color: rgb(92, 106, 104);
+    }
+
+.turquoise-text {color:cadetblue;}
+.orange-text {color:#F6995C;}
+
+body {
+    color: rgb(92, 106, 104); 
+}
+
+h1 {        
+    color: cadetblue;
+    background-color: whitesmoke;
+}
+
+footer{
+    color:grey;
+    background-color: whitesmoke;
+    padding: 1px;
+}
+
+
+/* #C4DAD2 vert clair */
