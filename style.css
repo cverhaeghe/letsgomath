@@ -28,7 +28,8 @@ nav li {
 
 img{
     margin-left:15%;
-    margin-top: 100px;
+    margin-top: 30px;
+    margin-bottom: 20px;
     width:70%;
     object-fit: cover; /*Image s'adapte à la place, ne se déforme pas*/
 }
