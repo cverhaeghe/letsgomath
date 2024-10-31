@@ -12,7 +12,7 @@ a{
     text-decoration: none; /* lien non souligné*/
 }
 h1{
-    font-size: 50px;
+    font-size: 3rem;
     text-align: center;
 }
 
@@ -26,14 +26,30 @@ nav li {
     padding: 10px;
     }
 
+.nav-size{
+    font-size: 1.5rem;
+    }
 img{
-    margin-left:15%;
+    margin-left:20%;
     margin-top: 30px;
-    margin-bottom: 20px;
-    width:70%;
+    margin-bottom: 10px;
+    width:60%;
     object-fit: cover; /*Image s'adapte à la place, ne se déforme pas*/
 }
 
 footer{
     text-align: center;
+    font-size: 0.8rem;
+}
+
+@media(max-width:600px){
+    h1{
+        font-size: 2rem;
+    }
+    .nav-size{
+        font-size: 1;
+    }
+    footer{
+        font-size:0.5rem;
+    }
 }

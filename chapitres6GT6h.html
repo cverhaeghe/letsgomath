@@ -16,10 +16,10 @@
             background-color: cadetblue;
             margin-bottom: 10px;
         }
-        .case145{
+        .case1, .case4, .case5{
             background-color: rgb(220, 193, 143);
         }
-        .case236{
+        .case2, .case3, .case6{
             background-color: #c9ecdf;
         }
 
@@ -39,18 +39,32 @@
             color:gray;
             text-align: center;
         }
-
+        @media(max-width:500px){
+            .menu{
+                display:grid;
+                grid-template-columns: 1fr;
+        }
+            .cours{
+                grid-column: span 1;
+        }
+            .case1, .case3, .case5 {
+            background-color: rgb(220, 193, 143);
+        }
+            .case2, .case4, .case6{
+            background-color: #c9ecdf;
+        }
+        }
     </style>
 </head>
 <body>
     <div class="menu">
         <div class="cours case"> Chapitres de 6GT</div>
-        <div class ="case145 case"> <a href="#" class="lien">Nombres complexes </a></div>
-        <div class ="case236 case"> <a href="#" class="lien">Probabilités</a></div>
-        <div class ="case236 case"> <a href="#" class="lien">Lois de probabilité</a></div>
-        <div class ="case145 case"> <a href="#" class="lien">Fonctions cyclométriques</a></div>
-        <div class ="case145 case"> <a href="#" class="lien">Intégrales</a></div>
-        <div class ="case236 case"> <a href="#" class="lien">Coniques</a></div>
+        <div class ="case1 case"> <a href="#" class="lien">Nombres complexes </a></div>
+        <div class ="case2 case"> <a href="#" class="lien">Probabilités</a></div>
+        <div class ="case3 case"> <a href="#" class="lien">Lois de probabilité</a></div>
+        <div class ="case4 case"> <a href="#" class="lien">Fonctions cyclométriques</a></div>
+        <div class ="case5 case"> <a href="#" class="lien">Intégrales</a></div>
+        <div class ="case6 case"> <a href="#" class="lien">Coniques</a></div>
     </div>
 </body>
 
