@@ -6,20 +6,17 @@ header {
     background-color: whitesmoke;
     }
 
+.math{
+    color:white;
+}
+
 nav{
     background-color: whitesmoke;
     }
 
-nav a{
-    color: rgb(92, 106, 104);
-    }
 
-.turquoise-text {color:cadetblue;}
-.orange-text {color:#F6995C;}
-
-body {
-    color: rgb(92, 106, 104); 
-}
+.couleur-claire{color:#c9ecdf;}
+.couleur-fonce{color: cadetblue}
 
 h1 {        
     color: cadetblue;
@@ -31,6 +28,3 @@ footer{
     background-color: whitesmoke;
     padding: 1px;
 }
-
-
-/* #C4DAD2 vert clair */

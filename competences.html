@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style+competences.css" />
+    <style>
+        .grille{
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 100px 200px 200px 200px;
+            gap: 10px;
+        }
+
+        .choix{
+            grid-column: span 2;
+        }
+
+        .case{
+            background-color: #c9ecdf;
+            color:cadetblue;
+            text-align: center;
+        }
+
+        .cours.case{
+            font-size: 30px; 
+            color:cadetblue;}
+    </style>
+</head>
+<body>
+    
+<div class="grille">
+    <div class="choix case">Choisis la matière que tu souhaites approfondir : </div>
+    <div class="4GT cours case"> 4GT</div>
+    <div class="4GTchapitres case"></div>
+    <div class="5GTchapitres case"></div>
+    <div class="5GT cours case">5GT 6h</div>
+    <div class="6GT cours case">6GT 6h</div>
+    <div class="6GTchapitres case"></div>
+</div>
+</body>
+</html>
