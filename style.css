@@ -27,9 +27,9 @@ nav li {
     }
 
 img{
-    margin-left:25%;
-    margin-top: 20px;
-    width:50%;
+    margin-left:15%;
+    margin-top: 100px;
+    width:70%;
     object-fit: cover; /*Image s'adapte à la place, ne se déforme pas*/
 }
 
