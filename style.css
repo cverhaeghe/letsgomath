@@ -28,9 +28,6 @@
     justify-content: flex-start; /* aligner à gauche */
 }
 
-body {
-    padding-top: 70px;
-}
 
 .nav-liste {
     list-style: none;
