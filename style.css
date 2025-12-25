@@ -192,6 +192,10 @@
     padding-bottom: 60px;
 }
 
+#dia1 {
+    padding-bottom: 100px; 
+}
+
 #dia3 {
     background-color: white;
     padding-bottom: 60px; /* garder le padding */
