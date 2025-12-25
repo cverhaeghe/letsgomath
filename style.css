@@ -122,9 +122,16 @@
 .case:hover{
     background-color: #FFA372;
 }
-.case > a {
-    text-decoration: none;
+.case {
+    display: flex;
+    text-align: center;
 }
+.case.lien {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 a {
     text-decoration: none;
@@ -162,11 +169,33 @@ footer{
 }
 
 @media(max-width:600px){
-    h1{
-        font-size: 2rem;
+
+    .flexbox{
+        flex-direction: column;
+        margin-left:5%;
+        margin-top:20%;
     }
 
-    footer{
-        font-size:0.5rem;
+    .intro h1{
+        font-size: 2.2rem;
+    }
+
+    .menu, .menu-8items{
+        width:90%;
+        margin-left:5%;
+        height:auto;
+        grid-template-columns: 1fr;
+    }
+
+    .case{
+        font-size: 1.2rem;
+        border-radius: 15px;
+        padding:20px;
+    }
+
+    .annee{
+        margin-left:5%;
+        font-size: 2rem;
     }
 }
+
