@@ -170,32 +170,55 @@ footer{
 
 @media(max-width:600px){
 
+    /* Navbar */
+    .navbar,
+    .nav-liste{
+        position: static;
+        height: auto;
+    }
+
+    /* Accueil */
+    #dia1{
+        height: auto;
+    }
+
     .flexbox{
         flex-direction: column;
         margin-left:5%;
-        margin-top:20%;
+        margin-top:10%;
     }
 
-    .intro h1{
-        font-size: 2.2rem;
+    /* Sections */
+    #dia2, #dia3, #dia4{
+        height: auto;
+        padding-bottom: 40px;
     }
 
+    /* Menus */
     .menu, .menu-8items{
         width:90%;
-        margin-left:5%;
-        height:auto;
+        margin-left:auto;
+        margin-right:auto;
         grid-template-columns: 1fr;
     }
 
+    /* Cartes */
     .case{
         font-size: 1.2rem;
         border-radius: 15px;
         padding:20px;
+        text-align: center;
     }
 
+    /* Années */
     .annee{
         margin-left:5%;
         font-size: 2rem;
+    }
+
+    /* Liens */
+    a, a:hover, a:focus, a:active{
+        text-decoration: none !important;
     }
 }
 
