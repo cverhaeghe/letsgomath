@@ -1,224 +1,245 @@
-.couleur-peps{color:#FFA372;}
-.couleur-fonce{color: #475a93}
-.couleur-gris{color:grey}
-.couleur-white{color:white}
+/* Couleurs */
+:root {
+    --peps: #FFA372;
+    --fonce: #475a93;
+    --gris: grey;
+    --white: white;
+}
+
+.couleur-peps { color: var(--peps); }
+.couleur-fonce { color: var(--fonce); }
+.couleur-gris { color: var(--gris); }
+.couleur-white { color: var(--white); }
 
 /* Navbar */
-
-.navbar{
-    display: block;
-    background-color:#FFA372;
-    height:60px;
-    width:100%;
+.navbar {
+    display: flex;
+    background-color: var(--peps);
+    height: 60px;
+    width: 100%;
     position: fixed;
+    top: 0;
+    z-index: 1000;
+    align-items: center;
+    padding: 0 1rem;
 }
 
-.nav-liste{
-    position:fixed;
-    overflow: hidden;
+.nav-liste {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    justify-content: flex-start;
 }
-.navbar li{
-    float: left;
-    display: block;
-    text-decoration: none;
-    padding-top: 10px;
-    padding-right: 15px;
+
+.nav-liste li {
+    margin-right: 1rem;
 }
 
 .navbar li a {
-    display: block;
-    color: #475a93;
-    text-align: center;
-    padding: 0.7rem 1rem;
-    display: block;
+    color: var(--fonce);
     font-size: 1.3rem;
     text-decoration: none;
-  }
-.navbar li a:hover{
-    font-weight: bold; 
-    color: white;   
+    padding: 0.5rem 1rem;
 }
 
+.navbar li a:hover {
+    font-weight: bold;
+    color: white;
+}
+
+/* Sections */
 #dia1, #dia2, #dia3, #dia4 {
     scroll-margin-top: 80px;
 }
 
-/* Accueil*/
+/* Accueil */
+#dia1 {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-#dia1{
-    height:400px;
+.flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin: 10% 5%;
 }
-.flexbox{
-    display:flex;
-    margin-left:15%;
-    margin-top:10%;
-    margin-bottom: 10%;
-} 
-.intro{
-    flex:1;
-    font-size:2rem;
+
+.intro {
+    flex: 1;
+    font-size: 2rem;
 }
-.intro h1{
+
+.intro h1 {
     font-size: 4rem;
 }
+
 .intro p {
-    margin-top:5%;
-    margin-bottom:5%;
-    margin-right: 10%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
-.intro-image{
-    flex:1.5;
+
+.intro-image {
+    flex: 1.5;
 }
+
+.intro-image img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Boutons */
 .bouton-lien {
-    background-color: #FFA372;
+    background-color: var(--peps);
     border-radius: 5px;
     padding: 5px 15px;
-    margin:10px 10px 0px 0px;
+    margin: 10px 10px 0 0;
     color: white;
     font-size: 1.5rem;
     text-align: center;
     text-decoration: none;
-    cursor:default;
-  }
-.bouton-lien:hover{
-    color: #475a93;
+    cursor: default;
 }
 
-
-
-/* 4GT Menu*/
-
-.menu{
-    display:grid;
-    width:60%;
-    margin-left:20%;
-    margin-bottom: 40px;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(2,1fr);
-    gap:20px;
-    height:400px;
+.bouton-lien:hover {
+    color: var(--fonce);
 }
 
-.annee{
+/* Menus */
+.menu, .menu-8items {
+    display: grid;
+    gap: 20px;
+    width: 60%;
+    margin: auto;
+}
+
+.menu {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.menu-8items {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.annee {
     font-size: 40px;
-    text-align:left;
+    text-align: left;
     margin-left: 20%;
-    padding:20px 10px;
-    color:#475a93;
+    padding: 20px 10px;
+    color: var(--fonce);
 }
 
-.case{
+/* Cartes */
+.case {
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 25px;
-    background-color: #475a93;
-    color:white;
-    padding:15px;
-    border-radius: 20%;
+    background-color: var(--fonce);
+    color: white;
+    padding: 15px;
+    border-radius: 20px;
     cursor: pointer;
+    transition: transform 0.3s, background-color 0.3s;
 }
-.case:hover{
-    background-color: #FFA372;
+
+.case:hover {
+    background-color: var(--peps);
+    transform: scale(1.05);
 }
-.case {
-    display: flex;
-    text-align: center;
-}
-.case.lien {
+
+.case a {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-
-a {
+    color: white;
     text-decoration: none;
 }
-.lien{
-    color:white;
+
+/* Section background */
+#dia2, #dia4 {
+    background-color: var(--peps);
+    padding-bottom: 40px;
 }
 
-
-
-
-/* 5GT Menu*/
-
-#dia2, #dia4{
-    background-color:#FFA372;
-    height: 550px;
-}
-.menu-8items{
-    display:grid;
-    width:60%;
-    margin-left:20%;
-    margin-bottom: 40px;
-    grid-template-columns: repeat(4,1fr);
-    grid-template-rows: repeat(2,1fr);
-    gap:20px;
-    height:400px;
-}
-
-
-/* Footer*/
-
-footer{
+/* Footer */
+footer {
     text-align: center;
     font-size: 0.8rem;
+    margin-top: 50px;
+    clear: both;
 }
 
-@media(max-width:600px){
+/* Responsive */
+@media(max-width: 600px) {
 
     /* Navbar */
-    .navbar,
-    .nav-liste{
-        position: static;
+    .navbar {
+        flex-direction: column;
         height: auto;
+        padding: 0.5rem;
+    }
+    .nav-liste {
+        flex-direction: column;
+        width: 100%;
+    }
+    .nav-liste li {
+        margin: 5px 0;
     }
 
     /* Accueil */
-    #dia1{
-        height: auto;
+    .flexbox {
+        flex-direction: column;
+        margin: 10% 5%;
     }
 
-    .flexbox{
-        flex-direction: column;
-        margin-left:5%;
-        margin-top:10%;
+    .intro h1 {
+        font-size: 2.5rem;
+    }
+    .intro p {
+        font-size: 1rem;
     }
 
     /* Sections */
-    #dia2, #dia3, #dia4{
-        height: auto;
+    #dia1, #dia2, #dia3, #dia4 {
+        min-height: auto;
         padding-bottom: 40px;
     }
 
     /* Menus */
-    .menu, .menu-8items{
-        width:90%;
-        margin-left:auto;
-        margin-right:auto;
+    .menu, .menu-8items {
+        width: 90%;
+        margin: auto;
         grid-template-columns: 1fr;
+        height: auto;
     }
 
     /* Cartes */
-    .case{
+    .case {
         font-size: 1.2rem;
+        padding: 20px;
         border-radius: 15px;
-        padding:20px;
-        text-align: center;
     }
 
     /* Années */
-    .annee{
-        margin-left:5%;
+    .annee {
+        margin-left: 5%;
         font-size: 2rem;
     }
 
     /* Liens */
-    a, a:hover, a:focus, a:active{
+    a, a:hover, a:focus, a:active {
         text-decoration: none !important;
     }
-}
 
+    /* Footer */
+    footer {
+        margin-top: 80px;
+    }
+}
