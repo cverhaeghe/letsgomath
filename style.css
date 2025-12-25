@@ -87,6 +87,7 @@
 .intro {
     flex: 1;
     font-size: 2rem;
+    padding-left: 15px;
 }
 
 .intro h1 {
