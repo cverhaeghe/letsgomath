@@ -244,6 +244,8 @@ footer {
     #dia1, #dia2, #dia3, #dia4 {
         min-height: auto;
         padding-bottom: 40px;
+        padding-top: 40px;
+        scroll-margin-top: 50px;
     }
 
     /* Menus responsive */
