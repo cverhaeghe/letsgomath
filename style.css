@@ -189,12 +189,12 @@
 /* Section background & padding pour espacer cartes/footer */
 #dia2, #dia4 {
     background-color: var(--peps);
-    padding-bottom: 40px;
+    padding-bottom: 60px;
 }
 
 #dia3 {
     background-color: white;
-    padding-bottom: 40px; /* garder le padding */
+    padding-bottom: 60px; /* garder le padding */
 }
 
 #dia4 {
