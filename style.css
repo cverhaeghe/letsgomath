@@ -24,8 +24,8 @@
     top: 0;
     z-index: 1000;
     align-items: center;
-    justify-content: space-around;
     padding: 0.5rem 1rem;
+    justify-content: flex-start; /* aligner à gauche */
 }
 
 .nav-liste {
@@ -33,13 +33,14 @@
     display: flex;
     margin: 0;
     padding: 0;
-    width: 100%;
-    justify-content: space-around;
+    justify-content: flex-start; /* aligner à gauche */
+    gap: 1rem; /* espacement entre liens */
 }
 
 .nav-liste li {
     margin: 0;
 }
+
 
 .navbar li a {
     color: var(--fonce);
@@ -75,8 +76,12 @@
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-    margin: 10% 5%;
+    margin: 10% auto; /* centrer horizontalement */
+    justify-content: center; /* alignement horizontal du contenu */
+    align-items: center;
+    max-width: 1200px; /* largeur max pour ne pas étirer l’écran */
 }
+
 
 .intro {
     flex: 1;
@@ -178,9 +183,14 @@
 }
 
 /* Section background & padding pour espacer cartes/footer */
-#dia2, #dia3, #dia4 {
+#dia2, #dia4 {
     background-color: var(--peps);
     padding-bottom: 40px;
+}
+
+#dia3 {
+    background-color: white;
+    padding-bottom: 40px; /* garder le padding */
 }
 
 #dia4 {
