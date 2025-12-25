@@ -34,7 +34,7 @@
     margin: 0;
     padding: 0;
     justify-content: flex-start; /* aligner à gauche */
-    gap: 2rem; /* espacement entre liens */
+    gap: 3rem; /* espacement entre liens */
 }
 
 .nav-liste li {
