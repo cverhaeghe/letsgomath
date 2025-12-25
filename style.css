@@ -326,20 +326,20 @@ footer {
         font-size: 2rem;
     }
 
-        .page-contenu {
+    .page-contenu {
         margin-top: 80px;
     }
 
     .page-contenu h1 {
-        font-size: 2.2rem;
+        font-size: 2.5rem;
     }
 
     .page-contenu h2 {
-        font-size: 1.4rem;
+        font-size: 1.8rem;
     }
 
     .liste-competences li a {
-        font-size: 1rem;
+        font-size: 1.3rem;
         padding: 15px;
     }
     
