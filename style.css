@@ -204,6 +204,56 @@ body {
     padding-bottom: 60px; /* espace réduit vers footer */
 }
 
+/* ============================= */
+/*   Pages de niveau / matière   */
+/* ============================= */
+
+.page-contenu {
+    max-width: 900px;
+    margin: 100px auto 60px; /* laisse la place à la navbar */
+    padding: 0 20px;
+}
+
+.page-contenu h1 {
+    font-size: 3rem;
+    color: var(--fonce);
+    margin-bottom: 10px;
+}
+
+.page-contenu h2 {
+    font-size: 1.8rem;
+    color: var(--peps);
+    margin: 40px 0 20px;
+}
+
+/* Liste des compétences */
+.liste-competences {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+/* Cartes compétence */
+.liste-competences li a {
+    display: block;
+    background-color: var(--fonce);
+    color: white;
+    padding: 18px 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.liste-competences li a:hover {
+    background-color: var(--peps);
+    transform: translateY(-3px);
+}
+
+
+
 /* Footer */
 footer {
     text-align: center;
@@ -274,6 +324,23 @@ footer {
         font-size: 2rem;
     }
 
+        .page-contenu {
+        margin-top: 80px;
+    }
+
+    .page-contenu h1 {
+        font-size: 2.2rem;
+    }
+
+    .page-contenu h2 {
+        font-size: 1.4rem;
+    }
+
+    .liste-competences li a {
+        font-size: 1rem;
+        padding: 15px;
+    }
+    
     /* Footer */
     footer {
         margin-top: 60px;
