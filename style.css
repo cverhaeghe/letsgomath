@@ -28,6 +28,10 @@
     justify-content: flex-start; /* aligner à gauche */
 }
 
+body {
+    padding-top: 70px;
+}
+
 .nav-liste {
     list-style: none;
     display: flex;
@@ -58,8 +62,8 @@
 /*           Sections            */
 /* ============================= */
 #dia1, #dia2, #dia3, #dia4 {
-    scroll-margin-top: 50px;
-    padding-top: 40px;
+    scroll-margin-top: 70px;
+    padding-top: 10px;
 }
 
 /* ============================= */
@@ -76,7 +80,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-    margin: 10% auto; /* centrer horizontalement */
+    margin: 80px auto 40px;
     justify-content: center; /* alignement horizontal du contenu */
     align-items: center;
     max-width: 1200px; /* largeur max pour ne pas étirer l’écran */
@@ -149,10 +153,13 @@
 .annee {
     font-size: 40px;
     text-align: left;
-    margin-left: 20%;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    padding-left: 10px;
     padding: 20px 10px;
     color: var(--fonce);
 }
+
 
 /* Cartes */
 .case {
@@ -231,7 +238,7 @@ footer {
     /* Accueil */
     .flexbox {
         flex-direction: column;
-        margin: 10% 5%;
+        margin: 60px 5% 30px;
     }
     .intro h1 {
         font-size: 2.5rem;
