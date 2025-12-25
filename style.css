@@ -39,6 +39,9 @@
     color: white;   
 }
 
+#dia1, #dia2, #dia3, #dia4 {
+    scroll-margin-top: 80px;
+}
 
 /* Accueil*/
 
