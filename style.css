@@ -346,7 +346,13 @@ footer {
         font-size: 1rem;
         padding: 15px;
     }
-    
+
+     /* Exercices */
+  .exo-container {
+    margin-top: 80px; /* au lieu de 120px */
+  }
+
+
     /* Footer */
     footer {
         margin-top: 60px;
