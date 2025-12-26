@@ -70,7 +70,7 @@
 let a, b, c;
 let coeffA, coeffB; // coefficients simplifiés
 
-// PGCD (algorithme d’Euclide)
+// PGCD
 function pgcd(x, y) {
   while (y !== 0) {
     let temp = y;
@@ -86,7 +86,6 @@ function genererEquation() {
   b = Math.floor(Math.random() * 20) + 1;
   c = Math.floor(Math.random() * 20) + 1;
 
-  // Simplification des fractions
   let pgcd1 = pgcd(a, b);
   let pgcd2 = pgcd(c, b);
 
@@ -102,16 +101,18 @@ function genererEquation() {
   MathJax.typeset();
 }
 
-// Analyse de la réponse de l’élève
-function corriger() {
-  let r = document.getElementById("reponse").value
+// Lecture et normalisation de la réponse
+function lireReponse() {
+  return document.getElementById("reponse").value
     .toLowerCase()
     .replace(/\s/g, "")
-    .replace("y=", "");
+}
 
+// Bouton 1 — Vérifier ma réponse
+function verifier() {
+  const r = lireReponse();
   const feedback = document.getElementById("feedback");
 
-  // Formes attendues
   const formeSimplifiee =
     `${coeffA.num}/${coeffA.den}x${coeffB.num < 0 ? "" : "+"}${coeffB.num}/${coeffB.den}`;
 
@@ -124,24 +125,41 @@ function corriger() {
   }
   else if (r === formeNonSimplifiee) {
     feedback.innerHTML =
-      "🟠 Presque…<br>La réponse est correcte mais les fractions doivent être simplifiées.";
+      "🟠 Presque…<br>Les fractions doivent être simplifiées.";
     feedback.style.color = "orange";
   }
   else {
-    feedback.innerHTML =
-      `❌ Incorrect.<br>
-       On isole y :<br>
-       \\(${a}x + ${b}y + ${c} = 0\\)<br>
-       \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br>
-       Réponse simplifiée : \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
+    feedback.innerHTML = "❌ Incorrect.";
     feedback.style.color = "red";
-    MathJax.typeset();
   }
 }
 
-// Génération automatique au chargement
+// Bouton 2 — Correction détaillée
+function corriger() {
+  const feedback = document.getElementById("feedback");
+
+  feedback.innerHTML =
+    `📘 <strong>Correction détaillée</strong><br><br>
+     On part de l'équation :<br>
+     \\(${a}x + ${b}y + ${c} = 0\\)<br><br>
+
+     On isole \\(y\\) :<br>
+     \\(${b}y = -${a}x - ${c}\\)<br><br>
+
+     On divise par ${b} :<br>
+     \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}\\) }<br><br>
+
+     On simplifie les fractions :<br>
+     \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
+
+  feedback.style.color = "#000";
+  MathJax.typeset();
+}
+
+// Génération au chargement
 genererEquation();
 </script>
+
 
 
 </body>
