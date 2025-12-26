@@ -59,8 +59,9 @@
 }
 
 .exo-container button:hover {
-  background-color: #5563a6;
+  background-color: var(--peps); /* même orange que la navbar */
   transform: translateY(-1px);
+  transition: background-color 0.25s ease;
 }
 
 
