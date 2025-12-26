@@ -41,27 +41,43 @@
 
 <p>Donne l'équation réduite de la droite \(d \equiv 6x-3y+ 9 = 0\).</p>
   
-<p>
-<input type="text" id="reponse">
-<button onclick="corriger()">Corriger</button>
-</p>
-
-<p id="feedback"></p>
-
-<p><a href="./exo2.html"> Exercice suivant</a></p>
-
-<p><a href="../4GT_geo_analytique.html">⬅ Retour au menu</a></p>
-
 <script>
+let a, b, c;
+let reponseAttendue;
+
+function genererEquation() {
+  // Coefficients entiers entre 1 et 20
+  a = Math.floor(Math.random() * 20) + 1;
+  b = Math.floor(Math.random() * 20) + 1;
+  c = Math.floor(Math.random() * 20) + 1;
+
+  // Affichage de l'équation
+  document.getElementById("equation").innerHTML =
+    `Donne l'équation réduite de la droite \\(${a}x + ${b}y + ${c} = 0\\).`;
+
+  // Réponse attendue (forme normalisée)
+  reponseAttendue = `y=${-a}/${b}x${-c < 0 ? "" : "+"}${-c}/${b}`;
+
+  // Rafraîchir MathJax
+  MathJax.typeset();
+}
+
 function corriger() {
-  const r = document.getElementById("reponse").value.replace(/\s/g,"");
-  if (r === "y=2x+3") {
+  let r = document.getElementById("reponse").value
+    .replace(/\s/g, "")
+    .toLowerCase();
+
+  if (r === reponseAttendue) {
     document.getElementById("feedback").innerHTML = "✅ Correct";
   } else {
-    document.getElementById("feedback").innerHTML = "❌ Incorrect";
+    document.getElementById("feedback").innerHTML =
+      `❌ Incorrect.<br>Réponse attendue : \\(${reponseAttendue}\\)`;
+    MathJax.typeset();
   }
 }
 </script>
+
+
 
 </body>
 </html>
