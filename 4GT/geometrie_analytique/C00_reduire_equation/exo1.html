@@ -33,32 +33,45 @@
 
   <!-- Contenu spécifique à chaque page -->
 
-<body>
 
 
-<h1>Exercice 1/5</h1>
+<h1>Exercice – Équation réduite</h1>
 
+<p id="equation"></p>
 
-<p>Donne l'équation réduite de la droite \(d \equiv 6x-3y+ 9 = 0\).</p>
-  
+<p>
+  <input type="text" id="reponse" placeholder="Ex : y = -2x - 3">
+  <button onclick="corriger()">Corriger</button>
+</p>
+
+<p id="feedback"></p>
+
+<p>
+  <button onclick="genererEquation()">Nouvelle équation</button>
+</p>
+
+<p>
+  <a href="../4GT_geo_analytique.html">⬅ Retour au menu</a>
+</p>
+
+<!-- ================= JAVASCRIPT ================= -->
 <script>
 let a, b, c;
 let reponseAttendue;
 
 function genererEquation() {
-  // Coefficients entiers entre 1 et 20
   a = Math.floor(Math.random() * 20) + 1;
   b = Math.floor(Math.random() * 20) + 1;
   c = Math.floor(Math.random() * 20) + 1;
 
-  // Affichage de l'équation
   document.getElementById("equation").innerHTML =
     `Donne l'équation réduite de la droite \\(${a}x + ${b}y + ${c} = 0\\).`;
 
-  // Réponse attendue (forme normalisée)
   reponseAttendue = `y=${-a}/${b}x${-c < 0 ? "" : "+"}${-c}/${b}`;
 
-  // Rafraîchir MathJax
+  document.getElementById("reponse").value = "";
+  document.getElementById("feedback").innerHTML = "";
+
   MathJax.typeset();
 }
 
@@ -75,9 +88,12 @@ function corriger() {
     MathJax.typeset();
   }
 }
+
+// Génération automatique au chargement
+genererEquation();
 </script>
-
-
 
 </body>
 </html>
+
+
