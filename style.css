@@ -309,6 +309,11 @@ footer {
         padding-bottom: 40px;
     }
 
+    #dia1 {
+    padding-top: 60px; /* espace confortable sous la navbar */
+  }
+
+    
     /* Menus responsive */
     .menu, .menu-8items {
         width: 90%;
@@ -348,8 +353,8 @@ footer {
     }
 
      /* Exercices */
-  .exo-container {
-    margin-top: 80px; /* au lieu de 120px */
+    .exo-container {
+         margin-top: 80px;
   }
 
 
