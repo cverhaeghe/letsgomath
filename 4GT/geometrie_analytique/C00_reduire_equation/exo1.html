@@ -65,17 +65,33 @@
 <!-- ================= JAVASCRIPT ================= -->
 <script>
 let a, b, c;
-let reponseAttendue;
+let coeffA, coeffB; // coefficients simplifiés
 
+// PGCD (algorithme d’Euclide)
+function pgcd(x, y) {
+  while (y !== 0) {
+    let temp = y;
+    y = x % y;
+    x = temp;
+  }
+  return Math.abs(x);
+}
+
+// Génération de l'équation
 function genererEquation() {
   a = Math.floor(Math.random() * 20) + 1;
   b = Math.floor(Math.random() * 20) + 1;
   c = Math.floor(Math.random() * 20) + 1;
 
+  // Simplification des fractions
+  let pgcd1 = pgcd(a, b);
+  let pgcd2 = pgcd(c, b);
+
+  coeffA = { num: -a / pgcd1, den: b / pgcd1 };
+  coeffB = { num: -c / pgcd2, den: b / pgcd2 };
+
   document.getElementById("equation").innerHTML =
     `Donne l'équation réduite de la droite \\(${a}x + ${b}y + ${c} = 0\\).`;
-
-  reponseAttendue = `y=${-a}/${b}x${-c < 0 ? "" : "+"}${-c}/${b}`;
 
   document.getElementById("reponse").value = "";
   document.getElementById("feedback").innerHTML = "";
@@ -83,16 +99,39 @@ function genererEquation() {
   MathJax.typeset();
 }
 
+// Analyse de la réponse de l’élève
 function corriger() {
   let r = document.getElementById("reponse").value
+    .toLowerCase()
     .replace(/\s/g, "")
-    .toLowerCase();
+    .replace("y=", "");
 
-  if (r === reponseAttendue) {
-    document.getElementById("feedback").innerHTML = "✅ Correct";
-  } else {
-    document.getElementById("feedback").innerHTML =
-      `❌ Incorrect.<br>Réponse attendue : \\(${reponseAttendue}\\)`;
+  const feedback = document.getElementById("feedback");
+
+  // Formes attendues
+  const formeSimplifiee =
+    `${coeffA.num}/${coeffA.den}x${coeffB.num < 0 ? "" : "+"}${coeffB.num}/${coeffB.den}`;
+
+  const formeNonSimplifiee =
+    `${-a}/${b}x${-c < 0 ? "" : "+"}${-c}/${b}`;
+
+  if (r === formeSimplifiee) {
+    feedback.innerHTML = "✅ Correct !";
+    feedback.style.color = "green";
+  }
+  else if (r === formeNonSimplifiee) {
+    feedback.innerHTML =
+      "🟠 Presque…<br>La réponse est correcte mais les fractions doivent être simplifiées.";
+    feedback.style.color = "orange";
+  }
+  else {
+    feedback.innerHTML =
+      `❌ Incorrect.<br>
+       On isole y :<br>
+       \\(${a}x + ${b}y + ${c} = 0\\)<br>
+       \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br>
+       Réponse simplifiée : \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
+    feedback.style.color = "red";
     MathJax.typeset();
   }
 }
@@ -100,6 +139,7 @@ function corriger() {
 // Génération automatique au chargement
 genererEquation();
 </script>
+
 
 </body>
 </html>
