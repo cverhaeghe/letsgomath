@@ -15,7 +15,7 @@
 /* Titre */
 .exo-container h1 {
   text-align: center;
-  color: #f36f21; /* orange du site */
+  color: #475a93; /* bleu du site */
   margin-bottom: 25px;
 }
 
@@ -46,7 +46,7 @@
 
 /* Boutons */
 .exo-container button {
-  background-color: #f36f21;
+  background-color: #475a93;
   color: white;
   border: none;
   padding: 10px 18px;
