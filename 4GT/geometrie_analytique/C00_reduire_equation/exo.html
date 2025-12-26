@@ -140,20 +140,22 @@ function corriger() {
 
   feedback.innerHTML =
     `📘 <strong>Correction détaillée</strong><br><br>
+
      On part de l'équation :<br>
      \\(${a}x + ${b}y + ${c} = 0\\)<br><br>
 
      On isole \\(${b}y\\) :<br>
      \\(${b}y = -${a}x - ${c}\\)<br><br>
 
-     On isole \\(y\\)  en divisant par ${b} :<br>
-     \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}\\) }<br><br>
+     On isole \\(y\\) en divisant par ${b} :<br>
+     \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
 
-     On simplifie les fractions si possible :<br>
+     On simplifie les fractions si possible :<br>`;
 
   feedback.style.color = "#000";
   MathJax.typeset();
 }
+
 
 // Génération au chargement
 genererEquation();
