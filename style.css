@@ -313,6 +313,9 @@ footer {
     padding-top: 60px; /* espace confortable sous la navbar */
   }
 
+    #dia3 {
+    padding-top: 30px; 
+  } 
     
     /* Menus responsive */
     .menu, .menu-8items {
