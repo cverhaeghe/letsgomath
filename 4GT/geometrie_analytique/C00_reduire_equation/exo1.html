@@ -40,24 +40,41 @@
 
 
 
-<h1>Exercice – Équation réduite</h1>
+<main class="exo-container">
 
-<p id="equation"></p>
+  <section class="exo-card">
 
-<p>
-  <input type="text" id="reponse" placeholder="Ex : y = -2x - 3">
-  <button onclick="corriger()">Corriger</button>
-</p>
+    <div class="exo-header">
+      <span class="exo-badge">4GT</span>
+      <h1>Équation réduite d’une droite</h1>
+      <p class="exo-consigne">
+        Donne l’équation réduite sous la forme <strong>y = ax + b</strong>.
+      </p>
+    </div>
 
-<p id="feedback"></p>
+    <div class="exo-body">
+      <p id="equation" class="exo-equation"></p>
 
-<p>
-  <button onclick="genererEquation()">Nouvelle équation</button>
-</p>
+      <div class="exo-input">
+        <input type="text" id="reponse" placeholder="Ex : y = -2x - 3">
+        <button onclick="corriger()">Corriger</button>
+      </div>
 
-<p>
-  <a href="../4GT_geo_analytique.html">⬅ Retour au menu</a>
-</p>
+      <p id="feedback" class="exo-feedback"></p>
+
+      <button class="btn-new" onclick="genererEquation()">
+        🔄 Nouvelle équation
+      </button>
+    </div>
+
+    <div class="exo-footer">
+      <a href="../4GT_geo_analytique.html">⬅ Retour au menu</a>
+    </div>
+
+  </section>
+
+</main>
+
 
 <!-- ================= JAVASCRIPT ================= -->
 <script>
