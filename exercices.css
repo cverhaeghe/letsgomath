@@ -90,6 +90,6 @@
 }
 
 .exo-links a {
-  color: #f36f21;
+  color: var(--peps);
   font-weight: 500;
 }
