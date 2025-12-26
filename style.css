@@ -16,7 +16,7 @@
 /* ============================= */
 /*           Navbar              */
 /* ============================= */
-.navbar {
+.lgm-navbar {
     display: flex;
     background-color: var(--peps);
     width: 100%;
@@ -43,14 +43,14 @@
 }
 
 
-.navbar li a {
+.lgm-navbar li a {
     color: var(--fonce);
     font-size: 1.1rem;
     text-decoration: none;
     padding: 0.3rem 0.5rem;
 }
 
-.navbar li a:hover {
+.lgm-navbar li a:hover {
     font-weight: bold;
     color: white;
 }
@@ -274,7 +274,7 @@ footer {
 @media(max-width:600px){
 
     /* Navbar une seule ligne */
-    .navbar {
+    .lgm-navbar {
         flex-direction: row;
         justify-content: space-around;
         flex-wrap: nowrap;
@@ -286,7 +286,7 @@ footer {
         justify-content: space-around;
         width: 100%;
     }
-    .navbar li a {
+    .lgm-navbar li a {
         font-size: 1rem;
         padding: 0.3rem 0.5rem;
     }
