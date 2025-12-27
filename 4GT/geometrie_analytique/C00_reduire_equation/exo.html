@@ -67,6 +67,14 @@
 
 <!-- ================= JAVASCRIPT ================= -->
 <script>
+function signe(num) {
+  return num < 0 ? "-" : "+";
+}
+
+function abs(x) {
+  return Math.abs(x);
+}
+
 let a, b, c;
 let coeffA, coeffB;
 
@@ -219,7 +227,7 @@ function verifier() {
 
   // Cas général
   const formeSimplifiee =
-    `${coeffA.num}/${coeffA.den}x${coeffB.num < 0 ? "" : "+"}${coeffB.num}/${coeffB.den}`;
+    `${coeffA.num}/${coeffA.den}x${signe(coeffB.num)}${abs(coeffB.num)}/${coeffB.den}`;
 
   const formeNonSimplifiee =
     `${-a}/${b}x${-c < 0 ? "" : "+"}${-c}/${b}`;
