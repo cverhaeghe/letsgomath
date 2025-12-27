@@ -256,7 +256,8 @@ function corriger() {
        \\(x = -\\frac{${c}}{${a}}\\)<br><br>
        Fraction simplifiée :<br>
        \\(x = \\frac{${num}}{${den}}\\)`;
-
+    
+    feedback.style.color = "#000";
     MathJax.typeset();
     return;
   }
@@ -275,6 +276,7 @@ function corriger() {
        Fraction simplifiée :<br>
        \\(y = \\frac{${num}}{${den}}\\)`;
 
+    feedback.style.color = "#000";
     MathJax.typeset();
     return;
   }
@@ -287,6 +289,7 @@ function corriger() {
        On isole y :<br>
        \\(y = -${a}x - ${c}\\)`;
 
+    feedback.style.color = "#000";
     MathJax.typeset();
     return;
   }
@@ -299,6 +302,7 @@ function corriger() {
      \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
      \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
 
+  feedback.style.color = "#000";
   MathJax.typeset();
 }
 
