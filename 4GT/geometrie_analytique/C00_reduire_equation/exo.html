@@ -185,7 +185,7 @@ function corriger(){
                    \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
   } else {
     correction += `Comme le coefficient de y est négatif, on passe ${b}y de l'autre côté : <br>
-                   \\(${-b}y = ${a}x + ${c}\\)<br><br>
+                   \\(${a}x + ${c} = ${-b}y \\)<br><br>
                    Ensuite, on divise par ${-b} pour isoler y :<br>
                    \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
   }
