@@ -152,39 +152,54 @@ function verifier(){
 
 // ====================== CORRECTION ======================
 function corriger(){
-  const feedback = document.getElementById("feedback");
+  const f = document.getElementById("feedback");
 
+  // --- Cas vertical ---
   if(b===0){
-    feedback.innerHTML =
-      `📘 <strong>Correction détaillée</strong><br><br>
-       \\(${equationTextePourCorrection} = 0\\)<br><br>
-       Il n'y a pas de y, on isole x :<br>
-       \\(x = ${-c/a}\\)`;
-    MathJax.typeset(); return;
+    f.innerHTML=`📘 <strong>Correction détaillée</strong><br><br>
+    \\(${equationTextePourCorrection}=0\\)<br><br>
+    Il n’y a pas de y, on isole x :<br>
+    \\(x=${-c/a}\\)`;
+    MathJax.typeset();
+    return;
   }
 
+  // --- Cas horizontal ---
   if(a===0){
-    feedback.innerHTML =
-      `📘 <strong>Correction détaillée</strong><br><br>
-       \\(${equationTextePourCorrection} = 0\\)<br><br>
-       On isole y :<br>
-       \\(y = ${-c/b}\\)`;
-    MathJax.typeset(); return;
+    f.innerHTML=`📘 <strong>Correction détaillée</strong><br><br>
+    \\(${equationTextePourCorrection}=0\\)<br><br>
+    On isole y :<br>
+    \\(y=${-c/b}\\)`;
+    MathJax.typeset();
+    return;
   }
 
-  let ax = (a===1?'x':(a===-1?'-x':a+'x'));
-  let cTxt = (c<0?'- '+Math.abs(c):'+ '+c);
+  // --- Cas général ---
+  let axTxt = (a===1 ? 'x' : (a===-1 ? '-x' : a+'x'));
+  let cTxt  = (c<0 ? '- '+Math.abs(c) : '+ '+c);
 
-  feedback.innerHTML =
-    `📘 <strong>Correction détaillée</strong><br><br>
-     \\(${equationTextePourCorrection} = 0\\)<br><br>
-     On isole le terme en y :<br>
-     \\(${Math.abs(b)}y = ${ax} ${cTxt}\\)<br><br>
-     On divise par ${Math.abs(b)} :<br>
-     \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
+  let texte = `📘 <strong>Correction détaillée</strong><br><br>
+  \\(${equationTextePourCorrection}=0\\)<br><br>`;
 
+  if(b>0){
+    // by reste à gauche
+    texte += `On isole le terme en y :<br>
+    \\(${b}y = -${axTxt} ${cTxt}\\)<br><br>
+    On divise par ${b} :<br>
+    \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
+  } 
+  else {
+    // by passe à droite, ax et c restent inchangés
+    texte += `Le coefficient de y est négatif, on passe le terme en y dans le membre de droite :<br>
+    \\(${axTxt} ${cTxt} = -${b}y\\)<br><br>
+    On divise par ${-b} :<br>
+    \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
+  }
+
+  f.innerHTML = texte;
   MathJax.typeset();
 }
+
 
 // ====================== INITIALISATION ======================
 genererEquation();
