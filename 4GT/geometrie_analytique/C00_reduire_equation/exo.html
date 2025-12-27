@@ -295,15 +295,28 @@ function corriger() {
   }
 
   // Cas général
-  feedback.innerHTML =
-    `📘 <strong>Correction détaillée</strong><br><br>
-     \\(${a}x + ${b}y + ${c} = 0\\)<br><br>
-     \\(${b}y = -${a}x - ${c}\\)<br><br>
+  // Cas général
+let correction = `📘 <strong>Correction détaillée</strong><br><br>
+\\(${a}x + ${b}y + ${c} = 0\\)<br><br>`;
+
+if (b > 0) {
+  // cas habituel
+  correction +=
+    `\\(${b}y = -${a}x - ${c}\\)<br><br>
      \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
      \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
+}
+else {
+  // b négatif : on passe by à droite
+  correction +=
+    `\\(${a}x + ${c} = ${-b}y\\)<br><br>
+     \\(y = \\frac{${a}}{${-b}}x + \\frac{${c}}{${-b}}\\)<br><br>
+     \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
+}
 
-  feedback.style.color = "#000";
-  MathJax.typeset();
+feedback.innerHTML = correction;
+feedback.style.color = "#000";
+MathJax.typeset();
 }
 
 
