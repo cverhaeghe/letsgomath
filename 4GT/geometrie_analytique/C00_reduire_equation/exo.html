@@ -68,7 +68,7 @@
 <!-- ================= JAVASCRIPT ================= -->
 <script>
 let a, b, c;
-let coeffA, coeffB; // coefficients simplifiés
+let coeffA, coeffB;
 
 // PGCD
 function pgcd(x, y) {
@@ -82,37 +82,80 @@ function pgcd(x, y) {
 
 // Génération de l'équation
 function genererEquation() {
-  a = Math.floor(Math.random() * 20) + 1;
-  b = Math.floor(Math.random() * 20) + 1;
-  c = Math.floor(Math.random() * 20) + 1;
 
-  let pgcd1 = pgcd(a, b);
-  let pgcd2 = pgcd(c, b);
+  do {
+    a = Math.floor(Math.random() * 21) - 10;
+    b = Math.floor(Math.random() * 21) - 10;
+  } while (a === 0 && b === 0);
 
-  coeffA = { num: -a / pgcd1, den: b / pgcd1 };
-  coeffB = { num: -c / pgcd2, den: b / pgcd2 };
+  c = Math.floor(Math.random() * 21) - 10;
+
+  let equationTexte = `${a}x + ${b}y + ${c} = 0`
+    .replace("+ -", "- ")
+    .replace("0x + ", "")
+    .replace("1x + ", "x")
+    .replace("+ 0y", "")
+    .replace("1y", "y")
+    .replace("0y + ", "")
+    .replace("+ 0", "");
 
   document.getElementById("equation").innerHTML =
-    `Donne l'équation réduite de la droite \\(${a}x + ${b}y + ${c} = 0\\).`;
+    `Réduis l’équation de la droite : \\(${equationTexte}\\).`;
 
   document.getElementById("reponse").value = "";
   document.getElementById("feedback").innerHTML = "";
 
+  // Cas général : y = mx + p
+  if (b !== 0) {
+    let pgcd1 = pgcd(a, b);
+    let pgcd2 = pgcd(c, b);
+
+    coeffA = { num: -a / pgcd1, den: b / pgcd1 };
+    coeffB = { num: -c / pgcd2, den: b / pgcd2 };
+  }
+
   MathJax.typeset();
 }
 
-// Lecture et normalisation de la réponse
+// Normalisation
 function lireReponse() {
   return document.getElementById("reponse").value
     .toLowerCase()
-    .replace(/\s/g, "")
+    .replace(/\s/g, "");
 }
 
-// Bouton 1 — Vérifier ma réponse
+// Vérification
 function verifier() {
   const r = lireReponse();
   const feedback = document.getElementById("feedback");
 
+  // Cas vertical : ax + c = 0
+  if (b === 0) {
+    const attendu = `x=${-c}/${a}`;
+    if (r === attendu) {
+      feedback.innerHTML = "✅ Correct !";
+      feedback.style.color = "green";
+    } else {
+      feedback.innerHTML = "❌ Incorrect.";
+      feedback.style.color = "red";
+    }
+    return;
+  }
+
+  // Cas horizontal : y = constante
+  if (a === 0) {
+    const attendu = `y=${-c}/${b}`;
+    if (r === attendu) {
+      feedback.innerHTML = "✅ Correct !";
+      feedback.style.color = "green";
+    } else {
+      feedback.innerHTML = "❌ Incorrect.";
+      feedback.style.color = "red";
+    }
+    return;
+  }
+
+  // Cas général
   const formeSimplifiee =
     `${coeffA.num}/${coeffA.den}x${coeffB.num < 0 ? "" : "+"}${coeffB.num}/${coeffB.den}`;
 
@@ -125,7 +168,7 @@ function verifier() {
   }
   else if (r === formeNonSimplifiee) {
     feedback.innerHTML =
-      "🟠 Presque…<br>Les fractions doivent être simplifiées.";
+      "🟠 Presque… Les fractions doivent être simplifiées.";
     feedback.style.color = "orange";
   }
   else {
@@ -134,33 +177,34 @@ function verifier() {
   }
 }
 
-// Bouton 2 — Correction détaillée
+// Correction
 function corriger() {
   const feedback = document.getElementById("feedback");
 
+  if (b === 0) {
+    feedback.innerHTML =
+      `📘 <strong>Correction</strong><br><br>
+       \\(${a}x + ${c} = 0\\)<br><br>
+       On isole x :<br>
+       \\(x = -\\frac{${c}}{${a}}\\)`;
+    MathJax.typeset();
+    return;
+  }
+
   feedback.innerHTML =
     `📘 <strong>Correction détaillée</strong><br><br>
-
-     On part de l'équation :<br>
      \\(${a}x + ${b}y + ${c} = 0\\)<br><br>
-
-     On isole \\(${b}y\\) :<br>
      \\(${b}y = -${a}x - ${c}\\)<br><br>
-
-     On isole \\(y\\) en divisant par ${b} :<br>
      \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
+     \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
 
-     On simplifie les fractions si possible :<br>
-    \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x + \\frac{${coeffB.num}}{${coeffB.den}}\\)`;
-
-  feedback.style.color = "#000";
   MathJax.typeset();
 }
 
-
-// Génération au chargement
+// Génération initiale
 genererEquation();
 </script>
+
 
 
 
