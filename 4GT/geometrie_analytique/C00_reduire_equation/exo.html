@@ -101,9 +101,18 @@ function genererEquation(){
 
   // Construction texte équation (sans 1x)
   let terms=[];
-  if(a!==0) terms.push((a===1?'':(a===-1?'-':''+a)) + 'x');
-  if(b!==0) terms.push((b>0?'+ ':'- ') + (Math.abs(b)===1?'y':Math.abs(b)+'y'));
-  if(c!==0) terms.push((c>0?'+ ':'- ') + Math.abs(c));
+  if(a !== 0){
+      terms.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x');
+}
+  if(b !== 0){
+    let signe = (terms.length > 0 ? (b > 0 ? '+' : '-') : (b < 0 ? '-' : ''));
+    let valeur = Math.abs(b) === 1 ? 'y' : Math.abs(b) + 'y';
+    terms.push(signe + valeur);
+}
+  if(c !== 0){
+    let signe = (terms.length > 0 ? (c > 0 ? '+' : '-') : (c < 0 ? '-' : ''));
+    terms.push(signe + Math.abs(c));
+}
 
 let equation = terms.join(' ') + ' = 0';
 console.log(equation);
