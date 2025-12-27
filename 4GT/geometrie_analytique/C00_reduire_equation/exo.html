@@ -106,6 +106,7 @@ function genererEquation(){
   if(c!==0) terms.push((c>0?'+ ':'- ') + Math.abs(c));
 
   equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ');
+  equationTextePourCorrection = equationTextePourCorrection.replace(/^\+\s*/, '');
   document.getElementById("equation").innerHTML =
     `Réduis l’équation de la droite : \\(${equationTextePourCorrection} = 0\\).`;
 
