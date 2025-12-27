@@ -145,35 +145,43 @@ function verifier(){
 function corriger(){
   const feedback = document.getElementById("feedback");
 
+  // --- Cas vertical ---
   if(b===0){
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
       \\(${equationTextePourCorrection} = 0\\)<br>
+      Ici, la droite est verticale car b = 0.<br>
       On isole x : \\(x = -\\frac{${c}}{${a}}\\)<br>
       Fraction simplifiée : \\(x = ${fractionLaTeX(-c, a)}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
+  // --- Cas horizontal ---
   if(a===0){
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
       \\(${equationTextePourCorrection} = 0\\)<br>
+      Ici, la droite est horizontale car a = 0.<br>
       On isole y : \\(y = -\\frac{${c}}{${b}}\\)<br>
       Fraction simplifiée : \\(y = ${fractionLaTeX(-c,b)}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
-  // Cas général
+  // --- Cas général ---
   let correction=`📘 <strong>Correction détaillée</strong><br><br>
-    \\(${equationTextePourCorrection} = 0\\)<br><br>`;
+    On part de l'équation : \\(${equationTextePourCorrection} = 0\\)<br><br>`;
 
-  // Passage à y = ...
-  let signeA = coeffA.num < 0 ? "-" : "+";
-  let signeB = coeffB.num < 0 ? "-" : "+";
-
-  correction += `\\(${b}y = ${-a}x ${-c<0?'+':'-'} ${Math.abs(c)}\\)<br>
-                 \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
+  if(b>0){
+    correction += `On isole le terme en y : \\(${b}y = ${-a}x ${-c<0?'+':'-'} ${Math.abs(c)}\\)<br>
+                   Ensuite, on divise par ${b} pour obtenir y :<br>
+                   \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
+  } else {
+    correction += `Comme b est négatif, on passe ${b}y de l'autre côté : \\(${-b}y = ${a}x + ${c}\\)<br>
+                   Ensuite, on divise par ${-b} pour isoler y :<br>
+                   \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
+  }
 
   feedback.innerHTML = correction;
-  feedback.style.color="#000"; MathJax.typeset();
+  feedback.style.color="#000";
+  MathJax.typeset();
 }
 
 // ====================== INITIALISATION ======================
@@ -182,4 +190,3 @@ genererEquation();
 
 </body>
 </html>
-
