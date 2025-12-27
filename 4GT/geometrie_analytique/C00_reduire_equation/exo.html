@@ -178,7 +178,7 @@ if(b === 0){
         On divise par ${a} :<br>
         \\(x = ${xFrac}\\)`;
     } else {
-      let xFrac = fractionLaTeX(-c, -a);
+      let xFrac = fractionLaTeX(c, -a);
       texte += `Le coefficient de x est négatif, on passe le terme en x à droite :<br>
         \\(${c} = ${Math.abs(a)}x\\)<br><br>
         On divise par ${Math.abs(a)} :<br>
