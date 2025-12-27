@@ -156,20 +156,42 @@ function corriger(){
   const f = document.getElementById("feedback");
   f.style.color = "#000"; // toujours noir
 
-  // --- Cas vertical ---
-  if(b === 0){
-    let xNum = -c;
-    let xDen = a;
-    let pg = pgcd(xNum, xDen);
-    let xFraction = fractionLaTeX(xNum/pg, xDen/pg);
+// --- Cas vertical ---
+if(b === 0){
+  let texte = `📘 <strong>Correction détaillée</strong><br><br>
+    \\(${equationTextePourCorrection}=0\\)<br><br>`;
 
-    f.innerHTML = `📘 <strong>Correction détaillée</strong><br><br>
-      \\(${equationTextePourCorrection}=0\\)<br><br>
-      Il n’y a pas de y, on isole x :<br>
-      \\(x = ${xFraction}\\)`;
-    MathJax.typeset();
-    return;
+  // a = ±1 → x isolé directement
+  if(Math.abs(a) === 1){
+    if(a === 1){
+      texte += `On a : \\(x = ${-c}\\)`;
+    } else {
+      texte += `On passe le terme en x à droite : \\(${c} = x\\)`;
+    }
+  } 
+  else {
+    // a ≠ ±1 → fraction simplifiée
+    if(a > 0){
+      let xFrac = fractionLaTeX(-c, a);
+      texte += `On isole le terme en x :<br>
+        \\(${a}x = ${-c}\\)<br><br>
+        On divise par ${a} :<br>
+        \\(x = ${xFrac}\\)`;
+    } else {
+      let xFrac = fractionLaTeX(-c, -a);
+      texte += `Le coefficient de x est négatif, on passe le terme en x à droite :<br>
+        \\(${c} = ${Math.abs(a)}x\\)<br><br>
+        On divise par ${Math.abs(a)} :<br>
+        \\(x = ${xFrac}\\)`;
+    }
   }
+
+  f.innerHTML = texte;
+  f.style.color = "#000";
+  MathJax.typeset();
+  return;
+}
+
 
   // --- Cas horizontal ---
   if(a === 0){
