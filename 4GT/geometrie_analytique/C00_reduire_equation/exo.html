@@ -139,9 +139,11 @@ function genererEquation() {
   let equationTexte = `${a}x + ${b}y + ${c} = 0`
     .replace("+ -", "- ")
     .replace("0x + ", "")
+    .replace("0x - ", "")
     .replace("1x", "x")
     .replace("-1x", "-x")
     .replace("0y + ", "")
+    .replace("0y - ", "")
     .replace("1y", "y")
     .replace("-1y", "-y")
     .replace("+ 0", "");
