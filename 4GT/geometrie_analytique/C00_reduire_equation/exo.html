@@ -70,6 +70,20 @@
 let a, b, c;
 let coeffA, coeffB;
 
+// ===============================
+// RÉGLAGES PÉDAGOGIQUES
+// ===============================
+
+// Probabilités (la somme doit faire 1)
+const PROBA_GENERAL = 0.7;      // ax + by + c = 0
+const PROBA_VERTICAL = 0.15;     // ax + c = 0
+const PROBA_HORIZONTAL = 0.15;   // by + c = 0
+
+// Amplitude des coefficients
+const COEFF_MIN = -20;
+const COEFF_MAX = 20;
+
+  
 // PGCD
 function pgcd(x, y) {
   while (y !== 0) {
@@ -83,20 +97,45 @@ function pgcd(x, y) {
 // Génération de l'équation
 function genererEquation() {
 
-  do {
-    a = Math.floor(Math.random() * 21) - 10;
-    b = Math.floor(Math.random() * 21) - 10;
-  } while (a === 0 && b === 0);
+  const tirage = Math.random();
 
-  c = Math.floor(Math.random() * 21) - 10;
+  // ----- Choix du type d'équation -----
 
+  if (tirage < PROBA_GENERAL) {
+    // Cas général
+    do {
+      a = Math.floor(Math.random() * (COEFF_MAX - COEFF_MIN + 1)) + COEFF_MIN;
+      b = Math.floor(Math.random() * (COEFF_MAX - COEFF_MIN + 1)) + COEFF_MIN;
+    } while (a === 0 || b === 0);
+  }
+
+  else if (tirage < PROBA_GENERAL + PROBA_VERTICAL) {
+    // Droite verticale : ax + c = 0
+    a = Math.floor(Math.random() * (COEFF_MAX - COEFF_MIN + 1)) + COEFF_MIN;
+    if (a === 0) a = 1;
+    b = 0;
+  }
+
+  else {
+    // Droite horizontale : by + c = 0
+    a = 0;
+    b = Math.floor(Math.random() * (COEFF_MAX - COEFF_MIN + 1)) + COEFF_MIN;
+    if (b === 0) b = 1;
+  }
+
+  // ----- Terme constant -----
+  c = Math.floor(Math.random() * (COEFF_MAX - COEFF_MIN + 1)) + COEFF_MIN;
+  if (c === 0) c = 1;
+
+  // ----- Affichage de l'équation -----
   let equationTexte = `${a}x + ${b}y + ${c} = 0`
     .replace("+ -", "- ")
     .replace("0x + ", "")
     .replace("1x", "x")
-    .replace("+ 0y", "")
-    .replace("1y", "y")
+    .replace("-1x", "-x")
     .replace("0y + ", "")
+    .replace("1y", "y")
+    .replace("-1y", "-y")
     .replace("+ 0", "");
 
   document.getElementById("equation").innerHTML =
@@ -105,17 +144,18 @@ function genererEquation() {
   document.getElementById("reponse").value = "";
   document.getElementById("feedback").innerHTML = "";
 
-  // Cas général : y = mx + p
+  // ----- Préparation des coefficients pour y = mx + p -----
   if (b !== 0) {
-    let pgcd1 = pgcd(a, b);
-    let pgcd2 = pgcd(c, b);
+    let p1 = pgcd(a, b);
+    let p2 = pgcd(c, b);
 
-    coeffA = { num: -a / pgcd1, den: b / pgcd1 };
-    coeffB = { num: -c / pgcd2, den: b / pgcd2 };
+    coeffA = { num: -a / p1, den: b / p1 };
+    coeffB = { num: -c / p2, den: b / p2 };
   }
 
   MathJax.typeset();
 }
+
 
 // Normalisation
 function lireReponse() {
