@@ -93,7 +93,7 @@ function genererEquation() {
   let equationTexte = `${a}x + ${b}y + ${c} = 0`
     .replace("+ -", "- ")
     .replace("0x + ", "")
-    .replace("1x + ", "x")
+    .replace("1x", "x")
     .replace("+ 0y", "")
     .replace("1y", "y")
     .replace("0y + ", "")
@@ -129,26 +129,48 @@ function verifier() {
   const r = lireReponse();
   const feedback = document.getElementById("feedback");
 
-  // Cas vertical : ax + c = 0
+  // Cas vertical : ax + c = 0 → x = -c/a
   if (b === 0) {
-    const attendu = `x=${-c}/${a}`;
-    if (r === attendu) {
+    let p = pgcd(c, a);
+    let num = -c / p;
+    let den = a / p;
+
+    const formeSimplifiee = `x=${num}/${den}`;
+    const formeNonSimplifiee = `x=${-c}/${a}`;
+
+    if (r === formeSimplifiee) {
       feedback.innerHTML = "✅ Correct !";
       feedback.style.color = "green";
-    } else {
+    }
+    else if (r === formeNonSimplifiee) {
+      feedback.innerHTML = "🟠 Presque… fraction à simplifier.";
+      feedback.style.color = "orange";
+    }
+    else {
       feedback.innerHTML = "❌ Incorrect.";
       feedback.style.color = "red";
     }
     return;
   }
 
-  // Cas horizontal : y = constante
+  // Cas horizontal : by + c = 0 → y = -c/b
   if (a === 0) {
-    const attendu = `y=${-c}/${b}`;
-    if (r === attendu) {
+    let p = pgcd(c, b);
+    let num = -c / p;
+    let den = b / p;
+
+    const formeSimplifiee = `y=${num}/${den}`;
+    const formeNonSimplifiee = `y=${-c}/${b}`;
+
+    if (r === formeSimplifiee) {
       feedback.innerHTML = "✅ Correct !";
       feedback.style.color = "green";
-    } else {
+    }
+    else if (r === formeNonSimplifiee) {
+      feedback.innerHTML = "🟠 Presque… fraction à simplifier.";
+      feedback.style.color = "orange";
+    }
+    else {
       feedback.innerHTML = "❌ Incorrect.";
       feedback.style.color = "red";
     }
@@ -167,8 +189,7 @@ function verifier() {
     feedback.style.color = "green";
   }
   else if (r === formeNonSimplifiee) {
-    feedback.innerHTML =
-      "🟠 Presque… Les fractions doivent être simplifiées.";
+    feedback.innerHTML = "🟠 Presque… Les fractions doivent être simplifiées.";
     feedback.style.color = "orange";
   }
   else {
@@ -177,20 +198,60 @@ function verifier() {
   }
 }
 
+
 // Correction
 function corriger() {
   const feedback = document.getElementById("feedback");
 
+  // Cas vertical
   if (b === 0) {
+    let p = pgcd(c, a);
+    let num = -c / p;
+    let den = a / p;
+
     feedback.innerHTML =
       `📘 <strong>Correction</strong><br><br>
        \\(${a}x + ${c} = 0\\)<br><br>
        On isole x :<br>
-       \\(x = -\\frac{${c}}{${a}}\\)`;
+       \\(x = -\\frac{${c}}{${a}}\\)<br><br>
+       Fraction simplifiée :<br>
+       \\(x = \\frac{${num}}{${den}}\\)`;
+
     MathJax.typeset();
     return;
   }
 
+  // Cas horizontal
+  if (a === 0) {
+    let p = pgcd(c, b);
+    let num = -c / p;
+    let den = b / p;
+
+    feedback.innerHTML =
+      `📘 <strong>Correction</strong><br><br>
+       \\(${b}y + ${c} = 0\\)<br><br>
+       On isole y :<br>
+       \\(y = -\\frac{${c}}{${b}}\\)<br><br>
+       Fraction simplifiée :<br>
+       \\(y = \\frac{${num}}{${den}}\\)`;
+
+    MathJax.typeset();
+    return;
+  }
+
+  // Cas b = 1 (pas de division inutile)
+  if (b === 1) {
+    feedback.innerHTML =
+      `📘 <strong>Correction</strong><br><br>
+       \\(${a}x + y + ${c} = 0\\)<br><br>
+       On isole y :<br>
+       \\(y = -${a}x - ${c}\\)`;
+
+    MathJax.typeset();
+    return;
+  }
+
+  // Cas général
   feedback.innerHTML =
     `📘 <strong>Correction détaillée</strong><br><br>
      \\(${a}x + ${b}y + ${c} = 0\\)<br><br>
@@ -200,6 +261,7 @@ function corriger() {
 
   MathJax.typeset();
 }
+
 
 // Génération initiale
 genererEquation();
