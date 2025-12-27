@@ -93,3 +93,13 @@
   color: var(--peps);
   font-weight: 500;
 }
+
+/* ===============================
+   RESPONSIVE - GSM
+   =============================== */
+@media(max-width:600px){
+
+.exo-container {
+         margin-top: 60px;
+  }
+)   
