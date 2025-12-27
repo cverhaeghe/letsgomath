@@ -62,7 +62,6 @@ function pgcd(x, y){ while(y!==0){ let t=y; y=x%y; x=t;} return Math.abs(x); }
 
 function fractionLaTeX(num, den){
   if(num === 0) return "0";
-  if(den < 0){ num = -num; den = -den; } // déplacer signe du dénominateur
   if(den === 1) return num.toString();
   return (num < 0 ? "-" : "") + `\\frac{${Math.abs(num)}}{${den}}`;
 }
@@ -98,10 +97,10 @@ function genererEquation(){
 
   // Préparer coefficients pour y = mx+p
   if(b!==0){
-    let p1 = pgcd(a,b);
-    let p2 = pgcd(c,b);
-    coeffA = {num: -a/p1, den: b/p1};
-    coeffB = {num: -c/p2, den: b/p2};
+    let p1 = pgcd(a, Math.abs(b));
+    let p2 = pgcd(c, Math.abs(b));
+    coeffA = {num: -a/p1, den: Math.abs(b)/p1};
+    coeffB = {num: -c/p2, den: Math.abs(b)/p2};
   }
 
   MathJax.typeset();
