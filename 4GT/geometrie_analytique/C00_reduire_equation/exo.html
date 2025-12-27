@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Let's go Math !</title>
+<title>Let's go Math !</title>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="../../../style.css">
-  <link rel="stylesheet" href="../../../exercices.css">
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
 
-  <!-- Bootstrap (optionnel) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- MathJax -->
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- MathJax -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
+
 <body>
 
 <nav class="lgm-navbar">
@@ -51,66 +52,64 @@
 </div>
 
 <script>
-// ================= UTILITAIRES =================
-function signe(num) { return num < 0 ? "-" : "+"; }
-function abs(x) { return Math.abs(x); }
-function pgcd(x, y) { while(y !==0){ let t=y; y=x%y; x=t;} return Math.abs(x); }
+// ====================== UTILITAIRES ======================
+function signe(num){ return num < 0 ? "-" : "+"; }
+function abs(x){ return Math.abs(x); }
+function pgcd(x, y){ while(y!==0){ let t=y; y=x%y; x=t;} return Math.abs(x); }
 
 let a, b, c;
 let coeffA, coeffB;
 
-// ================= RÉGLAGES =================
+// ====================== REGLAGES ======================
 const PROBA_GENERAL = 0.7;
 const PROBA_VERTICAL = 0.15;
 const PROBA_HORIZONTAL = 0.15;
 const COEFF_MIN = -20;
 const COEFF_MAX = 20;
 
-// ================= GENERATION EQUATION =================
-function genererEquation() {
-  const tirage = Math.random();
-
-  if (tirage < PROBA_GENERAL) {
-    do {
-      a = Math.floor(Math.random()*(COEFF_MAX-COEFF_MIN+1))+COEFF_MIN;
-      b = Math.floor(Math.random()*(COEFF_MAX-COEFF_MIN+1))+COEFF_MIN;
-    } while (a===0 || b===0);
-  } else if (tirage < PROBA_GENERAL+PROBA_VERTICAL) {
-    a = Math.floor(Math.random()*(COEFF_MAX-COEFF_MIN+1))+COEFF_MIN;
-    if(a===0) a=1;
-    b=0;
+// ====================== GENERATION EQUATION ======================
+function randCoeff(){ return Math.floor(Math.random()*(COEFF_MAX-COEFF_MIN+1))+COEFF_MIN; }
+function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
+function formatTerme(value, variable, isConst=false){
+  let s='';
+  if(isConst){
+    s=(value<0?'- ':'+ ') + Math.abs(value);
   } else {
-    a=0;
-    b = Math.floor(Math.random()*(COEFF_MAX-COEFF_MIN+1))+COEFF_MIN;
-    if(b===0) b=1;
+    if(value===1) s='+ '+variable;
+    else if(value===-1) s='- '+variable;
+    else s=(value>0?'+ ':'- ') + Math.abs(value) + variable;
+  }
+  return s;
+}
+
+function genererEquation(){
+  const tirage=Math.random();
+
+  if(tirage<PROBA_GENERAL){
+    do{ a=randCoeff(); b=randCoeff(); }while(a===0||b===0);
+  } else if(tirage<PROBA_GENERAL+PROBA_VERTICAL){
+    a=randCoeffNonZero(); b=0;
+  } else{
+    a=0; b=randCoeffNonZero();
   }
 
-  c = Math.floor(Math.random()*(COEFF_MAX-COEFF_MIN+1))+COEFF_MIN;
-  if(c===0) c=1;
+  c=randCoeffNonZero();
 
-  // Génération texte équation avec signes corrects
-  let equationTexte = "";
-  if(a!==0){
-    equationTexte += (a===1?"":"") + (a===-1?"-":"") + "x";
-  }
+  // Construction texte équation
+  let terms=[];
+  if(a!==0) terms.push(formatTerme(a,'x'));
+  if(b!==0) terms.push(formatTerme(b,'y'));
+  if(c!==0) terms.push(formatTerme(c,'',true));
+
+  let equationTexte=terms.join(' ').replace(/\s\+\s-/g,' - ');
+  document.getElementById("equation").innerHTML=`Réduis l’équation de la droite : \\(${equationTexte} = 0\\).`;
+
+  document.getElementById("reponse").value='';
+  document.getElementById("feedback").innerHTML='';
+
   if(b!==0){
-    equationTexte += (equationTexte ? (b>0?" + ":" - ") : (b<0?"-":"")) + (abs(b)===1?"y":abs(b)+"y");
-  }
-  if(c!==0){
-    equationTexte += (c>0?" + ":" - ") + abs(c);
-  }
-  if(equationTexte==="") equationTexte="0";
-
-  document.getElementById("equation").innerHTML =
-    `Réduis l’équation de la droite : \\(${equationTexte} = 0\\).`;
-
-  document.getElementById("reponse").value="";
-  document.getElementById("feedback").innerHTML="";
-
-  // Préparation coefficients pour y = mx+p si b≠0
-  if(b!==0){
-    let p1 = pgcd(a,b);
-    let p2 = pgcd(c,b);
+    let p1=pgcd(a,b);
+    let p2=pgcd(c,b);
     coeffA={num:-a/p1, den:b/p1};
     coeffB={num:-c/p2, den:b/p2};
   }
@@ -118,74 +117,64 @@ function genererEquation() {
   MathJax.typeset();
 }
 
-// ================= LIRE REPONSE =================
-function lireReponse(){
-  return document.getElementById("reponse").value.toLowerCase().replace(/\s/g,"");
-}
+// ====================== REPONSE ======================
+function lireReponse(){ return document.getElementById("reponse").value.toLowerCase().replace(/\s/g,''); }
 
-// ================= VERIFICATION =================
 function verifier(){
-  const r = lireReponse();
-  const feedback = document.getElementById("feedback");
+  const r=lireReponse();
+  const feedback=document.getElementById("feedback");
 
-  // Cas vertical
   if(b===0){
-    let p=pgcd(c,a);
-    let num=-c/p, den=a/p;
+    let p=pgcd(c,a), num=-c/p, den=a/p;
     const formeSimplifiee=`x=${num}/${den}`;
     const formeNonSimplifiee=`x=${-c}/${a}`;
     if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
     else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
-    else {feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
+    else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
     return;
   }
 
-  // Cas horizontal
   if(a===0){
-    let p=pgcd(c,b);
-    let num=-c/p, den=b/p;
+    let p=pgcd(c,b), num=-c/p, den=b/p;
     const formeSimplifiee=`y=${num}/${den}`;
     const formeNonSimplifiee=`y=${-c}/${b}`;
     if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
     else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
-    else {feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
+    else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
     return;
   }
 
-  // Cas général
-  const formeSimplifiee = `${coeffA.num}/${coeffA.den}x${signe(coeffB.num)}${abs(coeffB.num)}/${coeffB.den}`;
-  const formeNonSimplifiee = `${-a}/${b}x${-c<0?"":"+"}${-c}/${b}`;
+  const formeSimplifiee=`${coeffA.num}/${coeffA.den}x${signe(coeffB.num)}${abs(coeffB.num)}/${coeffB.den}`;
+  const formeNonSimplifiee=`${-a}/${b}x${-c<0?'':'+'}${-c}/${b}`;
+
   if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
   else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… Les fractions doivent être simplifiées."; feedback.style.color="orange";}
-  else {feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
+  else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
 }
 
-// ================= CORRECTION =================
+// ====================== CORRECTION ======================
 function corriger(){
-  const feedback = document.getElementById("feedback");
+  const feedback=document.getElementById("feedback");
 
   if(b===0){
-    let p=pgcd(c,a);
-    let num=-c/p, den=a/p;
-    feedback.innerHTML = `📘 <strong>Correction</strong><br><br>
-      \\(${a}x + ${c} = 0\\)<br><br>
+    let p=pgcd(c,a), num=-c/p, den=a/p;
+    feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
+      \\(${a}x + ${c} = 0\\)<br>
       On isole x : \\(x = -\\frac{${c}}{${a}}\\)<br>
       Fraction simplifiée : \\(x = \\frac{${num}}{${den}}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
   if(a===0){
-    let p=pgcd(c,b);
-    let num=-c/p, den=b/p;
-    feedback.innerHTML = `📘 <strong>Correction</strong><br><br>
-      \\(${b}y + ${c} = 0\\)<br><br>
+    let p=pgcd(c,b), num=-c/p, den=b/p;
+    feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
+      \\(${b}y + ${c} = 0\\)<br>
       On isole y : \\(y = -\\frac{${c}}{${b}}\\)<br>
       Fraction simplifiée : \\(y = \\frac{${num}}{${den}}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
-  // Cas général
-  let correction = `📘 <strong>Correction détaillée</strong><br><br>
+  let correction=`📘 <strong>Correction détaillée</strong><br><br>
     \\(${a}x + ${b}y + ${c} = 0\\)<br><br>`;
 
   if(b>0){
@@ -198,11 +187,10 @@ function corriger(){
                    \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x ${signe(coeffB.num)} \\frac{${abs(coeffB.num)}}{${coeffB.den}}\\)`;
   }
 
-  feedback.innerHTML = correction;
-  feedback.style.color="#000"; MathJax.typeset();
+  feedback.innerHTML=correction; feedback.style.color="#000"; MathJax.typeset();
 }
 
-// ================= INITIALISATION =================
+// ====================== INITIALISATION ======================
 genererEquation();
 </script>
 
