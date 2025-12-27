@@ -1,67 +1,193 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exercice : Équation de droite</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    h1 { color: #333; }
-    .exo { margin-bottom: 20px; }
-    button { margin-top: 10px; padding: 8px 12px; }
-    #feedback { margin-top: 15px; background: #fff; padding: 10px; border-radius: 6px; box-shadow: 0 0 5px rgba(0,0,0,0.1);}
-    code { background: #eee; padding: 2px 4px; border-radius: 3px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MathJax -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
+
 <body>
 
-<h1>Exercice : Mettre une équation sous forme explicite</h1>
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
 
-<div class="exo">
-  <p>Équation donnée :</p>
-  <p id="equation">ax + by + c = 0</p>
-  <p>Entrez les valeurs de a, b et c :</p>
-  <input type="number" id="a" placeholder="a" value="1">
-  <input type="number" id="b" placeholder="b" value="2">
-  <input type="number" id="c" placeholder="c" value="3">
-  <br>
-  <button onclick="corriger()">Voir la correction détaillée</button>
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+  <div class="equation-box" id="equation"></div>
+
+  <input type="text" id="reponse" placeholder="">
+
+  <button onclick="verifier()">Vérifier ma réponse</button>
+  <button onclick="corriger()">Correction</button>
+  <button onclick="genererEquation()">Nouvel exercice</button>
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_geo_analytique.html">Retour au menu</a>
+  </div>
 </div>
 
-<div id="feedback"></div>
-
 <script>
-function corriger() {
-  const a = Number(document.getElementById("a").value);
-  const b = Number(document.getElementById("b").value);
-  const c = Number(document.getElementById("c").value);
+// ====================== PARAMETRES PEDAGOGIQUES ======================
+// Somme = 1
+const PROBA_OBLIQUE     = 0.7;   // y = mx + p
+const PROBA_VERTICALE   = 0.15;  // x = k
+// le reste = horizontale (y = k)
+
+// ====================== VARIABLES ======================
+let a, b, c;
+let coeffA, coeffB;
+let equationTextePourCorrection = "";
+
+// ====================== UTILITAIRES ======================
+function pgcd(x, y){
+  while(y!==0){ let t=y; y=x%y; x=t; }
+  return Math.abs(x);
+}
+
+function fractionLaTeX(num, den){
+  if(num === 0) return "0";
+  if(den === 1) return num.toString();
+  return (num < 0 ? "-" : "") + `\\frac{${Math.abs(num)}}{${den}}`;
+}
+
+// ====================== GENERATION ======================
+function randCoeff(){ return Math.floor(Math.random()*41)-20; }
+function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
+
+function genererEquation(){
+  const tirage = Math.random();
+
+  if(tirage < PROBA_OBLIQUE){
+    // droite oblique
+    do{ a=randCoeff(); b=randCoeff(); }while(a===0 || b===0);
+  }
+  else if(tirage < PROBA_OBLIQUE + PROBA_VERTICALE){
+    // droite verticale
+    a = randCoeffNonZero();
+    b = 0;
+  }
+  else{
+    // droite horizontale
+    a = 0;
+    b = randCoeffNonZero();
+  }
+
+  c = randCoeffNonZero();
+
+  // Construction texte équation (sans 1x)
+  let terms=[];
+  if(a!==0) terms.push((a===1?'':(a===-1?'-':''+a)) + 'x');
+  if(b!==0) terms.push((b>0?'+ ':'- ') + (Math.abs(b)===1?'y':Math.abs(b)+'y'));
+  if(c!==0) terms.push((c>0?'+ ':'- ') + Math.abs(c));
+
+  equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ');
+  document.getElementById("equation").innerHTML =
+    `Réduis l’équation de la droite : \\(${equationTextePourCorrection} = 0\\).`;
+
+  document.getElementById("reponse").value='';
+  document.getElementById("feedback").innerHTML='';
+
+  if(b!==0){
+    let p1 = pgcd(a, Math.abs(b));
+    let p2 = pgcd(c, Math.abs(b));
+    coeffA = {num: -a/p1, den: Math.abs(b)/p1};
+    coeffB = {num: -c/p2, den: Math.abs(b)/p2};
+  }
+
+  MathJax.typeset();
+}
+
+// ====================== VERIFICATION ======================
+function lireReponse(){
+  return document.getElementById("reponse").value.toLowerCase().replace(/\s/g,'');
+}
+
+function verifier(){
+  const r = lireReponse();
   const feedback = document.getElementById("feedback");
 
-  // Étape 1 : Isoler by
-  let axPart = (a === 1) ? "-x" : `-${a}x`;
-  let byEq = `${axPart} ${c<0 ? "+ "+(-c) : "- "+c}`;
-  
-  // Étape 2 : Isoler y
-  let yEq = `y = (${axPart} ${c<0 ? "+ "+(-c) : "- "+c}) / ${b}`;
-  let slope = (a/b).toFixed(2);
-  let intercept = (c/b).toFixed(2);
-  let simplified = `y = ${-a/b}x ${c/b < 0 ? "- "+Math.abs(c/b) : "+ "+c/b}`;
+  if(b===0){
+    let x = -c / a;
+    feedback.innerHTML = (r === `x=${x}`) ? "✅ Correct !" : "❌ Incorrect.";
+    feedback.style.color = (r === `x=${x}`) ? "green" : "red";
+    return;
+  }
 
-  feedback.innerHTML = `
-    <h2>Correction détaillée</h2>
-    <p>Équation donnée :</p>
-    <p><code>${a}x + ${b}y + ${c} = 0</code></p>
-    
-    <p><strong>Étape 1 :</strong> Isoler <code>by</code></p>
-    <p><code>by = ${byEq}</code></p>
-    
-    <p><strong>Étape 2 :</strong> Isoler <code>y</code></p>
-    <p><code>y = (${axPart} ${c<0 ? "+ "+(-c) : "- "+c}) / ${b}</code></p>
-    
-    <p><strong>Forme simplifiée :</strong></p>
-    <p><code>y = ${simplified}</code></p>
-  `;
+  if(a===0){
+    let y = -c / b;
+    feedback.innerHTML = (r === `y=${y}`) ? "✅ Correct !" : "❌ Incorrect.";
+    feedback.style.color = (r === `y=${y}`) ? "green" : "red";
+    return;
+  }
+
+  const forme = `${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}`;
+  feedback.innerHTML = (r===forme) ? "✅ Correct !" : "❌ Incorrect.";
+  feedback.style.color = (r===forme) ? "green" : "red";
 }
+
+// ====================== CORRECTION ======================
+function corriger(){
+  const feedback = document.getElementById("feedback");
+
+  if(b===0){
+    feedback.innerHTML =
+      `📘 <strong>Correction détaillée</strong><br><br>
+       \\(${equationTextePourCorrection} = 0\\)<br><br>
+       Il n'y a pas de y, on isole x :<br>
+       \\(x = ${-c/a}\\)`;
+    MathJax.typeset(); return;
+  }
+
+  if(a===0){
+    feedback.innerHTML =
+      `📘 <strong>Correction détaillée</strong><br><br>
+       \\(${equationTextePourCorrection} = 0\\)<br><br>
+       On isole y :<br>
+       \\(y = ${-c/b}\\)`;
+    MathJax.typeset(); return;
+  }
+
+  let ax = (a===1?'x':(a===-1?'-x':a+'x'));
+  let cTxt = (c<0?'- '+Math.abs(c):'+ '+c);
+
+  feedback.innerHTML =
+    `📘 <strong>Correction détaillée</strong><br><br>
+     \\(${equationTextePourCorrection} = 0\\)<br><br>
+     On isole le terme en y :<br>
+     \\(${Math.abs(b)}y = ${ax} ${cTxt}\\)<br><br>
+     On divise par ${Math.abs(b)} :<br>
+     \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
+
+  MathJax.typeset();
+}
+
+// ====================== INITIALISATION ======================
+genererEquation();
 </script>
 
 </body>
