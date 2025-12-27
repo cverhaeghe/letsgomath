@@ -52,66 +52,53 @@
 </div>
 
 <script>
-// ====================== UTILITAIRES ======================
-function signe(num){ return num < 0 ? "-" : "+"; }
-function abs(x){ return Math.abs(x); }
-function pgcd(x, y){ while(y!==0){ let t=y; y=x%y; x=t;} return Math.abs(x); }
-
+// ====================== VARIABLES ======================
 let a, b, c;
 let coeffA, coeffB;
 
-// ====================== REGLAGES ======================
-const PROBA_GENERAL = 0.7;
-const PROBA_VERTICAL = 0.15;
-const PROBA_HORIZONTAL = 0.15;
-const COEFF_MIN = -20;
-const COEFF_MAX = 20;
-
-// ====================== GENERATION EQUATION ======================
-function randCoeff(){ return Math.floor(Math.random()*(COEFF_MAX-COEFF_MIN+1))+COEFF_MIN; }
-function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
-function formatTerme(value, variable, isConst=false){
-  let s='';
-  if(isConst){
-    s=(value<0?'- ':'+ ') + Math.abs(value);
-  } else {
-    if(value===1) s='+ '+variable;
-    else if(value===-1) s='- '+variable;
-    else s=(value>0?'+ ':'- ') + Math.abs(value) + variable;
-  }
-  return s;
+// ====================== UTILITAIRES ======================
+function pgcd(x, y){ while(y!==0){ let t=y; y=x%y; x=t;} return Math.abs(x); }
+function fractionLaTeX(num, den){
+  if(num === 0) return "0";
+  let signeFrac = num < 0 ? "-" : "";
+  return `${signeFrac}\\frac{${Math.abs(num)}}{${den}}`;
 }
 
-function genererEquation(){
-  const tirage=Math.random();
+// ====================== GENERATION ======================
+function randCoeff(){ return Math.floor(Math.random()*41)-20; } // -20 à 20
+function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
 
-  if(tirage<PROBA_GENERAL){
-    do{ a=randCoeff(); b=randCoeff(); }while(a===0||b===0);
-  } else if(tirage<PROBA_GENERAL+PROBA_VERTICAL){
-    a=randCoeffNonZero(); b=0;
+// Génération de l’équation
+function genererEquation(){
+  const tirage = Math.random();
+
+  if(tirage < 0.7){
+    do{ a=randCoeff(); b=randCoeff(); }while(a===0 || b===0);
+  } else if(tirage < 0.85){
+    a = randCoeffNonZero(); b = 0;
   } else{
-    a=0; b=randCoeffNonZero();
+    a = 0; b = randCoeffNonZero();
   }
 
-  c=randCoeffNonZero();
+  c = randCoeffNonZero();
 
   // Construction texte équation
   let terms=[];
-  if(a!==0) terms.push(formatTerme(a,'x'));
-  if(b!==0) terms.push(formatTerme(b,'y'));
-  if(c!==0) terms.push(formatTerme(c,'',true));
+  if(a!==0) terms.push((a===1?'':'') + (a===-1?'-':'') + 'x');
+  if(b!==0) terms.push((b>0?'+ ':'- ') + (Math.abs(b)===1?'y':Math.abs(b)+'y'));
+  if(c!==0) terms.push((c>0?'+ ':'- ') + Math.abs(c));
 
-  let equationTexte=terms.join(' ').replace(/\s\+\s-/g,' - ');
+  let equationTexte = terms.join(' ').replace(/\+\s-/g,'- ');
   document.getElementById("equation").innerHTML=`Réduis l’équation de la droite : \\(${equationTexte} = 0\\).`;
 
   document.getElementById("reponse").value='';
   document.getElementById("feedback").innerHTML='';
 
   if(b!==0){
-    let p1=pgcd(a,b);
-    let p2=pgcd(c,b);
-    coeffA={num:-a/p1, den:b/p1};
-    coeffB={num:-c/p2, den:b/p2};
+    let p1 = pgcd(a,b);
+    let p2 = pgcd(c,b);
+    coeffA = {num: -a/p1, den: b/p1};
+    coeffB = {num: -c/p2, den: b/p2};
   }
 
   MathJax.typeset();
@@ -121,13 +108,13 @@ function genererEquation(){
 function lireReponse(){ return document.getElementById("reponse").value.toLowerCase().replace(/\s/g,''); }
 
 function verifier(){
-  const r=lireReponse();
-  const feedback=document.getElementById("feedback");
+  const r = lireReponse();
+  const feedback = document.getElementById("feedback");
 
   if(b===0){
-    let p=pgcd(c,a), num=-c/p, den=a/p;
-    const formeSimplifiee=`x=${num}/${den}`;
-    const formeNonSimplifiee=`x=${-c}/${a}`;
+    let p = pgcd(c,a), num = -c/p, den = a/p;
+    const formeSimplifiee = `x=${num}/${den}`;
+    const formeNonSimplifiee = `x=${-c}/${a}`;
     if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
     else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
     else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
@@ -135,59 +122,58 @@ function verifier(){
   }
 
   if(a===0){
-    let p=pgcd(c,b), num=-c/p, den=b/p;
-    const formeSimplifiee=`y=${num}/${den}`;
-    const formeNonSimplifiee=`y=${-c}/${b}`;
+    let p = pgcd(c,b), num=-c/p, den=b/p;
+    const formeSimplifiee = `y=${num}/${den}`;
+    const formeNonSimplifiee = `y=${-c}/${b}`;
     if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
     else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
     else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
     return;
   }
 
-  const formeSimplifiee=`${coeffA.num}/${coeffA.den}x${signe(coeffB.num)}${abs(coeffB.num)}/${coeffB.den}`;
-  const formeNonSimplifiee=`${-a}/${b}x${-c<0?'':'+'}${-c}/${b}`;
+  const formeSimplifiee = `${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}`;
+  const formeNonSimplifiee = `${-a}/${b}x ${-c<0?'':'+'}${-c}/${b}`;
 
   if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
-  else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… Les fractions doivent être simplifiées."; feedback.style.color="orange";}
+  else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
   else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
 }
 
 // ====================== CORRECTION ======================
 function corriger(){
-  const feedback=document.getElementById("feedback");
+  const feedback = document.getElementById("feedback");
 
   if(b===0){
-    let p=pgcd(c,a), num=-c/p, den=a/p;
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
       \\(${a}x + ${c} = 0\\)<br>
       On isole x : \\(x = -\\frac{${c}}{${a}}\\)<br>
-      Fraction simplifiée : \\(x = \\frac{${num}}{${den}}\\)`;
+      Fraction simplifiée : \\(x = ${fractionLaTeX(-c, a)}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
   if(a===0){
-    let p=pgcd(c,b), num=-c/p, den=b/p;
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
       \\(${b}y + ${c} = 0\\)<br>
       On isole y : \\(y = -\\frac{${c}}{${b}}\\)<br>
-      Fraction simplifiée : \\(y = \\frac{${num}}{${den}}\\)`;
+      Fraction simplifiée : \\(y = ${fractionLaTeX(-c,b)}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
   let correction=`📘 <strong>Correction détaillée</strong><br><br>
     \\(${a}x + ${b}y + ${c} = 0\\)<br><br>`;
-
+  
   if(b>0){
     correction += `\\(${b}y = -${a}x - ${c}\\)<br>
                    \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br>
-                   \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x ${signe(coeffB.num)} \\frac{${abs(coeffB.num)}}{${coeffB.den}}\\)`;
+                   \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
   } else {
     correction += `\\(${a}x + ${c} = ${-b}y\\)<br>
                    \\(y = \\frac{${a}}{${-b}}x + \\frac{${c}}{${-b}}\\)<br>
-                   \\(y = \\frac{${coeffA.num}}{${coeffA.den}}x ${signe(coeffB.num)} \\frac{${abs(coeffB.num)}}{${coeffB.den}}\\)`;
+                   \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
   }
 
-  feedback.innerHTML=correction; feedback.style.color="#000"; MathJax.typeset();
+  feedback.innerHTML = correction;
+  feedback.style.color="#000"; MathJax.typeset();
 }
 
 // ====================== INITIALISATION ======================
