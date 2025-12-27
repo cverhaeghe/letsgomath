@@ -192,8 +192,8 @@ function corriger(){
   } 
   else {
     // by passe à droite, ax et c restent inchangés
-    texte += `Le coefficient de y est négatif, on passe le terme en y dans le membre de droite :<br>
-    \\(${axTxt} ${cTxt} = -${b}y\\)<br><br>
+    texte += `Le coefficient de y est négatif, on passe le terme en y à droite :<br>
+    \\(${axTxt} ${cTxt} = ${Math.abs(b)y}\\)<br><br>
     On divise par ${-b} :<br>
     \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
   }
