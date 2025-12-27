@@ -61,6 +61,7 @@ let equationTextePourCorrection = "";
 function pgcd(x, y){ while(y!==0){ let t=y; y=x%y; x=t;} return Math.abs(x); }
 function fractionLaTeX(num, den){
   if(num === 0) return "0";
+  if(den === 1) return num.toString();
   let signeFrac = num < 0 ? "-" : "";
   return `${signeFrac}\\frac{${Math.abs(num)}}{${den}}`;
 }
@@ -69,7 +70,6 @@ function fractionLaTeX(num, den){
 function randCoeff(){ return Math.floor(Math.random()*41)-20; } // -20 à 20
 function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
 
-// Génération de l’équation
 function genererEquation(){
   const tirage = Math.random();
 
@@ -113,32 +113,41 @@ function verifier(){
   const r = lireReponse();
   const feedback = document.getElementById("feedback");
 
+  // Cas vertical
   if(b===0){
-    let p = pgcd(c,a), num = -c/p, den = a/p;
-    const formeSimplifiee = `x=${num}/${den}`;
-    const formeNonSimplifiee = `x=${-c}/${a}`;
-    if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
-    else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
-    else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
+    let x = -c / a;
+    if(r === `x=${x}`){
+      feedback.innerHTML = "✅ Correct !";
+      feedback.style.color="green";
+    } else {
+      feedback.innerHTML = "❌ Incorrect.";
+      feedback.style.color="red";
+    }
     return;
   }
 
+  // Cas horizontal
   if(a===0){
-    let p = pgcd(c,b), num=-c/p, den=b/p;
-    const formeSimplifiee = `y=${num}/${den}`;
-    const formeNonSimplifiee = `y=${-c}/${b}`;
-    if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
-    else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
-    else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
+    let y = -c / b;
+    if(r === `y=${y}`){
+      feedback.innerHTML = "✅ Correct !";
+      feedback.style.color="green";
+    } else {
+      feedback.innerHTML = "❌ Incorrect.";
+      feedback.style.color="red";
+    }
     return;
   }
 
+  // Cas général
   const formeSimplifiee = `${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}`;
-  const formeNonSimplifiee = `${-a}/${b}x ${-c<0?'':'+'}${-c}/${b}`;
-
-  if(r===formeSimplifiee){feedback.innerHTML="✅ Correct !"; feedback.style.color="green";}
-  else if(r===formeNonSimplifiee){feedback.innerHTML="🟠 Presque… fraction à simplifier."; feedback.style.color="orange";}
-  else{feedback.innerHTML="❌ Incorrect."; feedback.style.color="red";}
+  if(r===formeSimplifiee){
+    feedback.innerHTML="✅ Correct !";
+    feedback.style.color="green";
+  } else {
+    feedback.innerHTML="❌ Incorrect.";
+    feedback.style.color="red";
+  }
 }
 
 // ====================== CORRECTION ======================
@@ -147,21 +156,21 @@ function corriger(){
 
   // --- Cas vertical ---
   if(b===0){
+    let x = -c / a;
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
       \\(${equationTextePourCorrection} = 0\\)<br>
       Ici, la droite est verticale car b = 0.<br>
-      On isole x : \\(x = -\\frac{${c}}{${a}}\\)<br>
-      Fraction simplifiée : \\(x = ${fractionLaTeX(-c, a)}\\)`;
+      On isole x : \\(x = ${x}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
   // --- Cas horizontal ---
   if(a===0){
+    let y = -c / b;
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
       \\(${equationTextePourCorrection} = 0\\)<br>
       Ici, la droite est horizontale car a = 0.<br>
-      On isole y : \\(y = -\\frac{${c}}{${b}}\\)<br>
-      Fraction simplifiée : \\(y = ${fractionLaTeX(-c,b)}\\)`;
+      On isole y : \\(y = ${y}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
