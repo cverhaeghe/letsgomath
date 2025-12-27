@@ -55,6 +55,7 @@
 // ====================== VARIABLES ======================
 let a, b, c;
 let coeffA, coeffB;
+let equationTextePourCorrection = "";
 
 // ====================== UTILITAIRES ======================
 function pgcd(x, y){ while(y!==0){ let t=y; y=x%y; x=t;} return Math.abs(x); }
@@ -82,18 +83,19 @@ function genererEquation(){
 
   c = randCoeffNonZero();
 
-  // Construction texte équation
+  // Construction texte équation pour l'affichage
   let terms=[];
   if(a!==0) terms.push((a===1?'':'') + (a===-1?'-':'') + 'x');
   if(b!==0) terms.push((b>0?'+ ':'- ') + (Math.abs(b)===1?'y':Math.abs(b)+'y'));
   if(c!==0) terms.push((c>0?'+ ':'- ') + Math.abs(c));
 
-  let equationTexte = terms.join(' ').replace(/\+\s-/g,'- ');
-  document.getElementById("equation").innerHTML=`Réduis l’équation de la droite : \\(${equationTexte} = 0\\).`;
+  equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ');
+  document.getElementById("equation").innerHTML=`Réduis l’équation de la droite : \\(${equationTextePourCorrection} = 0\\).`;
 
   document.getElementById("reponse").value='';
   document.getElementById("feedback").innerHTML='';
 
+  // Préparer coefficients pour y = mx+p
   if(b!==0){
     let p1 = pgcd(a,b);
     let p2 = pgcd(c,b);
@@ -104,7 +106,7 @@ function genererEquation(){
   MathJax.typeset();
 }
 
-// ====================== REPONSE ======================
+// ====================== VERIFICATION ======================
 function lireReponse(){ return document.getElementById("reponse").value.toLowerCase().replace(/\s/g,''); }
 
 function verifier(){
@@ -145,7 +147,7 @@ function corriger(){
 
   if(b===0){
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
-      \\(${a}x + ${c} = 0\\)<br>
+      \\(${equationTextePourCorrection} = 0\\)<br>
       On isole x : \\(x = -\\frac{${c}}{${a}}\\)<br>
       Fraction simplifiée : \\(x = ${fractionLaTeX(-c, a)}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
@@ -153,24 +155,22 @@ function corriger(){
 
   if(a===0){
     feedback.innerHTML=`📘 <strong>Correction</strong><br><br>
-      \\(${b}y + ${c} = 0\\)<br>
+      \\(${equationTextePourCorrection} = 0\\)<br>
       On isole y : \\(y = -\\frac{${c}}{${b}}\\)<br>
       Fraction simplifiée : \\(y = ${fractionLaTeX(-c,b)}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
   }
 
+  // Cas général
   let correction=`📘 <strong>Correction détaillée</strong><br><br>
-    \\(${a}x + ${b}y + ${c} = 0\\)<br><br>`;
-  
-  if(b>0){
-    correction += `\\(${b}y = -${a}x - ${c}\\)<br>
-                   \\(y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br>
-                   \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
-  } else {
-    correction += `\\(${a}x + ${c} = ${-b}y\\)<br>
-                   \\(y = \\frac{${a}}{${-b}}x + \\frac{${c}}{${-b}}\\)<br>
-                   \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
-  }
+    \\(${equationTextePourCorrection} = 0\\)<br><br>`;
+
+  // Passage à y = ...
+  let signeA = coeffA.num < 0 ? "-" : "+";
+  let signeB = coeffB.num < 0 ? "-" : "+";
+
+  correction += `\\(${b}y = ${-a}x ${-c<0?'+':'-'} ${Math.abs(c)}\\)<br>
+                 \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
 
   feedback.innerHTML = correction;
   feedback.style.color="#000"; MathJax.typeset();
@@ -182,3 +182,4 @@ genererEquation();
 
 </body>
 </html>
+
