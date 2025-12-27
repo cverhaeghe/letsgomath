@@ -114,12 +114,8 @@ function genererEquation(){
     terms.push(signe + Math.abs(c));
 }
 
-let equation = terms.join(' ') + ' = 0';
-console.log(equation);
-
-  equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ');
-  equationTextePourCorrection = equationTextePourCorrection.replace(/^\+\s*/, '');
-  document.getElementById("equation").innerHTML =
+let equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ').replace(/^\+\s*/, '');
+document.getElementById("equation").innerHTML =
     `Réduis l’équation de la droite : \\(${equationTextePourCorrection} = 0\\).`;
 
   document.getElementById("reponse").value='';
