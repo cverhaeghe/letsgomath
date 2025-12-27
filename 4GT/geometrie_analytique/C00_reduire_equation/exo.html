@@ -158,7 +158,6 @@ function corriger(){
   if(b===0){
     let x = -c / a;
     feedback.innerHTML=`📘 <strong>C orrection détaillée</strong><br><br>
-                   On part de l'équation : <br>
                    \\(${equationTextePourCorrection} = 0\\)<br><br>`;
                     Il n'y a pas de y donc on isole x : <br>
                     \\(x = ${x}\\)`;
@@ -169,7 +168,6 @@ function corriger(){
   if(a===0){
     let y = -c / b;
     feedback.innerHTML=`📘 <strong>Correction détaillée</strong><br><br>
-                  On part de l'équation : <br>
                    \\(${equationTextePourCorrection} = 0\\)<br><br>`;
                   On isole y : <br>
                   \\(y = ${y}\\)`;
@@ -178,7 +176,6 @@ function corriger(){
 
   // --- Cas général ---
   let correction=`📘 <strong>Correction détaillée</strong><br><br>
-                   On part de l'équation : <br>
                    \\(${equationTextePourCorrection} = 0\\)<br><br>`;
 
   if(b>0){
