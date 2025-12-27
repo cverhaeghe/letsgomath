@@ -158,7 +158,7 @@ function corriger(){
   if(b===0){
     let x = -c / a;
     feedback.innerHTML=`📘 <strong>C orrection détaillée</strong><br><br>
-                   \\(${equationTextePourCorrection} = 0\\)<br><br>;
+                   \\(${equationTextePourCorrection} = 0\\)<br><br>
                     Il n'y a pas de y donc on isole x : <br>
                     \\(x = ${x}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
@@ -168,7 +168,7 @@ function corriger(){
   if(a===0){
     let y = -c / b;
     feedback.innerHTML=`📘 <strong>Correction détaillée</strong><br><br>
-                   \\(${equationTextePourCorrection} = 0\\)<br><br>;
+                   \\(${equationTextePourCorrection} = 0\\)<br><br>
                   On isole y : <br>
                   \\(y = ${y}\\)`;
     feedback.style.color="#000"; MathJax.typeset(); return;
