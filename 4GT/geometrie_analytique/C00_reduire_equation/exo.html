@@ -164,35 +164,56 @@ function corriger(){
   const f = document.getElementById("feedback");
   f.style.color = "#000"; // toujours noir
 
-// --- Cas vertical ---
-if(b === 0){
-  let texte = `📘 <strong>Correction détaillée</strong><br><br>
-    \\(${equationTextePourCorrection}=0\\)<br><br>`;
+// --- CAS VERTICAL ---
+if (b === 0) {
 
-  // a = ±1 → x isolé directement
-  if(Math.abs(a) === 1){
-    if(a === 1){
-      texte += `On a : \\(x = ${-c}\\)`;
+  let texte = `📘 <strong>Correction détaillée</strong><br><br>
+  \\(${equationTextePourCorrection}=0\\)<br><br>`;
+
+  let num, den; // numérateur / dénominateur finaux
+
+  // ─────────────────────────────
+  // Étape 2 : isolement selon a
+  // ─────────────────────────────
+  if (a > 0) {
+
+    texte += `Étape 2 : a > 0, on isole \\(${a}x\\) à gauche :<br>
+    \\(${a}x = ${-c}\\)<br><br>
+    Étape 3 : on divise tout par ${a} :<br>`;
+
+    if (c > 0) {
+      // x = -|c| / a
+      num = -Math.abs(c);
+      den = a;
     } else {
-      texte += `On passe le terme en x à droite : \\(${c} = x\\)`;
+      // x = |c| / a
+      num = Math.abs(c);
+      den = a;
     }
-  } 
-  else {
-    // a ≠ ±1 → fraction simplifiée
-    if(a > 0){
-      let xFrac = fractionLaTeX(-c, a);
-      texte += `On isole le terme en x :<br>
-        \\(${a}x = ${-c}\\)<br><br>
-        On divise tout par ${a} :<br>
-        \\(x = ${xFrac}\\)`;
+
+  } else {
+
+    texte += `Étape 2 : a < 0, on isole \\(${Math.abs(a)}x\\) à droite :<br>
+    \\(${c} = ${Math.abs(a)}x\\)<br><br>
+    Étape 3 : on divise tout par ${-a} :<br>`;
+
+    if (c > 0) {
+      // x = c / (-a)
+      num = c;
+      den = -a;
     } else {
-      let xFrac = fractionLaTeX(c, -a);
-      texte += `Le coefficient de x est négatif, on passe le terme en x à droite :<br>
-        \\(${c} = ${Math.abs(a)}x\\)<br><br>
-        On divise tout par ${Math.abs(a)} :<br>
-        \\(x = ${xFrac}\\)`;
+      // x = -|c| / (-a)
+      num = -Math.abs(c);
+      den = -a;
     }
   }
+
+  // ─────────────────────────────
+  // Étape 4 : simplification
+  // ─────────────────────────────
+  let xFrac = fractionLaTeX(num, den);
+
+  texte += `\\(x = ${xFrac}\\)`;
 
   f.innerHTML = texte;
   f.style.color = "#000";
