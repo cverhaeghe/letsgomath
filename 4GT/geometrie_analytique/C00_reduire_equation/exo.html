@@ -139,7 +139,12 @@ function corriger(){
     texte += `Étape 3 : on simplifie <br>`;
        
     let frac = FractionIrreductible(c, a);
-    texte += `\\(x = - \\frac{${frac.num}}{${frac.den}}\\)`;
+    if (frac.den === 1) {
+    texte += `\\(x = - ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = -\\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+
 
     
   } else if (a > 0 && c < 0) {
@@ -156,11 +161,15 @@ function corriger(){
     texte += `\\( ${frac1} x = ${frac2}\\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
-       
+            
     let frac = FractionIrreductible(-c, a);
+    if (frac.den === 1) {
+    texte += `\\(x = ${frac.num}\\)`;
+    } else {
     texte += `\\(x = \\frac{${frac.num}}{${frac.den}}\\)`;
+    }
 
-    
+   
     
   } else if (a < 0 && c > 0) {
     texte += `Étape 1 : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
@@ -176,9 +185,14 @@ function corriger(){
     texte += `\\( ${frac1} = ${frac2} x \\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
-       
+            
     let frac = FractionIrreductible(c, -a);
+    if (frac.den === 1) {
+    texte += `\\(x = ${frac.num}\\)`;
+    } else {
     texte += `\\(x = \\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+  
   
 
   } else {
@@ -195,9 +209,13 @@ function corriger(){
     texte += `\\( -${frac1} = ${frac2} x \\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
-       
+             
     let frac = FractionIrreductible(-c, -a);
-    texte += `\\(x = - \\frac{${frac.num}}{${frac.den}}\\)`;
+    if (frac.den === 1) {
+    texte += `\\(x = - ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = -\\frac{${frac.num}}{${frac.den}}\\)`;
+    }
   }
     
 
