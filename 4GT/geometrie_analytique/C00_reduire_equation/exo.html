@@ -114,15 +114,17 @@ function corriger(){
 
   if(a > 0){
     texte += `Étape 1 : on isole \\(${a}x\\) :<br>
-    \\(${a}x = ${-c}\\)<br><br>
-    Étape 2 : on divise tout par ${a} :<br>`;
+        \\(${a}x = ${-c}\\)<br><br>
+    Étape 2 : on divise tout par ${a} :<br>
+        \\(x = ${-c}/${a}\\)<br><br>`;
 
     num = (c > 0 ? -Math.abs(c) : Math.abs(c));
     den = a;
   } else {
     texte += `Étape 1 : comme a < 0, on isole \\(${Math.abs(a)}x\\) à droite :<br>
-    \\(${c} = ${Math.abs(a)}x\\)<br><br>
-    Étape 2 : on divise tout par ${-a} :<br>`;
+        \\(${c} = ${Math.abs(a)}x\\)<br><br>
+    Étape 2 : on divise tout par ${-a} :<br>
+        \\(${c}/${Math.abs(a)} = x\\)<br><br>`;
 
     num = (c > 0 ? c : -Math.abs(c));
     den = -a;
