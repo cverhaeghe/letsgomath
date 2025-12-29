@@ -123,17 +123,22 @@ function corriger(){
   } else {
     texte += `Étape 1 : comme a < 0, on passe \\(${-Math.abs(a)}x\\) à droite <br>
         \\(${c} = ${Math.abs(a)}x\\)<br><br>
-    Étape 2 : on divise tout par ${-a} <br>
+    Étape 2 : on divise tout par ${-a} <br> `;
+
+    num = c;
+    den = Math.abs(a)
+
+    const frac = fractionLaTeX(num, den);
+    texte += `\\(x = ${frac}\\)`;
+
+    
         \\(${c}/${Math.abs(a)} = ${Math.abs(a)} /${Math.abs(a)}x\\)<br><br>
         \\(  \\frac{${c}/${Math.abs(a)}}{${Math.abs(a)} /${Math.abs(a)}x}   \\) `;
 
-    num = (c > 0 ? c : -Math.abs(c));
-    den = -a;
+
   }
 
-  const frac = fractionLaTeX(num, den);
-  texte += `Étape 3 : on simplifie <br>
-        \\(x = ${frac}\\)`;
+    texte += `Étape 3 : on simplifie <br>`;
 
   f.innerHTML = texte;
   renderMath(f);
