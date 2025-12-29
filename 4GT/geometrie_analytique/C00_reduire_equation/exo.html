@@ -164,17 +164,18 @@ function corriger(){
   const f = document.getElementById("feedback");
   f.style.color = "#000"; // toujours noir
 
-// --- CAS VERTICAL ---
-if (b === 0) {
+  // ─────────────────────────────//
+  // CAS VERTICAL 
+  // ─────────────────────────────//
+  
+  if (b === 0) {
 
   let texte = `📘 <strong>Correction détaillée</strong><br><br>
   \\(${equationTextePourCorrection}=0\\)<br><br>`;
 
   let num, den; // numérateur / dénominateur finaux
 
-  // ─────────────────────────────
-  // Étape 2 : isolement selon a
-  // ─────────────────────────────
+
   if (a > 0) {
 
     texte += `Étape 2 : a > 0, on isole \\(${a}x\\) à gauche :<br>
@@ -222,71 +223,6 @@ if (b === 0) {
 }
 
 
-  // --- Cas horizontal ---
-  if(a === 0){
-    let texte = `📘 <strong>Correction détaillée</strong><br><br>
-      \\(${equationTextePourCorrection}=0\\)<br><br>`;
-
-    // b = ±1 → y isolé directement
-    if(Math.abs(b) === 1){
-      if(b === 1){
-        texte += `On a : \\(y = ${-c}\\)`;
-      } else {
-        texte += `On a : \\(${c} = y\\)`;
-      }
-    } else {
-      // b ≠ ±1 → fraction simplifiée
-      if(b > 0){
-        let yFrac = fractionLaTeX(-c, b);
-        texte += `On isole le terme en y :<br>
-          \\(${b}y = ${-c}\\)<br><br>
-          On divise tout par ${b} :<br>
-          \\(y = ${yFrac}\\)`;
-      } else {
-        let yFrac = fractionLaTeX(-c, -b);
-        texte += `Le coefficient de y est négatif, on passe le terme en y à droite :<br>
-          \\(${c} = ${Math.abs(b)}y\\)<br><br>
-          On divise tout par ${Math.abs(b)} :<br>
-          \\(y = ${yFrac}\\)`;
-      }
-    }
-
-    f.innerHTML = texte;
-    MathJax.typeset();
-    return;
-  }
-
-  // --- Cas général ---
-  let axTxt = (a === 1 ? 'x' : (a === -1 ? '-x' : a+'x'));
-  let cTxt  = (c < 0 ? '- '+Math.abs(c) : '+ '+c);
-
-  let texte = `📘 <strong>Correction détaillée</strong><br><br>
-      \\(${equationTextePourCorrection}=0\\)<br><br>`;
-
-  // b = ±1 → y isolé directement
-  if(Math.abs(b) === 1){
-    if(b === 1){
-      texte += `On isole y : \\(y = -${axTxt} ${c < 0 ? '- '+Math.abs(c) : '+ '+c}\\)`;
-    } else {
-      texte += `On passe le terme en y à droite : \\(${axTxt} ${cTxt} = y\\)`;
-    }
-  } else {
-    if(b > 0){
-      texte += `On isole le terme en y :<br>
-        \\(${b}y = -${axTxt} ${cTxt}\\)<br><br>
-        On divise tout par ${b} :<br>
-        \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
-    } else {
-      texte += `Le coefficient de y est négatif, on passe le terme en y à droite :<br>
-        \\(${axTxt} ${cTxt} = ${Math.abs(b)}y\\)<br><br>
-        On divise tout par ${Math.abs(b)} :<br>
-        \\(y = ${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}\\)`;
-    }
-  }
-
-  f.innerHTML = texte;
-  MathJax.typeset();
-}
 
 
 // ====================== INITIALISATION ======================
