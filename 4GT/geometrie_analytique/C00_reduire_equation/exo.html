@@ -61,6 +61,13 @@ let equationTextePourCorrection = "";
 function randCoeff(){ return Math.floor(Math.random()*41)-20; }
 function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
 
+function pgcd(x, y){
+  x = Math.abs(x);
+  y = Math.abs(y);
+  while (y !== 0) {let t = y;y = x % y;x = t;}
+  return x;
+}
+
 function FractionIrreductible(num, den) {
     const p = pgcd(num, den);
     return {
