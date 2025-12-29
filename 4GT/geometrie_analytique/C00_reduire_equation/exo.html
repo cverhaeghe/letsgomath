@@ -61,10 +61,13 @@ let equationTextePourCorrection = "";
 function randCoeff(){ return Math.floor(Math.random()*41)-20; }
 function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
 
-function pgcd(x, y){
-  while(y!==0){ let t=y; y=x%y; x=t; }
-  return Math.abs(x);
-}
+function FractionIrreductible(num, den) {
+    const p = pgcd(num, den);
+    return {
+      num: num / p,
+      den: den / p
+      };
+    }
 
 function fractionLaTeX(num, den){
   if(num === 0) return "0";
@@ -125,8 +128,12 @@ function corriger(){
 
     texte += `\\( ${frac1} x = - ${frac2}\\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>
-       \\(x = - ${frac2}\\)`;
+    texte += `Étape 3 : on simplifie <br>`;
+       
+    let frac = FractionIrreductible(c, a);
+    texte += `\\(x = - frac{${frac.num}}{${frac.den}}\\)`;
+
+    
     
   } else if (a > 0 && c < 0) {
     texte += `Étape 1 : on isole \\(${a}x\\) <br>
