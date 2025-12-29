@@ -6,11 +6,6 @@
 
 <title>Let's go Math !</title>
 
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
-
 <!-- CSS -->
 <link rel="stylesheet" href="../../../style.css">
 <link rel="stylesheet" href="../../../exercices.css">
@@ -18,7 +13,7 @@
 <!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- MathJax -->
+<!-- MathJax v3 -->
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
@@ -38,9 +33,9 @@
 
   <div class="equation-box" id="equation"></div>
 
-  <input type="text" id="reponse" placeholder="">
+  <input type="text" id="reponse" placeholder="Ex : x = 3">
 
-  <button onclick="verifier()">Vérifier ma réponse</button>
+  <button onclick="verifier()">Vérifier</button>
   <button onclick="corriger()">Correction</button>
   <button onclick="genererEquation()">Nouvel exercice</button>
 
@@ -52,18 +47,20 @@
 </div>
 
 <script>
-// ====================== PARAMETRES PEDAGOGIQUES ======================
-// Somme = 1
-const PROBA_OBLIQUE     = 0.1;   // y = mx + p
-const PROBA_VERTICALE   = 0.9;  // x = k
-// le reste = horizontale (y = k)
+/* ====================== OUTILS MATHJAX ====================== */
+function renderMath(el){
+  MathJax.typesetClear([el]);
+  MathJax.typesetPromise([el]);
+}
 
-// ====================== VARIABLES ======================
+/* ====================== VARIABLES ====================== */
 let a, b, c;
-let coeffA, coeffB;
 let equationTextePourCorrection = "";
 
-// ====================== UTILITAIRES ======================
+/* ====================== UTILITAIRES ====================== */
+function randCoeff(){ return Math.floor(Math.random()*41)-20; }
+function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
+
 function pgcd(x, y){
   while(y!==0){ let t=y; y=x%y; x=t; }
   return Math.abs(x);
@@ -75,129 +72,70 @@ function fractionLaTeX(num, den){
   return (num < 0 ? "-" : "") + `\\frac{${Math.abs(num)}}{${den}}`;
 }
 
-// ====================== GENERATION ======================
-function randCoeff(){ return Math.floor(Math.random()*41)-20; }
-function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
-
+/* ====================== GENERATION ====================== */
 function genererEquation(){
-  const tirage = Math.random();
 
-  if(tirage < PROBA_OBLIQUE){
-    // droite oblique
-    do{ a=randCoeff(); b=randCoeff(); }while(a===0 || b===0);
-  }
-  else if(tirage < PROBA_OBLIQUE + PROBA_VERTICALE){
-    // droite verticale
-    a = randCoeffNonZero();
-    b = 0;
-  }
-  else{
-    // droite horizontale
-    a = 0;
-    b = randCoeffNonZero();
-  }
-
+  // ---- droite verticale uniquement ----
+  a = randCoeffNonZero();
+  b = 0;
   c = randCoeff();
 
-  // Construction texte équation (sans 1x)
-  let terms=[];
-  if(a !== 0){
-      terms.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x');
-}
-  if(b !== 0){
-    let signe = (terms.length > 0 ? (b > 0 ? '+' : '-') : (b < 0 ? '-' : ''));
-    let valeur = Math.abs(b) === 1 ? 'y' : Math.abs(b) + 'y';
-    terms.push(signe + valeur);
-}
+  // construction du texte ax + c
+  let terms = [];
+  terms.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x');
+
   if(c !== 0){
-    let signe = (terms.length > 0 ? (c > 0 ? '+' : '-') : (c < 0 ? '-' : ''));
-    terms.push(signe + Math.abs(c));
-}
-
-equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ').replace(/^\+\s*/, '');
-document.getElementById("equation").innerHTML =
-    `Réduis l’équation de la droite : \\(${equationTextePourCorrection} = 0\\).`;
-
-  document.getElementById("reponse").value='';
-  document.getElementById("feedback").innerHTML='';
-
-  if(b!==0){
-    let p1 = pgcd(a, Math.abs(b));
-    let p2 = pgcd(c, Math.abs(b));
-    coeffA = {num: -a/p1, den: Math.abs(b)/p1};
-    coeffB = {num: -c/p2, den: Math.abs(b)/p2};
+    terms.push((c > 0 ? '+ ' : '- ') + Math.abs(c));
   }
 
-  MathJax.typeset();
+  equationTextePourCorrection = terms.join(' ');
+
+  const eqDiv = document.getElementById("equation");
+  eqDiv.innerHTML =
+    `Réduis l’équation de la droite : \\(${equationTextePourCorrection} = 0\\).`;
+  renderMath(eqDiv);
+
+  document.getElementById("reponse").value = "";
+  document.getElementById("feedback").innerHTML = "";
 }
 
 
 
-// ====================== CORRECTION ======================
+/* ====================== CORRECTION ====================== */
 function corriger(){
-  const f = document.getElementById("feedback");
-  f.style.color = "#000"; // toujours noir
 
-  // ─────────────────────────────//
-  // CAS VERTICAL 
-  // ─────────────────────────────//
-  
-  if (b === 0) {
+  const f = document.getElementById("feedback");
+  f.style.color = "#000";
 
   let texte = `📘 <strong>Correction détaillée</strong><br><br>
-  \\(${equationTextePourCorrection}=0\\)<br><br>`;
+  \\(${equationTextePourCorrection} = 0\\)<br><br>`;
 
-  let num, den; // numérateur / dénominateur finaux
+  let num, den;
 
-
-  if (a > 0) {
-
+  if(a > 0){
     texte += `Étape 1 : on isole \\(${a}x\\) :<br>
     \\(${a}x = ${-c}\\)<br><br>
-    
     Étape 2 : on divise tout par ${a} :<br>`;
 
-    if (c > 0) {
-      // x = -|c| / a
-      num = -Math.abs(c);
-      den = a;
-    } else {
-      // x = |c| / a
-      num = Math.abs(c);
-      den = a;
-    }
-
+    num = (c > 0 ? -Math.abs(c) : Math.abs(c));
+    den = a;
   } else {
-
     texte += `Étape 1 : comme a < 0, on isole \\(${Math.abs(a)}x\\) à droite :<br>
     \\(${c} = ${Math.abs(a)}x\\)<br><br>
     Étape 2 : on divise tout par ${-a} :<br>`;
 
-    if (c > 0) {
-      // x = c / (-a)
-      num = c;
-      den = -a;
-    } else {
-      // x = -|c| / (-a)
-      num = -Math.abs(c);
-      den = -a;
-    }
+    num = (c > 0 ? c : -Math.abs(c));
+    den = -a;
   }
 
-  let xFrac = fractionLaTeX(num, den);
-
-  texte += `Etape 3 : on simplifie les fractions \\(x = ${xFrac}\\)`;
+  const frac = fractionLaTeX(num, den);
+  texte += `Étape 3 : on simplifie : \\(x = ${frac}\\)`;
 
   f.innerHTML = texte;
-  f.style.color = "#000";
-  MathJax.typeset();
-  return;
+  renderMath(f);
 }
 
-
-
-
-// ====================== INITIALISATION ======================
+/* ====================== INIT ====================== */
 genererEquation();
 </script>
 
