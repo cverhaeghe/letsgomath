@@ -116,25 +116,20 @@ function corriger(){
     texte += `Étape 1 : on isole \\(${a}x\\) <br>
         \\(${a}x = ${-c}\\)<br><br>
     Étape 2 : on divise tout par ${a} <br>
-        \\(${a} / ${a} x = ${-c} / ${a}\\)<br><br>`;
+        \\(${a} / ${a} x = -${c} / ${a}\\)<br><br>`;
 
     num = (c > 0 ? -Math.abs(c) : Math.abs(c));
     den = a;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num, den);
+
+    texte += `\\( ${frac1} x = ${frac2}\\)`;
+
   } else {
     texte += `Étape 1 : comme a < 0, on passe \\(${-Math.abs(a)}x\\) à droite <br>
         \\(${c} = ${Math.abs(a)}x\\)<br><br>
-    Étape 2 : on divise tout par ${-a} <br> `;
-
-    num = c;
-    den = Math.abs(a)
-
-    const frac = fractionLaTeX(num, den);
-    texte += `\\(x = ${frac}\\)`;
-
-    
-        \\(${c}/${Math.abs(a)} = ${Math.abs(a)} /${Math.abs(a)}x\\)<br><br>
-        \\(  \\frac{${c}/${Math.abs(a)}}{${Math.abs(a)} /${Math.abs(a)}x}   \\) `;
-
+    Étape 2 : on divise tout par ${-a} <br>
+        \\(${c}/${Math.abs(a)} = ${Math.abs(a)} /${Math.abs(a)}x\\)<br><br> `;
 
   }
 
