@@ -114,7 +114,7 @@ function genererEquation(){
     terms.push(signe + Math.abs(c));
 }
 
-let equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ').replace(/^\+\s*/, '');
+equationTextePourCorrection = terms.join(' ').replace(/\+\s-/g,'- ').replace(/^\+\s*/, '');
 document.getElementById("equation").innerHTML =
     `Réduis l’équation de la droite : \\(${equationTextePourCorrection} = 0\\).`;
 
@@ -209,9 +209,6 @@ function corriger(){
     }
   }
 
-  // ─────────────────────────────
-  // Étape 4 : simplification
-  // ─────────────────────────────
   let xFrac = fractionLaTeX(num, den);
 
   texte += `\\(x = ${xFrac}\\)`;
