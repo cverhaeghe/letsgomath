@@ -124,7 +124,8 @@ function corriger(){
     texte += `Étape 1 : comme a < 0, on passe \\(${-Math.abs(a)}x\\) à droite <br>
         \\(${c} = ${Math.abs(a)}x\\)<br><br>
     Étape 2 : on divise tout par ${-a} <br>
-        \\(${c}/${Math.abs(a)} = ${Math.abs(a)} /${Math.abs(a)}x\\)<br><br>`;
+        \\(${c}/${Math.abs(a)} = ${Math.abs(a)} /${Math.abs(a)}x\\)<br><br>
+        \\( fractionLaTeX(${c},${Math.abs(a)}) = fractionLaTeX(${Math.abs(a)}, ${Math.abs(a)})x\\)<br><br>`;
 
     num = (c > 0 ? c : -Math.abs(c));
     den = -a;
