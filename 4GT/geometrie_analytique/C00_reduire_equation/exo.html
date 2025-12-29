@@ -178,9 +178,10 @@ function corriger(){
 
   if (a > 0) {
 
-    texte += `Étape 2 : a > 0, on isole \\(${a}x\\) à gauche :<br>
+    texte += `Étape 1 : on isole \\(${a}x\\) :<br>
     \\(${a}x = ${-c}\\)<br><br>
-    Étape 3 : on divise tout par ${a} :<br>`;
+    
+    Étape 2 : on divise tout par ${a} :<br>`;
 
     if (c > 0) {
       // x = -|c| / a
@@ -194,9 +195,9 @@ function corriger(){
 
   } else {
 
-    texte += `Étape 2 : a < 0, on isole \\(${Math.abs(a)}x\\) à droite :<br>
+    texte += `Étape 1 : comme a < 0, on isole \\(${Math.abs(a)}x\\) à droite :<br>
     \\(${c} = ${Math.abs(a)}x\\)<br><br>
-    Étape 3 : on divise tout par ${-a} :<br>`;
+    Étape 2 : on divise tout par ${-a} :<br>`;
 
     if (c > 0) {
       // x = c / (-a)
@@ -211,7 +212,7 @@ function corriger(){
 
   let xFrac = fractionLaTeX(num, den);
 
-  texte += `\\(x = ${xFrac}\\)`;
+  texte += `Etape 3 : on simplifie les fractions \\(x = ${xFrac}\\)`;
 
   f.innerHTML = texte;
   f.style.color = "#000";
