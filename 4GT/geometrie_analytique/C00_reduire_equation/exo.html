@@ -131,33 +131,7 @@ document.getElementById("equation").innerHTML =
   MathJax.typeset();
 }
 
-// ====================== VERIFICATION ======================
-function lireReponse(){
-  return document.getElementById("reponse").value.toLowerCase().replace(/\s/g,'');
-}
 
-function verifier(){
-  const r = lireReponse();
-  const feedback = document.getElementById("feedback");
-
-  if(b===0){
-    let x = -c / a;
-    feedback.innerHTML = (r === `x=${x}`) ? "✅ Correct !" : "❌ Incorrect.";
-    feedback.style.color = (r === `x=${x}`) ? "green" : "red";
-    return;
-  }
-
-  if(a===0){
-    let y = -c / b;
-    feedback.innerHTML = (r === `y=${y}`) ? "✅ Correct !" : "❌ Incorrect.";
-    feedback.style.color = (r === `y=${y}`) ? "green" : "red";
-    return;
-  }
-
-  const forme = `${fractionLaTeX(coeffA.num, coeffA.den)}x ${fractionLaTeX(coeffB.num, coeffB.den)}`;
-  feedback.innerHTML = (r===forme) ? "✅ Correct !" : "❌ Incorrect.";
-  feedback.style.color = (r===forme) ? "green" : "red";
-}
 
 // ====================== CORRECTION ======================
 function corriger(){
