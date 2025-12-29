@@ -33,7 +33,7 @@
 
   <div class="equation-box" id="equation"></div>
 
-  <input type="text" id="reponse" placeholder="Ex : x = 3">
+  <input type="text" id="reponse" placeholder="">
 
   <button onclick="verifier()">Vérifier</button>
   <button onclick="corriger()">Correction</button>
@@ -121,7 +121,7 @@ function corriger(){
     num = (c > 0 ? -Math.abs(c) : Math.abs(c));
     den = a;
   } else {
-    texte += `Étape 1 : comme a < 0, on isole \\(${Math.abs(a)}x\\) à droite :<br>
+    texte += `Étape 1 : comme a < 0, on passe \\(${-Math.abs(a)}x\\) à droite :<br>
         \\(${c} = ${Math.abs(a)}x\\)<br><br>
     Étape 2 : on divise tout par ${-a} :<br>
         \\(${c}/${Math.abs(a)} = x\\)<br><br>`;
