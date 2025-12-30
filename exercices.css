@@ -126,23 +126,19 @@
   color: white; /* texte en blanc au hover */
 }
 
-
-
-
-/* Feedback spécifique */
-.feedback {
-  margin-top: 15px;
-  font-size: 1.1rem;
-  font-weight: 600;
+.qcm-card.correct {
+  background-color: #2e7d32; /* vert foncé */
+  color: white;
 }
 
-.feedback.correct {
-  color: #2e7d32;
+.qcm-card.incorrect {
+  background-color: #c62828; /* rouge foncé */
+  color: white;
 }
 
-.feedback.incorrect {
-  color: #c62828;
-}
+
+
+
 
 
 
