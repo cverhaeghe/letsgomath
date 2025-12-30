@@ -683,7 +683,47 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     texte += `\\( -${frac1} x - ${frac2}  = ${frac3} y \\)<br><br>`;
     }
 
+  /* ===== ÉTAPE 3 : forme y = mx + p ===== */
+  
     texte += `Étape 3 : on simplifie <br>`;
+
+  const sol = solutionOfficielle();
+  const m = sol.m;   // {num, den}
+  const p = sol.p;   // {num, den}
+
+  texte += `Étape 3 : on simplifie <br>`;
+
+  /* --- coefficient m --- */
+  let mTexte = "";
+
+  if (m.num === 0) {
+    mTexte = "0";
+} else if (m.den === 1) {
+  if (m.num === 1) mTexte = "x";
+  else if (m.num === -1) mTexte = "-x";
+  else mTexte = `${m.num}x`;
+} else {
+  mTexte = `${fractionLaTeX(m.num, m.den)}x`;
+}
+
+  /* --- terme p --- */
+  let pTexte = "";
+
+  if (p.num !== 0) {
+    if (p.den === 1) {
+      pTexte = p.num > 0
+      ? ` + ${p.num}`
+      : ` - ${Math.abs(p.num)}`;
+  } else {
+    pTexte = p.num > 0
+      ? ` + ${fractionLaTeX(p.num, p.den)}`
+      : ` - ${fractionLaTeX(Math.abs(p.num), p.den)}`;
+  }
+}
+
+/* --- affichage final --- */
+texte += `\\(y = ${mTexte}${pTexte}\\)`;
+
 
   
 } 
