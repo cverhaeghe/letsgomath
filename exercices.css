@@ -127,12 +127,12 @@
 }
 
 .qcm-card.correct {
-  background-color: #2e7d32; /* vert foncé */
+  background-color: #4CAF50; /* vert  */
   color: white;
 }
 
 .qcm-card.incorrect {
-  background-color: #c62828; /* rouge foncé */
+  background-color: #F44336; /* rouge  */
   color: white;
 }
 
