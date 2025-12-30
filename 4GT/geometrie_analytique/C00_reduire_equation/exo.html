@@ -657,7 +657,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 } else if (b < 0 && a > 0 && c > 0) {                        /* CAS 5 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
@@ -680,7 +680,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 } else if (b < 0 && a > 0 && c < 0) {                        /* CAS 6 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
@@ -704,7 +704,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 } else if (b < 0 && a < 0 && c > 0) {                        /* CAS 7 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
@@ -728,7 +728,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
  } else {                                           /* CAS 8 : y=mx+p  */
 
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
