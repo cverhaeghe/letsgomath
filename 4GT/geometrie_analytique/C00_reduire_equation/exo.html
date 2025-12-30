@@ -155,86 +155,167 @@ function genererEquation(){
 }
 
   
-/* ====================== 
-OUTILS POUR VERIFICATION 
+/* ======================
+OUTILS POUR VERIFICATION
 ====================== */
 
-  function parseReponse(txt) {
-  txt = txt.replace(/\s+/g, ""); // supprime les espaces
-
-  // format obligatoire : x=...
-  if (!txt.startsWith("x=")) return null;
-
-  txt = txt.substring(2); // enlève "x="
-
-  // fraction
+function parseFraction(txt) {
+  if (!txt) return null;
   if (txt.includes("/")) {
     const [n, d] = txt.split("/");
     if (d === "0") return null;
     return { num: parseInt(n), den: parseInt(d) };
   }
-
-  // entier
   return { num: parseInt(txt), den: 1 };
 }
 
-function solutionOfficielle() {
-  return FractionIrreductible(-c, a);
+function parseReponse(txt) {
+  txt = txt.replace(/\s+/g, "");
+
+  let variable;
+  if (txt.startsWith("x=")) variable = "x";
+  else if (txt.startsWith("y=")) variable = "y";
+  else return null;
+
+  txt = txt.substring(2);
+
+  // cas y = mx + p
+  if (variable === "y" && txt.includes("x")) {
+    const [mPart, pPartRaw] = txt.split("x");
+
+    const mTxt =
+      mPart === "" ? "1" :
+      mPart === "-" ? "-1" :
+      mPart;
+
+    const pTxt =
+      pPartRaw === "" ? "0" :
+      pPartRaw.startsWith("+") ? pPartRaw.substring(1) :
+      pPartRaw;
+
+    return {
+      variable: "y",
+      m: parseFraction(mTxt),
+      p: parseFraction(pTxt)
+    };
+  }
+
+  // cas x = k ou y = k
+  return {
+    variable,
+    valeur: parseFraction(txt)
+  };
 }
 
 function memesValeurs(f1, f2) {
   return f1.num * f2.den === f2.num * f1.den;
 }
 
+/* ======================
+SOLUTION OFFICIELLE
+====================== */
 
-  
-/* ====================== 
-        VERIFICATION 
+function solutionOfficielle() {
+
+  // droite verticale : ax + c = 0  →  x = -c/a
+  if (b === 0) {
+    return {
+      type: "verticale",
+      valeur: FractionIrreductible(-c, a)
+    };
+  }
+
+  // droite horizontale : by + c = 0  →  y = -c/b
+  if (a === 0) {
+    return {
+      type: "horizontale",
+      valeur: FractionIrreductible(-c, b)
+    };
+  }
+
+  // droite oblique : ax + by + c = 0  →  y = (-a/b)x + (-c/b)
+  return {
+    type: "oblique",
+    m: FractionIrreductible(-a, b),
+    p: FractionIrreductible(-c, b)
+  };
+}
+
+/* ======================
+        VERIFICATION
 ====================== */
 
 function verifier() {
+
   const f = document.getElementById("feedback");
   const saisie = document.getElementById("reponse").value;
 
-  const repEleve = parseReponse(saisie);
-
-  // Vérification du format
-  if (!repEleve || isNaN(repEleve.num) || isNaN(repEleve.den)) {
+  const rep = parseReponse(saisie);
+  if (!rep) {
     f.style.color = "red";
-    f.innerHTML = "❌ Réponse invalide. Écris sous la forme <strong>x = ...</strong>";
+    f.innerHTML = "❌ Format de réponse incorrect";
     return;
   }
 
-  // Fraction de la solution officielle
   const sol = solutionOfficielle();
-  const solIrred = FractionIrreductible(sol.num, sol.den);
 
-  // Normalisation des signes : on met le dénominateur positif
-  const repNorm = {
-    num: repEleve.den < 0 ? -repEleve.num : repEleve.num,
-    den: repEleve.den < 0 ? -repEleve.den : repEleve.den
-  };
+  /* ===== DROITE VERTICALE ===== */
+  if (sol.type === "verticale") {
 
-  const solNorm = {
-    num: solIrred.den < 0 ? -solIrred.num : solIrred.num,
-    den: solIrred.den < 0 ? -solIrred.den : solIrred.den
-  };
+    if (rep.variable !== "x" || !rep.valeur) {
+      f.style.color = "red";
+      f.innerHTML = "❌ Écris sous la forme <strong>x = ...</strong>";
+      return;
+    }
 
-  // Mauvaise valeur
-  if (!memesValeurs(repNorm, solNorm)) {
-    f.style.color = "red";
-    f.innerHTML = "❌ Incorrect";
-    return;
+    if (!memesValeurs(rep.valeur, sol.valeur)) {
+      f.style.color = "red";
+      f.innerHTML = "❌ Incorrect";
+      return;
+    }
+
+    if (pgcd(rep.valeur.num, rep.valeur.den) !== 1) {
+      f.style.color = "orange";
+      f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
+      return;
+    }
   }
 
-  // Test de simplification
-  if (pgcd(repNorm.num, repNorm.den) !== 1) {
-    f.style.color = "orange";
-    f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
-    return;
+  /* ===== DROITE HORIZONTALE ===== */
+  else if (sol.type === "horizontale") {
+
+    if (rep.variable !== "y" || !rep.valeur) {
+      f.style.color = "red";
+      f.innerHTML = "❌ Écris sous la forme <strong>y = ...</strong>";
+      return;
+    }
+
+    if (!memesValeurs(rep.valeur, sol.valeur)) {
+      f.style.color = "red";
+      f.innerHTML = "❌ Incorrect";
+      return;
+    }
   }
 
-  // Sinon : correct
+  /* ===== DROITE OBLIQUE ===== */
+  else {
+
+    if (rep.variable !== "y" || !rep.m || !rep.p) {
+      f.style.color = "red";
+      f.innerHTML = "❌ Écris sous la forme <strong>y = mx + p</strong>";
+      return;
+    }
+
+    if (
+      !memesValeurs(rep.m, sol.m) ||
+      !memesValeurs(rep.p, sol.p)
+    ) {
+      f.style.color = "red";
+      f.innerHTML = "❌ Incorrect";
+      return;
+    }
+  }
+
   f.style.color = "green";
   f.innerHTML = "✅ Correct";
 }
