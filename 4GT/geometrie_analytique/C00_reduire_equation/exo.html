@@ -577,15 +577,36 @@ let num, den;
     texte += `\\( ${frac1} y = - ${frac2} - ${frac3}\\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
-       
-    let frac = FractionIrreductible(c, b);
-    if (frac.den === 1) {
-    texte += `\\(y = - ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = -\\frac{${frac.num}}{${frac.den}}\\)`;
-    }
+
+
+    // Étape 3 : simplification en y = mx + p avec fractions irréductibles
+let m = FractionIrreductible(-a, b);  // m = -a/b
+let p = FractionIrreductible(-c, b);  // p = -c/b
+
+texte += `\\(y = `;
+
+// Ajouter m
+if (m.den === 1) {
+    texte += `${m.num}`;
+} else {
+    texte += `\\frac{${m.num}}{${m.den}}`;
 }
+
+texte += ` x `;
+
+// Ajouter p
+if (p.num === 0) {
+    // rien à ajouter si p = 0
+} else if (p.den === 1) {
+    texte += (p.num > 0 ? '+ ' : '- ') + Math.abs(p.num);
+} else {
+    texte += (p.num > 0 ? '+ ' : '- ') + `\\frac{${Math.abs(p.num)}}{${p.den}}`;
 }
+
+texte += `\\)`;
+
+}
+
   
 f.innerHTML = texte; 
 renderMath(f);   
