@@ -109,9 +109,7 @@ function genererEquation(){
     typeEquation = "constante";
   }
 
-  equationTextePourCorrection = terms.join(' ')
-    .replace(/\+\s-/g, '- ')
-    .replace(/^\+\s*/, '');
+
 
   const eqDiv = document.getElementById("equation");
   eqDiv.innerHTML = `De quel type de fonction s'agit-il : \\(${equationTextePourCorrection}\\) ?`;
