@@ -54,8 +54,8 @@ function renderMath(el){
 }
 // ====================== PARAMETRES PEDAGOGIQUES ======================
 // Somme = 1
-const PROBA_OBLIQUE     = 0.05;   // y = mx + p
-const PROBA_VERTICALE   = 0.2;  // x = k
+const PROBA_OBLIQUE     = 0.8;   // y = mx + p
+const PROBA_VERTICALE   = 0.1;  // x = k
 // le reste = horizontale (y = k)
 
 /* ====================== VARIABLES ====================== */
