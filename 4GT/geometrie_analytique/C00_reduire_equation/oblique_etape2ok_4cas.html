@@ -564,16 +564,18 @@ if(a!==0 && b!==0)  {
 if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx+p  */
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
         \\(${b}y = - ${a}x -${c}\\)<br><br>
+
         
     Étape 2 : on divise tout par ${b} <br>`;
-
-    num = c;
+    num1 = a;
+    num2 = c;
     den = b;
     const frac1 = fractionLaTeX(den, den);
-    const frac2 = fractionLaTeX(num, den);
+    const frac2 = fractionLaTeX(num1, den);
+    const frac3 = fractionLaTeX(num2, den);
+    texte += `\\( ${frac1} y = - ${frac2}x - ${frac3} \\)<br><br>`;
 
-    texte += `\\( ${frac1} y = - ${frac2}\\)<br><br>`;
-
+  
     texte += `Étape 3 : on simplifie <br>`;
        
     let frac = FractionIrreductible(c, b);
@@ -587,16 +589,18 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 } else if (b > 0 && a > 0 && c < 0) {                        /* CAS 2 : y=mx+p  */
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
         \\(${b}y = - ${a}x +${-c}\\)<br><br>
+
         
     Étape 2 : on divise tout par ${b} <br>`;
+    num1 = a;
+    num2 = -c;
+    den = b;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num1, den);
+    const frac3 = fractionLaTeX(num2, den);
+    texte += `\\( ${frac1} y = - ${frac2}x + ${frac3} \\)<br><br>`;
 
-    num = c;
-    den = -b;
-    const frac1 = fractionLaTeX(num, den);
-    const frac2 = fractionLaTeX(den, den);
-
-    texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
-
+  
     texte += `Étape 3 : on simplifie <br>`;
             
     let frac = FractionIrreductible(c, -b);
@@ -610,16 +614,18 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 } else if (b > 0 && a < 0 && c > 0) {                        /* CAS 3 : y=mx+p  */
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
         \\(${b}y =  ${-a}x -${c}\\)<br><br>
+
         
     Étape 2 : on divise tout par ${b} <br>`;
+    num1 = -a;
+    num2 = c;
+    den = b;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num1, den);
+    const frac3 = fractionLaTeX(num2, den);
+    texte += `\\( ${frac1} y = ${frac2}x - ${frac3} \\)<br><br>`;
 
-    num = c;
-    den = -b;
-    const frac1 = fractionLaTeX(num, den);
-    const frac2 = fractionLaTeX(den, den);
-
-    texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
-
+  
     texte += `Étape 3 : on simplifie <br>`;
             
     let frac = FractionIrreductible(c, -b);
@@ -634,16 +640,18 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 } else if (b > 0 && a < 0 && c < 0) {                        /* CAS 4 : y=mx+p  */
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
         \\(${b}y = ${-a}x +${-c}\\)<br><br>
+
         
     Étape 2 : on divise tout par ${b} <br>`;
+    num1 = -a;
+    num2 = -c;
+    den = b;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num1, den);
+    const frac3 = fractionLaTeX(num2, den);
+    texte += `\\( ${frac1} y = ${frac2}x + ${frac3} \\)<br><br>`;
 
-    num = c;
-    den = -b;
-    const frac1 = fractionLaTeX(num, den);
-    const frac2 = fractionLaTeX(den, den);
-
-    texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
-
+  
     texte += `Étape 3 : on simplifie <br>`;
             
     let frac = FractionIrreductible(c, -b);
@@ -657,7 +665,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 } else if (b < 0 && a > 0 && c > 0) {                        /* CAS 5 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
@@ -680,7 +688,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 } else if (b < 0 && a > 0 && c < 0) {                        /* CAS 6 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
@@ -704,7 +712,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 } else if (b < 0 && a < 0 && c > 0) {                        /* CAS 7 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
@@ -728,7 +736,7 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
  } else {                                           /* CAS 8 : y=mx+p  */
 
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+        \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
