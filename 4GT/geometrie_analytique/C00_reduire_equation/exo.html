@@ -54,8 +54,8 @@ function renderMath(el){
 }
 // ====================== PARAMETRES PEDAGOGIQUES ======================
 // Somme = 1
-const PROBA_OBLIQUE     = 0.05;   // y = mx + p
-const PROBA_VERTICALE   = 0.2;  // x = k
+const PROBA_OBLIQUE     = 0.7;   // y = mx + p
+const PROBA_VERTICALE   = 0.15;  // x = k
 // le reste = horizontale (y = k)
 
 /* ====================== VARIABLES ====================== */
@@ -555,7 +555,14 @@ let num, den;
   }
 }  
 
+    /* ====================== CAS 2 : horizontale ====================== */
 
+if(a!==0 || b!==0)  {
+      texte += `Étape 3 : on simplifie <br>`;
+
+}
+
+  
 f.innerHTML = texte; 
 renderMath(f);   
 }
