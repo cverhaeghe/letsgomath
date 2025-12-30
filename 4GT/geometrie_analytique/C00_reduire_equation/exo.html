@@ -567,12 +567,14 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
         
     Étape 2 : on divise tout par ${b} <br>`;
 
-    num = c;
+    num1 = a;
+    num2 = c;
     den = b;
     const frac1 = fractionLaTeX(den, den);
-    const frac2 = fractionLaTeX(num, den);
+    const frac2 = fractionLaTeX(num1, den);
+    const frac3 = fractionLaTeX(num2, den);
 
-    texte += `\\( ${frac1} y = - ${frac2}\\)<br><br>`;
+    texte += `\\( ${frac1} y = - ${frac2}x - ${frac3} \\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
        
