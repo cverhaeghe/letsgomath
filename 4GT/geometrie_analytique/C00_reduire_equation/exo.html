@@ -171,11 +171,8 @@ if (!memesValeurs(repEleve, solIrred)) {
   return;
 }
 
-// Fraction irréductible de la réponse élève
-const repIrred = FractionIrreductible(repEleve.num, repEleve.den);
-
-// Même valeur mais fraction non simplifiée
-if (repEleve.num !== repIrred.num || repEleve.den !== repIrred.den) {
+// Test de simplification (CRITÈRE MATHÉMATIQUE)
+if (pgcd(repEleve.num, repEleve.den) !== 1) {
   f.style.color = "orange";
   f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
   return;
@@ -184,6 +181,7 @@ if (repEleve.num !== repIrred.num || repEleve.den !== repIrred.den) {
 // Sinon : correct
 f.style.color = "green";
 f.innerHTML = "✅ Correct";
+
 
 
 
