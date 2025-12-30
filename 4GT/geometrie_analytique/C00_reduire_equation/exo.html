@@ -69,14 +69,13 @@ function pgcd(x, y){
   return x;
 }
 
-// fraction irréductible, dénominateur toujours positif
 function FractionIrreductible(num, den) {
     const p = pgcd(num, den);
-    num = num / p;
-    den = den / p;
-    if (den < 0) { num = -num; den = -den; }
-    return { num, den };
-}
+    return {
+      num: num / p,
+      den: den / p
+      };
+    }
 
 function fractionLaTeX(num, den){
   if(num === 0) return "0";
@@ -100,7 +99,7 @@ function genererEquation(){
     terms.push((c > 0 ? '+ ' : '- ') + Math.abs(c));
   }
 
-  equationTextePourCorrection = terms.join(' ').replace('--','-').replace('+-','-');
+  equationTextePourCorrection = terms.join(' ');
 
   const eqDiv = document.getElementById("equation");
   eqDiv.innerHTML =
@@ -111,20 +110,26 @@ function genererEquation(){
   document.getElementById("feedback").innerHTML = "";
 }
 
-/* ====================== OUTILS POUR VERIFICATION ====================== */
+/* ====================== 
+OUTILS POUR VERIFICATION 
+====================== */
 
-function parseReponse(txt) {
+  function parseReponse(txt) {
   txt = txt.replace(/\s+/g, ""); // supprime les espaces
 
+  // format obligatoire : x=...
   if (!txt.startsWith("x=")) return null;
+
   txt = txt.substring(2); // enlève "x="
 
+  // fraction
   if (txt.includes("/")) {
     const [n, d] = txt.split("/");
     if (d === "0") return null;
     return { num: parseInt(n), den: parseInt(d) };
   }
 
+  // entier
   return { num: parseInt(txt), den: 1 };
 }
 
@@ -136,50 +141,171 @@ function memesValeurs(f1, f2) {
   return f1.num * f2.den === f2.num * f1.den;
 }
 
-/* ====================== VERIFICATION ====================== */
+
+  
+/* ====================== 
+        VERIFICATION 
+====================== */
 
 function verifier() {
   const f = document.getElementById("feedback");
   const saisie = document.getElementById("reponse").value;
+
   const repEleve = parseReponse(saisie);
 
+  // Vérification du format
   if (!repEleve || isNaN(repEleve.num) || isNaN(repEleve.den)) {
     f.style.color = "red";
     f.innerHTML = "❌ Réponse invalide. Écris sous la forme <strong>x = ...</strong>";
     return;
   }
 
+  // Fraction de la solution officielle
   const sol = solutionOfficielle();
   const solIrred = FractionIrreductible(sol.num, sol.den);
 
-  if (!memesValeurs(repEleve, solIrred)) {
+  // Normalisation des signes : on met le dénominateur positif
+  const repNorm = {
+    num: repEleve.den < 0 ? -repEleve.num : repEleve.num,
+    den: repEleve.den < 0 ? -repEleve.den : repEleve.den
+  };
+
+  const solNorm = {
+    num: solIrred.den < 0 ? -solIrred.num : solIrred.num,
+    den: solIrred.den < 0 ? -solIrred.den : solIrred.den
+  };
+
+  // Mauvaise valeur
+  if (!memesValeurs(repNorm, solNorm)) {
     f.style.color = "red";
     f.innerHTML = "❌ Incorrect";
     return;
   }
 
-  // Test simplification
-  const repIrred = FractionIrreductible(repEleve.num, repEleve.den);
-  if (repEleve.num !== repIrred.num || repEleve.den !== repIrred.den) {
+  // Test de simplification
+  if (pgcd(repNorm.num, repNorm.den) !== 1) {
     f.style.color = "orange";
     f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
     return;
   }
 
+  // Sinon : correct
   f.style.color = "green";
   f.innerHTML = "✅ Correct";
 }
 
-/* ====================== CORRECTION ====================== */
+
+
+
+/* ====================== 
+        CORRECTION 
+====================== */
 function corriger(){
+
   const f = document.getElementById("feedback");
   f.style.color = "#000";
 
   let texte = `📘 <strong>Correction détaillée</strong><br><br>
   \\(${equationTextePourCorrection} = 0\\)<br><br>`;
 
-  let frac = solutionOfficielle();
-  texte += `\\(x = ${frac.den === 1 ? frac.num : "\\frac{" + frac.num + "}{" + frac.den + "}"}\\)`;
+  let num, den;
+
+  if (a > 0 && c > 0) { 
+    texte += `Étape 1 : on isole \\(${a}x\\) <br>
+        \\(${a}x = ${-c}\\)<br><br>
+        
+    Étape 2 : on divise tout par ${a} <br>`;
+
+    num = c;
+    den = a;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num, den);
+
+    texte += `\\( ${frac1} x = - ${frac2}\\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+       
+    let frac = FractionIrreductible(c, a);
+    if (frac.den === 1) {
+    texte += `\\(x = - ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = -\\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+
+
+    
+  } else if (a > 0 && c < 0) {
+    texte += `Étape 1 : on isole \\(${a}x\\) <br>
+        \\(${a}x = ${-c}\\)<br><br>
+        
+    Étape 2 : on divise tout par ${a} <br>`;
+
+    num = -c;
+    den = a;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num, den);
+
+    texte += `\\( ${frac1} x = ${frac2}\\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+            
+    let frac = FractionIrreductible(-c, a);
+    if (frac.den === 1) {
+    texte += `\\(x = ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = \\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+
+   
+    
+  } else if (a < 0 && c > 0) {
+    texte += `Étape 1 : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
+        \\(${c} = ${Math.abs(a)}x\\)<br><br>
+        
+    Étape 2 : on divise tout par ${-a} <br>`;
+
+    num = c;
+    den = -a;
+    const frac1 = fractionLaTeX(num, den);
+    const frac2 = fractionLaTeX(den, den);
+
+    texte += `\\( ${frac1} = ${frac2} x \\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+            
+    let frac = FractionIrreductible(c, -a);
+    if (frac.den === 1) {
+    texte += `\\(x = ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = \\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+  
+  
+
+  } else {
+    texte += `Étape 1 : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
+        \\(${c} = ${Math.abs(a)}x\\)<br><br>
+        
+    Étape 2 : on divise tout par ${-a} <br>`;
+
+    num = -c;
+    den = -a;
+    const frac1 = fractionLaTeX(num, den);
+    const frac2 = fractionLaTeX(den, den);
+
+    texte += `\\( -${frac1} = ${frac2} x \\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+             
+    let frac = FractionIrreductible(-c, -a);
+    if (frac.den === 1) {
+    texte += `\\(x = - ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = -\\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+  }
+    
+
 
   f.innerHTML = texte;
   renderMath(f);
