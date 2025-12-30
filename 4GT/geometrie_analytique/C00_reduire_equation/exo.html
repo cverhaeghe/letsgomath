@@ -66,6 +66,7 @@ let equationTextePourCorrection = "";
 function randCoeff(){ return Math.floor(Math.random()*41)-20; }
 function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
 function randCoeffNonZeroNotOne() {let x; do{x=randCoeff();}while(x === 0 || x === 1 || x === -1); return x; }
+function randCoeffNotOne() {let x; do{x=randCoeff();}while(x === 1 || x === -1); return x; }
 
 function pgcd(x, y){
   x = Math.abs(x);
@@ -114,12 +115,10 @@ function genererEquation(){
   /* ====== CAS 2 : DROITE OBLIQUE ====== */
   else if(tirage < PROBA_VERTICALE + PROBA_OBLIQUE){
 
-    do{
-      a = randCoeff();
-      b = randCoeff();
-    }while(a === 0 || b === 0);
-
-    c = randCoeff();
+  
+      a = randCoeffNonZeroNotOne();
+      b = randCoeffNonZeroNotOne();
+      c = randCoeffNonZero();
 
     terms.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x');
     terms.push((b > 0 ? '+ ' : '- ') + (Math.abs(b) === 1 ? 'y' : Math.abs(b) + 'y'));
@@ -132,8 +131,8 @@ function genererEquation(){
   else{
 
     a = 0;
-    b = randCoeffNonZero();
-    c = randCoeff();
+    b = randCoeffNonZeroNotOne();
+    c = randCoeffNonZero();
 
     terms.push((b > 0 ? '' : '-') + (Math.abs(b) === 1 ? 'y' : Math.abs(b) + 'y'));
     if(c !== 0){
