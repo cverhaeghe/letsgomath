@@ -358,10 +358,10 @@ function corriger(){
   let num, den;
 
   if (a > 0 && c > 0) { 
-    texte += `Étape 1 : on isole \\(${a}x\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${a}x\\) <br>
         \\(${a}x = ${-c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${a} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${a} <br>`;
 
     num = c;
     den = a;
@@ -370,7 +370,7 @@ function corriger(){
 
     texte += `\\( ${frac1} x = - ${frac2}\\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
        
     let frac = FractionIrreductible(c, a);
     if (frac.den === 1) {
@@ -382,10 +382,10 @@ function corriger(){
 
     
   } else if (a > 0 && c < 0) {
-    texte += `Étape 1 : on isole \\(${a}x\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${a}x\\) <br>
         \\(${a}x = ${-c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${a} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${a} <br>`;
 
     num = -c;
     den = a;
@@ -394,7 +394,7 @@ function corriger(){
 
     texte += `\\( ${frac1} x = ${frac2}\\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
             
     let frac = FractionIrreductible(-c, a);
     if (frac.den === 1) {
@@ -406,10 +406,10 @@ function corriger(){
    
     
   } else if (a < 0 && c > 0) {
-    texte += `Étape 1 : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
         \\(${c} = ${Math.abs(a)}x\\)<br><br>
         
-    Étape 2 : on divise tout par ${-a} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-a} <br>`;
 
     num = c;
     den = -a;
@@ -418,7 +418,7 @@ function corriger(){
 
     texte += `\\( ${frac1} = ${frac2} x \\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
             
     let frac = FractionIrreductible(c, -a);
     if (frac.den === 1) {
@@ -430,10 +430,10 @@ function corriger(){
   
 
   } else {
-    texte += `Étape 1 : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
         \\(${c} = ${Math.abs(a)}x\\)<br><br>
         
-    Étape 2 : on divise tout par ${-a} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-a} <br>`;
 
     num = -c;
     den = -a;
@@ -442,7 +442,7 @@ function corriger(){
 
     texte += `\\( -${frac1} = ${frac2} x \\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
              
     let frac = FractionIrreductible(-c, -a);
     if (frac.den === 1) {
@@ -460,10 +460,10 @@ if(a===0)  {
 let num, den;
 
   if (b > 0 && c > 0) { 
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${b}y\\) <br>
         \\(${b}y = ${-c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${b} <br>`;
 
     num = c;
     den = b;
@@ -472,7 +472,7 @@ let num, den;
 
     texte += `\\( ${frac1} y = - ${frac2}\\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
        
     let frac = FractionIrreductible(c, b);
     if (frac.den === 1) {
@@ -484,10 +484,10 @@ let num, den;
 
     
   } else if (b > 0 && c < 0) {
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${b}y\\) <br>
         \\(${b}y = ${-c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${b} <br>`;
 
     num = -c;
     den = b;
@@ -496,7 +496,7 @@ let num, den;
 
     texte += `\\( ${frac1} y = ${frac2}\\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
             
     let frac = FractionIrreductible(-c, b);
     if (frac.den === 1) {
@@ -508,10 +508,10 @@ let num, den;
    
     
   } else if (b < 0 && c > 0) {
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${c} = ${Math.abs(b)}y\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-b} <br>`;
 
     num = c;
     den = -b;
@@ -520,7 +520,7 @@ let num, den;
 
     texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
             
     let frac = FractionIrreductible(c, -b);
     if (frac.den === 1) {
@@ -532,10 +532,10 @@ let num, den;
   
 
   } else {
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${c} = ${Math.abs(b)}y\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-b} <br>`;
 
     num = -c;
     den = -b;
@@ -544,7 +544,7 @@ let num, den;
 
     texte += `\\( -${frac1} = ${frac2} y \\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
+    texte += `<u>Étape 3 </u> : on simplifie <br>`;
              
     let frac = FractionIrreductible(-c, -b);
     if (frac.den === 1) {
@@ -562,11 +562,11 @@ if(a!==0 && b!==0)  {
     let num, den;
 
 if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx+p  */
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${b}y\\) <br>
         \\(${b}y = - ${a}x -${c}\\)<br><br>
 
         
-    Étape 2 : on divise tout par ${b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${b} <br>`;
     num1 = a;
     num2 = c;
     den = b;
@@ -577,11 +577,11 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
     
 } else if (b > 0 && a > 0 && c < 0) {                        /* CAS 2 : y=mx+p  */
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${b}y\\) <br>
         \\(${b}y = - ${a}x +${-c}\\)<br><br>
 
         
-    Étape 2 : on divise tout par ${b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${b} <br>`;
     num1 = a;
     num2 = -c;
     den = b;
@@ -592,11 +592,11 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 
 } else if (b > 0 && a < 0 && c > 0) {                        /* CAS 3 : y=mx+p  */
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${b}y\\) <br>
         \\(${b}y =  ${-a}x -${c}\\)<br><br>
 
         
-    Étape 2 : on divise tout par ${b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${b} <br>`;
     num1 = -a;
     num2 = c;
     den = b;
@@ -608,11 +608,11 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 
 } else if (b > 0 && a < 0 && c < 0) {                        /* CAS 4 : y=mx+p  */
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+    texte += `<u>Étape 1 </u> : on isole \\(${b}y\\) <br>
         \\(${b}y = ${-a}x +${-c}\\)<br><br>
 
         
-    Étape 2 : on divise tout par ${b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${b} <br>`;
     num1 = -a;
     num2 = -c;
     den = b;
@@ -624,11 +624,11 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 
 } else if (b < 0 && a > 0 && c > 0) {                        /* CAS 5 : y=mx+p  */
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
 
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-b} <br>`;
     num1 = a;
     num2 = c;
     den = -b;
@@ -640,10 +640,10 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 
 } else if (b < 0 && a > 0 && c < 0) {                        /* CAS 6 : y=mx+p  */
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-b} <br>`;
     num1 = a;
     num2 = -c;
     den = -b;
@@ -654,10 +654,10 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 
 } else if (b < 0 && a < 0 && c > 0) {                        /* CAS 7 : y=mx+p  */
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-b} <br>`;
     num1 = -a;
     num2 = c;
     den = -b;
@@ -670,10 +670,10 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     
  } else {                                           /* CAS 8 : y=mx+p  */
 
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
+    texte += `<u>Étape 1 </u> : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    <u>Étape 2 </u> : on divise tout par ${-b} <br>`;
     num1 = -a;
     num2 = -c;
     den = -b;
@@ -698,7 +698,7 @@ let pDen = sol.p.den;
 if (mDen < 0) { mNum = -mNum; mDen = -mDen; }
 if (pDen < 0) { pNum = -pNum; pDen = -pDen; }
 
-texte += `<u>Étape 3 :</u> on simplifie <br>`;
+texte += `<u>Étape 3 </u> : on simplifie <br>`;
 
 /* --- écriture de m --- */
 let mTexte = "";
