@@ -69,12 +69,8 @@ function fractionLatex(num, den){
 function valFrac(f){ return f.num/f.den; }
 
 function fractionDansBornes(f){
-  return (
-    Math.abs(f.num) <= 5 &&
-    Math.abs(f.den) <= 5
-  );
+  return Math.abs(f.num)<=5 && Math.abs(f.den)<=5;
 }
-
 
 /* =====================================================
    GENERATEURS DE COEFFICIENTS
@@ -127,15 +123,16 @@ if(tirage<0.4){
   const m=randFractionNotOne();
   const p=randFractionNotOne();
 
-  e=Math.floor(Math.random()*7)-3;
+  let essais=0;
+  do{
+    e=Math.floor(Math.random()*7)-3;
+    const yF=fractionIrreductible(m.num*e*p.den + p.num*m.den, m.den*p.den);
+    f = fractionLatex(yF.num, yF.den);
+    essais++;
+    if(essais>50) break;
+  } while(appartient && !fractionDansBornes({num:yF.num, den:yF.den}));
 
-  if(appartient){
-    const yF=fractionIrreductible(
-      m.num*e*p.den + p.num*m.den,
-      m.den*p.den
-    );
-    f=fractionLatex(yF.num,yF.den);
-  }else{
+  if(!appartient){
     f=Math.floor(Math.random()*7)-3;
   }
 
@@ -153,16 +150,21 @@ if(tirage<0.4){
 }
 
 /* ===== CAS 2 : x = k ===== */
-else if(tirage<0.7){
+else if(tirage<0.6){
 
   const k=randFractionNotOne();
+  let essais=0;
   f=Math.floor(Math.random()*7)-3;
 
-  if(appartient){
-    e=fractionLatex(k.num,k.den);
-  }else{
-    e=Math.floor(Math.random()*7)-3;
-  }
+  do{
+    if(appartient){
+      e=fractionLatex(k.num,k.den);
+    } else {
+      e=Math.floor(Math.random()*7)-3;
+    }
+    essais++;
+    if(essais>50) break;
+  }while(false);
 
   enonce=`
   La droite a pour équation :<br>
@@ -182,16 +184,16 @@ else {
   const b = randIntNonZeroNotOne();
   const c = randIntNonZeroNotOne();
 
-  e = Math.floor(Math.random()*7)-3;
-
-  if(appartient){
-    // On calcule y pour que le point appartienne à la droite
-    let yF;
-    do {
-      yF = fractionIrreductible(-a*e-c, b);
-    } while(!fractionDansBornes(yF));
+  let essais = 0;
+  do {
+    e = Math.floor(Math.random()*7)-3;
+    let yF = fractionIrreductible(-a*e-c, b);
     f = fractionLatex(yF.num, yF.den);
-  } else {
+    essais++;
+    if(essais>50) break;
+  } while(appartient && !fractionDansBornes({num:-a*e-c, den:b}));
+
+  if(!appartient){
     f = Math.floor(Math.random()*7)-3;
   }
 
