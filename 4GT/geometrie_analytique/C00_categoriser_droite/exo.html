@@ -79,10 +79,17 @@ function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
 
 /* ====================== GENERATION ====================== */
 function genererEquation(){
+  // Réinitialiser les cartes si elles existent
+  const cards = document.querySelectorAll('.qcm-card');
+  cards.forEach(card => {
+    card.classList.remove('correct', 'incorrect');
+    card.style.pointerEvents = "auto"; // rendre à nouveau cliquables
+  });
+
   const tirage = Math.random();
   let terms = [];
 
-/* CAS 1 : DROITE LINEAIRE y = mx */
+  /* CAS 1 : DROITE LINEAIRE y = mx */
   if (tirage < PROBA_LINEAIRE) {
     m = randCoeffNonZero();
     terms.push((m === 1 ? '' : (m === -1 ? '-' : m)) + 'x');
@@ -111,14 +118,11 @@ function genererEquation(){
     typeEquation = "constante";
   }
 
-
-
   const eqDiv = document.getElementById("equation");
-  eqDiv.innerHTML = `Type de fonction ? <br> \\(${equationTextePourCorrection}\\) `;
+  eqDiv.innerHTML = `Type de fonction ? <br> \\(${equationTextePourCorrection}\\)`;
   renderMath(eqDiv);
-
-  document.getElementById("feedback").innerHTML = "";
 }
+
 
 /* ====================== VERIFICATION ====================== */
 function verifier(reponseEleve, element) {
