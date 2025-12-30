@@ -6,11 +6,14 @@
 
 <title>Let's go Math !</title>
 
+<!-- CSS -->
 <link rel="stylesheet" href="../../../style.css">
 <link rel="stylesheet" href="../../../exercices.css">
 
+<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<!-- MathJax -->
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
@@ -44,98 +47,160 @@
 </div>
 
 <script>
-/* ===================== OUTILS ===================== */
-function renderMath(el){
-  MathJax.typesetClear([el]);
-  MathJax.typesetPromise([el]);
+/* =====================================================
+   OUTILS MATHEMATIQUES
+===================================================== */
+function pgcd(a, b){
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while(b !== 0){
+    let t = b;
+    b = a % b;
+    a = t;
+  }
+  return a;
 }
 
-function randInt(){
+function fractionIrreductible(num, den){
+  if(den < 0){ num = -num; den = -den; }
+  const p = pgcd(num, den);
+  return { num: num/p, den: den/p };
+}
+
+function fracTex(num, den){
+  if(num === 0) return "0";
+  if(den === 1) return num.toString();
+  return `\\frac{${num}}{${den}}`;
+}
+
+function valFrac(f){
+  return f.num / f.den;
+}
+
+function randIntNonZero(){
   let x;
   do { x = Math.floor(Math.random()*11)-5; }
   while(x === 0);
   return x;
 }
 
-function randFrac(){
-  const num = randInt();
-  const den = randInt();
-  return {num, den};
+function randFraction(){
+  let num, den;
+  do{
+    num = Math.floor(Math.random()*11)-5;
+    den = Math.floor(Math.random()*11)-5;
+  } while(num === 0 || den === 0);
+
+  return fractionIrreductible(num, den);
 }
 
-function valFrac(f){ return f.num / f.den; }
+function renderMath(el){
+  MathJax.typesetClear([el]);
+  MathJax.typesetPromise([el]);
+}
 
-/* ===================== VARIABLES ===================== */
-let e, f;
-let texteCorrection = "";
+/* =====================================================
+   VARIABLES GLOBALES
+===================================================== */
 let appartient = false;
+let texteCorrection = "";
 
-/* ===================== GENERATION ===================== */
+/* =====================================================
+   GENERATION DE L'EXERCICE
+===================================================== */
 function generer(){
 
-  const type = Math.random();
   appartient = Math.random() < 0.5;
+  const tirage = Math.random();
 
+  let e, f;
   let enonce = "";
 
   /* ===== CAS 1 : y = mx + p ===== */
-  if(type < 0.4){
+  if(tirage < 0.4){
 
-    const m = randFrac();
-    const p = randFrac();
+    const m = randFraction();
+    const p = randFraction();
 
-    e = randInt();
-    f = appartient
-      ? valFrac(m)*e + valFrac(p)
-      : valFrac(m)*e + valFrac(p) + randInt();
+    e = randIntNonZero();
 
-    enonce = `La droite a pour équation :
-    \\(y = ${m.num}/${m.den}x + ${p.num}/${p.den}\\)<br>
-    Le point \\(A(${e};${f})\\) appartient-il à cette droite ?`;
+    if(appartient){
+      const yFrac = fractionIrreductible(
+        m.num * e * p.den + p.num * m.den,
+        m.den * p.den
+      );
+      f = fracTex(yFrac.num, yFrac.den);
+    } else {
+      f = randIntNonZero();
+    }
 
-    texteCorrection =
-      `On teste :<br>
-      \\(f = m\\times e + p\\)<br>
-      \\(${f} ${appartient ? "=" : "\\neq"} ${valFrac(m)*e + valFrac(p)}\\)`;
+    enonce = `
+    La droite a pour équation :<br>
+    \\(y = ${fracTex(m.num,m.den)}x + ${fracTex(p.num,p.den)}\\)<br><br>
+    Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
+    `;
+
+    texteCorrection = `
+    On teste l'appartenance :<br>
+    \\(y = mx + p\\)<br>
+    ${appartient ? "L'égalité est vérifiée." : "L'égalité n'est pas vérifiée."}
+    `;
   }
 
   /* ===== CAS 2 : x = k ===== */
-  else if(type < 0.7){
+  else if(tirage < 0.7){
 
-    const k = randFrac();
+    const k = randFraction();
 
-    e = appartient ? valFrac(k) : valFrac(k) + randInt();
-    f = randInt();
+    if(appartient){
+      e = fracTex(k.num, k.den);
+    } else {
+      e = randIntNonZero();
+    }
+    f = randIntNonZero();
 
-    enonce = `La droite a pour équation :
-    \\(x = ${k.num}/${k.den}\\)<br>
-    Le point \\(A(${e};${f})\\) appartient-il à cette droite ?`;
+    enonce = `
+    La droite a pour équation :<br>
+    \\(x = ${fracTex(k.num,k.den)}\\)<br><br>
+    Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
+    `;
 
-    texteCorrection =
-      `On teste :<br>
-      \\(x = ${e} ${appartient ? "=" : "\\neq"} ${valFrac(k)}\\)`;
+    texteCorrection = `
+    On teste l'abscisse :<br>
+    ${appartient ? "x est bien égal à k." : "x n'est pas égal à k."}
+    `;
   }
 
   /* ===== CAS 3 : ax + by + c = 0 ===== */
   else {
 
-    const a = randInt();
-    const b = randInt();
-    const c = randInt();
+    const a = randIntNonZero();
+    const b = randIntNonZero();
+    const c = randIntNonZero();
 
-    e = randInt();
-    f = appartient
-      ? (-a*e - c)/b
-      : (-a*e - c)/b + randInt();
+    e = randIntNonZero();
 
-    enonce = `La droite a pour équation :
-    \\(${a}x + ${b}y + ${c} = 0\\)<br>
-    Le point \\(A(${e};${f})\\) appartient-il à cette droite ?`;
+    if(appartient){
+      const yFrac = fractionIrreductible(
+        -a*e - c,
+        b
+      );
+      f = fracTex(yFrac.num, yFrac.den);
+    } else {
+      f = randIntNonZero();
+    }
 
-    texteCorrection =
-      `On calcule :<br>
-      \\(${a}\\times${e} + ${b}\\times${f} + ${c}
-      ${appartient ? "= 0" : "\\neq 0"}\\)`;
+    enonce = `
+    La droite a pour équation :<br>
+    \\(${a}x + ${b}y + ${c} = 0\\)<br><br>
+    Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
+    `;
+
+    texteCorrection = `
+    On calcule :<br>
+    \\(${a}\\times${e} + ${b}\\times${f} + ${c}
+    ${appartient ? "= 0" : "\\neq 0"}\\)
+    `;
   }
 
   const div = document.getElementById("enonce");
@@ -146,7 +211,9 @@ function generer(){
   document.getElementById("feedback").innerHTML = "";
 }
 
-/* ===================== VERIFIER ===================== */
+/* =====================================================
+   VERIFICATION
+===================================================== */
 function verifier(){
   const r = document.getElementById("reponse").value.trim().toLowerCase();
   const fdb = document.getElementById("feedback");
@@ -166,7 +233,9 @@ function verifier(){
   }
 }
 
-/* ===================== CORRECTION ===================== */
+/* =====================================================
+   CORRECTION
+===================================================== */
 function corriger(){
   const fdb = document.getElementById("feedback");
   fdb.style.color = "#000";
@@ -174,10 +243,13 @@ function corriger(){
   renderMath(fdb);
 }
 
-/* ===================== INIT ===================== */
+/* =====================================================
+   INIT
+===================================================== */
 generer();
 </script>
 
+<!-- Protection clic droit -->
 <script src="../../../js/protection.js"></script>
 
 </body>
