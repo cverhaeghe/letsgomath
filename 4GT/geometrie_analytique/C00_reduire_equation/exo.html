@@ -114,9 +114,7 @@ function genererEquation(){
 OUTILS POUR VERIFICATION 
 ====================== */
 
-  
-<script>
-function parseReponse(txt) {
+  function parseReponse(txt) {
   txt = txt.replace(/\s+/g, ""); // supprime les espaces
 
   // format obligatoire : x=...
@@ -142,7 +140,6 @@ function solutionOfficielle() {
 function memesValeurs(f1, f2) {
   return f1.num * f2.den === f2.num * f1.den;
 }
-</script>
 
 
   
@@ -150,8 +147,7 @@ function memesValeurs(f1, f2) {
         VERIFICATION 
 ====================== */
 
-<script>
-function verifier() {
+  function verifier() {
 
   const f = document.getElementById("feedback");
   const saisie = document.getElementById("reponse").value;
@@ -190,7 +186,6 @@ function verifier() {
     f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
   }
 }
-</script>
 
 
 
