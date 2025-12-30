@@ -588,7 +588,7 @@ let num, den;
   } else if (b > 0 && a > 0 && c < 0) { 
 
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
-        \\(${b}y = ${-c}\\)<br><br>
+        \\(${b}y = ${-a}x + ${-c}\\)<br><br>
         
     Étape 2 : on divise tout par ${b} <br>`;
 
@@ -611,10 +611,10 @@ let num, den;
    
     
   } else if (b > 0 && a < 0 && c > 0) { 
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+        \\(${b}y = ${-a}x - ${c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    Étape 2 : on divise tout par ${b} <br>`;
 
     num = c;
     den = -b;
@@ -634,6 +634,29 @@ let num, den;
 
     
   } else if (b > 0 && a < 0 && c < 0) { 
+    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+        \\(${b}y = ${-a}x + ${-c}\\)<br><br>
+        
+    Étape 2 : on divise tout par ${b} <br>`;
+
+    num = c;
+    den = -b;
+    const frac1 = fractionLaTeX(num, den);
+    const frac2 = fractionLaTeX(den, den);
+
+    texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+            
+    let frac = FractionIrreductible(c, -b);
+    if (frac.den === 1) {
+    texte += `\\(y = ${frac.num}\\)`;
+    } else {
+    texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
+    }  
+
+    
+} else if (b < 0 && a > 0 && c > 0) { 
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${c} = ${Math.abs(b)}y\\)<br><br>
         
@@ -655,6 +678,7 @@ let num, den;
     texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
     }  
 
+    
 
     
   } else {
