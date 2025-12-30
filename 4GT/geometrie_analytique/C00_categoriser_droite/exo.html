@@ -113,7 +113,7 @@ function genererEquation(){
 
 
   const eqDiv = document.getElementById("equation");
-  eqDiv.innerHTML = `De quel type de fonction s'agit-il : \\(${equationTextePourCorrection}\\) ?`;
+  eqDiv.innerHTML = `De quel type de fonction s'agit-il ? <br><br> \\(${equationTextePourCorrection}\\) `;
   renderMath(eqDiv);
 
   document.getElementById("feedback").innerHTML = "";
