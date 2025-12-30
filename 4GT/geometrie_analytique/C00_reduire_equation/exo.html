@@ -353,6 +353,8 @@ function corriger(){
 
   /* ====================== CAS 1 : verticale ====================== */
       
+  if(b===0) {
+    
   let num, den;
 
   if (a > 0 && c > 0) { 
@@ -449,6 +451,11 @@ function corriger(){
     texte += `\\(x = -\\frac{${frac.num}}{${frac.den}}\\)`;
     }
   }
+}  
+
+else {
+  
+}  
 }
   
 f.innerHTML = texte; 
