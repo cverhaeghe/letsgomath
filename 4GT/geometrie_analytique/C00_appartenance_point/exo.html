@@ -68,6 +68,14 @@ function fractionLatex(num, den){
 
 function valFrac(f){ return f.num/f.den; }
 
+function fractionDansBornes(f){
+  return (
+    Math.abs(f.num) <= 5 &&
+    Math.abs(f.den) <= 5
+  );
+}
+
+
 /* =====================================================
    GENERATEURS DE COEFFICIENTS
 ===================================================== */
@@ -178,8 +186,16 @@ else{
   e=Math.floor(Math.random()*7)-3;
 
   if(appartient){
-    const yF=fractionIrreductible(-a*e-c,b);
-    f=fractionLatex(yF.num,yF.den);
+  let yF;
+  do{
+  yF = fractionIrreductible(
+    m.num * e * p.den + p.num * m.den,
+    m.den * p.den
+  );
+}while(!fractionDansBornes(yF));
+
+f = fractionLatex(yF.num, yF.den);
+
   }else{
     f=Math.floor(Math.random()*7)-3;
   }
@@ -216,7 +232,7 @@ function verifier(){
 
   if(r!=="oui"&&r!=="non"){
     f.style.color="red";
-    f.innerHTML="❌ incorrect";
+    f.innerHTML="❌ Incorrect";
     return;
   }
 
