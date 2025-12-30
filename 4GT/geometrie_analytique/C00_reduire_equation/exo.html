@@ -111,9 +111,86 @@ function genererEquation(){
 }
 
 /* ====================== 
+OUTILS POUR VERIFICATION 
+====================== */
+
+  
+<script>
+function parseReponse(txt) {
+  txt = txt.replace(/\s+/g, ""); // supprime les espaces
+
+  // format obligatoire : x=...
+  if (!txt.startsWith("x=")) return null;
+
+  txt = txt.substring(2); // enlève "x="
+
+  // fraction
+  if (txt.includes("/")) {
+    const [n, d] = txt.split("/");
+    if (d === "0") return null;
+    return { num: parseInt(n), den: parseInt(d) };
+  }
+
+  // entier
+  return { num: parseInt(txt), den: 1 };
+}
+
+function solutionOfficielle() {
+  return FractionIrreductible(-c, a);
+}
+
+function memesValeurs(f1, f2) {
+  return f1.num * f2.den === f2.num * f1.den;
+}
+</script>
+
+
+  
+/* ====================== 
         VERIFICATION 
 ====================== */
 
+<script>
+function verifier() {
+
+  const f = document.getElementById("feedback");
+  const saisie = document.getElementById("reponse").value;
+
+  const repEleve = parseReponse(saisie);
+
+  // Vérification du format
+  if (!repEleve || isNaN(repEleve.num) || isNaN(repEleve.den)) {
+    f.style.color = "red";
+    f.innerHTML = "❌ Réponse invalide. Écris sous la forme <strong>x = ...</strong>";
+    return;
+  }
+
+  const sol = solutionOfficielle();
+  const solIrred = FractionIrreductible(sol.num, sol.den);
+
+  // Mauvaise valeur
+  if (!memesValeurs(repEleve, solIrred)) {
+    f.style.color = "red";
+    f.innerHTML = "❌ Incorrect";
+    return;
+  }
+
+  // Bonne valeur mais fraction non simplifiée
+  const repIrred = FractionIrreductible(repEleve.num, repEleve.den);
+
+  if (
+    repIrred.num === solIrred.num &&
+    repIrred.den === solIrred.den &&
+    repEleve.den === repIrred.den
+  ) {
+    f.style.color = "green";
+    f.innerHTML = "✅ Correct";
+  } else {
+    f.style.color = "orange";
+    f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
+  }
+}
+</script>
 
 
 
