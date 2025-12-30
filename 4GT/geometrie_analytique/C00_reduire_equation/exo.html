@@ -76,10 +76,10 @@ function pgcd(x, y){
 }
 
 function FractionIrreductible(num, den) {
-    const p = pgcd(num, den);
+    const s = pgcd(num, den);
     return {
-      num: num / p,
-      den: den / p
+      num: num / s,
+      den: den / s
       };
     }
 
@@ -559,7 +559,7 @@ let num, den;
 
 if(a!==0 && b!==0)  {
   
-let num, den;
+let num1, num2, den;
 
   if (b > 0 && a>0 && c>0) { 
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
@@ -576,34 +576,9 @@ let num, den;
 
     texte += `\\( ${frac1} y = - ${frac2} - ${frac3}\\)<br><br>`;
 
+    
     texte += `Étape 3 : on simplifie <br>`;
 
-
-    // Étape 3 : simplification en y = mx + p avec fractions irréductibles
-let m = FractionIrreductible(-a, b);  // m = -a/b
-let p = FractionIrreductible(-c, b);  // p = -c/b
-
-texte += `\\(y = `;
-
-// Ajouter m
-if (m.den === 1) {
-    texte += `${m.num}`;
-} else {
-    texte += `\\frac{${m.num}}{${m.den}}`;
-}
-
-texte += ` x `;
-
-// Ajouter p
-if (p.num === 0) {
-    // rien à ajouter si p = 0
-} else if (p.den === 1) {
-    texte += (p.num > 0 ? '+ ' : '- ') + Math.abs(p.num);
-} else {
-    texte += (p.num > 0 ? '+ ' : '- ') + `\\frac{${Math.abs(p.num)}}{${p.den}}`;
-}
-
-texte += `\\)`;
 
 }
 
