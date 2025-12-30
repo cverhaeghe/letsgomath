@@ -88,23 +88,62 @@ function fractionLaTeX(num, den){
   return (num < 0 ? "-" : "") + `\\frac{${Math.abs(num)}}{${den}}`;
 }
 
-/* ====================== GENERATION ====================== */
+/* ====================== 
+      GENERATION 
+====================== */
+
 function genererEquation(){
 
-  // ---- droite verticale uniquement ----
-  a = randCoeffNonZeroNotOne();
-  b = 0;
-  c = randCoeffNonZero();
+  const tirage = Math.random();
 
-  // construction du texte ax + c
   let terms = [];
-  terms.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x');
 
-  if(c !== 0){
-    terms.push((c > 0 ? '+ ' : '- ') + Math.abs(c));
+  /* ====== CAS 1 : DROITE VERTICALE (TON CODE ACTUEL) ====== */
+  if(tirage < PROBA_VERTICALE){
+
+    a = randCoeffNonZeroNotOne();
+    b = 0;
+    c = randCoeffNonZero();
+
+    terms.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x');
+    if(c !== 0){
+      terms.push((c > 0 ? '+ ' : '- ') + Math.abs(c));
+    }
   }
 
-  equationTextePourCorrection = terms.join(' ');
+  /* ====== CAS 2 : DROITE OBLIQUE ====== */
+  else if(tirage < PROBA_VERTICALE + PROBA_OBLIQUE){
+
+    do{
+      a = randCoeff();
+      b = randCoeff();
+    }while(a === 0 || b === 0);
+
+    c = randCoeff();
+
+    terms.push((a === 1 ? '' : (a === -1 ? '-' : a)) + 'x');
+    terms.push((b > 0 ? '+ ' : '- ') + (Math.abs(b) === 1 ? 'y' : Math.abs(b) + 'y'));
+    if(c !== 0){
+      terms.push((c > 0 ? '+ ' : '- ') + Math.abs(c));
+    }
+  }
+
+  /* ====== CAS 3 : DROITE HORIZONTALE ====== */
+  else{
+
+    a = 0;
+    b = randCoeffNonZero();
+    c = randCoeff();
+
+    terms.push((b > 0 ? '' : '-') + (Math.abs(b) === 1 ? 'y' : Math.abs(b) + 'y'));
+    if(c !== 0){
+      terms.push((c > 0 ? '+ ' : '- ') + Math.abs(c));
+    }
+  }
+
+  equationTextePourCorrection = terms.join(' ')
+    .replace(/\+\s-/g,'- ')
+    .replace(/^\+\s*/,'');
 
   const eqDiv = document.getElementById("equation");
   eqDiv.innerHTML =
@@ -115,6 +154,7 @@ function genererEquation(){
   document.getElementById("feedback").innerHTML = "";
 }
 
+  
 /* ====================== 
 OUTILS POUR VERIFICATION 
 ====================== */
