@@ -342,10 +342,120 @@ function verifier() {
       CORRECTION
 ====================== */
 
-function corriger() {
-  // rien pour l'instant
-}
+/* ====================== 
+        CORRECTION 
+====================== */
+function corriger(){
 
+  const f = document.getElementById("feedback");
+  f.style.color = "#000";
+
+  let texte = `📘 <strong>Correction détaillée</strong><br><br>
+  \\(${equationTextePourCorrection} = 0\\)<br><br>`;
+
+  /* ====================== CAS 1 : verticale ====================== */
+      
+  let num, den;
+
+  if (a > 0 && c > 0) { 
+    texte += `Étape 1 : on isole \\(${a}x\\) <br>
+        \\(${a}x = ${-c}\\)<br><br>
+        
+    Étape 2 : on divise tout par ${a} <br>`;
+
+    num = c;
+    den = a;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num, den);
+
+    texte += `\\( ${frac1} x = - ${frac2}\\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+       
+    let frac = FractionIrreductible(c, a);
+    if (frac.den === 1) {
+    texte += `\\(x = - ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = -\\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+
+
+    
+  } else if (a > 0 && c < 0) {
+    texte += `Étape 1 : on isole \\(${a}x\\) <br>
+        \\(${a}x = ${-c}\\)<br><br>
+        
+    Étape 2 : on divise tout par ${a} <br>`;
+
+    num = -c;
+    den = a;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num, den);
+
+    texte += `\\( ${frac1} x = ${frac2}\\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+            
+    let frac = FractionIrreductible(-c, a);
+    if (frac.den === 1) {
+    texte += `\\(x = ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = \\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+
+   
+    
+  } else if (a < 0 && c > 0) {
+    texte += `Étape 1 : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
+        \\(${c} = ${Math.abs(a)}x\\)<br><br>
+        
+    Étape 2 : on divise tout par ${-a} <br>`;
+
+    num = c;
+    den = -a;
+    const frac1 = fractionLaTeX(num, den);
+    const frac2 = fractionLaTeX(den, den);
+
+    texte += `\\( ${frac1} = ${frac2} x \\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+            
+    let frac = FractionIrreductible(c, -a);
+    if (frac.den === 1) {
+    texte += `\\(x = ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = \\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+  
+  
+
+  } else {
+    texte += `Étape 1 : comme \\( ${a}<0 \\), on passe \\(${a}x\\) à droite <br>
+        \\(${c} = ${Math.abs(a)}x\\)<br><br>
+        
+    Étape 2 : on divise tout par ${-a} <br>`;
+
+    num = -c;
+    den = -a;
+    const frac1 = fractionLaTeX(num, den);
+    const frac2 = fractionLaTeX(den, den);
+
+    texte += `\\( -${frac1} = ${frac2} x \\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+             
+    let frac = FractionIrreductible(-c, -a);
+    if (frac.den === 1) {
+    texte += `\\(x = - ${frac.num}\\)`;
+    } else {
+    texte += `\\(x = -\\frac{${frac.num}}{${frac.den}}\\)`;
+    }
+  }
+  
+f.innerHTML = texte; 
+renderMath(f); 
+  
+  
 
 /* ====================== INIT ====================== */
 genererEquation();
