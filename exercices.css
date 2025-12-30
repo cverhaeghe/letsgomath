@@ -123,8 +123,9 @@
 
 .qcm-card:hover {
   background-color: var(--peps); /* orange foncé du site */
-  color: white; /* texte blanc pour contraste */
+  color: white; /* texte en blanc au hover */
 }
+
 
 
 
