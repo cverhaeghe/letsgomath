@@ -666,15 +666,16 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 } else if (b < 0 && a > 0 && c > 0) {                        /* CAS 5 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
+
         
     Étape 2 : on divise tout par ${-b} <br>`;
-
-    num = c;
+    num1 = a;
+    num2 = c;
     den = -b;
-    const frac1 = fractionLaTeX(num, den);
-    const frac2 = fractionLaTeX(den, den);
-
-    texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
+    const frac1 = fractionLaTeX(num1, den);
+    const frac2 = fractionLaTeX(num2, den);
+    const frac3 = fractionLaTeX(den, den);
+    texte += `\\( ${frac1} x + ${frac2}  = ${frac3} y \\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
             
@@ -691,13 +692,13 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
         \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
-
-    num = c;
+    num1 = a;
+    num2 = -c;
     den = -b;
-    const frac1 = fractionLaTeX(num, den);
-    const frac2 = fractionLaTeX(den, den);
-
-    texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
+    const frac1 = fractionLaTeX(num1, den);
+    const frac2 = fractionLaTeX(num2, den);
+    const frac3 = fractionLaTeX(den, den);
+    texte += `\\( ${frac1} x - ${frac2}  = ${frac3} y \\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
             
@@ -715,13 +716,13 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
         \\(${a}x + ${c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
-
-    num = c;
+    num1 = -a;
+    num2 = c;
     den = -b;
-    const frac1 = fractionLaTeX(num, den);
-    const frac2 = fractionLaTeX(den, den);
-
-    texte += `\\( ${frac1} = ${frac2} y \\)<br><br>`;
+    const frac1 = fractionLaTeX(num1, den);
+    const frac2 = fractionLaTeX(num2, den);
+    const frac3 = fractionLaTeX(den, den);
+    texte += `\\( -${frac1} x + ${frac2}  = ${frac3} y \\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
             
@@ -739,13 +740,13 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
         \\(${a}x - ${-c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
-
-    num = -c;
+    num1 = -a;
+    num2 = -c;
     den = -b;
-    const frac1 = fractionLaTeX(num, den);
-    const frac2 = fractionLaTeX(den, den);
-
-    texte += `\\( -${frac1} = ${frac2} y \\)<br><br>`;
+    const frac1 = fractionLaTeX(num1, den);
+    const frac2 = fractionLaTeX(num2, den);
+    const frac3 = fractionLaTeX(den, den);
+    texte += `\\( -${frac1} x - ${frac2}  = ${frac3} y \\)<br><br>`;
 
     texte += `Étape 3 : on simplifie <br>`;
              
