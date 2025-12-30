@@ -35,16 +35,17 @@
   <div class="equation-box" id="equation"></div>
 
   <!-- QCM -->
-  <div id="qcm">
-    <button onclick="verifier('linéaire')">Fonction linéaire</button>
-    <button onclick="verifier('affine')">Fonction affine</button>
-    <button onclick="verifier('constante')">Fonction constante</button>
-    <button onclick="verifier('pasfonction')">Pas une fonction</button>
-  </div>
+<div id="qcm">
+  <button class="qcm-button" onclick="verifier('linéaire')">Fonction linéaire</button>
+  <button class="qcm-button" onclick="verifier('affine')">Fonction affine</button>
+  <button class="qcm-button" onclick="verifier('constante')">Fonction constante</button>
+  <button class="qcm-button" onclick="verifier('pasfonction')">Pas une fonction</button>
+</div>
 
-  <div class="center-button">
-    <button onclick="genererEquation()">Nouvel exercice</button>
-  </div>
+<div class="center-button">
+  <button onclick="genererEquation()">Nouvel exercice</button>
+</div>
+
 
   <p id="feedback" class="feedback"></p>
 
