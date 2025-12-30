@@ -683,41 +683,46 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     texte += `\\( -${frac1} x - ${frac2}  = ${frac3} y \\)<br><br>`;
     }
 
+
+  
   /* ===== ÉTAPE 3 : forme y = mx + p ===== */
   
-    texte += `<u>Étape 1 :</u>  on simplifie <br>`;
+const sol = solutionOfficielle();
 
-  const sol = solutionOfficielle();
-  const m = sol.m;   // {num, den}
-  const p = sol.p;   // {num, den}
+/* --- normalisation des signes --- */
+let mNum = sol.m.num;
+let mDen = sol.m.den;
+let pNum = sol.p.num;
+let pDen = sol.p.den;
 
-  texte += `Étape 3 : on simplifie <br>`;
+if (mDen < 0) { mNum = -mNum; mDen = -mDen; }
+if (pDen < 0) { pNum = -pNum; pDen = -pDen; }
 
-  /* --- coefficient m --- */
-  let mTexte = "";
+texte += `<u>Étape 3 :</u> on simplifie <br>`;
 
-  if (m.num === 0) {
-    mTexte = "0";
-} else if (m.den === 1) {
-  if (m.num === 1) mTexte = "x";
-  else if (m.num === -1) mTexte = "-x";
-  else mTexte = `${m.num}x`;
+/* --- écriture de m --- */
+let mTexte = "";
+
+if (mNum === 0) {
+  mTexte = "0";
+} else if (mDen === 1) {
+  if (mNum === 1) mTexte = "x";
+  else if (mNum === -1) mTexte = "-x";
+  else mTexte = `${mNum}x`;
 } else {
-  mTexte = `${fractionLaTeX(m.num, m.den)}x`;
+  mTexte = `${fractionLaTeX(mNum, mDen)}x`;
 }
 
-  /* --- terme p --- */
-  let pTexte = "";
+/* --- écriture de p --- */
+let pTexte = "";
 
-  if (p.num !== 0) {
-    if (p.den === 1) {
-      pTexte = p.num > 0
-      ? ` + ${p.num}`
-      : ` - ${Math.abs(p.num)}`;
+if (pNum !== 0) {
+  if (pDen === 1) {
+    pTexte = pNum > 0 ? ` + ${pNum}` : ` - ${Math.abs(pNum)}`;
   } else {
-    pTexte = p.num > 0
-      ? ` + ${fractionLaTeX(p.num, p.den)}`
-      : ` - ${fractionLaTeX(Math.abs(p.num), p.den)}`;
+    pTexte = pNum > 0
+      ? ` + ${fractionLaTeX(pNum, pDen)}`
+      : ` - ${fractionLaTeX(Math.abs(pNum), pDen)}`;
   }
 }
 
