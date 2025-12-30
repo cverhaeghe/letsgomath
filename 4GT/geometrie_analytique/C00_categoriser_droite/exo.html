@@ -120,16 +120,26 @@ function genererEquation(){
 }
 
 /* ====================== VERIFICATION ====================== */
-function verifier(reponseEleve) {
-  const feedback = document.getElementById("feedback");
+function verifier(reponseEleve, element) {
+  // Désactiver toutes les cartes pour éviter plusieurs clics
+  const cards = document.querySelectorAll('.qcm-card');
+  cards.forEach(card => card.style.pointerEvents = "none");
+
   if (reponseEleve === typeEquation) {
-    feedback.innerHTML = "✅ Correct !";
-    feedback.style.color = "green";
+    element.classList.add('correct');
   } else {
-    feedback.innerHTML = `❌ Faux.`;
-    feedback.style.color = "red";
+    element.classList.add('incorrect');
+    // Facultatif : montrer la bonne réponse en vert
+    const bonneCarte = Array.from(cards).find(c => {
+      return (typeEquation === "linéaire" && c.innerText.includes("linéaire")) ||
+             (typeEquation === "affine" && c.innerText.includes("affine")) ||
+             (typeEquation === "constante" && c.innerText.includes("constante")) ||
+             (typeEquation === "pasfonction" && c.innerText.includes("Pas"));
+    });
+    if (bonneCarte) bonneCarte.classList.add('correct');
   }
 }
+
 
 // Générer le premier exercice au chargement
 window.onload = genererEquation;
