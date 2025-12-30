@@ -555,6 +555,7 @@ let num, den;
   }
 }  
 
+    /* ====================== CAS 3 : oblique ====================== */
 
 f.innerHTML = texte; 
 renderMath(f);   
