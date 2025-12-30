@@ -127,14 +127,15 @@
 }
 
 .qcm-card.correct {
-  background-color: #4CAF50; /* vert  */
-  color: white;
+  background-color: #a5d6a7; /* vert clair doux */
+  color: #2e3b30; /* texte gris foncé doux */
 }
 
 .qcm-card.incorrect {
-  background-color: #F44336; /* rouge  */
-  color: white;
+  background-color: #ef9a9a; /* rouge clair doux */
+  color: #6b1a1a; /* texte rouge sombre mais pas noir */
 }
+
 
 
 
