@@ -69,13 +69,18 @@ function pgcd(x, y){
   return x;
 }
 
-function FractionIrreductible(num, den) {
+
+  function FractionIrreductible(num, den) {
     const p = pgcd(num, den);
-    return {
-      num: num / p,
-      den: den / p
-      };
+    num = num / p;
+    den = den / p;
+    // Normaliser le signe : dénominateur toujours positif
+    if (den < 0) {
+        num = -num;
+        den = -den;
     }
+    return { num, den };
+}
 
 function fractionLaTeX(num, den){
   if(num === 0) return "0";
