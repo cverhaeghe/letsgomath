@@ -36,11 +36,12 @@
 
   <!-- QCM -->
 <div id="qcm" class="qcm-grid">
-  <div class="qcm-card" onclick="verifier('linéaire')">Fonction linéaire</div>
-  <div class="qcm-card" onclick="verifier('affine')">Fonction affine</div>
-  <div class="qcm-card" onclick="verifier('constante')">Fonction constante</div>
-  <div class="qcm-card" onclick="verifier('pasfonction')">Pas une fonction</div>
+  <div class="qcm-card" onclick="verifier('linéaire', this)">Fonction linéaire</div>
+  <div class="qcm-card" onclick="verifier('affine', this)">Fonction affine</div>
+  <div class="qcm-card" onclick="verifier('constante', this)">Fonction constante</div>
+  <div class="qcm-card" onclick="verifier('pasfonction', this)">Pas une fonction</div>
 </div>
+
 
 <div class="center-button">
   <button onclick="genererEquation()">Nouvel exercice</button>
