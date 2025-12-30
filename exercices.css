@@ -95,6 +95,53 @@
 }
 
 /* ===============================
+   QCM Exercice interactif
+   =============================== */
+
+/* Boutons QCM */
+.qcm-button {
+  background-color: #6b78b8; /* reprend le bleu existant */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  margin: 8px 6px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.qcm-button:hover {
+  background-color: var(--peps); /* orange site */
+  transform: translateY(-1px);
+  transition: background-color 0.25s ease;
+}
+
+/* Centrer le bouton “Nouvel exercice” */
+.center-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Feedback spécifique */
+.feedback {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.feedback.correct {
+  color: #2e7d32;
+}
+
+.feedback.incorrect {
+  color: #c62828;
+}
+
+
+
+
+/* ===============================
    RESPONSIVE - GSM
    =============================== */
 @media(max-width:600px){
