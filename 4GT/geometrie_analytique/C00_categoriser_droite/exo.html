@@ -80,10 +80,11 @@ function genererEquation(){
   const tirage = Math.random();
   let terms = [];
 
-  /* CAS 1 : DROITE LINEAIRE y = mx */
+/* CAS 1 : DROITE LINEAIRE y = mx */
   if (tirage < PROBA_LINEAIRE) {
     m = randCoeffNonZero();
     terms.push((m === 1 ? '' : (m === -1 ? '-' : m)) + 'x');
+    equationTextePourCorrection = "y = " + terms.join(' ');
     typeEquation = "linéaire";
   }
   /* CAS 2 : DROITE OBLIQUE y = mx + p */
@@ -92,18 +93,19 @@ function genererEquation(){
     p = randCoeffNonZero();
     terms.push((m === 1 ? '' : (m === -1 ? '-' : m)) + 'x');
     if (p !== 0) terms.push((p > 0 ? '+ ' : '- ') + Math.abs(p));
+    equationTextePourCorrection = "y = " + terms.join(' ');
     typeEquation = "affine";
   }
   /* CAS 3 : DROITE VERTICALE x = k */
   else if (tirage < PROBA_LINEAIRE + PROBA_OBLIQUE + PROBA_VERTICALE) {
     k = randCoeff();
-    terms.push('x = ' + k);
+    equationTextePourCorrection = "x = " + k;
     typeEquation = "pasfonction";
   }
   /* CAS 4 : DROITE HORIZONTALE y = k */
   else {
     k = randCoeff();
-    terms.push('y = ' + k);
+    equationTextePourCorrection = "y = " + k;
     typeEquation = "constante";
   }
 
