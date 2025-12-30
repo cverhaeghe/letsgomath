@@ -54,8 +54,8 @@ function renderMath(el){
 }
 // ====================== PARAMETRES PEDAGOGIQUES ======================
 // Somme = 1
-const PROBA_OBLIQUE     = 0.7;   // y = mx + p
-const PROBA_VERTICALE   = 0.15;  // x = k
+const PROBA_OBLIQUE     = 0.05;   // y = mx + p
+const PROBA_VERTICALE   = 0.2;  // x = k
 // le reste = horizontale (y = k)
 
 /* ====================== VARIABLES ====================== */
@@ -76,10 +76,10 @@ function pgcd(x, y){
 }
 
 function FractionIrreductible(num, den) {
-    const s = pgcd(num, den);
+    const p = pgcd(num, den);
     return {
-      num: num / s,
-      den: den / s
+      num: num / p,
+      den: den / p
       };
     }
 
@@ -555,34 +555,7 @@ let num, den;
   }
 }  
 
-    /* ====================== CAS 3 : oblique ====================== */
 
-if(a!==0 && b!==0)  {
-  
-let num1, num2, den;
-
-  if (b > 0 && a>0 && c>0) { 
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
-        \\(${b}y =  - ${a}x - ${c}\\)<br><br>
-        
-    Étape 2 : on divise tout par ${b} <br>`;
-
-    num1 = a;
-    num2 = c;
-    den = b;
-    const frac1 = fractionLaTeX(den, den);
-    const frac2 = fractionLaTeX(num1, den);
-    const frac3 = fractionLaTeX(num2, den);
-
-    texte += `\\( ${frac1} y = - ${frac2} - ${frac3}\\)<br><br>`;
-
-    
-    texte += `Étape 3 : on simplifie <br>`;
-
-
-}
-
-  
 f.innerHTML = texte; 
 renderMath(f);   
 }
