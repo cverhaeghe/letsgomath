@@ -555,11 +555,35 @@ let num, den;
   }
 }  
 
-    /* ====================== CAS 2 : horizontale ====================== */
+    /* ====================== CAS 3 : oblique ====================== */
 
-if(a!==0 || b!==0)  {
-      texte += `Étape 3 : on simplifie <br>`;
+if(a!==0 && b!==0)  {
+  
+let num, den;
 
+  if (b > 0 && a>0 && c>0) { 
+    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+        \\(${b}y =  - ${a}x - ${c}\\)<br><br>
+        
+    Étape 2 : on divise tout par ${b} <br>`;
+
+    num1 = a;
+    num2 = c;
+    den = b;
+    const frac1 = fractionLaTeX(den, den);
+    const frac2 = fractionLaTeX(num1, den);
+    const frac3 = fractionLaTeX(num2, den);
+
+    texte += `\\( ${frac1} y = - ${frac2} - ${frac3}\\)<br><br>`;
+
+    texte += `Étape 3 : on simplifie <br>`;
+       
+    let frac = FractionIrreductible(c, b);
+    if (frac.den === 1) {
+    texte += `\\(y = - ${frac.num}\\)`;
+    } else {
+    texte += `\\(y = -\\frac{${frac.num}}{${frac.den}}\\)`;
+    }
 }
 
   
