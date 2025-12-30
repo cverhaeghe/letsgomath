@@ -193,18 +193,19 @@ function parseReponse(txt) {
       pPartRaw.startsWith("+") ? pPartRaw.substring(1) :
       pPartRaw;
 
-    return {
-      variable: "y",
-      m: parseFraction(mTxt),
-      p: parseFraction(pTxt)
-    };
+    const m = parseFraction(mTxt);
+    const p = parseFraction(pTxt);
+
+    if (!m || !p) return null;
+
+    return { variable: "y", m, p };
   }
 
   // cas x = k ou y = k
-  return {
-    variable,
-    valeur: parseFraction(txt)
-  };
+  const val = parseFraction(txt);
+  if (!val) return null;
+
+  return { variable, valeur: val };
 }
 
 function memesValeurs(f1, f2) {
@@ -217,7 +218,7 @@ SOLUTION OFFICIELLE
 
 function solutionOfficielle() {
 
-  // droite verticale : ax + c = 0  →  x = -c/a
+  // verticale : ax + c = 0 → x = -c/a
   if (b === 0) {
     return {
       type: "verticale",
@@ -225,7 +226,7 @@ function solutionOfficielle() {
     };
   }
 
-  // droite horizontale : by + c = 0  →  y = -c/b
+  // horizontale : by + c = 0 → y = -c/b
   if (a === 0) {
     return {
       type: "horizontale",
@@ -233,7 +234,7 @@ function solutionOfficielle() {
     };
   }
 
-  // droite oblique : ax + by + c = 0  →  y = (-a/b)x + (-c/b)
+  // oblique : ax + by + c = 0 → y = (-a/b)x + (-c/b)
   return {
     type: "oblique",
     m: FractionIrreductible(-a, b),
@@ -251,20 +252,21 @@ function verifier() {
   const saisie = document.getElementById("reponse").value;
 
   const rep = parseReponse(saisie);
+  const sol = solutionOfficielle();
+
+  // format invalide
   if (!rep) {
     f.style.color = "red";
-    f.innerHTML = "❌ Format de réponse incorrect";
+    f.innerHTML = "❌ Incorrect";
     return;
   }
-
-  const sol = solutionOfficielle();
 
   /* ===== DROITE VERTICALE ===== */
   if (sol.type === "verticale") {
 
     if (rep.variable !== "x" || !rep.valeur) {
       f.style.color = "red";
-      f.innerHTML = "❌ Écris sous la forme <strong>x = ...</strong>";
+      f.innerHTML = "❌ Incorrect";
       return;
     }
 
@@ -286,13 +288,19 @@ function verifier() {
 
     if (rep.variable !== "y" || !rep.valeur) {
       f.style.color = "red";
-      f.innerHTML = "❌ Écris sous la forme <strong>y = ...</strong>";
+      f.innerHTML = "❌ Incorrect";
       return;
     }
 
     if (!memesValeurs(rep.valeur, sol.valeur)) {
       f.style.color = "red";
       f.innerHTML = "❌ Incorrect";
+      return;
+    }
+
+    if (pgcd(rep.valeur.num, rep.valeur.den) !== 1) {
+      f.style.color = "orange";
+      f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
       return;
     }
   }
@@ -302,7 +310,7 @@ function verifier() {
 
     if (rep.variable !== "y" || !rep.m || !rep.p) {
       f.style.color = "red";
-      f.innerHTML = "❌ Écris sous la forme <strong>y = mx + p</strong>";
+      f.innerHTML = "❌ Incorrect";
       return;
     }
 
@@ -314,11 +322,22 @@ function verifier() {
       f.innerHTML = "❌ Incorrect";
       return;
     }
+
+    if (
+      pgcd(rep.m.num, rep.m.den) !== 1 ||
+      pgcd(rep.p.num, rep.p.den) !== 1
+    ) {
+      f.style.color = "orange";
+      f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
+      return;
+    }
   }
 
+  // tout est bon
   f.style.color = "green";
   f.innerHTML = "✅ Correct";
 }
+
 
 
 
