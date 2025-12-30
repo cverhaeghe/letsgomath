@@ -557,13 +557,13 @@ let num, den;
 
     /* ====================== CAS 3 : oblique ====================== */
 
-  if(a===0)  {
+if(a!==0 && b!==0)  {
   
     let num, den;
 
 if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx+p  */
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
-        \\(${b}y = ${-c}\\)<br><br>
+        \\(${b}y = - ${a}x -${c}\\)<br><br>
         
     Étape 2 : on divise tout par ${b} <br>`;
 
@@ -585,10 +585,10 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
     
 } else if (b > 0 && a > 0 && c < 0) {                        /* CAS 2 : y=mx+p  */
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+        \\(${b}y = - ${a}x +${-c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    Étape 2 : on divise tout par ${b} <br>`;
 
     num = c;
     den = -b;
@@ -608,10 +608,10 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 
 } else if (b > 0 && a < 0 && c > 0) {                        /* CAS 3 : y=mx+p  */
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+        \\(${b}y =  ${-a}x -${c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    Étape 2 : on divise tout par ${b} <br>`;
 
     num = c;
     den = -b;
@@ -632,10 +632,10 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
 
 
 } else if (b > 0 && a < 0 && c < 0) {                        /* CAS 4 : y=mx+p  */
-    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
-        \\(${c} = ${Math.abs(b)}y\\)<br><br>
+    texte += `Étape 1 : on isole \\(${b}y\\) <br>
+        \\(${b}y = ${-a}x +${-c}\\)<br><br>
         
-    Étape 2 : on divise tout par ${-b} <br>`;
+    Étape 2 : on divise tout par ${b} <br>`;
 
     num = c;
     den = -b;
