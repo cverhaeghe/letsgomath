@@ -557,13 +557,13 @@ let num, den;
 
 /* ====================== CAS 3 : oblique ====================== */
 
-if(a !==0 && b !== 0)  {
+if(a !==0 && b!==0)  {
   
 let num, den;
 
-    if (b > 0 && a>0 && c > 0) { 
+  if (b > 0 && c > 0) { 
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
-        \\(${b}y = -${a}x -${c}\\)<br><br>
+        \\(${b}y = ${-c}\\)<br><br>
         
     Étape 2 : on divise tout par ${b} <br>`;
 
@@ -585,9 +585,9 @@ let num, den;
 
 
     
-  } else if (b > 0 && a>0 && c < 0) { 
+  } else if (b > 0 && c < 0) {
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
-        \\(${b}y = -${a}x + ${-c}\\)<br><br>
+        \\(${b}y = ${-c}\\)<br><br>
         
     Étape 2 : on divise tout par ${b} <br>`;
 
@@ -609,9 +609,9 @@ let num, den;
 
    
     
-  } else if (b > 0 && a<0 && c > 0) { 
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
-        \\(${b}y = ${-a}x -${c}\\)<br><br>
+  } else if (b < 0 && c > 0) {
+    texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
+        \\(${c} = ${Math.abs(b)}y\\)<br><br>
         
     Étape 2 : on divise tout par ${-b} <br>`;
 
@@ -631,14 +631,8 @@ let num, den;
     texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
     }
   
-  } else if (b > 0 && a<0 && c < 0) { 
-    texte += `Étape 1 : on isole \\(${b}y\\) <br>
-        \\(${b}y = ${-a}x +${-c}\\)<br><br>
-        
-        Étape 2 : on divise tout par ${-b} <br>`;
-    }
+  
 
-    
   } else {
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
         \\(${c} = ${Math.abs(b)}y\\)<br><br>
@@ -661,7 +655,7 @@ let num, den;
     texte += `\\(y = -\\frac{${frac.num}}{${frac.den}}\\)`;
     }
   }
-}  
+} 
 
         
 f.innerHTML = texte; 
