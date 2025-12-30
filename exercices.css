@@ -95,32 +95,34 @@
 }
 
 /* ===============================
-   QCM Exercice interactif
+   QCM en cartes (2x2)
    =============================== */
 
-/* Boutons QCM */
-.qcm-button {
-  background-color: #6b78b8; /* reprend le bleu existant */
+.qcm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-items: center;
+  margin-bottom: 20px;
+}
+
+.qcm-card {
+  background-color: #a3b4e0; /* bleu clair pour QCM */
   color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 1rem;
-  border-radius: 12px;
-  cursor: pointer;
-  margin: 8px 6px;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.qcm-button:hover {
-  background-color: var(--peps); /* orange site */
-  transform: translateY(-1px);
-  transition: background-color 0.25s ease;
-}
-
-/* Centrer le bouton “Nouvel exercice” */
-.center-button {
+  padding: 25px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 15px;
   text-align: center;
-  margin-top: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  width: 100%; /* pour occuper toute la case */
+  max-width: 250px; /* limite la largeur */
+}
+
+.qcm-card:hover {
+  background-color: #7f91d0; /* bleu plus foncé au hover */
+  transform: translateY(-3px);
 }
 
 /* Feedback spécifique */
