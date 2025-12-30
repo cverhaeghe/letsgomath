@@ -164,28 +164,27 @@ function memesValeurs(f1, f2) {
   const sol = solutionOfficielle();
   const solIrred = FractionIrreductible(sol.num, sol.den);
 
-  // Mauvaise valeur
-  if (!memesValeurs(repEleve, solIrred)) {
-    f.style.color = "red";
-    f.innerHTML = "❌ Incorrect";
-    return;
-  }
-
-  // Bonne valeur mais fraction non simplifiée
-  const repIrred = FractionIrreductible(repEleve.num, repEleve.den);
-
-  if (
-    repIrred.num === solIrred.num &&
-    repIrred.den === solIrred.den &&
-    repEleve.den === repIrred.den
-  ) {
-    f.style.color = "green";
-    f.innerHTML = "✅ Correct";
-  } else {
-    f.style.color = "orange";
-    f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
-  }
+// Mauvaise valeur
+if (!memesValeurs(repEleve, solIrred)) {
+  f.style.color = "red";
+  f.innerHTML = "❌ Incorrect";
+  return;
 }
+
+// Fraction irréductible de la réponse élève
+const repIrred = FractionIrreductible(repEleve.num, repEleve.den);
+
+// Même valeur mais fraction non simplifiée
+if (repEleve.num !== repIrred.num || repEleve.den !== repIrred.den) {
+  f.style.color = "orange";
+  f.innerHTML = "⚠️ Presque… la fraction doit être simplifiée";
+  return;
+}
+
+// Sinon : correct
+f.style.color = "green";
+f.innerHTML = "✅ Correct";
+
 
 
 
