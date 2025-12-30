@@ -103,28 +103,29 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   justify-items: center; /* centre horizontalement chaque carte */
-  max-width: 550px;      /* limite la largeur totale de la grille */
+  max-width: 500px;      /* largeur totale de la grille légèrement augmentée */
   margin: 0 auto 20px;   /* centre la grille dans la page */
 }
 
-
 .qcm-card {
-  background-color: #dce6f9; /* bleu encore plus clair */
-  color: #3a4a7a; /* texte plus sombre pour contraste */
-  padding: 25px 20px;
-  font-size: 1.1rem;
-  font-weight: 400; /* 600 comme en gras*/
+  background-color: #dce6f9; /* fond bleu très clair */
+  color: #3a4a7a; /* texte bleu foncé clair */
+  padding: 30px 25px; /* plus de padding pour élargir la carte */
+  font-size: 1.2rem; /* texte un peu plus grand */
+  font-weight: normal; /* texte normal, pas gras */
   border-radius: 15px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
   width: 100%; 
-  max-width: 200px; /* un peu moins large pour rapprocher du centre */
+  max-width: 250px; /* cartes plus larges */
+  transition: background-color 0.2s ease; /* transition douce pour le fond */
 }
 
 .qcm-card:hover {
-  background-color: var(--peps); /* hover orange */
+  background-color: var(--peps); /* orange foncé du site */
+  color: white; /* texte blanc pour contraste */
 }
+
 
 
 /* Feedback spécifique */
