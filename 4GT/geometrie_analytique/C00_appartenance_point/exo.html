@@ -177,45 +177,41 @@ else if(tirage<0.7){
 }
 
 /* ===== CAS 3 : ax + by + c = 0 ===== */
-else{
+else {
+  const a = randIntNonZeroNotOne();
+  const b = randIntNonZeroNotOne();
+  const c = randIntNonZeroNotOne();
 
-  const a=randIntNonZeroNotOne();
-  const b=randIntNonZeroNotOne();
-  const c=randIntNonZeroNotOne();
-
-  e=Math.floor(Math.random()*7)-3;
+  e = Math.floor(Math.random()*7)-3;
 
   if(appartient){
-  let yF;
-  do{
-  yF = fractionIrreductible(
-    m.num * e * p.den + p.num * m.den,
-    m.den * p.den
-  );
-}while(!fractionDansBornes(yF));
-
-f = fractionLatex(yF.num, yF.den);
-
-  }else{
-    f=Math.floor(Math.random()*7)-3;
+    // On calcule y pour que le point appartienne à la droite
+    let yF;
+    do {
+      yF = fractionIrreductible(-a*e-c, b);
+    } while(!fractionDansBornes(yF));
+    f = fractionLatex(yF.num, yF.den);
+  } else {
+    f = Math.floor(Math.random()*7)-3;
   }
 
-  let eq="";
-  eq+=(a<0?"-":"")+(Math.abs(a)===1?"":Math.abs(a))+"x";
-  eq+=" "+(b>=0?"+ ":"- ")+(Math.abs(b)===1?"":Math.abs(b))+"y";
-  eq+=" "+(c>=0?"+ ":"- ")+Math.abs(c)+" = 0";
+  let eq = "";
+  eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
+  eq += " " + (b>=0?"+ ":"- ") + (Math.abs(b)===1?"":Math.abs(b)) + "y";
+  eq += " " + (c>=0?"+ ":"- ") + Math.abs(c) + " = 0";
 
-  enonce=`
+  enonce = `
   La droite a pour équation :<br>
   \\(${eq}\\)<br><br>
   Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
   `;
 
-  texteCorrection=`
+  texteCorrection = `
   On remplace \\(x\\) et \\(y\\) dans l'équation.<br>
   ${appartient?"On obtient 0.":"On n'obtient pas 0."}
   `;
 }
+
 
 document.getElementById("enonce").innerHTML=enonce;
 renderMath(document.getElementById("enonce"));
