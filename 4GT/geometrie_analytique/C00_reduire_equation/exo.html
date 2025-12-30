@@ -454,73 +454,7 @@ function corriger(){
   }
   }
 
-/* ====================== CAS 2 : oblique ====================== */
-else if (a !== 0 && b !== 0) {
-
-  texte += `Étape 1 : on isole \\(${b}y\\)<br>`;
-  texte += `\\(${b}y ${a<0?'+':'-'} ${Math.abs(a)}x ${c<0?'+':'-'} ${Math.abs(c)} = 0\\)<br><br>`;
-
-  texte += `Étape 2 : on divise tout par ${b} :<br>`;
-  let m = FractionIrreductible(-a, b);
-  let p = FractionIrreductible(-c, b);
-
-  texte += `\\(y = ${m.num<0?'-':''}${fractionLaTeX(Math.abs(m.num), m.den)}x ${p.num<0?'-':'+'} ${fractionLaTeX(Math.abs(p.num), p.den)}\\)<br><br>`;
-
-  texte += `Étape 3 : on simplifie si nécessaire<br>`;
-}
-
-/* ====================== CAS 3 : horizontale ====================== */
-else {
-
-  let num, den, frac;
-
-  if (b > 0 && c > 0) {
-    texte += `Étape 1 : on isole \\(${b}y\\)<br>`;
-    texte += `\\(${b}y = ${-c}\\)<br><br>`;
-    texte += `Étape 2 : on divise tout par ${b} :<br>`;
-    num = -c; den = b;
-    frac = FractionIrreductible(num, den);
-    texte += frac.den === 1
-      ? `\\(y = ${frac.num}\\)<br><br>`
-      : `\\(y = \\frac{${frac.num}}{${frac.den}}\\)<br><br>`;
-  }
-
-  else if (b > 0 && c < 0) {
-    texte += `Étape 1 : on isole \\(${b}y\\)<br>`;
-    texte += `\\(${b}y = ${-c}\\)<br><br>`;
-    texte += `Étape 2 : on divise tout par ${b} :<br>`;
-    num = -c; den = b;
-    frac = FractionIrreductible(num, den);
-    texte += frac.den === 1
-      ? `\\(y = ${frac.num}\\)<br><br>`
-      : `\\(y = \\frac{${frac.num}}{${frac.den}}\\)<br><br>`;
-  }
-
-  else if (b < 0 && c > 0) {
-    texte += `Étape 1 : comme \\(${b}<0\\), on passe \\(${b}y\\) à droite<br>`;
-    texte += `\\(${c} = ${Math.abs(b)}y\\)<br><br>`;
-    texte += `Étape 2 : on divise tout par ${-b} :<br>`;
-    num = c; den = -b;
-    frac = FractionIrreductible(num, den);
-    texte += frac.den === 1
-      ? `\\(y = ${frac.num}\\)<br><br>`
-      : `\\(y = \\frac{${frac.num}}{${frac.den}}\\)<br><br>`;
-  }
-
-  else { // b < 0 && c < 0
-    texte += `Étape 1 : comme \\(${b}<0\\), on passe \\(${b}y\\) à droite<br>`;
-    texte += `\\(${c} = ${Math.abs(b)}y\\)<br><br>`;
-    texte += `Étape 2 : on divise tout par ${-b} :<br>`;
-    num = -c; den = -b;
-    frac = FractionIrreductible(num, den);
-    texte += frac.den === 1
-      ? `\\(y = ${frac.num}\\)<br><br>`
-      : `\\(y = \\frac{${frac.num}}{${frac.den}}\\)<br><br>`;
-  }
-
-  texte += `Étape 3 : on simplifie si nécessaire<br>`;
-}
-
+else{}
 
 
   
