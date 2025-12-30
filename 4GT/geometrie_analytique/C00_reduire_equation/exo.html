@@ -575,16 +575,6 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac3 = fractionLaTeX(num2, den);
     texte += `\\( ${frac1} y = - ${frac2}x - ${frac3} \\)<br><br>`;
 
-  
-    texte += `Étape 3 : on simplifie <br>`;
-       
-    let frac = FractionIrreductible(c, b);
-    if (frac.den === 1) {
-    texte += `\\(y = - ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = -\\frac{${frac.num}}{${frac.den}}\\)`;
-    }
-
     
 } else if (b > 0 && a > 0 && c < 0) {                        /* CAS 2 : y=mx+p  */
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
@@ -600,16 +590,6 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac3 = fractionLaTeX(num2, den);
     texte += `\\( ${frac1} y = - ${frac2}x + ${frac3} \\)<br><br>`;
 
-  
-    texte += `Étape 3 : on simplifie <br>`;
-            
-    let frac = FractionIrreductible(c, -b);
-    if (frac.den === 1) {
-    texte += `\\(y = ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
-    }
-
 
 } else if (b > 0 && a < 0 && c > 0) {                        /* CAS 3 : y=mx+p  */
     texte += `Étape 1 : on isole \\(${b}y\\) <br>
@@ -624,16 +604,6 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac2 = fractionLaTeX(num1, den);
     const frac3 = fractionLaTeX(num2, den);
     texte += `\\( ${frac1} y = ${frac2}x - ${frac3} \\)<br><br>`;
-
-  
-    texte += `Étape 3 : on simplifie <br>`;
-            
-    let frac = FractionIrreductible(c, -b);
-    if (frac.den === 1) {
-    texte += `\\(y = ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
-    }
 
 
 
@@ -651,16 +621,6 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac3 = fractionLaTeX(num2, den);
     texte += `\\( ${frac1} y = ${frac2}x + ${frac3} \\)<br><br>`;
 
-  
-    texte += `Étape 3 : on simplifie <br>`;
-            
-    let frac = FractionIrreductible(c, -b);
-    if (frac.den === 1) {
-    texte += `\\(y = ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
-    }
-
 
 
 } else if (b < 0 && a > 0 && c > 0) {                        /* CAS 5 : y=mx+p  */
@@ -677,14 +637,6 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac3 = fractionLaTeX(den, den);
     texte += `\\( ${frac1} x + ${frac2}  = ${frac3} y \\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
-            
-    let frac = FractionIrreductible(c, -b);
-    if (frac.den === 1) {
-    texte += `\\(y = ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
-    }
 
 
 } else if (b < 0 && a > 0 && c < 0) {                        /* CAS 6 : y=mx+p  */
@@ -700,16 +652,6 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac3 = fractionLaTeX(den, den);
     texte += `\\( ${frac1} x - ${frac2}  = ${frac3} y \\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
-            
-    let frac = FractionIrreductible(c, -b);
-    if (frac.den === 1) {
-    texte += `\\(y = ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
-    }
-
-
 
 } else if (b < 0 && a < 0 && c > 0) {                        /* CAS 7 : y=mx+p  */
     texte += `Étape 1 : comme \\( ${b}<0 \\), on passe \\(${b}y\\) à droite <br>
@@ -724,14 +666,6 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac3 = fractionLaTeX(den, den);
     texte += `\\( -${frac1} x + ${frac2}  = ${frac3} y \\)<br><br>`;
 
-    texte += `Étape 3 : on simplifie <br>`;
-            
-    let frac = FractionIrreductible(c, -b);
-    if (frac.den === 1) {
-    texte += `\\(y = ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = \\frac{${frac.num}}{${frac.den}}\\)`;
-    }
 
     
  } else {                                           /* CAS 8 : y=mx+p  */
@@ -747,16 +681,11 @@ if (b > 0 && a > 0 && c > 0) {                                   /* CAS 1 : y=mx
     const frac2 = fractionLaTeX(num2, den);
     const frac3 = fractionLaTeX(den, den);
     texte += `\\( -${frac1} x - ${frac2}  = ${frac3} y \\)<br><br>`;
+    }
 
     texte += `Étape 3 : on simplifie <br>`;
-             
-    let frac = FractionIrreductible(-c, -b);
-    if (frac.den === 1) {
-    texte += `\\(y = - ${frac.num}\\)`;
-    } else {
-    texte += `\\(y = -\\frac{${frac.num}}{${frac.den}}\\)`;
-    }
-  }
+
+  
 } 
 f.innerHTML = texte; 
 renderMath(f);   
