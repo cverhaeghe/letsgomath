@@ -167,14 +167,17 @@ const p = randEntierOuFraction(0.4);
 
 
   let essais=0;
-  do{
-    const eF = randEntierOuFraction(0.4);
-    e = eF.den === 1 ? eF.num : eF; 
-    const yF=fractionIrreductible(m.num*e*p.den + p.num*m.den, m.den*p.den);
-    f = fractionLatex(yF.num, yF.den);
-    essais++;
-    if(essais>50) break;
-  } while(appartient && !fractionDansBornes({num:yF.num, den:yF.den}));
+
+  let yF;
+do{
+  const eF = randEntierOuFraction(0.4);
+  e = eF.den === 1 ? eF.num : eF; 
+  yF = fractionIrreductible(...);
+  f = fractionLatex(yF.num, yF.den);
+  essais++;
+  if(essais>50) break;
+} while(appartient && !fractionDansBornes(yF));
+
 
   if(!appartient){
     f=Math.floor(Math.random()*7)-3;
@@ -201,17 +204,16 @@ else if(tirage<0.6){
   let essais=0;
   f=Math.floor(Math.random()*7)-3;
 
+  let yF;
   do{
-    if(appartient){
-      e=fractionLatex(k.num,k.den);
-    } else {
-      const eF = randEntierOuFraction(0.4);
-      e = eF.den === 1 ? eF.num : eF; 
+  const eF = randEntierOuFraction(0.4);
+  e = eF.den === 1 ? eF.num : eF; 
+  yF = fractionIrreductible(...);
+  f = fractionLatex(yF.num, yF.den);
+  essais++;
+  if(essais>50) break;
+} while(appartient && !fractionDansBornes(yF));
 
-    }
-    essais++;
-    if(essais>50) break;
-  }while(false);
 
   enonce=`
   La droite a pour équation :<br>
@@ -240,15 +242,16 @@ else {
   let yF;
   let essais = 0;
 
-  do {
-    const eF = randEntierOuFraction(0.4);
-    e = eF.den === 1 ? eF.num : eF; 
+  let yF;
+  do{
+  const eF = randEntierOuFraction(0.4);
+  e = eF.den === 1 ? eF.num : eF; 
+  yF = fractionIrreductible(...);
+  f = fractionLatex(yF.num, yF.den);
+  essais++;
+  if(essais>50) break;
+} while(appartient && !fractionDansBornes(yF));
 
-    yF = fractionIrreductible(-a*e - c, b);
-    f = fractionLatex(yF.num, yF.den);
-    essais++;
-    if(essais > 50) break;
-  } while(appartient && !fractionDansBornes(yF));
 
   if(!appartient){
     f = Math.floor(Math.random()*7) - 3;
