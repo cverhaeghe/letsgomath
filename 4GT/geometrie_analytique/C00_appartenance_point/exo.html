@@ -123,7 +123,7 @@ function tirerE() {
     num,
     den,
     valeur: num / den,                       // POUR LES CALCULS
-    latex: den === 1 ? `${num}` : `\\frac{${num}}{${den}}`
+    latex: den === 1 ? `${num}`: (num < 0 ? `-\\frac{${Math.abs(num)}}{${den}}`: `\\frac{${num}}{${den}}`)
   };
 }
 
