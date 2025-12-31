@@ -290,6 +290,11 @@ else {
     e = eObj.valeur;           // calcul
     eAff = eObj.latex;   // affichage
 
+    // parenthèses si e est une fraction négative
+    if (eObj.num < 0 && eObj.den !== 1) {
+    eAff = `(${eAff})`;
+}
+
     yF = fractionIrreductible(-a * e - c, b);
 
     f = fractionLatex(yF.num, yF.den);
@@ -327,7 +332,7 @@ if (typeof f === "string") {
 
 
 let texte = `
-<u>Étape 1</u> : on remplace les coordonnées du point \\(A(${eAff};${f})\\) dans l'équation<br>
+<u>Étape 1</u> : on remplace les coordonnées du point A dans l'équation<br>
 \\[
 ${a}\\cdot ${eAff}
 ${termeAvecSigne(b)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
