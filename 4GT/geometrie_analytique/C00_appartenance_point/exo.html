@@ -208,10 +208,63 @@ else {
   Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
   `;
 
-  texteCorrection = `
-  On remplace \\(x\\) et \\(y\\) dans l'équation.<br>
-  ${appartient?"On obtient 0.":"On n'obtient pas 0."}
+ /* Correction */
+  
+// Préparation des valeurs
+const eIsFrac = typeof e === "object";
+const fIsFrac = typeof f === "object";
+
+let calcul = `
+On remplace les coordonnées du point \\(A(e;f)\\) dans l'équation :<br>
+\\[
+ax + by + c = a\\cdot e + b\\cdot f + c
+\\]
+`;
+
+// CAS 1 : e et f sont entiers
+if(!eIsFrac && !fIsFrac){
+
+  const val = a*e + b*(valFrac(yF)) + c;
+
+  calcul += `
+  \\[
+  = ${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
+  \\]
+  \\[
+  = ${fractionLatex(a*e*yF.den + b*yF.num + c*yF.den, yF.den)}
+  \\]
   `;
+
+}
+// CAS 2 : au moins une fraction → mise au même dénominateur
+else {
+
+  const den = yF.den;
+
+  calcul += `
+  \\[
+  = ${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
+  \\]
+  \\[
+  = \\frac{${a}\\cdot ${e}\\cdot ${den}}{${den}}
+    + \\frac{${b}\\cdot ${yF.num}}{${den}}
+    + \\frac{${c}\\cdot ${den}}{${den}}
+  \\]
+  \\[
+  = \\frac{${a*e*den + b*yF.num + c*den}}{${den}}
+  \\]
+  `;
+}
+
+// Conclusion
+calcul += appartient
+  ? `<br>Le numérateur est nul, donc l'expression vaut 0.<br>
+     👉 Le point appartient à la droite.`
+  : `<br>Le numérateur n'est pas nul, donc l'expression ne vaut pas 0.<br>
+     👉 Le point n'appartient pas à la droite.`;
+
+texteCorrection = calcul;
+
 }
 
 
