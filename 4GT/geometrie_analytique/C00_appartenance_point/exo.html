@@ -224,60 +224,96 @@ else {
 
   /* ===== CORRECTION DETAILLEE ===== */
 
-  let calcul = `
-  On remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation :<br>
-  \\[
-  ${a}x + ${b}y + ${c} = 0
-  \\]
-  \\[
-  ${a*e}
-  ${termeSigne(b, `\\cdot ${fractionLatex(yF.num,yF.den)}`)}
-  ${termeConstante(c)}
-  \\]
+  /* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
 
+let texte = `
+<u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'expression<br>
+\\[
+${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
+\\stackrel{?}{=} 0
+\\]
+`;
+
+/* ===== Étape 2 (implicite) : produits effectués dans l'expression ===== */
+
+/* Calcul des produits (fait "dans la tête", mais le résultat apparaît) */
+const ax = a * e;
+const by = (b * yF.num) / yF.den;
+
+/* ===== Étape 3 : on observe s'il reste des fractions ===== */
+
+if (yF.den === 1) {
+
+  /* Tous les termes sont entiers */
+
+  texte += `
+  <u>Étape 2</u> : on effectue et on simplifie les produits<br>
+  \\[
+  ${ax} + ${b*yF.num} + ${c}
+  \\stackrel{?}{=} 0
+  \\]
   `;
 
-  if(yF.den === 1){
+  const somme = ax + b*yF.num + c;
 
-    const resultat = a*e + b*yF.num + c;
+  texte += `
+  <u>Étape 3</u> : on additionne et on compare à zéro<br>
+  \\[
+  ${somme} ${somme === 0 ? "=" : "\\neq"} 0
+  \\]
+  `;
 
-    calcul += `
-    \\[
-    = ${a*e} + ${b*yF.num} + ${c}
-    \\]
-    \\[
-    = ${resultat}
-    \\]
-    `;
+  texte += somme === 0
+    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
 
-    calcul += appartient
-      ? `<br>On obtient 0.<br>👉 Le point appartient à la droite.`
-      : `<br>On n'obtient pas 0.<br>👉 Le point n'appartient pas à la droite.`;
+} else {
 
-  } else {
+  /* Il reste une fraction → mise au même dénominateur */
 
-    const den = yF.den;
-    const num = a*e*den + b*yF.num + c*den;
+  const den = yF.den;
+  const num = ax * den + b * yF.num + c * den;
 
-    calcul += `
-    \\[
-    = \\frac{${a}\\cdot ${e}\\cdot ${den}}{${den}}
-      + \\frac{${b}\\cdot ${yF.num}}{${den}}
-      + \\frac{${c}\\cdot ${den}}{${den}}
-    \\]
-    \\[
-    = \\frac{${num}}{${den}}
-    \\]
-    `;
+  texte += `
+  <u>Étape 2</u> : on effectue et on simplifie les produits<br>
+  \\[
+  ${ax} + ${fractionLatex(b*yF.num, yF.den)} + ${c}
+  \\stackrel{?}{=} 0
+  \\]
+  `;
 
-    calcul += appartient
-      ? `<br>Le numérateur est nul, donc l'expression vaut 0.<br>
-         👉 Le point appartient à la droite.`
-      : `<br>Le numérateur n'est pas nul, donc l'expression ne vaut pas 0.<br>
-         👉 Le point n'appartient pas à la droite.`;
-  }
+  texte += `
+  <u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur (${den})<br>
+  \\[
+  \\frac{${ax}\\cdot ${den}}{${den}}
+  + \\frac{${b*yF.num}}{${den}}
+  + \\frac{${c}\\cdot ${den}}{${den}}
+  \\stackrel{?}{=} 0
+  \\]
+  `;
 
-  texteCorrection = calcul;
+  texte += `
+  <u>Étape 4</u> : on effectue les produits des numérateurs<br>
+  \\[
+  \\frac{${num}}{${den}}
+  \\stackrel{?}{=} 0
+  \\]
+  `;
+
+  texte += `
+  <u>Étape 5</u> : on compare avec zéro<br>
+  \\[
+  ${num === 0 ? "0" : fractionLatex(num,den)} ${num === 0 ? "=" : "\\neq"} 0
+  \\]
+  `;
+
+  texte += num === 0
+    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+}
+
+texteCorrection = texte;
+
 
 
 
