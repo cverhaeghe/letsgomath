@@ -235,7 +235,7 @@ else {
   /* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
 
 let etape1 = `
-<u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'expression<br>
+<u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation<br>
 \\[
 ${a}\\cdot ${afficheNombre(e)}
 ${termeAvecSigne(b)}\\cdot ${afficheNombre(yF.num)}
@@ -252,7 +252,7 @@ const ax = a * e;
 const by = b * yF.num;
 
 let etape2 = `
-<u>Étape 2</u> : on effectue et on simplifie les produits<br>
+<u>Étape 2</u> : on effectue et/ou simplifie les produits<br>
 \\[
 ${ax}
 ${termeAvecSigne(by)}
