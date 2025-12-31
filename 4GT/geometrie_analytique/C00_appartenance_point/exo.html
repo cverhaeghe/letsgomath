@@ -328,7 +328,15 @@ ${termeAvecSigne(c)}
 
 /* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
 
-const ax = a * e;
+let axValeur, axFraction;
+
+if (eObj.den === 1) {
+  axValeur = a * eObj.num;
+  axFraction = axValeur; // entier
+} else {
+  axValeur = a * eObj.valeur;
+  axFraction = { num: a * eObj.num, den: eObj.den };
+}
 
 // produit b·y (avec simplification locale)
 let byNum = b * yCorr.num;
@@ -350,7 +358,11 @@ if (byDen === 1) {
 texte += `
 <u>Étape 2</u> : on effectue et/ou on simplifie les produits<br>
 \\[
-${ax}
+${
+  typeof axFraction === "number"
+    ? axFraction
+    : fractionAvecSigne(axFraction.num, axFraction.den)
+}
 ${
   resteFraction
     ? fractionAvecSigne(byValeur.num, byValeur.den)
