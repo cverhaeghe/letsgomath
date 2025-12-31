@@ -101,6 +101,17 @@ function renderMath(el){
   MathJax.typesetPromise([el]);
 }
 
+function termeSigne(coef, contenu){
+  if(coef === 0) return "";
+  if(coef > 0) return `+ ${coef === 1 ? "" : coef}${contenu}`;
+  return `- ${Math.abs(coef) === 1 ? "" : Math.abs(coef)}${contenu}`;
+}
+
+function termeConstante(c){
+  if(c === 0) return "";
+  return c > 0 ? `+ ${c}` : `- ${Math.abs(c)}`;
+}
+
 /* =====================================================
    VARIABLES
 ===================================================== */
@@ -219,8 +230,11 @@ else {
   ${a}x + ${b}y + ${c} = 0
   \\]
   \\[
-  ${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
+  ${a*e}
+  ${termeSigne(b, `\\cdot ${fractionLatex(yF.num,yF.den)}`)}
+  ${termeConstante(c)}
   \\]
+
   `;
 
   if(yF.den === 1){
