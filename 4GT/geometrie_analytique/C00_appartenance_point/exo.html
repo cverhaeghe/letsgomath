@@ -84,6 +84,51 @@ function afficheCoordonnee(num, den){
   return frac;
 }
 
+
+  /* =====================================================
+   ENSEMBLE E CONTROLE (ANTI-DECIMAUX)
+===================================================== */
+const ENSEMBLE_E = [
+  { num: 0, den: 1 },
+  { num: 1, den: 1 },
+  { num: 2, den: 1 },
+  { num: 3, den: 1 },
+  { num: 4, den: 1 },
+  { num: 5, den: 1 },
+
+  { num: 1, den: 2 },
+  { num: 1, den: 3 },
+  { num: 1, den: 4 },
+  { num: 1, den: 5 },
+
+  { num: 2, den: 3 },
+  { num: 2, den: 5 },
+
+  { num: 3, den: 2 },
+  { num: 3, den: 4 },
+  { num: 3, den: 5 },
+
+  { num: 4, den: 3 },
+  { num: 4, den: 5 }
+];
+
+function tirerE() {
+  const base = ENSEMBLE_E[Math.floor(Math.random() * ENSEMBLE_E.length)];
+  const signe = Math.random() < 0.5 ? -1 : 1;
+
+  const num = signe * base.num;
+  const den = base.den;
+
+  return {
+    num,
+    den,
+    valeur: num / den,                       // POUR LES CALCULS
+    latex: den === 1 ? `${num}` : `\\frac{${num}}{${den}}`
+  };
+}
+
+
+  
 /* =====================================================
    GENERATEURS DE COEFFICIENTS
 ===================================================== */
@@ -128,20 +173,11 @@ function afficheNombre(n){
   return n < 0 ? `(${n})` : `${n}`;
 }
 
-  function termeAvecSigne(val){
-  if(val === 0) return "+ 0";
+function termeAvecSigne(val){
+  if(val === 0) return "0";
   return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
 }
 
-
-  function randEntierOuFractionSimple(pFrac = 0.4){
-  if(Math.random() < pFrac){
-    return randFractionNotOne(); // {num, den}
-  }
-  return { num: Math.floor(Math.random()*7)-3, den: 1 };
-}
-
-  
 /* =====================================================
    VARIABLES
 ===================================================== */
@@ -165,14 +201,9 @@ if(tirage<0.4){
   const p=randFractionNotOne();
 
   let essais=0;
-  let eAff;
-  
   do{
-    const eF = randEntierOuFractionSimple(0.4);
-    const eCalc = eF.den === 1 ? eF.num : eF.num / eF.den;
-    const eAff  = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
-    e = eCalc;
-
+  const eObj = tirerE(); 
+    e = eObj.valeur;
     const yF=fractionIrreductible(m.num*e*p.den + p.num*m.den, m.den*p.den);
     f = fractionLatex(yF.num, yF.den);
     essais++;
@@ -187,7 +218,7 @@ if(tirage<0.4){
   La droite a pour équation :<br>
   \\(y = ${fractionLatex(m.num,m.den)}x
   ${p.num>=0?"+":"-"} ${fractionLatex(Math.abs(p.num),p.den)}\\)<br><br>
-  Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
+  Le point \\(A(${eObj.latex};${f})\\) appartient-il à cette droite ?
   `;
 
   texteCorrection=`
@@ -207,9 +238,8 @@ else if(tirage<0.6){
     if(appartient){
       e=fractionLatex(k.num,k.den);
     } else {
-      const eF = randEntierOuFractionSimple(0.4);
-      e = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
-
+    const eObj = tirerE();
+    e = eObj.latex;
     }
     essais++;
     if(essais>50) break;
@@ -218,7 +248,7 @@ else if(tirage<0.6){
   enonce=`
   La droite a pour équation :<br>
   \\(x = ${fractionLatex(k.num,k.den)}\\)<br><br>
-  Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
+  Le point \\(A(${eObj.latex};${f})\\) appartient-il à cette droite ?
   `;
 
   texteCorrection=`
@@ -236,14 +266,14 @@ else {
 
   let yF;
   let essais = 0;
-  let eAff;
-  
+
   do {
-    const eF = randEntierOuFractionSimple(0.4);
-    const eCalc = eF.den === 1 ? eF.num : eF.num / eF.den;
-    const eAff  = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
-    e = eCalc;
-    yF = fractionIrreductible(-a*e - c, b);
+    const eObj = tirerE();
+    e = eObj.valeur;           // calcul
+    const eAff = eObj.latex;   // affichage
+
+    yF = fractionIrreductible(-a * e - c, b);
+
     f = fractionLatex(yF.num, yF.den);
     essais++;
     if(essais > 50) break;
@@ -264,8 +294,7 @@ else {
   La droite a pour équation :<br>
   \\(${eq}\\)<br><br>
   Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
-`;
-
+  `;
 
 
 /* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
@@ -282,7 +311,7 @@ if (typeof f === "string") {
 let texte = `
 <u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation<br>
 \\[
-${a}\\cdot ${afficheNombre(e)}
+${a}\\cdot ${eAff}
 ${termeAvecSigne(b)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
 ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
