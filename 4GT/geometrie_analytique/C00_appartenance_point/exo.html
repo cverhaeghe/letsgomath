@@ -297,15 +297,16 @@ else {
     ? yF
     : { num: f, den: 1 };
 
-  let texte = `
+    let texte = `
 <u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation<br>
 \\[
-${aCalc}\\cdot ${afficheNombre(e)}
-${termeAvecSigne(bCalc)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
-${termeAvecSigne(cCalc)}
+${fractionLatex(a.num, a.den)}\\cdot ${afficheNombre(e)}
+${termeAvecSigne(fractionLatex(b.num, b.den))}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
+${termeAvecSigne(fractionLatex(c.num, c.den))}
 \\stackrel{?}{=} 0
 \\]
 `;
+
 
   const ax = aCalc * e;
 
