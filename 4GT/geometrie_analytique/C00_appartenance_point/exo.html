@@ -143,6 +143,12 @@ function termeAvecSigne(val){
   return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
 }
 
+function fractionAvecSigne(num, den){
+  if(num === 0) return "0";
+  const f = `\\frac{${Math.abs(num)}}{${den}}`;
+  return num > 0 ? `+ ${f}` : `- ${f}`;
+}
+
 /* =====================================================
    VARIABLES
 ===================================================== */
@@ -230,13 +236,16 @@ else if(tirage<0.6){
 /* ===== CAS 3 : ax + by + c = 0 ===== */
 else {
 
-  const a = randEntierOuFraction(0.4);
-  const b = randEntierOuFraction(0.4);
-
+  const a = randEntierOuFraction(0.3);
+  const b = randEntierOuFraction(0.3);
   let c;
   do{
-  c = randEntierOuFraction(0.4);
+  c = randEntierOuFraction(0.3);
   } while (c.num === 0);
+
+  const aNum = a.den === 1 ? a.num : a.num / a.den;
+  const bNum = b.den === 1 ? b.num : b.num / b.den;
+  const cNum = c.den === 1 ? c.num : c.num / c.den;
 
 
   let yF;
@@ -246,7 +255,7 @@ else {
   do{
   const eF = randEntierOuFraction(0.4);
   e = eF.den === 1 ? eF.num : eF; 
-  yF = fractionIrreductible(...);
+  yF = fractionIrreductible(-aNum*e - cNum, bNum);
   f = fractionLatex(yF.num, yF.den);
   essais++;
   if(essais>50) break;
