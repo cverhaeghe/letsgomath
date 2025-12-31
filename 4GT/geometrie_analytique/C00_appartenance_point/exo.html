@@ -112,6 +112,15 @@ function termeConstante(c){
   return c > 0 ? `+ ${c}` : `- ${Math.abs(c)}`;
 }
 
+function afficheNombre(n){
+  return n < 0 ? `(${n})` : `${n}`;
+}
+
+function termeAvecSigne(val){
+  if(val === 0) return "0";
+  return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
+}
+
 /* =====================================================
    VARIABLES
 ===================================================== */
@@ -222,23 +231,36 @@ else {
   Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
   `;
 
-  /* ===== CORRECTION DETAILLEE ===== */
 
   /* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
 
-let texte = `
+let etape1 = `
 <u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'expression<br>
 \\[
-${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
+${a}\\cdot ${afficheNombre(e)}
+${termeAvecSigne(b)}\\cdot ${afficheNombre(yF.num)}
+${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
 \\]
 `;
+
 
 /* ===== Étape 2 (implicite) : produits effectués dans l'expression ===== */
 
 /* Calcul des produits (fait "dans la tête", mais le résultat apparaît) */
 const ax = a * e;
-const by = (b * yF.num) / yF.den;
+const by = b * yF.num;
+
+let etape2 = `
+<u>Étape 2</u> : on effectue et on simplifie les produits<br>
+\\[
+${ax}
+${termeAvecSigne(by)}
+${termeAvecSigne(c)}
+\\stackrel{?}{=} 0
+\\]
+`;
+
 
 /* ===== Étape 3 : on observe s'il reste des fractions ===== */
 
@@ -247,7 +269,7 @@ if (yF.den === 1) {
   /* Tous les termes sont entiers */
 
   texte += `
-  <u>Étape 2</u> : on effectue et on simplifie les produits<br>
+  <u>Étape 2</u> : on effectue et/ou simplifie les produits<br>
   \\[
   ${ax} + ${b*yF.num} + ${c}
   \\stackrel{?}{=} 0
