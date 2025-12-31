@@ -179,91 +179,62 @@ else if(tirage<0.6){
 }
 
 /* ===== CAS 3 : ax + by + c = 0 ===== */
-else {
-  const a = randIntNonZeroNotOne();
-  const b = randIntNonZeroNotOne();
-  const c = randIntNonZeroNotOne();
-
-  let essais = 0;
-  do {
-    e = Math.floor(Math.random()*7)-3;
-    let yF = fractionIrreductible(-a*e-c, b);
-    f = fractionLatex(yF.num, yF.den);
-    essais++;
-    if(essais>50) break;
-  } while(appartient && !fractionDansBornes({num:-a*e-c, den:b}));
-
-  if(!appartient){
-    f = Math.floor(Math.random()*7)-3;
-  }
-
-  let eq = "";
-  eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
-  eq += " " + (b>=0?"+ ":"- ") + (Math.abs(b)===1?"":Math.abs(b)) + "y";
-  eq += " " + (c>=0?"+ ":"- ") + Math.abs(c) + " = 0";
-
-  enonce = `
-  La droite a pour équation :<br>
-  \\(${eq}\\)<br><br>
-  Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
-  `;
-
- /* Correction */
-  
-// Préparation des valeurs
-const eIsFrac = typeof e === "object";
-const fIsFrac = typeof f === "object";
-
-let calcul = `
-On remplace les coordonnées du point \\(A(e;f)\\) dans l'équation :<br>
+else {  let calcul = `
+On remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation :<br>
 \\[
-ax + by + c = a\\cdot e + b\\cdot f + c
+${a}x + ${b}y + ${c} = 0
+\\]
+\\[
+${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
 \\]
 `;
 
-// CAS 1 : e et f sont entiers
-if(!eIsFrac && !fIsFrac){
+// CAS 1 : y est entier → calcul direct
+if(yF.den === 1){
 
-  const val = a*e + b*(valFrac(yF)) + c;
+  const resultat = a*e + b*yF.num + c;
 
   calcul += `
   \\[
-  = ${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
+  = ${a*e} + ${b*yF.num} + ${c}
   \\]
   \\[
-  = ${fractionLatex(a*e*yF.den + b*yF.num + c*yF.den, yF.den)}
+  = ${resultat}
   \\]
   `;
 
+  calcul += appartient
+    ? `<br>On obtient 0.<br>👉 Le point appartient à la droite.`
+    : `<br>On n'obtient pas 0.<br>👉 Le point n'appartient pas à la droite.`;
+
 }
-// CAS 2 : au moins une fraction → mise au même dénominateur
+
+// CAS 2 : y est une fraction → mise au même dénominateur
 else {
 
   const den = yF.den;
+  const num = a*e*den + b*yF.num + c*den;
 
   calcul += `
-  \\[
-  = ${a}\\cdot ${e} + ${b}\\cdot ${fractionLatex(yF.num,yF.den)} + ${c}
-  \\]
   \\[
   = \\frac{${a}\\cdot ${e}\\cdot ${den}}{${den}}
     + \\frac{${b}\\cdot ${yF.num}}{${den}}
     + \\frac{${c}\\cdot ${den}}{${den}}
   \\]
   \\[
-  = \\frac{${a*e*den + b*yF.num + c*den}}{${den}}
+  = \\frac{${num}}{${den}}
   \\]
   `;
+
+  calcul += appartient
+    ? `<br>Le numérateur est nul, donc l'expression vaut 0.<br>
+       👉 Le point appartient à la droite.`
+    : `<br>Le numérateur n'est pas nul, donc l'expression ne vaut pas 0.<br>
+       👉 Le point n'appartient pas à la droite.`;
 }
 
-// Conclusion
-calcul += appartient
-  ? `<br>Le numérateur est nul, donc l'expression vaut 0.<br>
-     👉 Le point appartient à la droite.`
-  : `<br>Le numérateur n'est pas nul, donc l'expression ne vaut pas 0.<br>
-     👉 Le point n'appartient pas à la droite.`;
-
 texteCorrection = calcul;
+
 
 }
 
