@@ -178,6 +178,13 @@ function termeAvecSigne(val){
   return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
 }
 
+  function fractionAvecSigne(num, den){
+  if (num === 0) return "+ 0";
+  if (num > 0) return `+ \\frac{${num}}{${den}}`;
+  return `- \\frac{${Math.abs(num)}}{${den}}`;
+}
+
+  
 /* =====================================================
    VARIABLES
 ===================================================== */
