@@ -202,9 +202,10 @@ if(tirage<0.4){
 
   let essais=0;
   let eAff;
+  let eObj;
   
   do{
-  const eObj = tirerE();
+    eObj = tirerE();
     e = eObj.valeur;
     eAff = eObj.latex;
 
@@ -239,12 +240,13 @@ else if(tirage<0.6){
   f=Math.floor(Math.random()*7)-3;
 
   let eAff;
+  let eObj;
   
   do{
     if(appartient){
       e=fractionLatex(k.num,k.den);
     } else {
-    const eObj = tirerE();
+    eObj = tirerE();
     eAff = eObj.latex;
     e = eAff;
     }
@@ -274,9 +276,10 @@ else {
   let yF;
   let essais = 0;
   let eAff;
+  let eObj;
   
   do {
-    const eObj = tirerE();
+    eObj = tirerE();
     e = eObj.valeur;           // calcul
     eAff = eObj.latex;   // affichage
 
@@ -332,11 +335,11 @@ let axValeur, axFraction;
 
 if (eObj.den === 1) {
   axValeur = a * eObj.num;
-  axFraction = axValeur; // entier
+  axFraction = axValeur;
 } else {
-  axValeur = a * eObj.valeur;
   axFraction = { num: a * eObj.num, den: eObj.den };
 }
+
 
 // produit b·y (avec simplification locale)
 let byNum = b * yCorr.num;
@@ -354,7 +357,7 @@ if (byDen === 1) {
   byValeur = { num: byNum, den: byDen };
   resteFraction = true;
 }
-
+  
 texte += `
 <u>Étape 2</u> : on effectue et/ou on simplifie les produits<br>
 \\[
@@ -373,12 +376,13 @@ ${termeAvecSigne(c)}
 \\]
 `;
 
+
 /* ===== Étape 3 : addition directe ou fraction ===== */
 
 if (!resteFraction) {
 
   // tous les termes sont entiers
-  const somme = ax + byValeur + c;
+  const somme = (typeof axFraction === "number" ? axFraction : axFraction.num / axFraction.den) + byValeur + c;
 
   texte += `
 <u>Étape 3</u> : on additionne et on compare à zéro<br>
