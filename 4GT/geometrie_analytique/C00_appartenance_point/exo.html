@@ -201,9 +201,13 @@ if(tirage<0.4){
   const p=randFractionNotOne();
 
   let essais=0;
+  let eAff;
+  
   do{
-  const eObj = tirerE(); 
+  const eObj = tirerE();
     e = eObj.valeur;
+    eAff = eObj.latex;
+
     const yF=fractionIrreductible(m.num*e*p.den + p.num*m.den, m.den*p.den);
     f = fractionLatex(yF.num, yF.den);
     essais++;
@@ -218,7 +222,7 @@ if(tirage<0.4){
   La droite a pour équation :<br>
   \\(y = ${fractionLatex(m.num,m.den)}x
   ${p.num>=0?"+":"-"} ${fractionLatex(Math.abs(p.num),p.den)}\\)<br><br>
-  Le point \\(A(${eObj.latex};${f})\\) appartient-il à cette droite ?
+  Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
   `;
 
   texteCorrection=`
@@ -234,12 +238,15 @@ else if(tirage<0.6){
   let essais=0;
   f=Math.floor(Math.random()*7)-3;
 
+  let eAff;
+  
   do{
     if(appartient){
       e=fractionLatex(k.num,k.den);
     } else {
     const eObj = tirerE();
-    e = eObj.latex;
+    eAff = eObj.latex;
+    e = eAff;
     }
     essais++;
     if(essais>50) break;
@@ -248,7 +255,7 @@ else if(tirage<0.6){
   enonce=`
   La droite a pour équation :<br>
   \\(x = ${fractionLatex(k.num,k.den)}\\)<br><br>
-  Le point \\(A(${eObj.latex};${f})\\) appartient-il à cette droite ?
+  Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
   `;
 
   texteCorrection=`
@@ -266,11 +273,12 @@ else {
 
   let yF;
   let essais = 0;
-
+  let eAff;
+  
   do {
     const eObj = tirerE();
     e = eObj.valeur;           // calcul
-    const eAff = eObj.latex;   // affichage
+    eAff = eObj.latex;   // affichage
 
     yF = fractionIrreductible(-a * e - c, b);
 
