@@ -220,6 +220,18 @@ else {
     f = Math.floor(Math.random()*7) - 3;
   }
 
+    /* ===== PATCH : valeur réelle de y pour la correction ===== */
+
+  let yCorr;   // fraction irréductible utilisée dans la correction
+
+  if (typeof f === "string") {
+    // f est une fraction affichée → on utilise yF
+    yCorr = yF;
+  } else {
+    // f est un entier
+    yCorr = { num: f, den: 1 };
+  }
+
   let eq = "";
   eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
   eq += " " + (b>=0?"+ ":"- ") + (Math.abs(b)===1?"":Math.abs(b)) + "y";
@@ -244,7 +256,7 @@ ${termeAvecSigne(c)}
 \\]
 `;
 
-/* ===== Étape 2 : on effectue et on simplifie les produits ===== */
+/* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
 
 const ax = a * e;                 // entier
 const byNum = b * yF.num;         // numérateur de by
