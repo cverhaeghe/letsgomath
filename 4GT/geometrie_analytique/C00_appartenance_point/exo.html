@@ -128,10 +128,11 @@ function afficheNombre(n){
   return n < 0 ? `(${n})` : `${n}`;
 }
 
-function termeAvecSigne(val){
-  if(val === 0) return "0";
+  function termeAvecSigne(val){
+  if(val === 0) return "+ 0";
   return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
 }
+
 
   function randEntierOuFractionSimple(pFrac = 0.4){
   if(Math.random() < pFrac){
@@ -233,7 +234,9 @@ else {
 
   do {
     const eF = randEntierOuFractionSimple(0.4);
-    e = eF.den === 1 ? eF.num : eF.num / eF.den;
+    const eCalc = eF.den === 1 ? eF.num : eF.num / eF.den;
+    const eAff  = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
+    e = eCalc;
     yF = fractionIrreductible(-a*e - c, b);
     f = fractionLatex(yF.num, yF.den);
     essais++;
@@ -254,8 +257,9 @@ else {
   enonce = `
   La droite a pour équation :<br>
   \\(${eq}\\)<br><br>
-  Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
-  `;
+  Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
+`;
+
 
 
 /* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
