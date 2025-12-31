@@ -242,47 +242,48 @@ else if(tirage<0.6){
 /* ===== CAS 3 : ax + by + c = 0 ===== */
 else {
 
-  const a = randEntierOuFraction(0.3);
-  const b = randEntierOuFraction(0.3);
+  /* --- coefficients a, b, c --- */
+  const a = randEntierOuFraction(0.4);
+  const b = randEntierOuFraction(0.4);
+
   let c;
-  do{
-  c = randEntierOuFraction(0.3);
+  do {
+    c = randEntierOuFraction(0.4);
   } while (c.num === 0);
 
-  const aNum = a.den === 1 ? a.num : a.num / a.den;
-  const bNum = b.den === 1 ? b.num : b.num / b.den;
-  const cNum = c.den === 1 ? c.num : c.num / c.den;
+  /* valeurs numériques pour les calculs */
+  const aCalc = a.den === 1 ? a.num : a.num / a.den;
+  const bCalc = b.den === 1 ? b.num : b.num / b.den;
+  const cCalc = c.den === 1 ? c.num : c.num / c.den;
 
-
+  /* --- génération du point --- */
   let yF;
   let essais = 0;
 
-  do{
-  const eF = randEntierOuFraction(0.4);
-  e = eF.den === 1 ? eF.num : eF; 
-  yF = fractionIrreductible(
-  m.num * e * p.den + p.num * m.den,
-  m.den * p.den
-);
-  f = fractionLatex(yF.num, yF.den);
-  essais++;
-  if(essais>50) break;
-} while(appartient && !fractionDansBornes(yF));
+  do {
+    const eF = randEntierOuFraction(0.4);
+    e = eF.den === 1 ? eF.num : eF;
 
+    yF = fractionIrreductible(-aCalc * e - cCalc, bCalc);
+    f = fractionLatex(yF.num, yF.den);
 
-  if(!appartient){
-    f = Math.floor(Math.random()*7) - 3;
+    essais++;
+    if (essais > 50) break;
+  } while (appartient && !fractionDansBornes(yF));
+
+  if (!appartient) {
+    f = Math.floor(Math.random() * 7) - 3;
   }
 
+  /* --- équation affichée --- */
   const aAff = a.num;
   const bAff = b.num;
   const cAff = c.num;
 
-
   let eq = "";
-  eq += (aAff<0?"-":"") + (Math.abs(aAff)===1?"":Math.abs(aAff)) + "x";
-  eq += " " + (bAff>=0?"+ ":"- ") + (Math.abs(bAff)===1?"":Math.abs(bAff)) + "y";
-  eq += " " + (cAff>=0?"+ ":"- ") + Math.abs(cAff) + " = 0";
+  eq += (aAff < 0 ? "-" : "") + (Math.abs(aAff) === 1 ? "" : Math.abs(aAff)) + "x";
+  eq += " " + (bAff >= 0 ? "+ " : "- ") + (Math.abs(bAff) === 1 ? "" : Math.abs(bAff)) + "y";
+  eq += " " + (cAff >= 0 ? "+ " : "- ") + Math.abs(cAff) + " = 0";
 
   enonce = `
   La droite a pour équation :<br>
@@ -290,55 +291,41 @@ else {
   Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
   `;
 
+  /* ===== CORRECTION DÉTAILLÉE ===== */
 
-/* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
+  const yCorr = (typeof f === "string")
+    ? yF
+    : { num: f, den: 1 };
 
-const aCalc = a.den === 1 ? a.num : a.num / a.den;
-const bCalc = b.den === 1 ? b.num : b.num / b.den;
-const cCalc = c.den === 1 ? c.num : c.num / c.den;
-
-/* ===== PATCH SÛR : valeur de y pour la correction ===== */
-let yCorr;
-if (typeof f === "string") {
-  yCorr = yF;                 // fraction affichée
-} else {
-  yCorr = { num: f, den: 1 }; // entier affiché
-}
-
-
-let texte = `
+  let texte = `
 <u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation<br>
 \\[
-${a}\\cdot ${afficheNombre(e)}
-${termeAvecSigne(b)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
-${termeAvecSigne(c)}
+${aCalc}\\cdot ${afficheNombre(e)}
+${termeAvecSigne(bCalc)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
+${termeAvecSigne(cCalc)}
 \\stackrel{?}{=} 0
 \\]
 `;
 
-/* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
+  const ax = aCalc * e;
 
-const ax = aCalc * e;
-  
-// produit b·y (avec simplification locale)
-let byNum = bCalc * yCorr.num;
-let byDen = yCorr.den;
+  let byNum = bCalc * yCorr.num;
+  let byDen = yCorr.den;
 
-let byValeur;
-let resteFraction = false;
+  let byValeur;
+  let resteFraction = false;
 
-// simplification locale si possible
-if (byDen === 1) {
-  byValeur = byNum;
-} else if (Math.abs(byNum) % byDen === 0) {
-  byValeur = byNum / byDen;
-} else {
-  byValeur = { num: byNum, den: byDen };
-  resteFraction = true;
-}
+  if (byDen === 1) {
+    byValeur = byNum;
+  } else if (Math.abs(byNum) % byDen === 0) {
+    byValeur = byNum / byDen;
+  } else {
+    byValeur = { num: byNum, den: byDen };
+    resteFraction = true;
+  }
 
-texte += `
-<u>Étape 2</u> : on effectue et/ou on simplifie les produits<br>
+  texte += `
+<u>Étape 2</u> : on effectue et on simplifie les produits<br>
 \\[
 ${ax}
 ${
@@ -351,71 +338,52 @@ ${termeAvecSigne(cCalc)}
 \\]
 `;
 
-/* ===== Étape 3 : addition directe ou fraction ===== */
+  if (!resteFraction) {
 
-if (!resteFraction) {
+    const somme = ax + byValeur + cCalc;
 
-  // tous les termes sont entiers
-  const somme = ax + byValeur + cCalc;
-
-  texte += `
+    texte += `
 <u>Étape 3</u> : on additionne et on compare à zéro<br>
 \\[
 ${somme} ${somme === 0 ? "=" : "\\neq"} 0
 \\]
 `;
 
-  texte += somme === 0
-    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
-    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+    texte += somme === 0
+      ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+      : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
 
-} else {
+  } else {
 
-  // il reste une fraction → dénominateur commun
-  const den = byValeur.den;
+    const den = byValeur.den;
 
-  texte += `
+    texte += `
 <u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
 \\[
 ${fractionAvecSigne(ax * den, den)}
 ${fractionAvecSigne(byValeur.num, den)}
-${fractionAvecSigne(c * den, den)}
+${fractionAvecSigne(cCalc * den, den)}
 \\stackrel{?}{=} 0
 \\]
 `;
 
-  // produits des numérateurs
-  const n1 = ax * den;
-  const n2 = byValeur.num;
-  const n3 = c * den;
+    const numFinal = ax * den + byValeur.num + cCalc * den;
 
-  texte += `
-<u>Étape 4</u> : on effectue les produits des numérateurs<br>
-\\[
-${fractionAvecSigne(n1, den)}
-${fractionAvecSigne(n2, den)}
-${fractionAvecSigne(n3, den)}
-\\stackrel{?}{=} 0
-\\]
-`;
-
-  // addition finale
-  const numFinal = n1 + n2 + n3;
-
-  texte += `
-<u>Étape 5</u> : on additionne et on compare avec zéro<br>
+    texte += `
+<u>Étape 4</u> : on additionne les numérateurs<br>
 \\[
 ${numFinal === 0 ? "0" : fractionLatex(Math.abs(numFinal), den)}
 ${numFinal === 0 ? "=" : "\\neq"} 0
 \\]
 `;
 
-  texte += numFinal === 0
-    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
-    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
-}
+    texte += numFinal === 0
+      ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+      : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+  }
 
-texteCorrection = texte;
+  texteCorrection = texte;
+
 
 
 }
