@@ -178,7 +178,10 @@ const p = randEntierOuFraction(0.4);
 do{
   const eF = randEntierOuFraction(0.4);
   e = eF.den === 1 ? eF.num : eF; 
-  yF = fractionIrreductible(...);
+  yF = fractionIrreductible(
+  m.num * e * p.den + p.num * m.den,
+  m.den * p.den
+);
   f = fractionLatex(yF.num, yF.den);
   essais++;
   if(essais>50) break;
@@ -214,7 +217,10 @@ else if(tirage<0.6){
   do{
   const eF = randEntierOuFraction(0.4);
   e = eF.den === 1 ? eF.num : eF; 
-  yF = fractionIrreductible(...);
+  yF = fractionIrreductible(
+  m.num * e * p.den + p.num * m.den,
+  m.den * p.den
+);
   f = fractionLatex(yF.num, yF.den);
   essais++;
   if(essais>50) break;
@@ -251,11 +257,13 @@ else {
   let yF;
   let essais = 0;
 
-  let yF;
   do{
   const eF = randEntierOuFraction(0.4);
   e = eF.den === 1 ? eF.num : eF; 
-  yF = fractionIrreductible(-aNum*e - cNum, bNum);
+  yF = fractionIrreductible(
+  m.num * e * p.den + p.num * m.den,
+  m.den * p.den
+);
   f = fractionLatex(yF.num, yF.den);
   essais++;
   if(essais>50) break;
@@ -266,12 +274,15 @@ else {
     f = Math.floor(Math.random()*7) - 3;
   }
 
+  const aAff = a.num;
+  const bAff = b.num;
+  const cAff = c.num;
 
 
   let eq = "";
-  eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
-  eq += " " + (b>=0?"+ ":"- ") + (Math.abs(b)===1?"":Math.abs(b)) + "y";
-  eq += " " + (c>=0?"+ ":"- ") + Math.abs(c) + " = 0";
+  eq += (aAff<0?"-":"") + (Math.abs(aAff)===1?"":Math.abs(aAff)) + "x";
+  eq += " " + (bAff>=0?"+ ":"- ") + (Math.abs(bAff)===1?"":Math.abs(bAff)) + "y";
+  eq += " " + (cAff>=0?"+ ":"- ") + Math.abs(cAff) + " = 0";
 
   enonce = `
   La droite a pour équation :<br>
@@ -281,6 +292,10 @@ else {
 
 
 /* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
+
+const aCalc = a.den === 1 ? a.num : a.num / a.den;
+const bCalc = b.den === 1 ? b.num : b.num / b.den;
+const cCalc = c.den === 1 ? c.num : c.num / c.den;
 
 /* ===== PATCH SÛR : valeur de y pour la correction ===== */
 let yCorr;
@@ -303,10 +318,10 @@ ${termeAvecSigne(c)}
 
 /* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
 
-const ax = a * e;
-
+const ax = aCalc * e;
+  
 // produit b·y (avec simplification locale)
-let byNum = b * yCorr.num;
+let byNum = bCalc * yCorr.num;
 let byDen = yCorr.den;
 
 let byValeur;
@@ -331,7 +346,7 @@ ${
     ? fractionAvecSigne(byValeur.num, byValeur.den)
     : termeAvecSigne(byValeur)
 }
-${termeAvecSigne(c)}
+${termeAvecSigne(cCalc)}
 \\stackrel{?}{=} 0
 \\]
 `;
@@ -341,7 +356,7 @@ ${termeAvecSigne(c)}
 if (!resteFraction) {
 
   // tous les termes sont entiers
-  const somme = ax + byValeur + c;
+  const somme = ax + byValeur + cCalc;
 
   texte += `
 <u>Étape 3</u> : on additionne et on compare à zéro<br>
