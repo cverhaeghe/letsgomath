@@ -220,17 +220,7 @@ else {
     f = Math.floor(Math.random()*7) - 3;
   }
 
-    /* ===== PATCH : valeur réelle de y pour la correction ===== */
 
-  let yCorr;   // fraction irréductible utilisée dans la correction
-
-  if (typeof f === "string") {
-    // f est une fraction affichée → on utilise yF
-    yCorr = yF;
-  } else {
-    // f est un entier
-    yCorr = { num: f, den: 1 };
-  }
 
   let eq = "";
   eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
@@ -246,11 +236,20 @@ else {
 
 /* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
 
+/* ===== PATCH SÛR : valeur de y pour la correction ===== */
+let yCorr;
+if (typeof f === "string") {
+  yCorr = yF;                 // fraction affichée
+} else {
+  yCorr = { num: f, den: 1 }; // entier affiché
+}
+
+
 let texte = `
 <u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation<br>
 \\[
 ${a}\\cdot ${afficheNombre(e)}
-${termeAvecSigne(b)}\\cdot ${fractionLatex(yF.num, yF.den)}
+${termeAvecSigne(b)}\\cdot ${fractionLatex(yCorr.num, yCorr.den)}
 ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
 \\]
@@ -258,20 +257,22 @@ ${termeAvecSigne(c)}
 
 /* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
 
-const ax = a * e;                 // entier
-const byNum = b * yF.num;         // numérateur de by
-const byDen = yF.den;             // dénominateur de by
+const ax = a * e;
 
-// simplification locale de by si possible
-let byTexte;
+// produit b·y (avec simplification locale)
+let byNum = b * yCorr.num;
+let byDen = yCorr.den;
+
+let byValeur;
 let resteFraction = false;
 
+// simplification locale si possible
 if (byDen === 1) {
-  byTexte = byNum;
+  byValeur = byNum;
 } else if (Math.abs(byNum) % byDen === 0) {
-  byTexte = byNum / byDen;
+  byValeur = byNum / byDen;
 } else {
-  byTexte = fractionLatex(byNum, byDen);
+  byValeur = { num: byNum, den: byDen };
   resteFraction = true;
 }
 
@@ -279,27 +280,29 @@ texte += `
 <u>Étape 2</u> : on effectue et on simplifie les produits<br>
 \\[
 ${ax}
-${termeAvecSigne(typeof byTexte === "number" ? byTexte : 0)}
-${typeof byTexte === "string" ? termeAvecSigne(1).replace("1", byTexte) : ""}
+${
+  resteFraction
+    ? fractionAvecSigne(byValeur.num, byValeur.den)
+    : termeAvecSigne(byValeur)
+}
 ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
 \\]
 `;
 
-/* ===== Étape 3 : on regarde s'il reste une fraction ===== */
+/* ===== Étape 3 : addition directe ou fraction ===== */
 
 if (!resteFraction) {
 
-  /* Tous les termes sont entiers */
-
-  const somme = ax + byTexte + c;
+  // tous les termes sont entiers
+  const somme = ax + byValeur + c;
 
   texte += `
-  <u>Étape 3</u> : on additionne et on compare à zéro<br>
-  \\[
-  ${somme} ${somme === 0 ? "=" : "\\neq"} 0
-  \\]
-  `;
+<u>Étape 3</u> : on additionne et on compare à zéro<br>
+\\[
+${somme} ${somme === 0 ? "=" : "\\neq"} 0
+\\]
+`;
 
   texte += somme === 0
     ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
@@ -307,43 +310,44 @@ if (!resteFraction) {
 
 } else {
 
-  /* Il reste une fraction */
-
-  const den = byDen;
-
-  texte += `
-  <u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
-  \\[
-  ${fractionAvecSigne(ax * den, den)}
-  ${fractionAvecSigne(byNum, den)}
-  ${fractionAvecSigne(c * den, den)}
-  \\stackrel{?}{=} 0
-  \\]
-  `;
-
-  /* ===== Étape 4 : produits des numérateurs ===== */
-
-  const numFinal = ax * den + byNum + c * den;
+  // il reste une fraction → dénominateur commun
+  const den = byValeur.den;
 
   texte += `
-  <u>Étape 4</u> : on effectue les produits des numérateurs<br>
-  \\[
-  ${fractionAvecSigne(ax * den, den)}
-  ${fractionAvecSigne(byNum, den)}
-  ${fractionAvecSigne(c * den, den)}
-  \\stackrel{?}{=} 0
-  \\]
-  `;
+<u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
+\\[
+${fractionAvecSigne(ax * den, den)}
+${fractionAvecSigne(byValeur.num, den)}
+${fractionAvecSigne(c * den, den)}
+\\stackrel{?}{=} 0
+\\]
+`;
 
-  /* ===== Étape 5 : addition et comparaison ===== */
+  // produits des numérateurs
+  const n1 = ax * den;
+  const n2 = byValeur.num;
+  const n3 = c * den;
 
   texte += `
-  <u>Étape 5</u> : on additionne et on compare avec zéro<br>
-  \\[
-  ${numFinal === 0 ? "0" : fractionLatex(Math.abs(numFinal), den)}
-  ${numFinal === 0 ? "=" : "\\neq"} 0
-  \\]
-  `;
+<u>Étape 4</u> : on effectue les produits des numérateurs<br>
+\\[
+${fractionAvecSigne(n1, den)}
+${fractionAvecSigne(n2, den)}
+${fractionAvecSigne(n3, den)}
+\\stackrel{?}{=} 0
+\\]
+`;
+
+  // addition finale
+  const numFinal = n1 + n2 + n3;
+
+  texte += `
+<u>Étape 5</u> : on additionne et on compare avec zéro<br>
+\\[
+${numFinal === 0 ? "0" : fractionLatex(Math.abs(numFinal), den)}
+${numFinal === 0 ? "=" : "\\neq"} 0
+\\]
+`;
 
   texte += numFinal === 0
     ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
@@ -351,7 +355,6 @@ if (!resteFraction) {
 }
 
 texteCorrection = texte;
-
 
 
 }
