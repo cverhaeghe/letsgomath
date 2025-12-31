@@ -84,9 +84,6 @@ function afficheCoordonnee(num, den){
   return frac;
 }
 
-
-
-  
 /* =====================================================
    GENERATEURS DE COEFFICIENTS
 ===================================================== */
@@ -111,13 +108,6 @@ function randFractionNotOne(){
   return f;
 }
 
-function randEntierOuFraction(pFrac = 0.4){
-  if(Math.random() < pFrac){
-    return randFractionNotOne();
-  }
-  return { num: randIntNonZeroNotOne(), den: 1 };
-}
-  
 function renderMath(el){
   MathJax.typesetClear([el]);
   MathJax.typesetPromise([el]);
@@ -143,12 +133,14 @@ function termeAvecSigne(val){
   return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
 }
 
-function fractionAvecSigne(num, den){
-  if(num === 0) return "0";
-  const f = `\\frac{${Math.abs(num)}}{${den}}`;
-  return num > 0 ? `+ ${f}` : `- ${f}`;
+  function randEntierOuFractionSimple(pFrac = 0.4){
+  if(Math.random() < pFrac){
+    return randFractionNotOne(); // {num, den}
+  }
+  return { num: Math.floor(Math.random()*7)-3, den: 1 };
 }
 
+  
 /* =====================================================
    VARIABLES
 ===================================================== */
@@ -168,25 +160,18 @@ function generer(){
 /* ===== CAS 1 : y = mx + p ===== */
 if(tirage<0.4){
 
-const m = randEntierOuFraction(0.4);
-const p = randEntierOuFraction(0.4);
-
+  const m=randFractionNotOne();
+  const p=randFractionNotOne();
 
   let essais=0;
-
-  let yF;
-do{
-  const eF = randEntierOuFraction(0.4);
-  e = eF.den === 1 ? eF.num : eF; 
-  yF = fractionIrreductible(
-  m.num * e * p.den + p.num * m.den,
-  m.den * p.den
-);
-  f = fractionLatex(yF.num, yF.den);
-  essais++;
-  if(essais>50) break;
-} while(appartient && !fractionDansBornes(yF));
-
+  do{
+    const eF = randEntierOuFractionSimple(0.4);
+    e = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
+    const yF=fractionIrreductible(m.num*e*p.den + p.num*m.den, m.den*p.den);
+    f = fractionLatex(yF.num, yF.den);
+    essais++;
+    if(essais>50) break;
+  } while(appartient && !fractionDansBornes({num:yF.num, den:yF.den}));
 
   if(!appartient){
     f=Math.floor(Math.random()*7)-3;
@@ -208,24 +193,21 @@ do{
 /* ===== CAS 2 : x = k ===== */
 else if(tirage<0.6){
 
-  const k = randEntierOuFraction(0.4);
-  
+  const k=randFractionNotOne();
   let essais=0;
   f=Math.floor(Math.random()*7)-3;
 
-  let yF;
   do{
-  const eF = randEntierOuFraction(0.4);
-  e = eF.den === 1 ? eF.num : eF; 
-  yF = fractionIrreductible(
-  m.num * e * p.den + p.num * m.den,
-  m.den * p.den
-);
-  f = fractionLatex(yF.num, yF.den);
-  essais++;
-  if(essais>50) break;
-} while(appartient && !fractionDansBornes(yF));
+    if(appartient){
+      e=fractionLatex(k.num,k.den);
+    } else {
+      const eF = randEntierOuFractionSimple(0.4);
+      e = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
 
+    }
+    essais++;
+    if(essais>50) break;
+  }while(false);
 
   enonce=`
   La droite a pour équation :<br>
@@ -242,48 +224,32 @@ else if(tirage<0.6){
 /* ===== CAS 3 : ax + by + c = 0 ===== */
 else {
 
-  /* --- coefficients a, b, c --- */
-  const a = randEntierOuFraction(0.4);
-  const b = randEntierOuFraction(0.4);
+  const a = randIntNonZeroNotOne();
+  const b = randIntNonZeroNotOne();
+  const c = randIntNonZeroNotOne();
 
-  let c;
-  do {
-    c = randEntierOuFraction(0.4);
-  } while (c.num === 0);
-
-  /* valeurs numériques pour les calculs */
-  const aCalc = a.den === 1 ? a.num : a.num / a.den;
-  const bCalc = b.den === 1 ? b.num : b.num / b.den;
-  const cCalc = c.den === 1 ? c.num : c.num / c.den;
-
-  /* --- génération du point --- */
   let yF;
   let essais = 0;
 
   do {
-    const eF = randEntierOuFraction(0.4);
-    e = eF.den === 1 ? eF.num : eF;
-
-    yF = fractionIrreductible(-aCalc * e - cCalc, bCalc);
+    const eF = randEntierOuFractionSimple(0.4);
+    e = eF.den === 1 ? eF.num : eF.num / eF.den;
+    yF = fractionIrreductible(-a*e - c, b);
     f = fractionLatex(yF.num, yF.den);
-
     essais++;
-    if (essais > 50) break;
-  } while (appartient && !fractionDansBornes(yF));
+    if(essais > 50) break;
+  } while(appartient && !fractionDansBornes(yF));
 
-  if (!appartient) {
-    f = Math.floor(Math.random() * 7) - 3;
+  if(!appartient){
+    f = Math.floor(Math.random()*7) - 3;
   }
 
-  /* --- équation affichée --- */
-  const aAff = a.num;
-  const bAff = b.num;
-  const cAff = c.num;
+
 
   let eq = "";
-  eq += (aAff < 0 ? "-" : "") + (Math.abs(aAff) === 1 ? "" : Math.abs(aAff)) + "x";
-  eq += " " + (bAff >= 0 ? "+ " : "- ") + (Math.abs(bAff) === 1 ? "" : Math.abs(bAff)) + "y";
-  eq += " " + (cAff >= 0 ? "+ " : "- ") + Math.abs(cAff) + " = 0";
+  eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
+  eq += " " + (b>=0?"+ ":"- ") + (Math.abs(b)===1?"":Math.abs(b)) + "y";
+  eq += " " + (c>=0?"+ ":"- ") + Math.abs(c) + " = 0";
 
   enonce = `
   La droite a pour équation :<br>
@@ -291,42 +257,51 @@ else {
   Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
   `;
 
-  /* ===== CORRECTION DÉTAILLÉE ===== */
 
-  const yCorr = (typeof f === "string")
-    ? yF
-    : { num: f, den: 1 };
+/* ===== CORRECTION DETAILLEE : ax + by + c = 0 ===== */
 
-    let texte = `
+/* ===== PATCH SÛR : valeur de y pour la correction ===== */
+let yCorr;
+if (typeof f === "string") {
+  yCorr = yF;                 // fraction affichée
+} else {
+  yCorr = { num: f, den: 1 }; // entier affiché
+}
+
+
+let texte = `
 <u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation<br>
 \\[
-${fractionLatex(a.num, a.den)}\\cdot ${afficheNombre(e)}
-${termeAvecSigne(fractionLatex(b.num, b.den))}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
-${termeAvecSigne(fractionLatex(c.num, c.den))}
+${a}\\cdot ${afficheNombre(e)}
+${termeAvecSigne(b)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
+${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
 \\]
 `;
 
+/* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
 
-  const ax = aCalc * e;
+const ax = a * e;
 
-  let byNum = bCalc * yCorr.num;
-  let byDen = yCorr.den;
+// produit b·y (avec simplification locale)
+let byNum = b * yCorr.num;
+let byDen = yCorr.den;
 
-  let byValeur;
-  let resteFraction = false;
+let byValeur;
+let resteFraction = false;
 
-  if (byDen === 1) {
-    byValeur = byNum;
-  } else if (Math.abs(byNum) % byDen === 0) {
-    byValeur = byNum / byDen;
-  } else {
-    byValeur = { num: byNum, den: byDen };
-    resteFraction = true;
-  }
+// simplification locale si possible
+if (byDen === 1) {
+  byValeur = byNum;
+} else if (Math.abs(byNum) % byDen === 0) {
+  byValeur = byNum / byDen;
+} else {
+  byValeur = { num: byNum, den: byDen };
+  resteFraction = true;
+}
 
-  texte += `
-<u>Étape 2</u> : on effectue et on simplifie les produits<br>
+texte += `
+<u>Étape 2</u> : on effectue et/ou on simplifie les produits<br>
 \\[
 ${ax}
 ${
@@ -334,57 +309,76 @@ ${
     ? fractionAvecSigne(byValeur.num, byValeur.den)
     : termeAvecSigne(byValeur)
 }
-${termeAvecSigne(cCalc)}
+${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
 \\]
 `;
 
-  if (!resteFraction) {
+/* ===== Étape 3 : addition directe ou fraction ===== */
 
-    const somme = ax + byValeur + cCalc;
+if (!resteFraction) {
 
-    texte += `
+  // tous les termes sont entiers
+  const somme = ax + byValeur + c;
+
+  texte += `
 <u>Étape 3</u> : on additionne et on compare à zéro<br>
 \\[
 ${somme} ${somme === 0 ? "=" : "\\neq"} 0
 \\]
 `;
 
-    texte += somme === 0
-      ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
-      : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+  texte += somme === 0
+    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
 
-  } else {
+} else {
 
-    const den = byValeur.den;
+  // il reste une fraction → dénominateur commun
+  const den = byValeur.den;
 
-    texte += `
+  texte += `
 <u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
 \\[
 ${fractionAvecSigne(ax * den, den)}
 ${fractionAvecSigne(byValeur.num, den)}
-${fractionAvecSigne(cCalc * den, den)}
+${fractionAvecSigne(c * den, den)}
 \\stackrel{?}{=} 0
 \\]
 `;
 
-    const numFinal = ax * den + byValeur.num + cCalc * den;
+  // produits des numérateurs
+  const n1 = ax * den;
+  const n2 = byValeur.num;
+  const n3 = c * den;
 
-    texte += `
-<u>Étape 4</u> : on additionne les numérateurs<br>
+  texte += `
+<u>Étape 4</u> : on effectue les produits des numérateurs<br>
+\\[
+${fractionAvecSigne(n1, den)}
+${fractionAvecSigne(n2, den)}
+${fractionAvecSigne(n3, den)}
+\\stackrel{?}{=} 0
+\\]
+`;
+
+  // addition finale
+  const numFinal = n1 + n2 + n3;
+
+  texte += `
+<u>Étape 5</u> : on additionne et on compare avec zéro<br>
 \\[
 ${numFinal === 0 ? "0" : fractionLatex(Math.abs(numFinal), den)}
 ${numFinal === 0 ? "=" : "\\neq"} 0
 \\]
 `;
 
-    texte += numFinal === 0
-      ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
-      : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
-  }
+  texte += numFinal === 0
+    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+}
 
-  texteCorrection = texte;
-
+texteCorrection = texte;
 
 
 }
