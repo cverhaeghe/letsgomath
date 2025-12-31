@@ -379,6 +379,11 @@ ${termeAvecSigne(c)}
 
 /* ===== Étape 3 : addition directe ou fraction ===== */
 
+  const axNum = (typeof axFraction === "number")
+  ? axFraction
+  : axFraction.num;
+
+  
 if (!resteFraction) {
 
   // tous les termes sont entiers
@@ -403,7 +408,7 @@ ${somme} ${somme === 0 ? "=" : "\\neq"} 0
   texte += `
 <u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
 \\[
-${fractionAvecSigne(ax * den, den)}
+${fractionAvecSigne(axNum * den, den)}
 ${fractionAvecSigne(byValeur.num, den)}
 ${fractionAvecSigne(c * den, den)}
 \\stackrel{?}{=} 0
@@ -411,7 +416,7 @@ ${fractionAvecSigne(c * den, den)}
 `;
 
   // produits des numérateurs
-  const n1 = ax * den;
+  const n1 = axNum * den;
   const n2 = byValeur.num;
   const n3 = c * den;
 
