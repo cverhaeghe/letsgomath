@@ -165,9 +165,14 @@ if(tirage<0.4){
   const p=randFractionNotOne();
 
   let essais=0;
+  let eAff;
+  
   do{
     const eF = randEntierOuFractionSimple(0.4);
-    e = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
+    const eCalc = eF.den === 1 ? eF.num : eF.num / eF.den;
+    const eAff  = eF.den === 1 ? eF.num : fractionLatex(eF.num, eF.den);
+    e = eCalc;
+
     const yF=fractionIrreductible(m.num*e*p.den + p.num*m.den, m.den*p.den);
     f = fractionLatex(yF.num, yF.den);
     essais++;
@@ -182,7 +187,7 @@ if(tirage<0.4){
   La droite a pour équation :<br>
   \\(y = ${fractionLatex(m.num,m.den)}x
   ${p.num>=0?"+":"-"} ${fractionLatex(Math.abs(p.num),p.den)}\\)<br><br>
-  Le point \\(A(${e};${f})\\) appartient-il à cette droite ?
+  Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
   `;
 
   texteCorrection=`
@@ -231,7 +236,8 @@ else {
 
   let yF;
   let essais = 0;
-
+  let eAff;
+  
   do {
     const eF = randEntierOuFractionSimple(0.4);
     const eCalc = eF.den === 1 ? eF.num : eF.num / eF.den;
