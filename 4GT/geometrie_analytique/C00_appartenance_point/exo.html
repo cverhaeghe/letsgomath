@@ -72,6 +72,18 @@ function fractionDansBornes(f){
   return Math.abs(f.num)<=5 && Math.abs(f.den)<=5;
 }
 
+function afficheCoordonnee(num, den){
+  // entier
+  if (den === 1) {
+    return num < 0 ? `(${num})` : `${num}`;
+  }
+
+  // fraction
+  const frac = `\\frac{${Math.abs(num)}}{${den}}`;
+  if (num < 0) return `(-${frac})`;
+  return frac;
+}
+
 /* =====================================================
    GENERATEURS DE COEFFICIENTS
 ===================================================== */
@@ -249,7 +261,7 @@ let texte = `
 <u>Étape 1</u> : on remplace les coordonnées du point \\(A(${e};${f})\\) dans l'équation<br>
 \\[
 ${a}\\cdot ${afficheNombre(e)}
-${termeAvecSigne(b)}\\cdot ${fractionLatex(yCorr.num, yCorr.den)}
+${termeAvecSigne(b)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
 ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
 \\]
