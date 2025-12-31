@@ -347,6 +347,8 @@ if (eObj.den === 1) {
   axFraction = { num: a * eObj.num, den: eObj.den };
 }
 
+const axEstFraction = typeof axFraction !== "number";
+
 
 // produit b·y (avec simplification locale)
 let byNum = b * yCorr.num;
@@ -391,7 +393,7 @@ ${termeAvecSigne(c)}
   : axFraction.num;
 
   
-if (!resteFraction) {
+if (!resteFraction && !axEstFraction) {
 
   // tous les termes sont entiers
   const somme = (typeof axFraction === "number" ? axFraction : axFraction.num / axFraction.den) + byValeur + c;
