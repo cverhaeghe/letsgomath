@@ -347,50 +347,52 @@ ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
 \\]
 `;
-
 /* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
 
+// produit a·x
 let axValeur, axFraction;
 
 if (eObj.den === 1) {
   axValeur = a * eObj.num;
-  axFraction = axValeur;
+  axFraction = axValeur;          // entier
 } else {
-  axFraction = { num: a * eObj.num, den: eObj.den };
+  axFraction = { num: a * eObj.num, den: eObj.den }; // fraction
 }
 
 const axEstFraction = typeof axFraction !== "number";
 
 
-// produit b·y (avec simplification locale)
-let byNum = b * yCorr.num;
-let byDen = yCorr.den;
+// produit b·y
+let byFraction;
+let byEstFraction = false;
 
-let byValeur;
-let resteFraction = false;
+const byNum = b * yCorr.num;
+const byDen = yCorr.den;
 
-// simplification locale si possible
+// simplification locale
 if (byDen === 1) {
-  byValeur = byNum;
+  byFraction = byNum;             // entier
 } else if (Math.abs(byNum) % byDen === 0) {
-  byValeur = byNum / byDen;
+  byFraction = byNum / byDen;     // entier simplifié
 } else {
-  byValeur = { num: byNum, den: byDen };
-  resteFraction = true;
+  byFraction = { num: byNum, den: byDen }; // fraction
+  byEstFraction = true;
 }
-  
+
+
+// ===== Affichage Étape 2 =====
 texte += `
 <u>Étape 2</u> : on effectue et/ou on simplifie les produits<br>
 \\[
 ${
-  typeof axFraction === "number"
-    ? axFraction
-    : fractionAvecSigne(axFraction.num, axFraction.den)
+  axEstFraction
+    ? fractionAvecSigne(axFraction.num, axFraction.den)
+    : axFraction
 }
 ${
-  resteFraction
-    ? fractionAvecSigne(byValeur.num, byValeur.den)
-    : termeAvecSigne(byValeur)
+  byEstFraction
+    ? fractionAvecSigne(byFraction.num, byFraction.den)
+    : termeAvecSigne(byFraction)
 }
 ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
@@ -398,17 +400,12 @@ ${termeAvecSigne(c)}
 `;
 
 
-/* ===== Étape 3 : addition directe ou fraction ===== */
+// ===== Étape 3 : addition directe ou fraction =====
 
-  const axNum = (typeof axFraction === "number")
-  ? axFraction
-  : axFraction.num;
-
-  
-if (!resteFraction && !axEstFraction) {
+if (!axEstFraction && !byEstFraction) {
 
   // tous les termes sont entiers
-  const somme = (typeof axFraction === "number" ? axFraction : axFraction.num / axFraction.den) + byValeur + c;
+  const somme = axFraction + byFraction + c;
 
   texte += `
 <u>Étape 3</u> : on additionne et on compare à zéro<br>
@@ -423,26 +420,21 @@ ${somme} ${somme === 0 ? "=" : "\\neq"} 0
 
 } else {
 
-  // il reste une fraction → dénominateur commun
-  const den = byValeur.den;
+  // il reste au moins une fraction
+  let den;
 
-  texte += `
-<u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
-\\[
-${fractionAvecSigne(axNum * den, den)}
-${fractionAvecSigne(byValeur.num, den)}
-${fractionAvecSigne(c * den, den)}
-\\stackrel{?}{=} 0
-\\]
-`;
+  if (axEstFraction) {
+    den = axFraction.den;
+  } else {
+    den = byFraction.den;
+  }
 
-  // produits des numérateurs
-  const n1 = axNum * den;
-  const n2 = byValeur.num;
+  const n1 = axEstFraction ? axFraction.num : axFraction * den;
+  const n2 = byEstFraction ? byFraction.num : byFraction * den;
   const n3 = c * den;
 
   texte += `
-<u>Étape 4</u> : on effectue les produits des numérateurs<br>
+<u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
 \\[
 ${fractionAvecSigne(n1, den)}
 ${fractionAvecSigne(n2, den)}
@@ -451,11 +443,10 @@ ${fractionAvecSigne(n3, den)}
 \\]
 `;
 
-  // addition finale
   const numFinal = n1 + n2 + n3;
 
   texte += `
-<u>Étape 5</u> : on additionne et on compare avec zéro<br>
+<u>Étape 4</u> : on additionne et on compare avec zéro<br>
 \\[
 ${numFinal === 0 ? "0" : fractionLatex(Math.abs(numFinal), den)}
 ${numFinal === 0 ? "=" : "\\neq"} 0
@@ -466,6 +457,7 @@ ${numFinal === 0 ? "=" : "\\neq"} 0
     ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
     : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
 }
+
 
 texteCorrection = texte;
 
