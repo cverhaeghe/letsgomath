@@ -201,6 +201,7 @@ function termeAvecSigne(val){
 ===================================================== */
 let appartient=false;
 let texteCorrection="";
+let dernierEnonceHTML = "";
 
 /* =====================================================
    GENERATION EXERCICE
@@ -497,6 +498,13 @@ if (!generationOK) {
   return;
 }
 
+// empêcher deux énoncés identiques d'affilée
+if (enonce === dernierEnonceHTML) {
+  generer();
+  return;
+}
+
+dernierEnonceHTML = enonce;
 document.getElementById("enonce").innerHTML = enonce;
 renderMath(document.getElementById("enonce"));
 document.getElementById("reponse").value="";
