@@ -292,7 +292,7 @@ const n1 = valeur * den;           // y
 const n2 = p.num;                  // p
 
 texte += `
-<u>Étape 2</u> : on isole le terme en x et à gauche, on met sur le même dénominateur<br>
+<u>Étape 2</u> : on isole le terme en x à droite et on met sur le même dénominateur à gauche<br>
 \\[
 ${fractionLatex(n1,den)}
 ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
@@ -324,7 +324,7 @@ const xDen = gauche.den * m.num;
 solution = fractionIrreductible(xNum, xDen);
 
 texte += `
-<u>Étape 4</u> : on isole x<br>
+<u>Étape 4</u> : on isole x et on calcule <br>
 \\[
 x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)} = ${fractionLatex(solution.num,solution.den)}
 \\]
