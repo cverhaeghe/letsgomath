@@ -72,56 +72,80 @@ const PROBA_VERTICALE  = 0.25;   // x = k
 let m, p, k;
 let typeEquation = ""; // pour stocker le type correct
 let equationTextePourCorrection = "";
+let historiqueTypes = [];
 
 /* ====================== UTILITAIRES ====================== */
 function randCoeff(){ return Math.floor(Math.random()*41)-20; }
 function randCoeffNonZero(){ let x; do{x=randCoeff();}while(x===0); return x; }
+function tropDeRepetitions(type) {
+  if (historiqueTypes.length < 2) return false;
+  const n = historiqueTypes.length;
+  return historiqueTypes[n-1] === type && historiqueTypes[n-2] === type;
+}
 
 /* ====================== GENERATION ====================== */
 function genererEquation(){
-  // Réinitialiser les cartes si elles existent
+  // Réinitialiser les cartes
   const cards = document.querySelectorAll('.qcm-card');
   cards.forEach(card => {
     card.classList.remove('correct', 'incorrect');
-    card.style.pointerEvents = "auto"; // rendre à nouveau cliquables
+    card.style.pointerEvents = "auto";
   });
 
-  const tirage = Math.random();
-  let terms = [];
+  let valide = false;
 
-  /* CAS 1 : DROITE LINEAIRE y = mx */
-  if (tirage < PROBA_LINEAIRE) {
-    m = randCoeffNonZero();
-    terms.push((m === 1 ? '' : (m === -1 ? '-' : m)) + 'x');
-    equationTextePourCorrection = "y = " + terms.join(' ');
-    typeEquation = "linéaire";
+  while (!valide) {
+
+    const tirage = Math.random();
+    let terms = [];
+
+    /* CAS 1 : DROITE LINEAIRE y = mx */
+    if (tirage < PROBA_LINEAIRE) {
+      m = randCoeffNonZero();
+      terms.push((m === 1 ? '' : (m === -1 ? '-' : m)) + 'x');
+      equationTextePourCorrection = "y = " + terms.join(' ');
+      typeEquation = "linéaire";
+    }
+
+    /* CAS 2 : DROITE OBLIQUE y = mx + p */
+    else if (tirage < PROBA_LINEAIRE + PROBA_OBLIQUE) {
+      m = randCoeffNonZero();
+      p = randCoeffNonZero();
+      terms.push((m === 1 ? '' : (m === -1 ? '-' : m)) + 'x');
+      if (p !== 0) terms.push((p > 0 ? '+ ' : '- ') + Math.abs(p));
+      equationTextePourCorrection = "y = " + terms.join(' ');
+      typeEquation = "affine";
+    }
+
+    /* CAS 3 : DROITE VERTICALE x = k */
+    else if (tirage < PROBA_LINEAIRE + PROBA_OBLIQUE + PROBA_VERTICALE) {
+      k = randCoeff();
+      equationTextePourCorrection = "x = " + k;
+      typeEquation = "pasfonction";
+    }
+
+    /* CAS 4 : DROITE HORIZONTALE y = k */
+    else {
+      k = randCoeff();
+      equationTextePourCorrection = "y = " + k;
+      typeEquation = "constante";
+    }
+
+    // Vérification : pas plus de 2 fois le même type d'affilée
+    if (!tropDeRepetitions(typeEquation)) {
+      valide = true;
+    }
   }
-  /* CAS 2 : DROITE OBLIQUE y = mx + p */
-  else if (tirage < PROBA_LINEAIRE + PROBA_OBLIQUE) {
-    m = randCoeffNonZero();
-    p = randCoeffNonZero();
-    terms.push((m === 1 ? '' : (m === -1 ? '-' : m)) + 'x');
-    if (p !== 0) terms.push((p > 0 ? '+ ' : '- ') + Math.abs(p));
-    equationTextePourCorrection = "y = " + terms.join(' ');
-    typeEquation = "affine";
-  }
-  /* CAS 3 : DROITE VERTICALE x = k */
-  else if (tirage < PROBA_LINEAIRE + PROBA_OBLIQUE + PROBA_VERTICALE) {
-    k = randCoeff();
-    equationTextePourCorrection = "x = " + k;
-    typeEquation = "pasfonction";
-  }
-  /* CAS 4 : DROITE HORIZONTALE y = k */
-  else {
-    k = randCoeff();
-    equationTextePourCorrection = "y = " + k;
-    typeEquation = "constante";
-  }
+
+  // Mise à jour de l'historique
+  historiqueTypes.push(typeEquation);
+  if (historiqueTypes.length > 2) historiqueTypes.shift();
 
   const eqDiv = document.getElementById("equation");
   eqDiv.innerHTML = `Type de fonction ? <br> \\(${equationTextePourCorrection}\\)`;
   renderMath(eqDiv);
 }
+
 
 
 /* ====================== VERIFICATION ====================== */
