@@ -261,15 +261,17 @@ do {
   (Math.abs(yF.num) > 20 || Math.abs(yF.den) > 10)
 );
 
-
+  
 if (!appartient) {
-  if (typeof f === "string") {
-    f = f === "0" ? "1" : "0";
+  if (Math.random() < 0.5) {
+    // entier faux
+    f = yF.num + 1;
   } else {
-    f = f + 1;
+    // fraction fausse
+    const faux = tirerE();
+    f = fractionLatex(faux.num, faux.den);
   }
 }
-
 
 
 const eqDroite =
@@ -401,6 +403,7 @@ ${pNum === 0 ? "" : (pNum > 0 ? " - " : " + ") + fractionLatex(Math.abs(n2), den
 
 // ---------- Étape 4 : addition des numérateurs ----------
 const sommeNum = n1 + n2;
+const egalite = (sommeNum === yCorr.num * den);
 
 texte += `
 <u>Étape 4</u> : on additionne et on compare <br>
