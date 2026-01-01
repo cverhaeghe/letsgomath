@@ -258,8 +258,9 @@ do {
   if (essais > 50) break;
 } while (
   appartient &&
-  Math.abs(yF.num) <= 20 && Math.abs(yF.den) <= 10
+  (Math.abs(yF.num) > 20 || Math.abs(yF.den) > 10)
 );
+
 
 if (!appartient) {
   if (typeof f === "string") {
