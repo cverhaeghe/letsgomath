@@ -330,11 +330,23 @@ if (typeof f === "string") {
   yCorr = { num: f, den: 1 }; // entier affiché
 }
 
+// Affichage sécurisé de e pour l'étape 1 (parenthèses si e < 0)
+let eAffEtape1 = eAff;
+
+// entier négatif
+if (typeof e === "number" && e < 0) {
+  eAffEtape1 = `(${eAff})`;
+}
+
+// fraction négative (déjà latex)
+if (eObj && eObj.num < 0) {
+  eAffEtape1 = `(${eAff})`;
+}
 
 let texte = `
 <u>Étape 1</u> : on remplace les coordonnées du point A dans l'équation<br>
 \\[
-${a}\\cdot ${eAff}
+${a}\\cdot ${eAffEtape1}
 ${termeAvecSigne(b)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
 ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
