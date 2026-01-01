@@ -288,7 +288,22 @@ const n1 = valeur * den;           // y
 const n2 = p.num;                  // p
 
 texte += `
-<u>Étape 2</u> : on isole le terme en x à droite et on met sur le même dénominateur à gauche<br>
+<u>Étape 2</u> : on isole le terme en x <br>
+\\[
+${valeur} ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(p.num),p.den)}=
+${fractionLatex(m.num,m.den)}x
+\\]
+`;
+
+    /* =================================================
+     ÉTAPE 3 : on met sur le même dénominateur
+  ================================================= */
+  const den = p.den;                 // dénominateur commun
+const n1 = valeur * den;           // y
+const n2 = p.num;                  // p
+
+texte += `
+<u>Étape 2</u> : on met sur le même dénominateur à gauche<br>
 \\[
 ${fractionLatex(n1,den)}
 ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
@@ -296,8 +311,9 @@ ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
 \\]
 `;
 
+  
   /* =================================================
-     ÉTAPE 3 : on calcule
+     ÉTAPE 4 : on calcule
   ================================================= */
 const numGauche = n1 - n2;
 const gauche = fractionIrreductible(numGauche, den);
@@ -311,7 +327,7 @@ ${fractionLatex(gauche.num,gauche.den)}
 `;
 
   /* =================================================
-     ÉTAPE 4 : on isole x
+     ÉTAPE 5 : on isole x
   ================================================= */
 
   
