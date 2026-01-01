@@ -178,6 +178,11 @@ function termeAvecSigne(val){
   return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
 }
 
+  function termeAvecSigneCorrection(val){
+  if(val === 0) return "+ 0";
+  return val > 0 ? `+ ${val}` : `- ${Math.abs(val)}`;
+}
+
   function fractionAvecSigne(num, den){
   if (num === 0) return "+ 0";
   if (num > 0) return `+ \\frac{${num}}{${den}}`;
@@ -392,7 +397,7 @@ ${
 ${
   byEstFraction
     ? fractionAvecSigne(byFraction.num, byFraction.den)
-    : termeAvecSigne(byFraction)
+    : termeAvecSigneCorrection(byFraction)
 }
 ${termeAvecSigne(c)}
 \\stackrel{?}{=} 0
