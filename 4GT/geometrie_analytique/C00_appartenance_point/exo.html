@@ -256,16 +256,22 @@ do {
   f = fractionLatex(yF.num, yF.den);
   essais++;
   if (essais > 50) break;
-} while (appartient && !fractionDansBornes(yF));
+} while (
+  appartient &&
+  !(Math.abs(yF.num) <= 10 && Math.abs(yF.den) <= 10)
+);
 
 
-  if (appartient && !fractionDansBornes({num:yF.num, den:yF.den})) {
-  generationOK = false;
+if (!appartient) {
+  // f aléatoire, entier OU fraction
+  if (Math.random() < 0.5) {
+    f = Math.floor(Math.random() * 7) - 3;
+  } else {
+    const fObj = tirerE();
+    f = fractionLatex(fObj.num, fObj.den);
+  }
 }
 
-  if(!appartient){
-    f=Math.floor(Math.random()*7)-3;
-  }
 
 const eqDroite =
   p.num === 0
