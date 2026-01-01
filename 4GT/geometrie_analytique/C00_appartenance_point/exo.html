@@ -361,16 +361,21 @@ ${termeAvecSigne(c)}
 /* ===== Étape 2 : on effectue et/ou on simplifie les produits ===== */
 
 // produit a·x
-let axValeur, axFraction;
+let axFraction;
+let axEstFraction = false;
 
-if (eObj.den === 1) {
-  axValeur = a * eObj.num;
-  axFraction = axValeur;          // entier
+const axNum = a * eObj.num;
+const axDen = eObj.den;
+
+if (axDen === 1) {
+  axFraction = axNum;                 // entier
+} else if (Math.abs(axNum) % axDen === 0) {
+  axFraction = axNum / axDen;         // entier simplifié
 } else {
-  axFraction = { num: a * eObj.num, den: eObj.den }; // fraction
+  axFraction = { num: axNum, den: axDen }; // fraction
+  axEstFraction = true;
 }
 
-const axEstFraction = typeof axFraction !== "number";
 
 
 // produit b·y
