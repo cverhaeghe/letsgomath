@@ -257,7 +257,10 @@ if(tirage<0.4){
   `;
 }
 
-/* ===== CAS 2 : x = k ===== */
+/* ==================
+    CAS 2 : x = k
+==================== */
+  
 else if(tirage<0.6){
 
   const k=randFractionNotOne();
@@ -285,13 +288,42 @@ else if(tirage<0.6){
   Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
   `;
 
-  texteCorrection=`
-  On compare l'abscisse du point à \\(k\\).<br>
-  ${appartient?"Elles sont égales.":"Elles sont différentes."}
-  `;
+  /* ===== CORRECTION DETAILLEE : x = k ===== */
+
+const kAff = fractionLatex(k.num, k.den);
+
+// ===== Étape 1 : substitution =====
+let texte = `
+<u>Étape 1</u> : on remplace l’abscisse du point A dans l’équation<br>
+\\[
+x = ${kAff}
+\\quad\\Longrightarrow\\quad
+${eAff} \\stackrel{?}{=} ${kAff}
+\\]
+`;
+
+// ===== Étape 2 : comparaison =====
+const egalite = eObj.valeur === k.num / k.den;
+
+texte += `
+<u>Étape 2</u> : on compare<br>
+\\[
+${eAff} ${egalite ? "=" : "\\neq"} ${kAff}
+\\]
+`;
+
+// ===== Conclusion =====
+texte += egalite
+  ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+  : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+
+texteCorrection = texte;
+
 }
 
-/* ===== CAS 3 : ax + by + c = 0 ===== */
+/* ============================ 
+    CAS 3 : ax + by + c = 0 
+=========================== */
 else {
 
   const a = randIntNonZeroNotOne();
