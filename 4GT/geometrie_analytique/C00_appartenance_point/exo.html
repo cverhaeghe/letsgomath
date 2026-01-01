@@ -253,10 +253,127 @@ if(tirage<0.4){
   Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
   `;
 
-  texteCorrection=`
-  On teste l'expression \\(y = mx + p\\).<br>
-  ${appartient?"L'égalité est vérifiée.":"L'égalité n'est pas vérifiée."}
-  `;
+/* ===== CORRECTION DETAILLEE : y = mx + p ===== */
+
+// ---------- Données ----------
+const mNum = m.num;
+const mDen = m.den;
+const pNum = p.num;
+const pDen = p.den;
+
+// y du point (f)
+let yCorr;
+if (typeof f === "string") {
+  yCorr = yF;                 // fraction
+} else {
+  yCorr = { num: f, den: 1 }; // entier
+}
+
+// ---------- Affichage sécurisé de x ----------
+let xAff = eAff;
+if (eObj && eObj.valeur < 0) {
+  xAff = `(${eAff})`;
+}
+
+// ---------- Étape 1 : substitution ----------
+let texte = `
+<u>Étape 1</u> : on remplace les coordonnées du point A dans l’équation<br>
+\\[
+${fractionLatex(yCorr.num, yCorr.den)}
+\\stackrel{?}{=}
+${fractionLatex(mNum, mDen)} \\cdot ${xAff}
+${pNum === 0 ? "" : (pNum > 0 ? "+ " : "- ") + fractionLatex(Math.abs(pNum), pDen)}
+\\]
+`;
+
+// ---------- Étape 2 : calcul de m·x (avec simplification) ----------
+const mxNum = mNum * eObj.num;
+const mxDen = mDen * eObj.den;
+
+let mx;
+let mxEstFraction = false;
+
+if (mxDen === 1) {
+  mx = mxNum;
+} else if (Math.abs(mxNum) % mxDen === 0) {
+  mx = mxNum / mxDen;
+} else {
+  mx = fractionIrreductible(mxNum, mxDen);
+  mxEstFraction = true;
+}
+
+texte += `
+<u>Étape 2</u> : on effectue et/ou on simplifie le produit<br>
+\\[
+${fractionLatex(yCorr.num, yCorr.den)}
+\\stackrel{?}{=}
+${
+  mxEstFraction
+    ? fractionLatex(mx.num, mx.den)
+    : mx
+}
+${pNum === 0 ? "" : (pNum > 0 ? "+ " : "- ") + fractionLatex(Math.abs(pNum), pDen)}
+\\]
+`;
+
+// ---------- Étape 3 : addition ----------
+if (!mxEstFraction && pDen === 1) {
+
+  // tout est entier
+  const somme = mx + pNum;
+
+  texte += `
+<u>Étape 3</u> : on additionne<br>
+\\[
+${fractionLatex(yCorr.num, yCorr.den)}
+${somme === yCorr.num ? "=" : "\\neq"}
+${somme}
+\\]
+`;
+
+  texte += somme === yCorr.num
+    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+
+} else {
+
+  // ---------- Étape 4 : mise sur le même dénominateur ----------
+  const den = mxEstFraction ? mx.den : pDen;
+
+  const n1 = mxEstFraction ? mx.num : mx * den;
+  const n2 = pNum * (den / pDen);
+
+  const sommeNum = n1 + n2;
+
+  texte += `
+<u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
+\\[
+${fractionLatex(yCorr.num * den, den)}
+\\stackrel{?}{=}
+${fractionLatex(sommeNum, den)}
+\\]
+`;
+
+  // ---------- Étape finale : comparaison ----------
+  const egalite =
+    yCorr.num * den === sommeNum * yCorr.den;
+
+  texte += `
+<u>Étape 4</u> : on compare avec zéro<br>
+\\[
+${fractionLatex(yCorr.num * den, den)}
+${egalite ? "=" : "\\neq"}
+${fractionLatex(sommeNum, den)}
+\\]
+`;
+
+  texte += egalite
+    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+}
+
+texteCorrection = texte;
+
 }
 
 /* ==================
