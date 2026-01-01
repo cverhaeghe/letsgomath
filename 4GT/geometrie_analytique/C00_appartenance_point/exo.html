@@ -397,7 +397,10 @@ ${somme}
 } else {
 
 // ---------- Étape 3 : mise sur le même dénominateur ----------
-const den = mxEstFraction ? mx.den : pDen;
+const den = ppcmListe([
+  mxEstFraction ? mx.den : 1,
+  pEstNul ? 1 : pDen
+]);
 const n1 = mxEstFraction ? mx.num : mx * den;
 const n2 = pEstNul ? 0 : pNum * (den / pDen);
 somme = fractionIrreductible(n1 + n2, den);
