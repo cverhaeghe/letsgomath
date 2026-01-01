@@ -210,6 +210,7 @@ let dernierEnonceHTML = "";
 let generationOK = true;
 
 function generer(){
+  generationOK = true;   // ← OBLIGATOIRE
   appartient = Math.random() < 0.4; // 40% de oui, 60% de non
   const tirage=Math.random();
   let enonce="";
@@ -223,20 +224,26 @@ if(tirage<0.4){
   const m=randFractionNotOne();
   const p=randFractionNotOne();
 
-  let essais=0;
-  let eAff;
-  let eObj;
-  
-  do{
-    eObj = tirerE();
-    e = eObj.valeur;
-    eAff = eObj.latex;
+let essais = 0;
+let eAff;
+let eObj;
+let yF;   // ← DÉCLARATION ICI
 
-    const yF=fractionIrreductible(m.num*e*p.den + p.num*m.den, m.den*p.den);
-    f = fractionLatex(yF.num, yF.den);
-    essais++;
-    if(essais>50) break;
-  } while(appartient && !fractionDansBornes({num:yF.num, den:yF.den}));
+do {
+  eObj = tirerE();
+  e = eObj.valeur;
+  eAff = eObj.latex;
+
+  yF = fractionIrreductible(
+    m.num * e * p.den + p.num * m.den,
+    m.den * p.den
+  );
+
+  f = fractionLatex(yF.num, yF.den);
+  essais++;
+  if (essais > 50) break;
+} while (appartient && !fractionDansBornes(yF));
+
 
   if (appartient && !fractionDansBornes({num:yF.num, den:yF.den})) {
   generationOK = false;
