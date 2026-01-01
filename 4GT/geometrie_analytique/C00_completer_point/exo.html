@@ -273,65 +273,64 @@ else {
   /* =================================================
      ÉTAPE 1 : substitution
   ================================================= */
-  texte += `
-  <u>Étape 1</u> : on remplace y par ${valeur}<br>
-  \\[
-  ${valeurAff} =
-  ${fractionLatex(m.num,m.den)}x
-  ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
-  \\]
-  `;
+texte += `
+<u>Étape 1</u> : on remplace y par ${valeur}<br>
+\\[
+${valeur} =
+${fractionLatex(m.num,m.den)}x
+${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
+\\]
+`;
+
 
   /* =================================================
-     ÉTAPE 2 : on isole le terme en x
-     y - p = mx
+     ÉTAPE 2 : 
   ================================================= */
-  const ypNum = valeur * p.den - p.num;
-  const ypDen = p.den;
+  const den = p.den;                 // dénominateur commun
+const n1 = valeur * den;           // y
+const n2 = p.num;                  // p
 
-  let yp;
-  let ypEstFraction = false;
-
-  if(ypDen===1){
-    yp = ypNum;
-  }else if(Math.abs(ypNum)%ypDen===0){
-    yp = ypNum/ypDen;
-  }else{
-    yp = fractionIrreductible(ypNum,ypDen);
-    ypEstFraction = true;
-  }
-
-  texte += `
-  <u>Étape 2</u> : on isole le terme en x<br>
-  \\[
-  ${ypEstFraction?fractionLatex(yp.num,yp.den):yp}
-  = ${fractionLatex(m.num,m.den)}x
-  \\]
-  `;
+texte += `
+<u>Étape 2</u> : on met les termes sur le même dénominateur<br>
+\\[
+${fractionLatex(n1,den)}
+${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
+= ${fractionLatex(m.num,m.den)}x
+\\]
+`;
 
   /* =================================================
-     ÉTAPE 3 : on divise par m
+     ÉTAPE 3 : on isole x
   ================================================= */
-  const xNum = ypEstFraction ? yp.num * m.den : yp * m.den;
-  const xDen = ypEstFraction ? yp.den * m.num : m.num;
+const numGauche = n1 - n2;
+const gauche = fractionIrreductible(numGauche, den);
 
-  const xFrac = fractionIrreductible(xNum,xDen);
-  solution = xFrac;
-
-  texte += `
-  <u>Étape 3</u> : on isole x <br>
-  \\[
-  ${fractionLatex(xFrac.num,xFrac.den)} = x
-  \\]
-  `;
+texte += `
+<u>Étape 3</u> : on isole x<br>
+\\[
+${fractionLatex(gauche.num,gauche.den)}
+= ${fractionLatex(m.num,m.den)}x
+\\]
+`;
 
   /* =================================================
-     CONCLUSION
+     ÉTAPE 4 : on calcule
   ================================================= */
-  texte += `
-  👉 Coordonnée cherchée :
-  \\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
-  `;
+
+  
+  const xNum = gauche.num * m.den;
+const xDen = gauche.den * m.num;
+solution = fractionIrreductible(xNum, xDen);
+
+texte += `
+<u>Étape 4</u> : on multiplie par l’inverse de ${fractionLatex(m.num,m.den)}<br>
+\\[
+x = ${fractionLatex(solution.num,solution.den)}
+\\]
+`;
+
+
+  
 
   texteCorrection = texte;
 }
