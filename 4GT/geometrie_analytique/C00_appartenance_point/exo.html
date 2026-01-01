@@ -57,6 +57,9 @@ function ppcm(a, b) {
   return Math.abs(a * b) / pgcd(a, b);
 }
 
+function ppcmListe(dens) {
+  return dens.reduce((acc, d) => ppcm(acc, d), 1);
+}
   
 function fractionIrreductible(num, den){
   if(den<0){ num=-num; den=-den; }
@@ -394,10 +397,13 @@ ${somme}
 } else {
 
 // ---------- Étape 3 : mise sur le même dénominateur ----------
-const denMx = mxEstFraction ? mx.den : 1;
-const denP  = pEstNul ? 1 : pDen;
-const den   = ppcm(denMx, denP);
-
+const dens = [
+  yCorr.den,
+  mxEstFraction ? mx.den : 1,
+  pEstNul ? 1 : pDen
+];
+const den = ppcmListe(dens);
+const n0 = yCorr.num * (den / yCorr.den);
 const n1 = mxEstFraction ? mx.num * (den / mx.den) : mx * den;
 const n2 = pEstNul ? 0 : pNum * (den / pDen);
 
