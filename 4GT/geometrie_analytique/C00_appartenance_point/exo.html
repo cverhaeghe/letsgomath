@@ -409,7 +409,7 @@ texte += `
 ${fractionLatex(yCorr.num * den, den)}
 \\stackrel{?}{=}
 ${fractionLatex(n1, den)}
-${pNum === 0 ? "" : (pNum > 0 ? " - " : " + ") + fractionLatex(Math.abs(n2), den)}
+${pNum === 0 ? "" : fractionAvecSigne(n2, den)}
 \\]
 `;
 
