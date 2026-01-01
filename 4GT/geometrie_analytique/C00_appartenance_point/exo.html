@@ -215,7 +215,9 @@ function generer(){
   let enonce="";
   let e,f;
 
-/* ===== CAS 1 : y = mx + p ===== */
+/* ==================== 
+  CAS 1 : y = mx + p 
+===================== */
 if(tirage<0.4){
 
   const m=randFractionNotOne();
@@ -263,30 +265,31 @@ if(tirage<0.4){
   
 else if(tirage<0.6){
 
-  const k=randFractionNotOne();
-  let essais=0;
-  f=Math.floor(Math.random()*7)-3;
+const k = randFractionNotOne();
+f = Math.floor(Math.random() * 7) - 3;
 
-  let eAff;
-  let eObj;
-  
-  do{
-    if(appartient){
-      e=fractionLatex(k.num,k.den);
-    } else {
+let eObj;
+let eAff;
+
+if (appartient) {
+  // le point appartient : e = k
+  eObj = { num: k.num, den: k.den, valeur: k.num / k.den };
+  eAff = fractionLatex(k.num, k.den);
+} else {
+  // le point n'appartient pas : e ≠ k
+  do {
     eObj = tirerE();
-    eAff = eObj.latex;
-    e = eAff;
-    }
-    essais++;
-    if(essais>50) break;
-  }while(false);
+  } while (eObj.num === k.num && eObj.den === k.den);
 
-  enonce=`
-  La droite a pour équation :<br>
-  \\(x = ${fractionLatex(k.num,k.den)}\\)<br><br>
-  Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
-  `;
+  eAff = eObj.latex;
+}
+
+enonce = `
+La droite a pour équation :<br>
+\\(x = ${fractionLatex(k.num,k.den)}\\)<br><br>
+Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
+`;
+
 
   /* ===== CORRECTION DETAILLEE : x = k ===== */
 
