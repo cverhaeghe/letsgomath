@@ -246,40 +246,95 @@ function generer(){
       texteCorrection = texte;
     }
 
-    /* ===== y donné → x cherché (inchangé) ===== */
-    else{
+    /* ===== y donné → x recherché ===== */
+else {
 
-      solution = fractionIrreductible(
-        valeur*m.den - p.num,
-        m.num
-      );
+  let texte = "";
 
-      enonce = `
-      La droite a pour équation :<br>
-      \\( y = ${fractionLatex(m.num,m.den)}x + ${fractionLatex(p.num,p.den)} \\)<br><br>
-      Complète les coordonnées du point \\( A(\\dots;${valeur}) \\)<br>
-      afin qu'il appartienne à la droite.`;
+  /* ÉNONCÉ */
+  let eq = `y = ${fractionLatex(m.num,m.den)}x`;
+  if(p.num!==0){
+    eq += " " + (p.num>0
+      ? `+ ${fractionLatex(p.num,p.den)}`
+      : `- ${fractionLatex(Math.abs(p.num),p.den)}`
+    );
+  }
 
-      let etape1 = `y = ${fractionLatex(m.num,m.den)}\\cdot ${valeur}`;
-      if(p.num!==0){
-        etape1 += " " + (p.num>0
-          ? `+ ${fractionLatex(p.num,p.den)}`
-          : `- ${fractionLatex(Math.abs(p.num),p.den)}`
-        );
-      }
+  enonce = `
+  La droite a pour équation :<br>
+  \\( ${eq} \\)<br><br>
+  Complète les coordonnées du point \\( A(\\dots;${valeur}) \\)<br>
+  afin qu'il appartienne à la droite.
+  `;
 
-      texteCorrection = `
-      <u>Étape 1</u> : on remplace y par ${valeur}<br>
-      \\[
-      ${etape1}
-      \\]
+  /* affichage sécurisé de y */
+  const valeurAff = valeur < 0 ? `(${valeur})` : valeur;
 
-      <u>Étape 2</u> : on isole x<br>
-      \\[
-      x = ${fractionLatex(solution.num,solution.den)}
-      \\]
+  /* =================================================
+     ÉTAPE 1 : substitution
+  ================================================= */
+  texte += `
+  <u>Étape 1</u> : on remplace y par ${valeur}<br>
+  \\[
+  ${valeurAff} =
+  ${fractionLatex(m.num,m.den)}x
+  ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
+  \\]
+  `;
 
-    }
+  /* =================================================
+     ÉTAPE 2 : on isole le terme en x
+     y - p = mx
+  ================================================= */
+  const ypNum = valeur * p.den - p.num;
+  const ypDen = p.den;
+
+  let yp;
+  let ypEstFraction = false;
+
+  if(ypDen===1){
+    yp = ypNum;
+  }else if(Math.abs(ypNum)%ypDen===0){
+    yp = ypNum/ypDen;
+  }else{
+    yp = fractionIrreductible(ypNum,ypDen);
+    ypEstFraction = true;
+  }
+
+  texte += `
+  <u>Étape 2</u> : on isole le terme en x<br>
+  \\[
+  ${ypEstFraction?fractionLatex(yp.num,yp.den):yp}
+  = ${fractionLatex(m.num,m.den)}x
+  \\]
+  `;
+
+  /* =================================================
+     ÉTAPE 3 : on divise par m
+  ================================================= */
+  const xNum = ypEstFraction ? yp.num * m.den : yp * m.den;
+  const xDen = ypEstFraction ? yp.den * m.num : m.num;
+
+  const xFrac = fractionIrreductible(xNum,xDen);
+  solution = xFrac;
+
+  texte += `
+  <u>Étape 3</u> : on divise par ${fractionLatex(m.num,m.den)}<br>
+  \\[
+  x = ${fractionLatex(xFrac.num,xFrac.den)}
+  \\]
+  `;
+
+  /* =================================================
+     CONCLUSION
+  ================================================= */
+  texte += `
+  👉 Coordonnée cherchée :
+  \\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
+  `;
+
+  texteCorrection = texte;
+}
   }
 
   /* =========================
