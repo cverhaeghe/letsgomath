@@ -201,6 +201,7 @@ function termeAvecSigne(val){
 ===================================================== */
 let appartient=false;
 let texteCorrection="";
+let dernierEnonce = "";
 
 /* =====================================================
    GENERATION EXERCICE
@@ -480,8 +481,14 @@ texteCorrection = texte;
 
 }
 
+// éviter deux exercices identiques d'affilée
+if (enonce === dernierEnonce) {
+  generer();
+  return;
+}
 
-document.getElementById("enonce").innerHTML=enonce;
+dernierEnonce = enonce;
+document.getElementById("enonce").innerHTML = enonce;
 renderMath(document.getElementById("enonce"));
 document.getElementById("reponse").value="";
 document.getElementById("feedback").innerHTML="";
