@@ -267,12 +267,19 @@ do {
     f=Math.floor(Math.random()*7)-3;
   }
 
-  enonce=`
-  La droite a pour équation :<br>
-  \\(y = ${fractionLatex(m.num,m.den)}x
-  ${p.num>=0?"+":"-"} ${fractionLatex(Math.abs(p.num),p.den)}\\)<br><br>
-  Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
-  `;
+const eqDroite =
+  p.num === 0
+    ? `y = ${fractionLatex(m.num, m.den)}x`
+    : `y = ${fractionLatex(m.num, m.den)}x ${
+        p.num > 0 ? "+ " : "- "
+      }${fractionLatex(Math.abs(p.num), p.den)}`;
+
+enonce = `
+La droite a pour équation :<br>
+\\(${eqDroite}\\)<br><br>
+Le point \\(A(${eAff};${f})\\) appartient-il à cette droite ?
+`;
+
 
 /* ===== CORRECTION DETAILLEE : y = mx + p ===== */
 
@@ -281,7 +288,9 @@ const mNum = m.num;
 const mDen = m.den;
 const pNum = p.num;
 const pDen = p.den;
+const pEstNul = (pNum === 0);
 
+  
 // y du point (f)
 let yCorr;
 if (typeof f === "string") {
@@ -359,10 +368,9 @@ ${somme}
 } else {
 
 // ---------- Étape 3 : mise sur le même dénominateur ----------
-const den = mxEstFraction ? mx.den : pDen;
-
+const den = mxEstFraction ? mx.den : (pEstNul ? 1 : pDen);
 const n1 = mxEstFraction ? mx.num : mx * den;
-const n2 = pNum * (den / pDen);
+const n2 = pEstNul ? 0 : pNum * (den / pDen);
 
 // affichage détaillé avant addition
 texte += `
