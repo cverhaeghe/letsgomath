@@ -159,11 +159,13 @@ function generer(){
       afin qu'il appartienne à la droite.
       `;
 
+      const valeurAff = valeur < 0 ? `(${valeur})` : valeur;
+
       /* ÉTAPE 1 */
       texte += `
       <u>Étape 1</u> : on remplace x par ${valeur}<br>
       \\[
-      y = ${fractionLatex(m.num,m.den)}\\cdot ${valeur}
+      y = ${fractionLatex(m.num,m.den)}\\cdot ${valeurAff}
       ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
       \\]
       `;
@@ -255,9 +257,8 @@ function generer(){
       enonce = `
       La droite a pour équation :<br>
       \\( y = ${fractionLatex(m.num,m.den)}x + ${fractionLatex(p.num,p.den)} \\)<br><br>
-      Complète les coordonnées du point<br>
-      \\( A(\\dots;${valeur}) \\)
-      `;
+      Complète les coordonnées du point \\( A(\\dots;${valeur}) \\)<br>
+      afin qu'il appartienne à la droite.`;
 
       let etape1 = `y = ${fractionLatex(m.num,m.den)}\\cdot ${valeur}`;
       if(p.num!==0){
@@ -278,9 +279,6 @@ function generer(){
       x = ${fractionLatex(solution.num,solution.den)}
       \\]
 
-      👉 Coordonnée cherchée :
-      \\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
-      `;
     }
   }
 
