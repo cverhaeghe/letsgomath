@@ -290,11 +290,6 @@ else {
     e = eObj.valeur;           // calcul
     eAff = eObj.latex;   // affichage
 
-    // parenthèses si e est une fraction négative
-    if (eObj.num < 0 && eObj.den !== 1) {
-    eAff = `(${eAff})`;
-}
-
     yF = fractionIrreductible(-a * e - c, b);
 
     f = fractionLatex(yF.num, yF.den);
