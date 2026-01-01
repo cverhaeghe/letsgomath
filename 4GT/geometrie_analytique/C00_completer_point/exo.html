@@ -151,6 +151,10 @@ function generer(){
       afin qu'il appartienne à la droite.
       `;
 
+      
+    /* Correction Cas 1 : y =mx+p */
+
+      
       texteCorrection = `
       <u>Étape 1</u> : on remplace x par ${valeur}<br>
       \\[
@@ -158,15 +162,83 @@ function generer(){
       + ${fractionLatex(p.num,p.den)}
       \\]
 
-      <u>Étape 2</u> : on calcule<br>
-      \\[
-      y = ${fractionLatex(solution.num,solution.den)}
-      \\]
+          /* Etape 2 */
 
-      👉 Coordonnée cherchée :
-      \\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
-      `;
-    }
+      const mxNum = m.num * valeur;
+      const mxDen = m.den;
+
+      let mx;
+      let mxEstFraction = false;
+
+      if (mxDen === 1) {
+      mx = mxNum;                 // entier
+      } else if (Math.abs(mxNum) % mxDen === 0) {
+      mx = mxNum / mxDen;         // entier simplifié
+      } else {
+      mx = fractionIrreductible(mxNum, mxDen);
+      mxEstFraction = true;
+      }
+
+      texte += `
+      <u>Étape 2</u> : on effectue et/ou on simplifie<br>`;
+      \\[
+        y = ${mxEstFraction
+    ? fractionLatex(mx.num, mx.den)
+    : mx
+        }
+      ${p.num === 0 ? "" : (p.num > 0 ? "+ " : "- ") + fractionLatex(Math.abs(p.num), p.den)}
+      \\]
+`;
+
+    /* Etape 3 */
+
+      
+      if (!mxEstFraction && p.den === 1) {
+      const somme = mx + p.num;
+      texte += `<u>Étape 3</u> : on calcule<br>
+      \\[
+      y = ${somme}
+      \\]
+`;
+      solution = { num: somme, den: 1 };
+        
+} else {
+
+  const den = ppcmListe([
+    mxEstFraction ? mx.den : 1,
+    p.den
+  ]);
+
+  const n1 = mxEstFraction ? mx.num * (den / mx.den) : mx * den;
+  const n2 = p.num * (den / p.den);
+
+  texte += `
+<u>Étape 3</u> : on met sur le même dénominateur<br>
+\\[
+y =
+${fractionLatex(n1, den)}
+${p.num >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
+\\]
+`;
+
+   /* Etape 4 */
+
+  const somme = fractionIrreductible(n1 + n2, den);
+  solution = somme;
+
+  texte += `<u>Étape 4</u> : on calcule<br>
+  \\[
+  y = ${fractionLatex(somme.num, somme.den)}
+  \\]
+  `;
+}
+
+texte += `
+👉 Coordonnée cherchée :
+\\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
+`;
+
+}
 
     else {
       solution = fractionIrreductible(
