@@ -158,7 +158,8 @@ function generer(){
       Complète les coordonnées du point \\( A(${valeur};\\dots) \\)<br>
       afin qu'il appartienne à la droite.
       `;
-
+/*CORRECTION */
+      
       const valeurAff = valeur < 0 ? `(${valeur})` : valeur;
 
       /* ÉTAPE 1 */
@@ -291,7 +292,7 @@ const n1 = valeur * den;           // y
 const n2 = p.num;                  // p
 
 texte += `
-<u>Étape 2</u> : on isole le terme en x et on met les termes sur le même dénominateur<br>
+<u>Étape 2</u> : on isole le terme en x et à gauche, on met sur le même dénominateur<br>
 \\[
 ${fractionLatex(n1,den)}
 ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
@@ -306,7 +307,7 @@ const numGauche = n1 - n2;
 const gauche = fractionIrreductible(numGauche, den);
 
 texte += `
-<u>Étape 3</u> : on calcule x<br>
+<u>Étape 3</u> : on calcule <br>
 \\[
 ${fractionLatex(gauche.num,gauche.den)}
 = ${fractionLatex(m.num,m.den)}x
@@ -325,7 +326,7 @@ solution = fractionIrreductible(xNum, xDen);
 texte += `
 <u>Étape 4</u> : on isole x<br>
 \\[
-x = ${fractionLatex(gauche.num,gauche.den)} \cdot ${fractionLatex(m.den,m.num)} = ${fractionLatex(solution.num,solution.den)}
+x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)} = ${fractionLatex(solution.num,solution.den)}
 \\]
 `;
 
