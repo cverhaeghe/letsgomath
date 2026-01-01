@@ -406,7 +406,7 @@ sommeEstFraction = true;
 texte += `
 <u>Étape 3</u> : on met les termes de droite sur le même dénominateur<br>
 \\[
-${fractionLatex(yCorr.num * den, den)}
+${fractionLatex(yCorr.num, yCorr.den)}
 \\stackrel{?}{=}
 ${fractionLatex(n1, den)}
 ${pNum === 0 ? "" : fractionAvecSigne(n2, den)}
