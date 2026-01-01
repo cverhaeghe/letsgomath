@@ -249,14 +249,17 @@ let eObj;
 let yF;   // ← DÉCLARATION ICI
 
 do {
-  eObj = tirerE();
-  e = eObj.valeur;
-  eAff = eObj.latex;
+eObj = tirerE();
+const eNum = eObj.num;    
+const eDen = eObj.den;   
+eAff = eObj.latex;
 
-  yF = fractionIrreductible(
-    m.num * e * p.den + p.num * m.den,
-    m.den * p.den
-  );
+
+yF = fractionIrreductible(
+  m.num * eNum * p.den + p.num * m.den * eDen,
+  m.den * eDen * p.den
+);
+
 
   f = fractionLatex(yF.num, yF.den);
   essais++;
