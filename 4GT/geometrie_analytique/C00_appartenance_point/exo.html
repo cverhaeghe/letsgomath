@@ -337,29 +337,28 @@ ${somme}
 
 } else {
 
-  // ---------- Étape 4 : mise sur le même dénominateur ----------
-  const den = mxEstFraction ? mx.den : pDen;
+// ---------- Étape 3 : mise sur le même dénominateur ----------
+const den = mxEstFraction ? mx.den : pDen;
 
-  const n1 = mxEstFraction ? mx.num : mx * den;
-  const n2 = pNum * (den / pDen);
+const n1 = mxEstFraction ? mx.num : mx * den;
+const n2 = pNum * (den / pDen);
 
-  const sommeNum = n1 + n2;
-
-  texte += `
-<u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
+// affichage détaillé avant addition
+texte += `
+<u>Étape 3</u> : on met tous les termes sur le même dénominateur<br>
 \\[
 ${fractionLatex(yCorr.num * den, den)}
 \\stackrel{?}{=}
-${fractionLatex(sommeNum, den)}
+${fractionLatex(n1, den)}
+${pNum === 0 ? "" : (pNum > 0 ? " - " : " + ") + fractionLatex(Math.abs(n2), den)}
 \\]
 `;
 
-  // ---------- Étape finale : comparaison ----------
-  const egalite =
-    yCorr.num * den === sommeNum * yCorr.den;
+// ---------- Étape 4 : addition des numérateurs ----------
+const sommeNum = n1 + n2;
 
-  texte += `
-<u>Étape 4</u> : on compare avec zéro<br>
+texte += `
+<u>Étape 4</u> : on additionne et on compare <br>
 \\[
 ${fractionLatex(yCorr.num * den, den)}
 ${egalite ? "=" : "\\neq"}
