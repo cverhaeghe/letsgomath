@@ -444,7 +444,7 @@ texteCorrection = texte;
     CAS 2 : x = k
 ==================== */
   
-else if(tirage<0.6){
+else if(tirage<0.5){
 
 const k = randFractionNotOne();
 f = Math.floor(Math.random() * 7) - 3;
@@ -502,9 +502,70 @@ texte += egalite
 texteCorrection = texte;
 
 }
+  
+/* ==================
+    CAS 3 : y = k
+==================== */
+
+else if (tirage < 0.6) {
+
+  const k = randFractionNotOne();
+  e = Math.floor(Math.random() * 7) - 3;   // abscisse libre
+
+  let fObj;
+  let fAff;
+
+  if (appartient) {
+    // le point appartient : f = k
+    fObj = { num: k.num, den: k.den, valeur: k.num / k.den };
+    fAff = fractionLatex(k.num, k.den);
+  } else {
+    // le point n'appartient pas : f ≠ k
+    do {
+      fObj = tirerE();
+    } while (fObj.num === k.num && fObj.den === k.den);
+
+    fAff = fObj.latex;
+  }
+
+  enonce = `
+  La droite a pour équation :<br>
+  \\(y = ${fractionLatex(k.num, k.den)}\\)<br><br>
+  Le point \\(A(${e};${fAff})\\) appartient-il à cette droite ?
+  `;
+
+  /* ===== CORRECTION DETAILLEE : y = k ===== */
+
+  const kAff = fractionLatex(k.num, k.den);
+
+  // Étape 1 : substitution
+  let texte = `
+  <u>Étape 1</u> : on remplace l’ordonnée du point A dans l’équation<br>
+  \\[
+  ${fAff} \\stackrel{?}{=} ${kAff}
+  \\]
+  `;
+
+  // Étape 2 : comparaison
+  const egalite = fObj.valeur === k.num / k.den;
+
+  texte += `
+  <u>Étape 2</u> : on compare<br>
+  \\[
+  ${fAff} ${egalite ? "=" : "\\neq"} ${kAff}
+  \\]
+  `;
+
+  // Conclusion
+  texte += egalite
+    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+
+  texteCorrection = texte;
+}
 
 /* ============================ 
-    CAS 3 : ax + by + c = 0 
+    CAS 4 : ax + by + c = 0 
 =========================== */
 else {
 
