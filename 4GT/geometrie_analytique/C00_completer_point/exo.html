@@ -284,14 +284,14 @@ ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
 
 
   /* =================================================
-     ÉTAPE 2 : 
+     ÉTAPE 2 : on isole mx
   ================================================= */
   const den = p.den;                 // dénominateur commun
 const n1 = valeur * den;           // y
 const n2 = p.num;                  // p
 
 texte += `
-<u>Étape 2</u> : on met les termes sur le même dénominateur<br>
+<u>Étape 2</u> : on isole le terme en x et on met les termes sur le même dénominateur<br>
 \\[
 ${fractionLatex(n1,den)}
 ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
@@ -300,13 +300,13 @@ ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
 `;
 
   /* =================================================
-     ÉTAPE 3 : on isole x
+     ÉTAPE 3 : on calcule
   ================================================= */
 const numGauche = n1 - n2;
 const gauche = fractionIrreductible(numGauche, den);
 
 texte += `
-<u>Étape 3</u> : on isole x<br>
+<u>Étape 3</u> : on calcule x<br>
 \\[
 ${fractionLatex(gauche.num,gauche.den)}
 = ${fractionLatex(m.num,m.den)}x
@@ -314,7 +314,7 @@ ${fractionLatex(gauche.num,gauche.den)}
 `;
 
   /* =================================================
-     ÉTAPE 4 : on calcule
+     ÉTAPE 4 : on isole x
   ================================================= */
 
   
@@ -323,9 +323,9 @@ const xDen = gauche.den * m.num;
 solution = fractionIrreductible(xNum, xDen);
 
 texte += `
-<u>Étape 4</u> : on multiplie par l’inverse de ${fractionLatex(m.num,m.den)}<br>
+<u>Étape 4</u> : on isole x<br>
 \\[
-x = ${fractionLatex(solution.num,solution.den)}
+x = ${fractionLatex(gauche.num,gauche.den)} \cdot ${fractionLatex(m.den,m.num)} = ${fractionLatex(solution.num,solution.den)}
 \\]
 `;
 
