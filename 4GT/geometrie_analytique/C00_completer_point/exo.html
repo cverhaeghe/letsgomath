@@ -53,6 +53,14 @@ function pgcd(a,b){
   return a;
 }
 
+function ppcm(a,b){
+  return Math.abs(a*b)/pgcd(a,b);
+}
+
+function ppcmListe(dens){
+  return dens.reduce((acc,d)=>ppcm(acc,d),1);
+}
+
 function fractionIrreductible(num, den){
   if(den<0){ num=-num; den=-den; }
   const p=pgcd(num,den);
@@ -130,117 +138,115 @@ function generer(){
     const m = tirerDansE({nonZero:true, nonOne:true});
     const p = tirerDansE();
 
+    /* ===== x donné → y cherché ===== */
     if(coordDonnee==="x"){
-      solution = fractionIrreductible(
-        m.num*valeur*p.den + p.num*m.den,
-        m.den*p.den
-      );
 
-    let eq = `y = ${fractionLatex(m.num,m.den)}x`;
-    if(p.num !== 0){
-    eq += " " + (p.num > 0
-    ? `+ ${fractionLatex(p.num,p.den)}`
-    : `- ${fractionLatex(Math.abs(p.num),p.den)}`
-    );
-}
+      let texte = "";
+
+      /* ÉNONCÉ */
+      let eq = `y = ${fractionLatex(m.num,m.den)}x`;
+      if(p.num!==0){
+        eq += " " + (p.num>0
+          ? `+ ${fractionLatex(p.num,p.den)}`
+          : `- ${fractionLatex(Math.abs(p.num),p.den)}`
+        );
+      }
 
       enonce = `
       La droite a pour équation :<br>
       \\( ${eq} \\)<br><br>
-      Complète les coordonnées du point \\( A(${valeur};\\dots) \\) <br>
+      Complète les coordonnées du point \\( A(${valeur};\\dots) \\)<br>
       afin qu'il appartienne à la droite.
       `;
 
-      
-    /* Correction Cas 1 : y =mx+p */
-
-      
-      texteCorrection = `
+      /* ÉTAPE 1 */
+      texte += `
       <u>Étape 1</u> : on remplace x par ${valeur}<br>
       \\[
       y = ${fractionLatex(m.num,m.den)}\\cdot ${valeur}
-      + ${fractionLatex(p.num,p.den)}
+      ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
       \\]
+      `;
 
-          /* Etape 2 */
-
+      /* ÉTAPE 2 : calcul du produit */
       const mxNum = m.num * valeur;
       const mxDen = m.den;
 
       let mx;
       let mxEstFraction = false;
 
-      if (mxDen === 1) {
-      mx = mxNum;                 // entier
-      } else if (Math.abs(mxNum) % mxDen === 0) {
-      mx = mxNum / mxDen;         // entier simplifié
-      } else {
-      mx = fractionIrreductible(mxNum, mxDen);
-      mxEstFraction = true;
+      if(mxDen===1){
+        mx = mxNum;
+      }else if(Math.abs(mxNum)%mxDen===0){
+        mx = mxNum/mxDen;
+      }else{
+        mx = fractionIrreductible(mxNum,mxDen);
+        mxEstFraction = true;
       }
 
       texte += `
-      <u>Étape 2</u> : on effectue et/ou on simplifie<br>`;
+      <u>Étape 2</u> : on effectue et/ou on simplifie<br>
       \\[
-        y = ${mxEstFraction
-    ? fractionLatex(mx.num, mx.den)
-    : mx
-        }
-      ${p.num === 0 ? "" : (p.num > 0 ? "+ " : "- ") + fractionLatex(Math.abs(p.num), p.den)}
+      y =
+      ${mxEstFraction?fractionLatex(mx.num,mx.den):mx}
+      ${p.num===0?"":(p.num>0?"+ ":"- ")+fractionLatex(Math.abs(p.num),p.den)}
       \\]
-`;
+      `;
 
-    /* Etape 3 */
+      /* ÉTAPE 3 / 4 */
+      if(!mxEstFraction && p.den===1){
 
-      
-      if (!mxEstFraction && p.den === 1) {
-      const somme = mx + p.num;
-      texte += `<u>Étape 3</u> : on calcule<br>
-      \\[
-      y = ${somme}
-      \\]
-`;
-      solution = { num: somme, den: 1 };
-        
-} else {
+        const somme = mx + p.num;
+        solution = {num:somme, den:1};
 
-  const den = ppcmListe([
-    mxEstFraction ? mx.den : 1,
-    p.den
-  ]);
+        texte += `
+        <u>Étape 3</u> : on calcule<br>
+        \\[
+        y = ${somme}
+        \\]
+        `;
 
-  const n1 = mxEstFraction ? mx.num * (den / mx.den) : mx * den;
-  const n2 = p.num * (den / p.den);
+      }else{
 
-  texte += `
-<u>Étape 3</u> : on met sur le même dénominateur<br>
-\\[
-y =
-${fractionLatex(n1, den)}
-${p.num >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
-\\]
-`;
+        const den = ppcmListe([
+          mxEstFraction?mx.den:1,
+          p.den
+        ]);
 
-   /* Etape 4 */
+        const n1 = mxEstFraction?mx.num*(den/mx.den):mx*den;
+        const n2 = p.num*(den/p.den);
 
-  const somme = fractionIrreductible(n1 + n2, den);
-  solution = somme;
+        texte += `
+        <u>Étape 3</u> : on met sur le même dénominateur<br>
+        \\[
+        y =
+        ${fractionLatex(n1,den)}
+        ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(n2),den)}
+        \\]
+        `;
 
-  texte += `<u>Étape 4</u> : on calcule<br>
-  \\[
-  y = ${fractionLatex(somme.num, somme.den)}
-  \\]
-  `;
-}
+        const somme = fractionIrreductible(n1+n2,den);
+        solution = somme;
 
-texte += `
-👉 Coordonnée cherchée :
-\\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
-`;
+        texte += `
+        <u>Étape 4</u> : on calcule<br>
+        \\[
+        y = ${fractionLatex(somme.num,somme.den)}
+        \\]
+        `;
+      }
 
-}
+      texte += `
+      👉 Coordonnée cherchée :
+      \\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
+      `;
 
-    else {
+      texteCorrection = texte;
+    }
+
+    /* ===== y donné → x cherché (inchangé) ===== */
+    else{
+
       solution = fractionIrreductible(
         valeur*m.den - p.num,
         m.num
@@ -254,21 +260,18 @@ texte += `
       `;
 
       let etape1 = `y = ${fractionLatex(m.num,m.den)}\\cdot ${valeur}`;
-      if(p.num !== 0){
-      etape1 += " " + (p.num > 0
-        ? `+ ${fractionLatex(p.num,p.den)}`
-        : `- ${fractionLatex(Math.abs(p.num),p.den)}`
-      );
-}
+      if(p.num!==0){
+        etape1 += " " + (p.num>0
+          ? `+ ${fractionLatex(p.num,p.den)}`
+          : `- ${fractionLatex(Math.abs(p.num),p.den)}`
+        );
+      }
 
-
-      
       texteCorrection = `
       <u>Étape 1</u> : on remplace y par ${valeur}<br>
       \\[
       ${etape1}
       \\]
-
 
       <u>Étape 2</u> : on isole x<br>
       \\[
