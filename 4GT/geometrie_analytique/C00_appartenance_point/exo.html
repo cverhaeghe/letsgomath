@@ -258,19 +258,17 @@ do {
   if (essais > 50) break;
 } while (
   appartient &&
-  !(Math.abs(yF.num) <= 10 && Math.abs(yF.den) <= 10)
+  Math.abs(yF.num) <= 20 && Math.abs(yF.den) <= 10
 );
 
-
 if (!appartient) {
-  // f aléatoire, entier OU fraction
-  if (Math.random() < 0.5) {
-    f = Math.floor(Math.random() * 7) - 3;
+  if (typeof f === "string") {
+    f = f === "0" ? "1" : "0";
   } else {
-    const fObj = tirerE();
-    f = fractionLatex(fObj.num, fObj.den);
+    f = f + 1;
   }
 }
+
 
 
 const eqDroite =
