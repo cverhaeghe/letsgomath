@@ -97,6 +97,12 @@ function renderMath(el){
   MathJax.typesetPromise([el]);
 }
 
+function termeSigne(val, contenu = ""){
+  if(val === 0) return "";
+  if(val > 0) return `+ ${val}${contenu}`;
+  return `- ${Math.abs(val)}${contenu}`;
+}
+
 /* =====================================================
    VARIABLES
 ===================================================== */
@@ -130,9 +136,17 @@ function generer(){
         m.den*p.den
       );
 
+    let eq = `y = ${fractionLatex(m.num,m.den)}x`;
+    if(p.num !== 0){
+    eq += " " + (p.num > 0
+    ? `+ ${fractionLatex(p.num,p.den)}`
+    : `- ${fractionLatex(Math.abs(p.num),p.den)}`
+    );
+}
+
       enonce = `
       La droite a pour équation :<br>
-      \\( y = ${fractionLatex(m.num,m.den)}x + ${fractionLatex(p.num,p.den)} \\)<br><br>
+      \\( ${eq} \\)<br><br>
       Complète les coordonnées du point \\( A(${valeur};\\dots) \\) <br>
       afin qu'il appartienne à la droite.
       `;
@@ -167,12 +181,22 @@ function generer(){
       \\( A(\\dots;${valeur}) \\)
       `;
 
+      let etape1 = `y = ${fractionLatex(m.num,m.den)}\\cdot ${valeur}`;
+      if(p.num !== 0){
+      etape1 += " " + (p.num > 0
+        ? `+ ${fractionLatex(p.num,p.den)}`
+        : `- ${fractionLatex(Math.abs(p.num),p.den)}`
+      );
+}
+
+
+      
       texteCorrection = `
       <u>Étape 1</u> : on remplace y par ${valeur}<br>
       \\[
-      ${valeur} = ${fractionLatex(m.num,m.den)}x
-      + ${fractionLatex(p.num,p.den)}
+      ${etape1}
       \\]
+
 
       <u>Étape 2</u> : on isole x<br>
       \\[
@@ -186,7 +210,7 @@ function generer(){
   }
 
   /* =========================
-     CAS 4 : ax + by + c = 0
+     CAS 2 : ax + by + c = 0
   ========================= */
   else {
 
@@ -197,18 +221,33 @@ function generer(){
     if(coordDonnee==="x"){
       solution = fractionIrreductible(-a*valeur - c, b);
 
+    let eq = "";
+    eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
+    eq += " " + termeSigne(b,"y");
+    eq += " " + termeSigne(c);
+    eq += " = 0";
+
+
+      
       enonce = `
       La droite a pour équation :<br>
-      \\( ${a}x + ${b}y + ${c} = 0 \\)<br><br>
+      \\( ${eq} \\)<br><br>
       Complète les coordonnées du point \\( A(${valeur};\\dots) \\) <br>
       afin qu'il appartienne à la droite.
       `;
 
+      let etape1 = "";
+      etape1 += `${a}\\cdot ${valeur}`;
+      etape1 += " " + termeSigne(b,"y");
+      etape1 += " " + termeSigne(c);
+      etape1 += " = 0";
+
       texteCorrection = `
       <u>Étape 1</u> : on remplace x par ${valeur}<br>
       \\[
-      ${a}\\cdot ${valeur} + ${b}y + ${c} = 0
+        ${etape1}
       \\]
+
 
       <u>Étape 2</u> : on isole y<br>
       \\[
