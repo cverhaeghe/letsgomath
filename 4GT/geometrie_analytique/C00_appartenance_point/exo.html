@@ -295,13 +295,24 @@ const pDen = p.den;
 const pEstNul = (pNum === 0);
 
   
-// y du point (f)
+// y du point (f) (doit correspondre à l'affichage)
 let yCorr;
+
 if (typeof f === "string") {
-  yCorr = yF;                 // fraction
+  // f est une fraction latex → on reconstruit num/den
+  const match = f.match(/-?\\frac\{(\d+)\}\{(\d+)\}|-?\d+/);
+  if (match) {
+    if (match[1]) {
+      const signe = f.startsWith("-") ? -1 : 1;
+      yCorr = { num: signe * parseInt(match[1]), den: parseInt(match[2]) };
+    } else {
+      yCorr = { num: parseInt(f), den: 1 };
+    }
+  }
 } else {
-  yCorr = { num: f, den: 1 }; // entier
+  yCorr = { num: f, den: 1 };
 }
+
 
 // ---------- Affichage sécurisé de x ----------
 let xAff = eAff;
