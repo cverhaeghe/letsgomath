@@ -189,6 +189,12 @@ function termeAvecSigne(val){
   return `- \\frac{${Math.abs(num)}}{${den}}`;
 }
 
+  function fractionSansPlus(num, den){
+  if (num === 0) return "0";
+  if (num > 0) return `\\frac{${num}}{${den}}`;
+  return `-\\frac{${Math.abs(num)}}{${den}}`;
+}
+
   
 /* =====================================================
    VARIABLES
@@ -391,7 +397,7 @@ texte += `
 \\[
 ${
   axEstFraction
-    ? fractionAvecSigne(axFraction.num, axFraction.den)
+    ? fractionSansPlus(axFraction.num, axFraction.den)
     : axFraction
 }
 ${
@@ -441,7 +447,7 @@ ${somme} ${somme === 0 ? "=" : "\\neq"} 0
   texte += `
 <u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
 \\[
-${fractionAvecSigne(n1, den)}
+${fractionSansPlus(n1, den)}
 ${fractionAvecSigne(n2, den)}
 ${fractionAvecSigne(n3, den)}
 \\stackrel{?}{=} 0
