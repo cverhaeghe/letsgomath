@@ -127,6 +127,16 @@ function tirerE() {
   };
 }
 
+function tirerDansE(options = {}) {
+  let obj;
+  do {
+    obj = tirerE();
+  } while (
+    (options.nonZero && obj.num === 0) ||
+    (options.nonOne && Math.abs(obj.num) === obj.den)
+  );
+  return obj;
+}
 
   
 /* =====================================================
@@ -221,8 +231,12 @@ function generer(){
 ===================== */
 if(tirage<0.4){
 
-  const m=randFractionNotOne();
-  const p=randFractionNotOne();
+const mObj = tirerDansE({ nonZero: true, nonOne: true });
+const pObj = tirerDansE();
+
+const m = { num: mObj.num, den: mObj.den };
+const p = { num: pObj.num, den: pObj.den };
+
 
 let essais = 0;
 let eAff;
