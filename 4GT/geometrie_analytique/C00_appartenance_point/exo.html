@@ -201,11 +201,13 @@ function termeAvecSigne(val){
 ===================================================== */
 let appartient=false;
 let texteCorrection="";
-let dernierEnonce = "";
 
 /* =====================================================
    GENERATION EXERCICE
 ===================================================== */
+
+let generationOK = true;
+
 function generer(){
 
   appartient = Math.random() < 0.4; // 40% de oui, 60% de non
@@ -233,6 +235,10 @@ if(tirage<0.4){
     essais++;
     if(essais>50) break;
   } while(appartient && !fractionDansBornes({num:yF.num, den:yF.den}));
+
+  if (appartient && !fractionDansBornes({num:yF.num, den:yF.den})) {
+  generationOK = false;
+}
 
   if(!appartient){
     f=Math.floor(Math.random()*7)-3;
@@ -309,6 +315,10 @@ else {
     if(essais > 50) break;
   } while(appartient && !fractionDansBornes(yF));
 
+  if (appartient && !fractionDansBornes(yF)) {
+  generationOK = false;
+}
+  
   if(!appartient){
     f = Math.floor(Math.random()*7) - 3;
   }
@@ -481,13 +491,11 @@ texteCorrection = texte;
 
 }
 
-// éviter deux exercices identiques d'affilée
-if (enonce === dernierEnonce) {
+if (!generationOK) {
   generer();
   return;
 }
 
-dernierEnonce = enonce;
 document.getElementById("enonce").innerHTML = enonce;
 renderMath(document.getElementById("enonce"));
 document.getElementById("reponse").value="";
