@@ -397,20 +397,14 @@ ${somme}
 } else {
 
 // ---------- Étape 3 : mise sur le même dénominateur ----------
-const dens = [
-  yCorr.den,
-  mxEstFraction ? mx.den : 1,
-  pEstNul ? 1 : pDen
-];
-const den = ppcmListe(dens);
-const n0 = yCorr.num * (den / yCorr.den);
-const n1 = mxEstFraction ? mx.num * (den / mx.den) : mx * den;
+const den = mxEstFraction ? mx.den : pDen;
+const n1 = mxEstFraction ? mx.num : mx * den;
 const n2 = pEstNul ? 0 : pNum * (den / pDen);
-
-
-// affichage détaillé avant addition
+somme = fractionIrreductible(n1 + n2, den);
+sommeEstFraction = true;
+  
 texte += `
-<u>Étape 3</u> : on met tous les termes sur le même dénominateur<br>
+<u>Étape 3</u> : on met les termes de droite sur le même dénominateur<br>
 \\[
 ${fractionLatex(yCorr.num * den, den)}
 \\stackrel{?}{=}
@@ -420,21 +414,23 @@ ${pNum === 0 ? "" : fractionAvecSigne(n2, den)}
 `;
 
 // ---------- Étape 4 : addition des numérateurs ----------
-const sommeNum = n1 + n2;
-const egalite = (sommeNum === yCorr.num * den);
+const egalite = sommeEstFraction
+  ? (somme.num === yCorr.num && somme.den === yCorr.den)
+  : (somme === yCorr.num);
 
 texte += `
-<u>Étape 4</u> : on additionne et on compare <br>
+<u>Étape 4</u> : on compare<br>
 \\[
-${fractionLatex(yCorr.num * den, den)}
+${fractionLatex(yCorr.num, yCorr.den)}
 ${egalite ? "=" : "\\neq"}
-${fractionLatex(sommeNum, den)}
+${sommeEstFraction ? fractionLatex(somme.num, somme.den) : somme}
 \\]
 `;
 
-  texte += egalite
-    ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
-    : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+texte += egalite
+  ? `<br>👉 Le point <strong>appartient</strong> à la droite.`
+  : `<br>👉 Le point <strong>n'appartient pas</strong> à la droite.`;
+
 }
 
 texteCorrection = texte;
