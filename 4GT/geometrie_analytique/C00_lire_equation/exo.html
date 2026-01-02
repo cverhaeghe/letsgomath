@@ -179,7 +179,15 @@ function genererExercice(){
 
 /* ====================== VERIFICATION ====================== */
 function verifier(){
-  const rep = nettoyer(document.getElementById("reponse").value);
+  const input = document.getElementById("reponse");
+  const repBrute = input.value;
+
+  // 👉 SI RIEN N'EST ECRIT : ON NE FAIT RIEN
+  if (!repBrute || repBrute.trim() === "") {
+    return;
+  }
+
+  const rep = nettoyer(repBrute);
   const sol = nettoyer(solutionCanonique);
   const fb = document.getElementById("feedback");
 
@@ -187,13 +195,14 @@ function verifier(){
     fb.innerHTML = "✅ Bonne réponse !";
   } else {
     fb.innerHTML = `
-      ❌ Réponse incorrecte.<br>
-      Équation correcte : \\( ${solutionLatex} \\)
+      ❌ Réponse incorrecte<br>
+      Équation correcte
     `;
     MathJax.typesetClear([fb]);
     MathJax.typesetPromise([fb]);
   }
 }
+
 
 
 window.onload = genererExercice;
