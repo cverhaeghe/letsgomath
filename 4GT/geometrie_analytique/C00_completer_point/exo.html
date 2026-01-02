@@ -207,7 +207,7 @@ const xAffProd = afficheProduit(valeurAff, valeur);
 
       /* ÉTAPE 1 */
       texte += `
-      <u>Étape 1</u> : on remplace x par l'abscisse du point A (${valeur})<br>
+      <u>Étape 1</u> : on remplace x par l'abscisse du point A (${valeurAff})<br>
       \\[
       y = ${fractionLatex(m.num,m.den)}\\cdot ${valeurAff}
       ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
@@ -312,7 +312,7 @@ else {
   /*  ÉTAPE 1 : substitution
   ================================================= */
 texte += `
-<u>Étape 1</u> : on remplace y par l'ordonnée du point A (${valeur})<br>
+<u>Étape 1</u> : on remplace y par l'ordonnée du point A (${valeurAff})<br>
 \\[
 ${valeurAff} =
 ${fractionLatex(m.num,m.den)}x
@@ -393,116 +393,162 @@ x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)}
     const b = randIntNonZeroNotOne();
     const c = randIntNonZeroNotOne();
 
-    if(coordDonnee==="x"){
-      solution = fractionIrreductible(-a*valeur - c, b);
+  /* =====================================================
+   CAS 2 : ax + by + c = 0
+   x donné → y recherché
+===================================================== */
 
-    let eq = "";
-    eq += (a<0?"-":"") + (Math.abs(a)===1?"":Math.abs(a)) + "x";
-    eq += " " + termeSigne(b,"y");
-    eq += " " + termeSigne(c);
-    eq += " = 0";
+if (coordDonnee === "x") {
 
+  let texte = "";
 
-      
-      enonce = `
-      La droite a pour équation :<br>
-      \\( ${eq} \\)<br><br>
-      Complète les coordonnées du point \\( A(${valeurAff};\\dots) \\) <br>
-      afin qu'il appartienne à la droite.
-      `;
+  /* ========= ÉNONCÉ ========= */
+  let eq = "";
+  eq += (a < 0 ? "-" : "") + (Math.abs(a) === 1 ? "" : Math.abs(a)) + "x";
+  eq += " " + termeSigne(b, "y");
+  eq += " " + termeSigne(c);
+  eq += " = 0";
 
-/* Etape 1 : on remplace
-=========================*/
-      
-let texte = "";
+  enonce = `
+  La droite a pour équation :<br>
+  \\( ${eq} \\)<br><br>
+  Complète les coordonnées du point \\( A(${valeurAff};\\dots) \\)<br>
+  afin qu'il appartienne à la droite.
+  `;
 
-const xAffProd = afficheProduit(valeurAff, valeur);
+  /* ========= ÉTAPE 1 : substitution ========= */
 
-texte += `
-<u>Étape 1</u> : on remplace x par l'abscisse du point A (${valeur})<br>
-\\[
-${a}\\cdot ${xAffProd}
-${termeSigne(b,"y")}
-${termeSigne(c)}
-= 0
-\\]
-`;
-
-
-
-/* Etape 2 : on effectue et isole le terme en y
-===============================================*/
-      
-const ax = a * valeur;
-let coefY;          // coefficient positif de y
-let terme1, terme2; // termes à calculer
-
-
-/* ===== CAS b > 0 : by à gauche ===== */
-if (b > 0) {
-
-  coefY = b;
-  const droite = -ax - c;
+  const xAffProd = afficheProduit(valeurAff, valeur);
 
   texte += `
-  <u>Étape 2</u> : on effectue et on isole le terme en y<br>
+  <u>Étape 1</u> : on remplace x par l’abscisse du point A (${valeurAff})<br>
   \\[
-  ${b}y = ${afficheSomme(-ax, -c)}
+  ${a}\\cdot ${xAffProd}
+  ${termeSigne(b, "y")}
+  ${termeSigne(c)}
+  = 0
   \\]
   `;
-}
 
-  /* ===== CAS b < 0 : by à droite ===== */
+  /* ========= ÉTAPE 2 : calcul de ax (EN FRACTION) et isolement de y ========= */
 
-else {
+  // ax = a * eObj.num / eObj.den
+  const axNum = a * eObj.num;
+  const axDen = eObj.den;
 
-  coefY = -b;
+  let ax;
+  let axEstFraction = false;
 
-  texte += `
-  <u>Étape 2</u> : on effectue et on isole le terme en y<br>
-  \\[
-  ${afficheSomme(ax, c)} = ${coefY}y
-  \\]
-  `;
-}
+  if (axDen === 1) {
+    ax = axNum;
+  } else if (Math.abs(axNum) % axDen === 0) {
+    ax = axNum / axDen;
+  } else {
+    ax = fractionIrreductible(axNum, axDen);
+    axEstFraction = true;
+  }
 
+  let coefY;   // coefficient positif devant y
+  let terme1;  // premier terme du membre sans y
+  let terme2;  // second terme (c ou -c)
 
-/* Etape 3 : on calcule
-===============================================*/
-      
-const resultat = (b > 0) ? (-ax - c) : (ax + c);
+  if (b > 0) {
+    coefY = b;
+    terme1 = axEstFraction ? { num: -ax.num, den: ax.den } : -ax;
+    terme2 = -c;
 
-if (b > 0) {
-  texte += `
-  <u>Étape 3</u> : on calcule<br>
-  \\[
-  ${coefY}y = ${resultat}
-  \\]
-  `;
-} else {
-  texte += `
-  <u>Étape 3</u> : on calcule<br>
-  \\[
-  ${resultat} = ${coefY}y
-  \\]
-  `;
-}
+    texte += `
+    <u>Étape 2</u> : on effectue et on isole le terme en y<br>
+    \\[
+    ${b}y =
+    ${axEstFraction
+      ? fractionLatex(-ax.num, ax.den)
+      : -ax}
+    ${c >= 0 ? " - " : " + "}${Math.abs(c)}
+    \\]
+    `;
+  } else {
+    coefY = -b;
+    terme1 = ax;
+    terme2 = c;
 
+    texte += `
+    <u>Étape 2</u> : on effectue et on isole le terme en y<br>
+    \\[
+    ${axEstFraction
+      ? fractionLatex(ax.num, ax.den)
+      : ax}
+    ${c >= 0 ? " + " : " - "}${Math.abs(c)}
+    = ${coefY}y
+    \\]
+    `;
+  }
 
+  /* ========= TEST : reste-t-il une fraction ? ========= */
 
-/* Etape 4 : on isole y
-======================*/
-      
-solution = fractionIrreductible(resultat, coefY);
+  const resteFraction = axEstFraction;
 
-texte += `
-<u>Étape 4</u> : on isole y<br>
-\\[
-y = ${fractionLatex(solution.num, solution.den)}
-\\]
-`;
+  /* ========= ÉTAPE 3 / 4 ========= */
 
+  if (!resteFraction) {
 
+    /* ----- CAS SANS FRACTION ----- */
+
+    const resultat = terme1 + terme2;
+
+    texte += `
+    <u>Étape 3</u> : on calcule<br>
+    \\[
+    ${b > 0 ? `${coefY}y = ${resultat}` : `${resultat} = ${coefY}y`}
+    \\]
+    `;
+
+    solution = fractionIrreductible(resultat, coefY);
+
+    texte += `
+    <u>Étape 4</u> : on isole y<br>
+    \\[
+    y = ${fractionLatex(solution.num, solution.den)}
+    \\]
+    `;
+
+  } else {
+
+    /* ----- CAS AVEC FRACTION ----- */
+
+    const den = ax.den;
+
+    const n1 = (b > 0 ? terme1.num : terme1.num);
+    const n2 = terme2 * den;
+
+    texte += `
+    <u>Étape 3</u> : on met sur le même dénominateur<br>
+    \\[
+    ${fractionLatex(n1, den)}
+    ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
+    \\]
+    `;
+
+    const somme = fractionIrreductible(n1 + n2, den);
+
+    texte += `
+    <u>Étape 4</u> : on calcule<br>
+    \\[
+    ${b > 0
+      ? `${coefY}y = ${fractionLatex(somme.num, somme.den)}`
+      : `${fractionLatex(somme.num, somme.den)} = ${coefY}y`}
+    \\]
+    `;
+
+    solution = fractionIrreductible(somme.num, somme.den * coefY);
+
+    texte += `
+    <u>Étape 5</u> : on isole y<br>
+    \\[
+    y = ${fractionLatex(solution.num, solution.den)}
+    \\]
+    `;
+  }
 
       
 texteCorrection = texte;
