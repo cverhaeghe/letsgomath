@@ -98,30 +98,49 @@ function dessinerPoint(x, y){
   `;
 }
 
+function tracerSegmentPointille(x1, y1, x2, y2){
+  svg.innerHTML += `
+    <line x1="${xToPx(x1)}" y1="${yToPx(y1)}"
+          x2="${xToPx(x2)}" y2="${yToPx(y2)}"
+          stroke="#0b3c5d"
+          stroke-width="2"
+          stroke-dasharray="5,5"/>
+  `;
+}
 
-  function afficherPointsCorrection(){
-  // y = mx ou y = mx + p
+function afficherPointsCorrection(){
+
+  // ----- DROITES y = mx ou y = mx + p -----
   if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
 
-    const y0 = p || 0;          // ordonnée à l'origine
-    const y1 = m + (p || 0);    // image de 1
+    const xA = 0;
+    const yA = p || 0;
 
-    dessinerPoint(0, y0, "A");
-    dessinerPoint(1, y1, "B");
+    const xB = 1;
+    const yB = m + (p || 0);
+
+    // points
+    dessinerPoint(xA, yA);
+    dessinerPoint(xB, yB);
+
+    // segments pédagogiques
+    tracerSegmentPointille(xA, yA, xB, yA); // horizontal
+    tracerSegmentPointille(xB, yA, xB, yB); // vertical
   }
 
-  // y = k
+  // ----- DROITE y = k -----
   else if (solutionCanonique.startsWith("y=")) {
-    dessinerPoint(0, k, "A");
-    dessinerPoint(1, k, "B");
+    dessinerPoint(0, k);
+    dessinerPoint(1, k);
   }
 
-  // x = k
+  // ----- DROITE x = k -----
   else if (solutionCanonique.startsWith("x=")) {
-    dessinerPoint(k, 0, "A");
-    dessinerPoint(k, 1, "B");
+    dessinerPoint(k, 0);
+    dessinerPoint(k, 1);
   }
 }
+
 
   function relierPoints(x1,y1,x2,y2){
   svg.innerHTML += `
