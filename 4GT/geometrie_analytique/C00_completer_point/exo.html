@@ -173,6 +173,7 @@ const eObj = tirerE();
 const valeur = eObj.valeur;   // POUR LES CALCULS
 const valeurAff = eObj.latex; // POUR L’AFFICHAGE
 
+
   /* ======================
      CAS 1 : y = mx + p
   ====================== */
@@ -579,8 +580,6 @@ else if (coordDonnee === "y") {
   `;
 
   /* ========= ÉTAPE 1 : substitution ========= */
-
-  const yAffProd = afficheProduit(valeurAff, valeur);
 
   texte += `
   <u>Étape 1</u> : on remplace y par l’ordonnée du point A<br>
