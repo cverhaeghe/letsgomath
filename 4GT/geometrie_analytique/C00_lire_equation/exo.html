@@ -92,13 +92,16 @@ function afficherCorrection(){
   const fb = document.getElementById("feedback");
 
   fb.innerHTML = `
-    ✅ <strong>Correction :</strong><br>
-    \\( ${solutionLatex} \\)
+    <span style="font-size:1.1em;">
+      📘 <strong>Correction</strong><br>
+      \\( ${solutionLatex} \\)
+    </span>
   `;
 
   MathJax.typesetClear([fb]);
   MathJax.typesetPromise([fb]);
 }
+
 
 /* ====================== REPERE ====================== */
 function dessinerRepere(){
