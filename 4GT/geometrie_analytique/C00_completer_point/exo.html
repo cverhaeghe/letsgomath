@@ -170,7 +170,6 @@ function generer(){
 const cas = Math.random()<0.1 ? 1 : 2;
 const coordDonnee = Math.random()<0.5 ? "x" : "y";
 const eObj = tirerE();
-const fObj = tirerE();
 const valeur = eObj.valeur;   // POUR LES CALCULS
 const valeurAff = eObj.latex; // POUR L’AFFICHAGE
 
@@ -179,8 +178,9 @@ const valeurAff = eObj.latex; // POUR L’AFFICHAGE
   ====================== */
   if(cas===1){
 
-    const m = tirerDansE({nonZero:true, nonOne:true});
-    const p = tirerDansE();
+const m = tirerE();
+const p = tirerE();
+
 
     /* ===== x donné → y cherché ===== */
     if(coordDonnee==="x"){
@@ -579,8 +579,6 @@ else if (coordDonnee === "y") {
   `;
 
   /* ========= ÉTAPE 1 : substitution ========= */
-
-  const yAffProd = afficheProduit(valeurAff, valeur);
 
   texte += `
   <u>Étape 1</u> : on remplace y par l’ordonnée du point A<br>
