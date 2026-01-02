@@ -89,15 +89,15 @@ function nettoyer(s){
 }
 
 
-function dessinerPoint(x, y, label = ""){
+function dessinerPoint(x, y){
   const cx = xToPx(x);
   const cy = yToPx(y);
 
   svg.innerHTML += `
-    <circle cx="${cx}" cy="${cy}" r="5" fill="#0d6efd" />
-    ${label ? `<text x="${cx+6}" y="${cy-6}" font-size="12" fill="#0d6efd">${label}</text>` : ""}
+    <circle cx="${cx}" cy="${cy}" r="5" fill="#0b3c5d" />
   `;
 }
+
 
   function afficherPointsCorrection(){
   // y = mx ou y = mx + p
@@ -132,13 +132,13 @@ function dessinerPoint(x, y, label = ""){
 }
 
   
-  function afficherCorrection(){
+function afficherCorrection(){
   const fb = document.getElementById("feedback");
 
   fb.classList.remove("visible");
 
   fb.innerHTML = `
-    <span style="color:#0d6efd;">
+    <span style="color:#000;">
       📘 <strong>Correction</strong><br>
       \\( ${solutionLatex} \\)
     </span>
@@ -149,9 +149,9 @@ function dessinerPoint(x, y, label = ""){
     setTimeout(() => fb.classList.add("visible"), 50);
   });
 
-  // 👉 affichage des points de lecture
   afficherPointsCorrection();
 }
+
 
   
 /* ====================== REPERE ====================== */
@@ -191,7 +191,8 @@ function tracer(type){
     svg.innerHTML+=`
       <line x1="${xToPx(x1)}" y1="${yToPx(y1)}"
             x2="${xToPx(x2)}" y2="${yToPx(y2)}"
-            stroke="red" stroke-width="3"/>
+            stroke="#f28c00"
+            stroke-width="3"/>
     `;
   }
 }
