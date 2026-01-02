@@ -88,21 +88,72 @@ function nettoyer(s){
           .replace(/−/g,"-");
 }
 
-function afficherCorrection(){
+
+function dessinerPoint(x, y, label = ""){
+  const cx = xToPx(x);
+  const cy = yToPx(y);
+
+  svg.innerHTML += `
+    <circle cx="${cx}" cy="${cy}" r="5" fill="#0d6efd" />
+    ${label ? `<text x="${cx+6}" y="${cy-6}" font-size="12" fill="#0d6efd">${label}</text>` : ""}
+  `;
+}
+
+  function afficherPointsCorrection(){
+  // y = mx ou y = mx + p
+  if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
+
+    const y0 = p || 0;          // ordonnée à l'origine
+    const y1 = m + (p || 0);    // image de 1
+
+    dessinerPoint(0, y0, "A");
+    dessinerPoint(1, y1, "B");
+  }
+
+  // y = k
+  else if (solutionCanonique.startsWith("y=")) {
+    dessinerPoint(0, k, "A");
+    dessinerPoint(1, k, "B");
+  }
+
+  // x = k
+  else if (solutionCanonique.startsWith("x=")) {
+    dessinerPoint(k, 0, "A");
+    dessinerPoint(k, 1, "B");
+  }
+}
+
+  function relierPoints(x1,y1,x2,y2){
+  svg.innerHTML += `
+    <line x1="${xToPx(x1)}" y1="${yToPx(y1)}"
+          x2="${xToPx(x2)}" y2="${yToPx(y2)}"
+          stroke="#0d6efd" stroke-dasharray="4"/>
+  `;
+}
+
+  
+  function afficherCorrection(){
   const fb = document.getElementById("feedback");
 
+  fb.classList.remove("visible");
+
   fb.innerHTML = `
-    <span style="font-size:1.1em;">
+    <span style="color:#0d6efd;">
       📘 <strong>Correction</strong><br>
       \\( ${solutionLatex} \\)
     </span>
   `;
 
   MathJax.typesetClear([fb]);
-  MathJax.typesetPromise([fb]);
+  MathJax.typesetPromise([fb]).then(() => {
+    setTimeout(() => fb.classList.add("visible"), 50);
+  });
+
+  // 👉 affichage des points de lecture
+  afficherPointsCorrection();
 }
 
-
+  
 /* ====================== REPERE ====================== */
 function dessinerRepere(){
   svg.innerHTML="";
