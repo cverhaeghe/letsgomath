@@ -560,30 +560,163 @@ texteCorrection = texte;
 
     }
 
-    else {
-      solution = fractionIrreductible(-b*valeur - c, a);
+else if (coordDonnee === "y") {
 
-      enonce = `
-      La droite a pour équation :<br>
-      \\( ${a}x + ${b}y + ${c} = 0 \\)<br><br>
-      Complète les coordonnées du point<br>
-      \\( A(\\dots;${valeur}) \\)
-      `;
+  let texte = "";
 
-      texteCorrection = `
-      <u>Étape 1</u> : on remplace y par ${valeur}<br>
-      \\[
-      ${a}x + ${b}\\cdot ${valeur} + ${c} = 0
-      \\]
+  /* ========= ÉNONCÉ ========= */
+  let eq = "";
+  eq += (a < 0 ? "-" : "") + (Math.abs(a) === 1 ? "" : Math.abs(a)) + "x";
+  eq += " " + termeSigne(b, "y");
+  eq += " " + termeSigne(c);
+  eq += " = 0";
 
-      <u>Étape 2</u> : on isole x<br>
-      \\[
-      x = ${fractionLatex(solution.num,solution.den)}
-      \\]
+  enonce = `
+  La droite a pour équation :<br>
+  \\( ${eq} \\)<br><br>
+  Complète les coordonnées du point \\( A(\\dots ; ${valeurAff}) \\)<br>
+  afin qu'il appartienne à la droite.
+  `;
 
-      👉 Coordonnée cherchée :
-      \\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
-      `;
+  /* ========= ÉTAPE 1 : substitution ========= */
+
+  const yAffProd = afficheProduit(valeurAff, valeur);
+
+  texte += `
+  <u>Étape 1</u> : on remplace y par l’ordonnée du point A<br>
+  \\[
+  ${a}x
+  ${termeSigne(b, yAffProd)}
+  ${termeSigne(c)}
+  = 0
+  \\]
+  `;
+
+  /* ========= ÉTAPE 2 : calcul de by (EN FRACTION) et isolement de x ========= */
+
+  // by = b * fObj.num / fObj.den
+  const byNum = b * fObj.num;
+  const byDen = fObj.den;
+
+  let by;
+  let byEstFraction = false;
+
+  if (byDen === 1) {
+    by = byNum;
+  } else if (Math.abs(byNum) % byDen === 0) {
+    by = byNum / byDen;
+  } else {
+    by = fractionIrreductible(byNum, byDen);
+    byEstFraction = true;
+  }
+
+  let coefX;   // coefficient positif devant x
+  let terme1;  // premier terme du membre sans x
+  let terme2;  // second terme (c ou -c)
+
+  if (a > 0) {
+    coefX = a;
+    terme1 = byEstFraction ? { num: -by.num, den: by.den } : -by;
+    terme2 = -c;
+
+    texte += `
+    <u>Étape 2</u> : on effectue et on isole le terme en x<br>
+    \\[
+    ${a}x =
+    ${byEstFraction
+      ? fractionLatex(-by.num, by.den)
+      : -by}
+    ${c >= 0 ? " - " : " + "}${Math.abs(c)}
+    \\]
+    `;
+  } else {
+    coefX = -a;
+    terme1 = by;
+    terme2 = c;
+
+    texte += `
+    <u>Étape 2</u> : on effectue et on isole le terme en x<br>
+    \\[
+    ${byEstFraction
+      ? fractionLatex(by.num, by.den)
+      : by}
+    ${c >= 0 ? " + " : " - "}${Math.abs(c)}
+    = ${coefX}x
+    \\]
+    `;
+  }
+
+  /* ========= TEST : reste-t-il une fraction ? ========= */
+
+  const resteFraction = byEstFraction;
+
+  /* ========= ÉTAPE 3 / 4 ========= */
+
+  if (!resteFraction) {
+
+    /* ----- CAS SANS FRACTION ----- */
+
+    const resultat = terme1 + terme2;
+
+    texte += `
+    <u>Étape 3</u> : on calcule<br>
+    \\[
+    ${a > 0 ? `${coefX}x = ${resultat}` : `${resultat} = ${coefX}x`}
+    \\]
+    `;
+
+    solution = fractionIrreductible(resultat, coefX);
+
+    texte += `
+    <u>Étape 4</u> : on isole x<br>
+    \\[
+    x = ${fractionLatex(solution.num, solution.den)}
+    \\]
+    `;
+
+  } else {
+
+    /* ----- CAS AVEC FRACTION ----- */
+
+    const den = by.den;
+
+    const n1 = terme1.num;
+    const n2 = terme2 * den;
+
+    texte += `
+    <u>Étape 3</u> : on met sur le même dénominateur<br>
+    \\[
+    ${coefX}x = ${fractionLatex(n1, den)}
+    ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
+    \\]
+    `;
+
+    const somme = fractionIrreductible(n1 + n2, den);
+
+    texte += `
+    <u>Étape 4</u> : on calcule<br>
+    \\[
+    ${a > 0
+      ? `${coefX}x = ${fractionLatex(somme.num, somme.den)}`
+      : `${fractionLatex(somme.num, somme.den)} = ${coefX}x`}
+    \\]
+    `;
+
+    solution = fractionIrreductible(somme.num, somme.den * coefX);
+
+    texte += `
+    <u>Étape 5</u> : on isole x<br>
+    \\[
+    x = ${fractionLatex(somme.num, somme.den)}
+    \\cdot ${fractionLatex(1, coefX)}
+    = ${fractionLatex(solution.num, solution.den)}
+    \\]
+    `;
+  }
+
+  texteCorrection = texte;
+}
+
     }
   }
 
