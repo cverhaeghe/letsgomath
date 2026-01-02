@@ -198,9 +198,7 @@ function verifier(){
     fb.innerHTML = "✅ Bonne réponse !";
   } else {
     fb.innerHTML = `
-      ❌ Réponse incorrecte<br>
-      Équation correcte
-    `;
+      ❌ Réponse incorrecte<br>`;
     MathJax.typesetClear([fb]);
     MathJax.typesetPromise([fb]);
   }
