@@ -719,9 +719,11 @@ const byDen = eObj.den;
 }
 
     }
-  }
+  
 
-  if(enonce===dernierEnonce){ generer(); return; }
+  if(enonce===dernierEnonce){ 
+    generer(); 
+    return; }
   dernierEnonce=enonce;
 
   document.getElementById("enonce").innerHTML=enonce;
