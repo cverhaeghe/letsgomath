@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MathJax v3 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+  <p>Déterminer l’équation de la droite représentée.</p>
+
+  <!-- GRAPHIQUE -->
+  <div style="display:flex;justify-content:center;margin-bottom:20px;">
+    <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
+  </div>
+
+  <!-- SAISIE ELEVE -->
+  <div class="equation-box">
+    <input id="reponse" type="text" class="form-control"
+           placeholder="...">
+  </div>
+
+  <div class="center-button">
+    <button onclick="verifier()">Vérifier</button>
+    <button onclick="afficherCorrection()">Correction</button>    
+    <button onclick="genererExercice()">Nouvel exercice</button>
+  </div>
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_geo_analytique.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+/* ====================== PARAMETRES REPERE ====================== */
+const svg = document.getElementById("graph");
+const width = 400, height = 400;
+const unit = 40;
+const xmin = -5, xmax = 5;
+const ymin = -5, ymax = 5;
+
+/* ====================== VARIABLES ====================== */
+let m, p, k;
+let solutionCanonique = "";
+let solutionLatex = "";
+
+/* ====================== OUTILS ====================== */
+function xToPx(x){ return width/2 + x*unit; }
+function yToPx(y){ return height/2 - y*unit; }
+
+function randInt(min,max){
+  return Math.floor(Math.random()*(max-min+1))+min;
+}
+function randNonZero(min,max){
+  let x;
+  do{x=randInt(min,max);}while(x===0);
+  return x;
+}
+function nettoyer(s){
+  return s.toLowerCase()
+          .replace(/\s+/g,"")
+          .replace(/−/g,"-");
+}
+
+function afficherCorrection(){
+  const fb = document.getElementById("feedback");
+
+  fb.innerHTML = `
+    <span style="font-size:1.1em;">
+      📘 <strong>Correction</strong><br>
+      \\( ${solutionLatex} \\)
+    </span>
+  `;
+
+  MathJax.typesetClear([fb]);
+  MathJax.typesetPromise([fb]);
+}
+
+
+/* ====================== REPERE ====================== */
+function dessinerRepere(){
+  svg.innerHTML="";
+
+  for(let x=xmin;x<=xmax;x++){
+    svg.innerHTML+=`<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
+  }
+  for(let y=ymin;y<=ymax;y++){
+    svg.innerHTML+=`<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
+  }
+
+  svg.innerHTML+=`
+    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
+    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black" stroke-width="2"/>
+  `;
+
+  for(let x=xmin;x<=xmax;x++) if(x!==0)
+    svg.innerHTML+=`<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
+
+  for(let y=ymin;y<=ymax;y++) if(y!==0)
+    svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
+}
+
+/* ====================== DROITE ====================== */
+function tracer(type){
+  if(type==="x=k"){
+    svg.innerHTML+=`<line x1="${xToPx(k)}" y1="0" x2="${xToPx(k)}" y2="${height}" stroke="red" stroke-width="3"/>`;
+  }
+  if(type==="y=k"){
+    svg.innerHTML+=`<line x1="0" y1="${yToPx(k)}" x2="${width}" y2="${yToPx(k)}" stroke="red" stroke-width="3"/>`;
+  }
+  if(type==="y=mx"||type==="y=mx+p"){
+    const x1=xmin,y1=m*x1+(p||0);
+    const x2=xmax,y2=m*x2+(p||0);
+    svg.innerHTML+=`
+      <line x1="${xToPx(x1)}" y1="${yToPx(y1)}"
+            x2="${xToPx(x2)}" y2="${yToPx(y2)}"
+            stroke="red" stroke-width="3"/>
+    `;
+  }
+}
+
+/* ====================== GENERATION ====================== */
+function genererExercice(){
+  document.getElementById("feedback").innerHTML="";
+  document.getElementById("reponse").value="";
+
+  dessinerRepere();
+  const r=Math.random();
+
+  if(r<0.25){
+    m=randNonZero(-3,3);
+    solutionCanonique=`y=${m}x`;
+    solutionLatex=`y=${m}x`;
+    tracer("y=mx");
+  }
+  else if(r<0.5){
+    m=randNonZero(-3,3);
+    p=randNonZero(-4,4);
+    solutionCanonique=`y=${m}x${p>0?`+${p}`:p}`;
+    solutionLatex=`y=${m}x${p>0?`+${p}`:p}`;
+    tracer("y=mx+p");
+  }
+  else if(r<0.75){
+    k=randInt(-4,4);
+    solutionCanonique=`x=${k}`;
+    solutionLatex=`x=${k}`;
+    tracer("x=k");
+  }
+  else{
+    k=randInt(-4,4);
+    solutionCanonique=`y=${k}`;
+    solutionLatex=`y=${k}`;
+    tracer("y=k");
+  }
+}
+
+/* ====================== VERIFICATION ====================== */
+function verifier(){
+  const input = document.getElementById("reponse");
+  const repBrute = input.value;
+
+  // 👉 SI RIEN N'EST ECRIT : ON NE FAIT RIEN
+  if (!repBrute || repBrute.trim() === "") {
+    return;
+  }
+
+  const rep = nettoyer(repBrute);
+  const sol = nettoyer(solutionCanonique);
+  const fb = document.getElementById("feedback");
+
+  if(rep === sol){
+    fb.innerHTML = "✅ Bonne réponse !";
+  } else {
+    fb.innerHTML = `
+      ❌ Réponse incorrecte<br>`;
+    MathJax.typesetClear([fb]);
+    MathJax.typesetPromise([fb]);
+  }
+}
+
+
+
+window.onload = genererExercice;
+</script>
+
+<script src="../../../js/protection.js"></script>
+</body>
+</html>
