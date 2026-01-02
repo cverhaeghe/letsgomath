@@ -373,7 +373,7 @@ solution = fractionIrreductible(xNum, xDen);
 texte += `
 <u>Étape 4</u> : on isole x et on calcule <br>
 \\[
-x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)} = = ${fractionLatex(solution.num, solution.den)}
+x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)} =  ${fractionLatex(solution.num, solution.den)}
 
 \\]
 `;
@@ -395,7 +395,6 @@ x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)}
     const c = randIntNonZeroNotOne();
 
   /* =====================================================
-   CAS 2 : ax + by + c = 0
    x donné → y recherché
 ===================================================== */
 
@@ -596,8 +595,9 @@ else if (coordDonnee === "y") {
   /* ========= ÉTAPE 2 : calcul de by (EN FRACTION) et isolement de x ========= */
 
   // by = b * fObj.num / fObj.den
-  const byNum = b * fObj.num;
-  const byDen = fObj.den;
+const byNum = b * eObj.num;
+const byDen = eObj.den;
+
 
   let by;
   let byEstFraction = false;
