@@ -74,12 +74,12 @@ function fractionLatex(num, den){
   return `\\frac{${num}}{${den}}`;
 }
 
-  function afficheSomme(val1, val2) {
-  // affiche val1 + val2 sans jamais montrer 0
+function afficheSomme(val1, val2) {
   if (val1 === 0) return `${val2}`;
   if (val2 === 0) return `${val1}`;
-  return `${val1} ${val2 >= 0 ? "+ " : "- "}${Math.abs(val2)}`;
+  return `${val1} ${val2 > 0 ? "+ " : "- "}${Math.abs(val2)}`;
 }
+
 
 /* =====================================================
    ALEATOIRE
@@ -400,7 +400,6 @@ ${termeSigne(c)}
 const ax = a * valeur;
 let coefY;          // coefficient positif de y
 let terme1, terme2; // termes à calculer
-let resultat;       // résultat du calcul
 
 
 /* ===== CAS b > 0 : by à gauche ===== */
@@ -432,10 +431,10 @@ else {
 }
 
 
-/* Etape 3 : met sur le même dénominateur
+/* Etape 3 : on calcule
 ===============================================*/
       
-const resultat = ax + c;   // ou -(ax+c) selon le cas
+const resultat = (b > 0) ? (-ax - c) : (ax + c);
 
 if (b > 0) {
   texte += `
