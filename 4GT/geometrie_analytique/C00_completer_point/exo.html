@@ -44,6 +44,30 @@
 </div>
 
 <script>
+  /* =====================================================
+   OUTILS 
+===================================================== */
+  const ENSEMBLE_E = [
+  { num: 0, den: 1 },
+  { num: 1, den: 1 },
+  { num: 2, den: 1 },
+  { num: 3, den: 1 },
+  { num: 4, den: 1 },
+  { num: 5, den: 1 },
+  { num: 1, den: 2 },
+  { num: 1, den: 3 },
+  { num: 1, den: 4 },
+  { num: 1, den: 5 },
+  { num: 2, den: 3 },
+  { num: 2, den: 5 },
+  { num: 3, den: 2 },
+  { num: 3, den: 4 },
+  { num: 3, den: 5 },
+  { num: 4, den: 3 },
+  { num: 4, den: 5 }
+];
+
+  
 /* =====================================================
    OUTILS FRACTIONS
 ===================================================== */
@@ -92,6 +116,7 @@ function randIntNonZeroNotOne(){
   return x;
 }
 
+  
 function tirerE() {
   const base = ENSEMBLE_E[Math.floor(Math.random() * ENSEMBLE_E.length)];
   const signe = Math.random() < 0.5 ? -1 : 1;
@@ -179,7 +204,6 @@ const valeurAff = eObj.latex; // POUR L’AFFICHAGE
 /*CORRECTION */
       
 const xAffProd = afficheProduit(valeurAff, valeur);
-y = m · xAffProd + p
 
       /* ÉTAPE 1 */
       texte += `
@@ -284,8 +308,6 @@ else {
   afin qu'il appartienne à la droite.
   `;
 
-  /* affichage sécurisé de y */
-  const valeurAff = valeur < 0 ? `(${valeur})` : valeur;
 
   /*  ÉTAPE 1 : substitution
   ================================================= */
@@ -350,7 +372,8 @@ solution = fractionIrreductible(xNum, xDen);
 texte += `
 <u>Étape 4</u> : on isole x et on calcule <br>
 \\[
-x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)} = ${fractionLatex(m.den, m.num)}
+x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)} = = ${fractionLatex(solution.num, solution.den)}
+
 \\]
 `;
 
@@ -394,12 +417,11 @@ x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)}
 let texte = "";
 
 const xAffProd = afficheProduit(valeurAff, valeur);
-a · xAffProd + by + c = 0
 
 texte += `
 <u>Étape 1</u> : on remplace x par l'abscisse du point A (${valeur})<br>
 \\[
-${a}\\cdot ${xAff}
+${a}\\cdot ${xAffProd}
 ${termeSigne(b,"y")}
 ${termeSigne(c)}
 = 0
