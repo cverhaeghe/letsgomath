@@ -180,7 +180,10 @@ const yAffProd = afficheProduit(valeurAff, valeur);
   ====================== */
   if(cas===1){
 
-const m = tirerE();
+let m;
+do {
+  m = tirerE();
+} while (m.num === 0);
 const p = tirerE();
 
 
@@ -201,7 +204,7 @@ const p = tirerE();
       enonce = `
       La droite a pour équation :<br>
       \\( ${eq} \\)<br><br>
-      Complète les coordonnées du point \\( A(${valeurAff};\dots) \\)<br>
+      Complète les coordonnées du point \\( A(${valeurAff};\\dots) \\)<br>
       afin qu'il appartienne à la droite.
       `;
 /*CORRECTION */
