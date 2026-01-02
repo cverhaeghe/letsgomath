@@ -267,8 +267,7 @@ else {
   /* affichage sécurisé de y */
   const valeurAff = valeur < 0 ? `(${valeur})` : valeur;
 
-  /* =================================================
-     ÉTAPE 1 : substitution
+  /*  ÉTAPE 1 : substitution
   ================================================= */
 texte += `
 <u>Étape 1</u> : on remplace y par ${valeur}<br>
@@ -280,8 +279,7 @@ ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
 `;
 
 
-  /* =================================================
-     ÉTAPE 2 : on isole mx
+  /*  ÉTAPE 2 : on isole mx
   ================================================= */
   const den = p.den;                 // dénominateur commun
 const n1 = valeur * den;           // y
@@ -295,8 +293,7 @@ ${fractionLatex(m.num,m.den)}x
 \\]
 `;
 
-    /* =================================================
-     ÉTAPE 3 : on met sur le même dénominateur
+    /* ÉTAPE 3 : on met sur le même dénominateur
   ================================================= */
 
 texte += `
@@ -309,8 +306,7 @@ ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
 `;
 
   
-  /* =================================================
-     ÉTAPE 4 : on calcule
+  /* ÉTAPE 4 : on calcule
   ================================================= */
 const numGauche = n1 - n2;
 const gauche = fractionIrreductible(numGauche, den);
@@ -323,8 +319,7 @@ ${fractionLatex(gauche.num,gauche.den)}
 \\]
 `;
 
-  /* =================================================
-     ÉTAPE 5 : on isole x
+/*     ÉTAPE 5 : on isole x
   ================================================= */
 
   
@@ -373,32 +368,58 @@ x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)}
       afin qu'il appartienne à la droite.
       `;
 
-      let etape1 = "";
-      etape1 += `${a}\\cdot ${valeur}`;
-      etape1 += " " + termeSigne(b,"y");
-      etape1 += " " + termeSigne(c);
-      etape1 += " = 0";
+/* Etape 1 : on remplace
+=========================*/
+      
+let texte = "";
+const valeurAff = valeur < 0 ? `(${valeur})` : valeur;
 
-      texteCorrection = `
-      <u>Étape 1</u> : on remplace x par ${valeur}<br>
-      \\[
-        ${etape1}
-      \\]
+texte += `
+<u>Étape 1</u> : on remplace x par ${valeur}<br>
+\\[
+${a}\\cdot ${valeurAff}
+${termeSigne(b,"y")}
+${termeSigne(c)}
+= 0
+\\]
+`;
 
 
-      <u>Étape 2</u> : on isole y<br>
-      \\[
-      ${b}y = ${-a*valeur-c}
-      \\]
+/* Etape 2 : on effectue et isole le terme en y
+===============================================*/
+      
+const termeSansY = -a * valeur - c;
 
-      <u>Étape 3</u> : on divise par ${b}<br>
-      \\[
-      y = ${fractionLatex(solution.num,solution.den)}
-      \\]
+texte += `
+<u>Étape 2</u> : on effectue et isole le terme en y <br>
+\\[
+${b}y = ${termeSansY}
+\\]
+`;
 
-      👉 Coordonnée cherchée :
-      \\( \\boxed{${fractionLatex(solution.num,solution.den)}} \\)
-      `;
+
+/* Etape 3 : met sur le même dénominateur
+===============================================*/
+      
+let droite;
+let droiteEstFraction = false;
+
+if (Math.abs(termeSansY) % Math.abs(b) === 0) {
+  droite = termeSansY / b;
+} else {
+  droite = fractionIrreductible(termeSansY, b);
+  droiteEstFraction = true;
+}
+
+texte += `
+<u>Étape 3</u> : on calcule<br>
+\\[
+y = ${droiteEstFraction ? fractionLatex(droite.num, droite.den) : droite}
+\\]
+`;
+
+texteCorrection = texte;
+
     }
 
     else {
