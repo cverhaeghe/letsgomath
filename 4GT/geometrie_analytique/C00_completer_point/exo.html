@@ -586,7 +586,7 @@ else if (coordDonnee === "y") {
   <u>Étape 1</u> : on remplace y par l’ordonnée du point A<br>
   \\[
   ${a}x
-  ${termeSigne(b, yAffProd)}
+  ${termeSigne(b, yAffProd)} \\cdot
   ${termeSigne(c)}
   = 0
   \\]
@@ -687,8 +687,8 @@ const byDen = eObj.den;
     texte += `
     <u>Étape 3</u> : on met sur le même dénominateur<br>
     \\[
-    ${coefX}x = ${fractionLatex(n1, den)}
-    ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
+    ${fractionLatex(n1, den)}
+    ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)} = ${coefX}x
     \\]
     `;
 
