@@ -74,6 +74,13 @@ function fractionLatex(num, den){
   return `\\frac{${num}}{${den}}`;
 }
 
+  function afficheSomme(val1, val2) {
+  // affiche val1 + val2 sans jamais montrer 0
+  if (val1 === 0) return `${val2}`;
+  if (val2 === 0) return `${val1}`;
+  return `${val1} ${val2 >= 0 ? "+ " : "- "}${Math.abs(val2)}`;
+}
+
 /* =====================================================
    ALEATOIRE
 ===================================================== */
@@ -400,52 +407,44 @@ let resultat;       // résultat du calcul
 if (b > 0) {
 
   coefY = b;
-  terme1 = -ax;
-  terme2 = -c;
+  const droite = -ax - c;
 
   texte += `
   <u>Étape 2</u> : on effectue et on isole le terme en y<br>
   \\[
-  ${b}y = ${-ax} ${c>=0?"- ":"+ "}${Math.abs(c)}
+  ${b}y = ${afficheSomme(-ax, -c)}
   \\]
   `;
 }
+
   /* ===== CAS b < 0 : by à droite ===== */
 
 else {
 
   coefY = -b;
-  terme1 = ax;
-  terme2 = c;
 
   texte += `
   <u>Étape 2</u> : on effectue et on isole le terme en y<br>
   \\[
-  ${ax} ${c>=0?"+ ":"- "}${Math.abs(c)} = ${coefY}y
+  ${afficheSomme(ax, c)} = ${coefY}y
   \\]
   `;
 }
 
 
-
-
-
 /* Etape 3 : met sur le même dénominateur
 ===============================================*/
       
-resultat = terme1 + terme2;
+const resultat = ax + c;   // ou -(ax+c) selon le cas
 
 if (b > 0) {
-
   texte += `
   <u>Étape 3</u> : on calcule<br>
   \\[
   ${coefY}y = ${resultat}
   \\]
   `;
-}
-else {
-
+} else {
   texte += `
   <u>Étape 3</u> : on calcule<br>
   \\[
@@ -453,6 +452,7 @@ else {
   \\]
   `;
 }
+
 
 
 /* Etape 4 : on isole y
