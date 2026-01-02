@@ -586,12 +586,14 @@ else if (coordDonnee === "y") {
   <u>Étape 1</u> : on remplace y par l’ordonnée du point A<br>
   \\[
   ${a}x
-  ${termeSigne(b, yAffProd)} \\cdot
+  ${b > 0 ? "+ " : "- "}${Math.abs(b)} \\cdot ${yAffProd}
   ${termeSigne(c)}
   = 0
   \\]
   `;
 
+
+  
   /* ========= ÉTAPE 2 : calcul de by (EN FRACTION) et isolement de x ========= */
 
   // by = b * fObj.num / fObj.den
