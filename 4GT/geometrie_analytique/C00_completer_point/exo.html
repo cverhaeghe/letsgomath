@@ -421,7 +421,7 @@ if (coordDonnee === "x") {
   const xAffProd = afficheProduit(valeurAff, valeur);
 
   texte += `
-  <u>Étape 1</u> : on remplace x par l’abscisse du point A (${valeurAff})<br>
+  <u>Étape 1</u> : on remplace x par l’abscisse du point A \\((${valeurAff})\\)<br>
   \\[
   ${a}\\cdot ${xAffProd}
   ${termeSigne(b, "y")}
@@ -521,13 +521,15 @@ if (coordDonnee === "x") {
     const n1 = (b > 0 ? terme1.num : terme1.num);
     const n2 = terme2 * den;
 
-    texte += `
-    <u>Étape 3</u> : on met sur le même dénominateur<br>
-    \\[
-    ${fractionLatex(n1, den)}
-    ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
-    \\]
-    `;
+texte += `
+<u>Étape 3</u> : on met sur le même dénominateur<br>
+\\[
+${fractionLatex(n1, den)}
+${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
+= ${coefY}y
+\\]
+`;
+
 
     const somme = fractionIrreductible(n1 + n2, den);
 
@@ -542,12 +544,15 @@ if (coordDonnee === "x") {
 
     solution = fractionIrreductible(somme.num, somme.den * coefY);
 
-    texte += `
-    <u>Étape 5</u> : on isole y<br>
-    \\[
-    y = ${fractionLatex(solution.num, solution.den)}
-    \\]
-    `;
+texte += `
+<u>Étape 5</u> : on isole y<br>
+\\[
+y = ${fractionLatex(somme.num, somme.den)}
+\\cdot ${fractionLatex(1, coefY)}
+= ${fractionLatex(solution.num, solution.den)}
+\\]
+`;
+
   }
 
       
