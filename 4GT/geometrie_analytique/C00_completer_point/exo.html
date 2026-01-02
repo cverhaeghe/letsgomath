@@ -376,7 +376,7 @@ let texte = "";
 const xAff = valeur < 0 ? `(${valeur})` : valeur;
 
 texte += `
-<u>Étape 1</u> : on remplace x par ${valeur}<br>
+<u>Étape 1</u> : on remplace x par l'abscisse du point A (${valeur})<br>
 \\[
 ${a}\\cdot ${xAff}
 ${termeSigne(b,"y")}
@@ -391,55 +391,74 @@ ${termeSigne(c)}
 ===============================================*/
       
 const ax = a * valeur;
+let coefY;          // coefficient positif de y
+let terme1, terme2; // termes à calculer
+let resultat;       // résultat du calcul
 
-// on choisit le signe pour avoir by positif à droite
-const coefY = b < 0 ? -b : b;
 
-// terme constant restant
-const termeConst = ax + c;
+/* ===== CAS b > 0 : by à gauche ===== */
+if (b > 0) {
 
-texte += `
-<u>Étape 2</u> : on effectue et on isole le terme en y<br>
-\\[
-${ax}${termeSigne(c)}
-= ${coefY}y
-\\]
-`;
+  coefY = b;
+  terme1 = -ax;
+  terme2 = -c;
+
+  texte += `
+  <u>Étape 2</u> : on effectue et on isole le terme en y<br>
+  \\[
+  ${b}y = ${-ax} ${c>=0?"- ":"+ "}${Math.abs(c)}
+  \\]
+  `;
+}
+  /* ===== CAS b < 0 : by à droite ===== */
+
+else {
+
+  coefY = -b;
+  terme1 = ax;
+  terme2 = c;
+
+  texte += `
+  <u>Étape 2</u> : on effectue et on isole le terme en y<br>
+  \\[
+  ${ax} ${c>=0?"+ ":"- "}${Math.abs(c)} = ${coefY}y
+  \\]
+  `;
+}
+
+
 
 
 
 /* Etape 3 : met sur le même dénominateur
 ===============================================*/
       
-let gauche;
-let gaucheEstFraction = false;
+resultat = terme1 + terme2;
 
-if (Number.isInteger(termeConst)) {
-  gauche = termeConst;
-} else {
-  gauche = fractionIrreductible(termeConst.num, termeConst.den);
-  gaucheEstFraction = true;
+if (b > 0) {
+
+  texte += `
+  <u>Étape 3</u> : on calcule<br>
+  \\[
+  ${coefY}y = ${resultat}
+  \\]
+  `;
+}
+else {
+
+  texte += `
+  <u>Étape 3</u> : on calcule<br>
+  \\[
+  ${resultat} = ${coefY}y
+  \\]
+  `;
 }
 
-texte += `
-<u>Étape 3</u> : on calcule<br>
-\\[
-${gaucheEstFraction
-  ? fractionLatex(gauche.num, gauche.den)
-  : gauche}
-= ${coefY}y
-\\]
-`;
 
 /* Etape 4 : on isole y
 ======================*/
       
-const yFrac = fractionIrreductible(
-  gaucheEstFraction ? gauche.num : gauche,
-  coefY
-);
-
-solution = yFrac;
+solution = fractionIrreductible(resultat, coefY);
 
 texte += `
 <u>Étape 4</u> : on isole y<br>
@@ -447,6 +466,7 @@ texte += `
 y = ${fractionLatex(solution.num, solution.den)}
 \\]
 `;
+
 
 
       
