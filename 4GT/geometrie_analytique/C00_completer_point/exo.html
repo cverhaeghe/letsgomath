@@ -164,7 +164,7 @@ function generer(){
 
       /* ÉTAPE 1 */
       texte += `
-      <u>Étape 1</u> : on remplace x par ${valeur}<br>
+      <u>Étape 1</u> : on remplace x par l'abscisse du point A (${valeur})<br>
       \\[
       y = ${fractionLatex(m.num,m.den)}\\cdot ${valeurAff}
       ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
@@ -270,7 +270,7 @@ else {
   /*  ÉTAPE 1 : substitution
   ================================================= */
 texte += `
-<u>Étape 1</u> : on remplace y par ${valeur}<br>
+<u>Étape 1</u> : on remplace y par l'ordonnée du point A (${valeur})<br>
 \\[
 ${valeur} =
 ${fractionLatex(m.num,m.den)}x
@@ -372,12 +372,13 @@ x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)}
 =========================*/
       
 let texte = "";
-const valeurAff = valeur < 0 ? `(${valeur})` : valeur;
+
+const xAff = valeur < 0 ? `(${valeur})` : valeur;
 
 texte += `
 <u>Étape 1</u> : on remplace x par ${valeur}<br>
 \\[
-${a}\\cdot ${valeurAff}
+${a}\\cdot ${xAff}
 ${termeSigne(b,"y")}
 ${termeSigne(c)}
 = 0
@@ -385,39 +386,70 @@ ${termeSigne(c)}
 `;
 
 
+
 /* Etape 2 : on effectue et isole le terme en y
 ===============================================*/
       
-const termeSansY = -a * valeur - c;
+const ax = a * valeur;
+
+// on choisit le signe pour avoir by positif à droite
+const coefY = b < 0 ? -b : b;
+
+// terme constant restant
+const termeConst = ax + c;
 
 texte += `
-<u>Étape 2</u> : on effectue et isole le terme en y <br>
+<u>Étape 2</u> : on effectue et on isole le terme en y<br>
 \\[
-${b}y = ${termeSansY}
+${ax}${termeSigne(c)}
+= ${coefY}y
 \\]
 `;
+
 
 
 /* Etape 3 : met sur le même dénominateur
 ===============================================*/
       
-let droite;
-let droiteEstFraction = false;
+let gauche;
+let gaucheEstFraction = false;
 
-if (Math.abs(termeSansY) % Math.abs(b) === 0) {
-  droite = termeSansY / b;
+if (Number.isInteger(termeConst)) {
+  gauche = termeConst;
 } else {
-  droite = fractionIrreductible(termeSansY, b);
-  droiteEstFraction = true;
+  gauche = fractionIrreductible(termeConst.num, termeConst.den);
+  gaucheEstFraction = true;
 }
 
 texte += `
 <u>Étape 3</u> : on calcule<br>
 \\[
-y = ${droiteEstFraction ? fractionLatex(droite.num, droite.den) : droite}
+${gaucheEstFraction
+  ? fractionLatex(gauche.num, gauche.den)
+  : gauche}
+= ${coefY}y
 \\]
 `;
 
+/* Etape 4 : on isole y
+======================*/
+      
+const yFrac = fractionIrreductible(
+  gaucheEstFraction ? gauche.num : gauche,
+  coefY
+);
+
+solution = yFrac;
+
+texte += `
+<u>Étape 4</u> : on isole y<br>
+\\[
+y = ${fractionLatex(solution.num, solution.den)}
+\\]
+`;
+
+
+      
 texteCorrection = texte;
 
     }
