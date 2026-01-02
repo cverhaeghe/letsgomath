@@ -41,11 +41,12 @@
   <!-- SAISIE ELEVE -->
   <div class="equation-box">
     <input id="reponse" type="text" class="form-control"
-           placeholder="Exemple : y = 2x - 1 ou x = 3">
+           placeholder="...">
   </div>
 
   <div class="center-button">
     <button onclick="verifier()">Vérifier</button>
+    <button onclick="corriger()">Correction</button>
     <button onclick="genererExercice()">Nouvel exercice</button>
   </div>
 
@@ -173,7 +174,7 @@ function verifier(){
   if(rep===sol){
     fb.innerHTML="✅ Bonne réponse !";
   } else {
-    fb.innerHTML = "❌ Réponse incorrecte.<br>Équation correcte : \\(" + solutionLatex + "\\)";
+    fb.innerHTML = "❌ Réponse incorrecte.<br>;
     MathJax.typeset();
   }
 }
