@@ -207,7 +207,7 @@ const xAffProd = afficheProduit(valeurAff, valeur);
 
       /* ÉTAPE 1 */
       texte += `
-      <u>Étape 1</u> : on remplace x par l'abscisse du point A (${valeurAff})<br>
+      <u>Étape 1</u> : on remplace x par l'abscisse du point A<br>
       \\[
       y = ${fractionLatex(m.num,m.den)}\\cdot ${valeurAff}
       ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
@@ -312,7 +312,7 @@ else {
   /*  ÉTAPE 1 : substitution
   ================================================= */
 texte += `
-<u>Étape 1</u> : on remplace y par l'ordonnée du point A (${valeurAff})<br>
+<u>Étape 1</u> : on remplace y par l'ordonnée du point A<br>
 \\[
 ${valeurAff} =
 ${fractionLatex(m.num,m.den)}x
@@ -421,7 +421,7 @@ if (coordDonnee === "x") {
   const xAffProd = afficheProduit(valeurAff, valeur);
 
   texte += `
-  <u>Étape 1</u> : on remplace x par l’abscisse du point A \\((${valeurAff})\\)<br>
+  <u>Étape 1</u> : on remplace x par l’abscisse du point A<br>
   \\[
   ${a}\\cdot ${xAffProd}
   ${termeSigne(b, "y")}
