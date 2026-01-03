@@ -182,6 +182,23 @@ function ecrirePLatex(p){
 }
 
 
+function fractionAB(val){
+  if (Number.isInteger(val)) {
+    return { a: val, b: 1 };
+  }
+
+  const abs = Math.abs(val);
+  const signe = val < 0 ? -1 : 1;
+
+  if (abs === 1/2) return { a: signe*1, b: 2 };
+  if (abs === 1/3) return { a: signe*1, b: 3 };
+  if (abs === 1/4) return { a: signe*1, b: 4 };
+  if (abs === 2/3) return { a: signe*2, b: 3 };
+  if (abs === 3/2) return { a: signe*3, b: 2 };
+  if (abs === 3/4) return { a: signe*3, b: 4 };
+
+  return { a: val, b: 1 };
+}
 
   
 function dessinerPoint(x, y){
@@ -203,16 +220,48 @@ function tracerSegmentPointille(x1, y1, x2, y2){
   `;
 }
 
+  function ecrireTexteCentreSegment(x1, y1, x2, y2, texte, dx = 0, dy = 0){
+  const xm = (x1 + x2) / 2 + dx;
+  const ym = (y1 + y2) / 2 + dy;
+
+  ecrireTexteSVG(xm, ym, texte);
+    // Segments pédagogiques
+tracerSegmentPointille(xA, yA, xB, yA); // horizontal (Δx)
+tracerSegmentPointille(xB, yA, xB, yB); // vertical   (Δy)
+
+// Texte Δx (au milieu du segment horizontal)
+ecrireTexteCentreSegment(
+  xA, yA,
+  xB, yA,
+  `Δx = ${b}`,
+  0, -0.3   // léger décalage vers le bas
+);
+
+// Texte Δy (au milieu du segment vertical)
+ecrireTexteCentreSegment(
+  xB, yA,
+  xB, yB,
+  `Δy = ${a}`,
+  0.2, 0    // léger décalage vers la droite
+);
+
+}
+
+  
 function afficherPointsCorrection(){
 
   // ----- DROITES y = mx ou y = mx + p -----
   if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
 
-    const xA = 0;
-    const yA = p || 0;
+const { a, b } = fractionAB(m);
 
-    const xB = 1;
-    const yB = m + (p || 0);
+const xA = 0;
+const yA = p || 0;
+
+const xB = b;
+const yB = yA + a;
+
+
 
     // points
     dessinerPoint(xA, yA);
@@ -227,10 +276,11 @@ const dx = 1;
 
 // Position du texte (près des segments)
 ecrireTexteSVG(
-  1.2,
-  (p || 0) + m/2,
-  `m = Δy/Δx = ${ecrireFractionTexte(dy)}/${dx}`
+  xB + 0.3,
+  (yA + yB) / 2,
+  `m = Δy/Δx = ${a}/${b}`
 );
+
 
     // Texte pour p (ordonnée à l'origine)
 if (typeof p !== "undefined") {
