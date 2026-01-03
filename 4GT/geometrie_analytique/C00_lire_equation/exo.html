@@ -300,6 +300,7 @@ if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
   // points
   dessinerPoint(A.x, A.y);
   dessinerPoint(B.x, B.y);
+  dessinerPoint(0, p);
 
   // segments pédagogiques
   tracerSegmentPointille(A.x, A.y, B.x, A.y); // horizontal
@@ -330,13 +331,13 @@ ecrireLatexSurGraph(
 );
 
 
-    // Texte pour p (ordonnée à l'origine)
-if (typeof p !== "undefined") {
-  ecrireTexteSVG(
-    -0.8,
-    p,
-    `p = ${ecrireFractionTexte(p)}`
-  );
+// Écriture de p à droite du point (alignée horizontalement)
+ecrireLatexSurGraph(
+  0.4,   // léger décalage vers la droite
+  p,
+  `p = ${ecrireFractionTexte(p)}`
+);
+
 }
 
   }
