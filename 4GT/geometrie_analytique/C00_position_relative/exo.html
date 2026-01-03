@@ -234,6 +234,8 @@ p1 = fractionIrreductible(-c, b);
   /* ====================== CORRECTION DETAILLEE ====================== */
 
 function corriger(){
+  const m1Red = fractionIrreductible(-a, b);
+  const p1Red = fractionIrreductible(-c, b);
   const f = document.getElementById("feedback");
   f.style.color = "#000";
 
@@ -258,7 +260,9 @@ function corriger(){
 
     On divise tout par ${b} :<br>
     \\[
-      y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}
+y = ${fractionLaTeX(m1Red.num, m1Red.den)}x
+    ${p1Red.num>=0 ? '+' : '-'}
+    ${fractionLaTeX(Math.abs(p1Red.num), p1Red.den)}
     \\]<br><br>
     `;
   }
@@ -272,15 +276,14 @@ function corriger(){
       ${a}x + ${c} = ${Math.abs(b)}y
     \\]<br>`;
 
-const m1Red = fractionIrreductible(-a, b);
-const p1Red = fractionIrreductible(-c, b);
+
 
 texte += `
 On divise tout par ${b} :<br>
 \\[
-  y = ${fractionLaTeX(m1Red.num, m1Red.den)}x
-      ${p1Red.num>=0 ? '+' : '-'}
-      ${fractionLaTeX(Math.abs(p1Red.num), p1Red.den)}
+y = ${fractionLaTeX(m1Red.num, m1Red.den)}x
+    ${p1Red.num>=0 ? '+' : '-'}
+    ${fractionLaTeX(Math.abs(p1Red.num), p1Red.den)}
 \\]<br><br>
 `;
 
@@ -326,8 +329,6 @@ function verifier(rep, el){
 
     // affichage automatique de la correction
   corriger();
-}
-
 }
 
 
