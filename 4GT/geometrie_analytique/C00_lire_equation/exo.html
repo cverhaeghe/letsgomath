@@ -395,7 +395,7 @@ ecrireLatexSVG(
 );
 
 // Afficher p UNIQUEMENT pour y = mx + p
-if (solutionCanonique.includes("+")) {
+if (typeof p !== 0) {
   dessinerPoint(0, p);
   ecrireLatexSVG(
     1.1,
