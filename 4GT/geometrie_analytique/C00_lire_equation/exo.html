@@ -235,13 +235,18 @@ function genererExercice(){
     solutionLatex     = `y=${ecrireMx(m)}`;
     tracer("y=mx");
   }
-  else if(r<0.5){
-    m=randNonZero(-3,3);
-    p=randNonZero(-4,4);
-    solutionCanonique=`y=${m}x${p>0?`+${p}`:p}`;
-    solutionLatex=`y=${m}x${p>0?`+${p}`:p}`;
-    tracer("y=mx+p");
-  }
+else if(r<0.5){
+  m = randNonZero(-3,3);
+  p = randNonZero(-4,4);
+
+  const mx = ecrireMx(m);
+  const signeP = p > 0 ? `+${p}` : p;
+
+  solutionCanonique = `y=${mx}${signeP}`;
+  solutionLatex     = `y=${mx}${signeP}`;
+
+  tracer("y=mx+p");
+}
   else if(r<0.75){
     k=randInt(-4,4);
     solutionCanonique=`x=${k}`;
