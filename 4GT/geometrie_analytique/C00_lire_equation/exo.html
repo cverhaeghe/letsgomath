@@ -155,16 +155,19 @@ function ecrireMxLatex(m){
 
 
 function ecrirePCanonique(p){
+  if (Number.isInteger(p)) {
+    return p > 0 ? `+${p}` : `${p}`;
+  }
+
   const signe = p < 0 ? "-" : "+";
   const abs = Math.abs(p);
 
-  if (!Number.isInteger(p)) {
-    if (abs === 1/2) return `${signe}1/2`;
-    if (abs === 3/2) return `${signe}3/2`;
-    if (abs === 5/2) return `${signe}5/2`;
-    if (abs === 7/2) return `${signe}7/2`;
-  }
+  if (abs === 1/2) return `${signe}1/2`;
+  if (abs === 3/2) return `${signe}3/2`;
+  if (abs === 5/2) return `${signe}5/2`;
+  if (abs === 7/2) return `${signe}7/2`;
 }
+
 
 function ecrirePLatex(p){
   const signe = p < 0 ? "-" : "+";
@@ -176,13 +179,9 @@ function ecrirePLatex(p){
     if (abs === 5/2) return `${signe}\\frac{5}{2}`;
     if (abs === 7/2) return `${signe}\\frac{7}{2}`;
   }
-
-  return p > 0 ? `+${p}` : p;
 }
 
 
-  return p > 0 ? `+${p}` : p;
-}
 
   
 function dessinerPoint(x, y){
