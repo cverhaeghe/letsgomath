@@ -203,12 +203,14 @@ function dessinerRepere(){
 
 /* ====================== DROITE ====================== */
 function tracer(type){
-  if(type==="x=k"){
-    svg.innerHTML+=`<line x1="${xToPx(k)}" y1="0" x2="${xToPx(k)}" y2="${height}" stroke="red" stroke-width="3"/>`;
-  }
-  if(type==="y=k"){
-    svg.innerHTML+=`<line x1="0" y1="${yToPx(k)}" x2="${width}" y2="${yToPx(k)}" stroke="red" stroke-width="3"/>`;
-  }
+if(type==="x=k"){
+  svg.innerHTML+=`<line x1="${xToPx(k)}" y1="0" x2="${xToPx(k)}" y2="${height}"
+                       stroke="#FFA372" stroke-width="3"/>`;
+}
+if(type==="y=k"){
+  svg.innerHTML+=`<line x1="0" y1="${yToPx(k)}" x2="${width}" y2="${yToPx(k)}"
+                       stroke="#FFA372" stroke-width="3"/>`;
+}
   if(type==="y=mx"||type==="y=mx+p"){
     const x1=xmin,y1=m*x1+(p||0);
     const x2=xmax,y2=m*x2+(p||0);
