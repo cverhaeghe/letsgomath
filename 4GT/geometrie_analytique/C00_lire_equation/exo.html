@@ -337,14 +337,16 @@ ecrireLatexSVG(
 
   // ----- DROITE y = k -----
   else if (solutionCanonique.startsWith("y=")) {
-    dessinerPoint(0, k);
     dessinerPoint(1, k);
+    dessinerPoint(2, k);
+    dessinerPoint(3, k);
   }
 
   // ----- DROITE x = k -----
   else if (solutionCanonique.startsWith("x=")) {
-    dessinerPoint(k, 0);
     dessinerPoint(k, 1);
+    dessinerPoint(k, 2);
+    dessinerPoint(k, 3);
   }
 }
 
