@@ -34,9 +34,11 @@
   <p>Lis l’équation de la droite représentée.</p>
 
   <!-- GRAPHIQUE -->
-  <div style="display:flex;justify-content:center;margin-bottom:20px;">
-    <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
-  </div>
+<div id="graph-container"
+     style="position:relative; display:flex; justify-content:center; margin-bottom:20px;">
+  <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
+</div>
+
 
   <!-- SAISIE ELEVE -->
   <div class="equation-box">
@@ -181,6 +183,24 @@ function ecrirePLatex(p){
   }
 }
 
+  function ecrireLatexSurGraph(x, y, latex){
+  const container = document.getElementById("graph-container");
+
+  const div = document.createElement("div");
+  div.style.position = "absolute";
+  div.style.left = xToPx(x) + "px";
+  div.style.top  = yToPx(y) + "px";
+  div.style.transform = "translate(-50%, -50%)";
+  div.style.color = "#0b3c5d";
+  div.style.fontSize = "16px";
+  div.style.pointerEvents = "none";
+
+  div.innerHTML = `\\(${latex}\\)`;
+  container.appendChild(div);
+
+  MathJax.typesetPromise([div]);
+}
+
 
 function fractionAB(val){
   if (Number.isInteger(val)) {
@@ -289,26 +309,26 @@ if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
   const dy = B.y - A.y;
 
   // textes Δx et Δy
-  ecrireTexteCentreSegment(
-    A.x, A.y,
-    B.x, A.y,
-    `Δx = ${dx}`,
-    0, -0.3
-  );
+ecrireLatexSurGraph(
+  (A.x + B.x)/2,
+  A.y - 0.4,
+  `\\Delta x = ${dx}`
+);
 
-  ecrireTexteCentreSegment(
-    B.x, A.y,
-    B.x, B.y,
-    `Δy = ${dy}`,
-    0.2, 0
-  );
+ecrireLatexSurGraph(
+  B.x + 0.4,
+  (A.y + B.y)/2,
+  `\\Delta y = ${dy}`
+);
+
 
   // texte de la pente
-  ecrireTexteSVG(
-    B.x + 0.3,
-    (A.y + B.y) / 2,
-    `m = Δy/Δx = ${dy}/${dx}`
-  );
+ecrireLatexSurGraph(
+  B.x + 0.5,
+  (A.y + B.y) / 2,
+  `m = \\frac{\\Delta y}{\\Delta x} = \\frac{${dy}}{${dx}}`
+);
+
 
     // Texte pour p (ordonnée à l'origine)
 if (typeof p !== "undefined") {
