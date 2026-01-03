@@ -82,18 +82,104 @@ function randNonZero(min,max){
   do{x=randInt(min,max);}while(x===0);
   return x;
 }
+
+  // Génère une fraction parmi une liste, avec signe ±
+function randFraction(liste){
+  const frac = liste[Math.floor(Math.random() * liste.length)];
+  const signe = Math.random() < 0.5 ? 1 : -1;
+  return signe * frac;
+}
+
+  const FRACTIONS_M = [
+  1/2, 1/3, 1/4,
+  2/3,
+  3/2, 3/4
+];
+
+const FRACTIONS_P = [
+  1/2, 3/2, 5/2, 7/2
+];
+
 function nettoyer(s){
   return s.toLowerCase()
           .replace(/\s+/g,"")
           .replace(/−/g,"-");
 }
 
-function ecrireMx(m){
+// Pour la comparaison (texte élève)
+function ecrireMxCanonique(m){
   if (m === 1) return "x";
   if (m === -1) return "-x";
+
+  if (!Number.isInteger(m)) {
+    const signe = m < 0 ? "-" : "";
+    const abs = Math.abs(m);
+
+    if (abs === 1/2) return `${signe}1/2x`;
+    if (abs === 1/3) return `${signe}1/3x`;
+    if (abs === 1/4) return `${signe}1/4x`;
+    if (abs === 2/3) return `${signe}2/3x`;
+    if (abs === 3/2) return `${signe}3/2x`;
+    if (abs === 3/4) return `${signe}3/4x`;
+  }
+
   return m + "x";
 }
 
+// Pour l'affichage MathJax
+function ecrireMxLatex(m){
+  if (m === 1) return "x";
+  if (m === -1) return "-x";
+
+  if (!Number.isInteger(m)) {
+    const signe = m < 0 ? "-" : "";
+    const abs = Math.abs(m);
+
+    if (abs === 1/2) return `${signe}\\frac{1}{2}x`;
+    if (abs === 1/3) return `${signe}\\frac{1}{3}x`;
+    if (abs === 1/4) return `${signe}\\frac{1}{4}x`;
+    if (abs === 2/3) return `${signe}\\frac{2}{3}x`;
+    if (abs === 3/2) return `${signe}\\frac{3}{2}x`;
+    if (abs === 3/4) return `${signe}\\frac{3}{4}x`;
+  }
+
+  return m + "x";
+}
+
+
+function ecrirePCanonique(p){
+  const signe = p < 0 ? "-" : "+";
+  const abs = Math.abs(p);
+
+  if (!Number.isInteger(p)) {
+    if (abs === 1/2) return `${signe}1/2`;
+    if (abs === 3/2) return `${signe}3/2`;
+    if (abs === 5/2) return `${signe}5/2`;
+    if (abs === 7/2) return `${signe}7/2`;
+  }
+
+  return p > 0 ? `+${p}` : p;
+}
+
+function ecrirePLatex(p){
+  const signe = p < 0 ? "-" : "+";
+  const abs = Math.abs(p);
+
+  if (!Number.isInteger(p)) {
+    if (abs === 1/2) return `${signe}\\frac{1}{2}`;
+    if (abs === 3/2) return `${signe}\\frac{3}{2}`;
+    if (abs === 5/2) return `${signe}\\frac{5}{2}`;
+    if (abs === 7/2) return `${signe}\\frac{7}{2}`;
+  }
+
+  return p > 0 ? `+${p}` : p;
+}
+
+
+  return p > 0 ? `+${p}` : p;
+}
+
+  
 function dessinerPoint(x, y){
   const cx = xToPx(x);
   const cy = yToPx(y);
@@ -231,25 +317,27 @@ function genererExercice(){
   dessinerRepere();
   const r=Math.random();
 
-  if(r<0.25){
+  if(r<0.2){
     m=randNonZero(-3,3);
     solutionCanonique = `y=${ecrireMx(m)}`;
     solutionLatex     = `y=${ecrireMx(m)}`;
     tracer("y=mx");
   }
-else if(r<0.5){
-  m = randNonZero(-3,3);
-  p = randNonZero(-4,4);
+else if(r < 0.6){
+  m = randFraction(FRACTIONS_M);
+  p = randFraction(FRACTIONS_P);
 
-  const mx = ecrireMx(m);
-  const signeP = p > 0 ? `+${p}` : p;
+  solutionCanonique =
+    `y=${ecrireMxCanonique(m)}${ecrirePCanonique(p)}`;
 
-  solutionCanonique = `y=${mx}${signeP}`;
-  solutionLatex     = `y=${mx}${signeP}`;
+  solutionLatex =
+    `y=${ecrireMxLatex(m)}${ecrirePLatex(p)}`;
 
   tracer("y=mx+p");
 }
-  else if(r<0.75){
+
+
+  else if(r<0.8){
     k=randInt(-4,4);
     solutionCanonique=`x=${k}`;
     solutionLatex=`x=${k}`;
