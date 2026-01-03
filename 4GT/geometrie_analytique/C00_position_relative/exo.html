@@ -64,6 +64,7 @@ function nonZero(){ let x; do{x=rand(-6,6);}while(x===0); return x; }
 let a,b,c,p;
 let m1,p1;
 let mFrac;
+let pFrac;
 let bonneReponse="", explication="";
 let eq1Texte="", eq2Texte="";
   
@@ -137,10 +138,18 @@ function genererEquation(){
 
   /* ===== DROITE d2 : y = mx + p ===== */
   mFrac = tirerDansEnsembleM();
-  p = randCoeffNZ10();
+  pFrac = tirerDansEnsembleM();
 
-eq2Texte = `y = ${fractionLaTeX(mFrac.num, mFrac.den)}x ${p>0?'+':''} ${p}`
-  .replace(/\+\s-/g,'- ');
+let pTexte = "";
+
+if (pFrac.num !== 0) {
+  pTexte = pFrac.num > 0
+    ? ` + ${fractionLaTeX(pFrac.num, pFrac.den)}`
+    : ` - ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}`;
+}
+
+eq2Texte = `y = ${fractionLaTeX(mFrac.num, mFrac.den)}x${pTexte}`;
+
 
 
   /* ==================== AFFICHAGE ======================== */
@@ -162,32 +171,32 @@ const eqDiv = document.getElementById("enonce");
 
 function calculerBonneReponse(){
 
-  // pente et ordonnée à l'origine de d1
-m1 = { num: -a, den: b };
-p1 = { num: -c, den: b };
+  // d1 : ax + by + c = 0
+  m1 = { num: -a, den: b };
+  p1 = { num: -c, den: b };
 
+  // d2 : y = mx + p
+  const m2 = mFrac;
+  const p2 = pFrac;
 
-  // pente et ordonnée de d2
-const m2 = mFrac;
-const p2 = { num: p, den: 1 };
-  
   if (fractionsEgales(m1, m2) && fractionsEgales(p1, p2)) {
-  bonneReponse = "confondue";
+    bonneReponse = "confondue";
     explication = "Les deux droites ont la même pente et la même ordonnée à l’origine.";
   }
-else if (fractionsEgales(m1, m2)) {
-  bonneReponse = "paralleles";
+  else if (fractionsEgales(m1, m2)) {
+    bonneReponse = "paralleles";
     explication = "Les pentes sont égales mais les ordonnées à l’origine sont différentes.";
   }
-else if (m1.num * m2.num === -m1.den * m2.den) {
-  bonneReponse = "perpendiculaires";
+  else if (m1.num * m2.num === -m1.den * m2.den) {
+    bonneReponse = "perpendiculaires";
     explication = "Les pentes sont opposées inverses.";
   }
-else {
-  bonneReponse = "secantes";
+  else {
+    bonneReponse = "secantes";
     explication = "Les pentes sont différentes et non opposées inverses.";
   }
 }
+
 
   /* ====================== CORRECTION DETAILLEE ====================== */
 
@@ -203,7 +212,10 @@ function corriger(){
   \\(\\Rightarrow y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
 
   <u>Étape 2</u> : on lit les pentes<br>
-\\(m_1 = -\\frac{${a}}{${b}}\\), \\(m_2 = ${fractionLaTeX(mFrac.num, mFrac.den)}\\)
+\\(m_1 = -\\frac{${a}}{${b}}\\), 
+\\(m_2 = ${fractionLaTeX(mFrac.num, mFrac.den)}\\)<br>
+\\(p_1 = -\\frac{${c}}{${b}}\\), 
+\\(p_2 = ${fractionLaTeX(pFrac.num, pFrac.den)}\\)
 
   <u>Conclusion</u> : ${explication}
   `;
