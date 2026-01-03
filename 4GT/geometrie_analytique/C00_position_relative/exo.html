@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+  <div class="equation-box" id="enonce"></div>
+
+  <!-- QCM -->
+  <div id="qcm" class="qcm-grid">
+    <div class="qcm-card" onclick="verifier('confondue',this)">Parallèles confondues</div>
+    <div class="qcm-card" onclick="verifier('paralleles',this)">Parallèles distinctes</div>
+    <div class="qcm-card" onclick="verifier('perpendiculaires',this)">Perpendiculaires</div>
+    <div class="qcm-card" onclick="verifier('secantes',this)">Sécantes non perpendiculaires</div>
+  </div>
+
+  <div class="center-button">
+    <button onclick="generer()">Nouvel exercice</button>
+  </div>
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_geo_analytique.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+/* ====================== MATHJAX ====================== */
+function renderMath(el){
+  MathJax.typesetClear([el]);
+  MathJax.typesetPromise([el]);
+}
+
+/* ====================== OUTILS ====================== */
+function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function nonZero(){ let x; do{x=rand(-6,6);}while(x===0); return x; }
+
+/* ====================== VARIABLES ====================== */
+let m1,p1,m2,p2;
+let bonneReponse="";
+let explication="";
+
+/* ====================== GENERATION ====================== */
+function generer(){
+
+  document.querySelectorAll('.qcm-card').forEach(c=>{
+    c.classList.remove('correct','incorrect');
+    c.style.pointerEvents="auto";
+  });
+  document.getElementById("feedback").innerHTML="";
+
+  const type = rand(1,4);
+
+  if(type===1){
+    m1=nonZero(); p1=rand(-5,5);
+    m2=m1; p2=p1;
+    bonneReponse="confondue";
+    explication="Les pentes sont égales \\(m_1=m_2\\) et les ordonnées à l'origine aussi \\(p_1=p_2\\).";
+  }
+
+  if(type===2){
+    m1=nonZero(); p1=rand(-5,5);
+    m2=m1; do{p2=rand(-5,5);}while(p2===p1);
+    bonneReponse="paralleles";
+    explication="Les pentes sont égales \\(m_1=m_2\\) mais \\(p_1 \\neq p_2\\).";
+  }
+
+  if(type===3){
+    m1=nonZero();
+    m2=-1/m1;
+    p1=rand(-5,5); p2=rand(-5,5);
+    bonneReponse="perpendiculaires";
+    explication="Les pentes vérifient \\(m_1=-\\dfrac{1}{m_2}\\).";
+  }
+
+  if(type===4){
+    m1=nonZero(); m2=nonZero();
+    while(m2===m1 || m2===-1/m1){ m2=nonZero(); }
+    p1=rand(-5,5); p2=rand(-5,5);
+    bonneReponse="secantes";
+    explication="Les pentes sont différentes et non opposées inverses.";
+  }
+
+  const enonce = document.getElementById("enonce");
+  enonce.innerHTML = `
+  La droite \\(d_1\\) a pour équation :
+  \\[
+    ${m1}x ${p1>=0?'+':''} ${p1} = y
+  \\]
+  La droite \\(d_2\\) a pour équation :
+  \\[
+    ${m2}x ${p2>=0?'+':''} ${p2} = y
+  \\]
+  Détermine la position relative de ces deux droites.
+  `;
+  renderMath(enonce);
+}
+
+/* ====================== VERIFICATION ====================== */
+function verifier(rep,el){
+  document.querySelectorAll('.qcm-card').forEach(c=>c.style.pointerEvents="none");
+
+  if(rep===bonneReponse){
+    el.classList.add('correct');
+  }else{
+    el.classList.add('incorrect');
+    document.querySelectorAll('.qcm-card').forEach(c=>{
+      if(c.textContent.toLowerCase().includes(bonneReponse))
+        c.classList.add('correct');
+    });
+  }
+
+  const f=document.getElementById("feedback");
+  f.innerHTML=`<strong>Justification :</strong> ${explication}`;
+  renderMath(f);
+}
+
+window.onload=generer;
+</script>
+
+<script src="../../../js/protection.js"></script>
+</body>
+</html>
