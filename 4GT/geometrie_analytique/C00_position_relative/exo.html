@@ -192,10 +192,8 @@ eq2Texte = `y = ${fractionLaTeX(mFrac.num, mFrac.den)}x${pTexte}`;
   /* ==================== AFFICHAGE ======================== */
 const eqDiv = document.getElementById("enonce");
   eqDiv.innerHTML = `
-    La droite \\(d_1\\) a pour équation :
-    \\[ ${eq1Texte} \\]<br>
-    La droite \\(d_2\\) a pour équation :
-    \\[ ${eq2Texte} \\]<br>
+    La droite \\(d_1\\) a pour équation : \\[ ${eq1Texte} \\]<br>
+    La droite \\(d_2\\) a pour équation : \\[ ${eq2Texte} \\]<br>
     Détermine la position relative de ces deux droites.
   `;
   renderMath(eqDiv);
