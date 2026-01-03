@@ -200,6 +200,24 @@ function fractionAB(val){
   return { a: val, b: 1 };
 }
 
+function trouverDeuxPointsEntiers(m, p){
+  const points = [];
+
+  for (let x = xmin; x <= xmax; x++) {
+    const y = m * x + p;
+
+    if (Number.isInteger(y) && y >= ymin && y <= ymax) {
+      points.push({ x, y });
+    }
+  }
+
+  // On prend deux points distincts
+  if (points.length >= 2) {
+    return [points[0], points[1]];
+  }
+
+  return null; // sécurité
+}
   
 function dessinerPoint(x, y){
   const cx = xToPx(x);
@@ -251,36 +269,46 @@ ecrireTexteCentreSegment(
 function afficherPointsCorrection(){
 
   // ----- DROITES y = mx ou y = mx + p -----
-  if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
+if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
 
-const { a, b } = fractionAB(m);
+  const pts = trouverDeuxPointsEntiers(m, p);
+  if (!pts) return;
 
-const xA = 0;
-const yA = p || 0;
+  const A = pts[0];
+  const B = pts[1];
 
-const xB = b;
-const yB = yA + a;
+  // points
+  dessinerPoint(A.x, A.y);
+  dessinerPoint(B.x, B.y);
 
+  // segments pédagogiques
+  tracerSegmentPointille(A.x, A.y, B.x, A.y); // horizontal
+  tracerSegmentPointille(B.x, A.y, B.x, B.y); // vertical
 
+  const dx = B.x - A.x;
+  const dy = B.y - A.y;
 
-    // points
-    dessinerPoint(xA, yA);
-    dessinerPoint(xB, yB);
+  // textes Δx et Δy
+  ecrireTexteCentreSegment(
+    A.x, A.y,
+    B.x, A.y,
+    `Δx = ${dx}`,
+    0, -0.3
+  );
 
-    // segments pédagogiques
-    tracerSegmentPointille(xA, yA, xB, yA); // horizontal
-    tracerSegmentPointille(xB, yA, xB, yB); // vertical
-    // Texte de la pente
-const dy = m;
-const dx = 1;
+  ecrireTexteCentreSegment(
+    B.x, A.y,
+    B.x, B.y,
+    `Δy = ${dy}`,
+    0.2, 0
+  );
 
-// Position du texte (près des segments)
-ecrireTexteSVG(
-  xB + 0.3,
-  (yA + yB) / 2,
-  `m = Δy/Δx = ${a}/${b}`
-);
-
+  // texte de la pente
+  ecrireTexteSVG(
+    B.x + 0.3,
+    (A.y + B.y) / 2,
+    `m = Δy/Δx = ${dy}/${dx}`
+  );
 
     // Texte pour p (ordonnée à l'origine)
 if (typeof p !== "undefined") {
