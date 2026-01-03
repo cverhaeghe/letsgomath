@@ -367,6 +367,15 @@ const signeM = dy * dx < 0 ? "-" : "";
 const absDy = Math.abs(dy);
 const absDx = Math.abs(dx);
 
+let latexM;
+if (absDx === 1) {
+  // cas m = ±entier
+  latexM = `m = ${signeM}${absDy}`;
+} else {
+  // cas fraction
+  latexM = `m = ${signeM}\\frac{${absDy}}{${absDx}}`;
+}
+
     ecrireLatexSVG(
       (A.x + B.x) / 2,
       A.y + 0.2,
@@ -382,7 +391,7 @@ const absDx = Math.abs(dx);
 ecrireLatexSVG(
   3.5,
   4.3,
-  `m = \\frac{\\Delta y}{\\Delta x} = ${signeM}\\frac{${absDy}}{${absDx}}`
+  `m = \\frac{\\Delta y}{\\Delta x} = latexM`
 );
 
 
