@@ -31,12 +31,26 @@
   <div class="equation-box" id="enonce"></div>
 
   <!-- QCM -->
-  <div id="qcm" class="qcm-grid">
-    <div class="qcm-card" onclick="verifier('confondue',this)">Parallèles confondues</div>
-    <div class="qcm-card" onclick="verifier('paralleles',this)">Parallèles distinctes</div>
-    <div class="qcm-card" onclick="verifier('perpendiculaires',this)">Perpendiculaires</div>
-    <div class="qcm-card" onclick="verifier('secantes',this)">Sécantes non perpendiculaires</div>
-  </div>
+<div class="qcm-card" data-reponse="confondue"
+     onclick="verifier('confondue',this)">
+  Parallèles confondues
+</div>
+
+<div class="qcm-card" data-reponse="paralleles"
+     onclick="verifier('paralleles',this)">
+  Parallèles distinctes
+</div>
+
+<div class="qcm-card" data-reponse="perpendiculaires"
+     onclick="verifier('perpendiculaires',this)">
+  Perpendiculaires
+</div>
+
+<div class="qcm-card" data-reponse="secantes"
+     onclick="verifier('secantes',this)">
+  Sécantes non perpendiculaires
+</div>
+
 
   <div class="center-button">
     <button onclick="generer()">Nouvel exercice</button>
@@ -224,21 +238,23 @@ function corriger(){
 
   
 /* ====================== VERIFICATION ====================== */
-function verifier(rep,el){
-  document.querySelectorAll('.qcm-card').forEach(c=>c.style.pointerEvents="none");
+function verifier(rep, el){
+  document.querySelectorAll('.qcm-card')
+    .forEach(c => c.style.pointerEvents = "none");
 
-  if(rep===bonneReponse){
+  if(rep === bonneReponse){
     el.classList.add('correct');
-  }else{
+  } else {
     el.classList.add('incorrect');
-    document.querySelectorAll('.qcm-card').forEach(c=>{
-      if(c.textContent.toLowerCase().includes(bonneReponse))
+
+    document.querySelectorAll('.qcm-card').forEach(c => {
+      if(c.dataset.reponse === bonneReponse){
         c.classList.add('correct');
+      }
     });
   }
-
-
 }
+
 
 window.onload = genererEquation;
 </script>
