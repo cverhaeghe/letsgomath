@@ -89,16 +89,18 @@ function randFraction(liste){
   const signe = Math.random() < 0.5 ? 1 : -1;
   return signe * frac;
 }
-
-  const FRACTIONS_M = [
-  1/2, 1/3, 1/4,
-  2/3,
-  3/2, 3/4
+const M_POSSIBLES = [
+  -3, -2, -1, 1, 2, 3,
+  1/2, 1/3, 1/4, 2/3, 3/2, 3/4,
+  -1/2, -1/3, -1/4, -2/3, -3/2, -3/4
 ];
 
-const FRACTIONS_P = [
-  1/2, 3/2, 5/2, 7/2
+const P_POSSIBLES = [
+  -4, -3, -2, -1, 1, 2, 3, 4,
+  1/2, 3/2, 5/2, 7/2,
+  -1/2, -3/2, -5/2, -7/2
 ];
+
 
 function nettoyer(s){
   return s.toLowerCase()
@@ -106,6 +108,11 @@ function nettoyer(s){
           .replace(/−/g,"-");
 }
 
+  function randDansListe(liste){
+  return liste[Math.floor(Math.random() * liste.length)];
+}
+
+  
 // Pour la comparaison (texte élève)
 function ecrireMxCanonique(m){
   if (m === 1) return "x";
@@ -316,14 +323,14 @@ function genererExercice(){
   const r=Math.random();
 
 if(r < 0.2){
-  m = randNonZero(-3,3);
+  m = randDansListe(M_POSSIBLES);
   solutionCanonique = `y=${ecrireMxCanonique(m)}`;
   solutionLatex     = `y=${ecrireMxLatex(m)}`;
   tracer("y=mx");
 }
 else if(r < 0.6){
-  m = randFraction(FRACTIONS_M);
-  p = randFraction(FRACTIONS_P);
+  m = randDansListe(M_POSSIBLES);
+  p = randDansListe(P_POSSIBLES);
 
   solutionCanonique =
     `y=${ecrireMxCanonique(m)}${ecrirePCanonique(p)}`;
@@ -333,8 +340,6 @@ else if(r < 0.6){
 
   tracer("y=mx+p");
 }
-
-
   else if(r<0.8){
     k=randInt(-4,4);
     solutionCanonique=`x=${k}`;
