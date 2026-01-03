@@ -157,8 +157,6 @@ function ecrirePCanonique(p){
     if (abs === 5/2) return `${signe}5/2`;
     if (abs === 7/2) return `${signe}7/2`;
   }
-
-  return p > 0 ? `+${p}` : p;
 }
 
 function ecrirePLatex(p){
@@ -317,12 +315,12 @@ function genererExercice(){
   dessinerRepere();
   const r=Math.random();
 
-  if(r<0.2){
-    m=randNonZero(-3,3);
-    solutionCanonique = `y=${ecrireMx(m)}`;
-    solutionLatex     = `y=${ecrireMx(m)}`;
-    tracer("y=mx");
-  }
+if(r < 0.2){
+  m = randNonZero(-3,3);
+  solutionCanonique = `y=${ecrireMxCanonique(m)}`;
+  solutionLatex     = `y=${ecrireMxLatex(m)}`;
+  tracer("y=mx");
+}
 else if(r < 0.6){
   m = randFraction(FRACTIONS_M);
   p = randFraction(FRACTIONS_P);
@@ -378,6 +376,8 @@ function verifier(){
 
 
 window.onload = genererExercice;
+console.log("JS chargé sans erreur");
+
 </script>
 
 <script src="../../../js/protection.js"></script>
