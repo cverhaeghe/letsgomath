@@ -349,7 +349,7 @@ function afficherPointsCorrection(){
   // ===== 1) y = mx ou y = mx + p =====
   if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
 
-    const pts = trouverDeuxPointsEntiers(m, p || 0);
+    const pts = trouverDeuxPointsEntiers(m, p);
     if (!pts) return;
 
     const A = pts[0];
@@ -579,12 +579,14 @@ function genererExercice(){
   dessinerRepere();
   const r=Math.random();
 
-if(r < 0.2){
+if (r < 0.2) {
   m = randDansListe(M_POSSIBLES);
+  p = 0; // 🔥 OBLIGATOIRE
   solutionCanonique = `y=${ecrireMxCanonique(m)}`;
   solutionLatex     = `y=${ecrireMxLatex(m)}`;
   tracer("y=mx");
 }
+
 else if (r < 0.6){
   const droite = genererDroiteAvecPointsEntiers();
   m = droite.m;
