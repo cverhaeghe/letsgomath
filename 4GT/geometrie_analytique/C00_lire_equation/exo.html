@@ -298,36 +298,35 @@ if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
 
   const dx = B.x - A.x;
   const dy = B.y - A.y;
-
-  // textes Δx et Δy
+  
+// Δx (LaTeX)
 ecrireLatexSVG(
   (A.x + B.x)/2,
   A.y - 0.7,
   `\\Delta x = ${dx}`
 );
 
+// Δy (LaTeX)
 ecrireLatexSVG(
   B.x + 0.7,
   (A.y + B.y)/2,
   `\\Delta y = ${dy}`
 );
 
-
-  // texte de la pente
+// m (LaTeX, position fixe)
 ecrireLatexSVG(
   4.5,
   1.5,
   `m = \\frac{\\Delta y}{\\Delta x} = \\frac{${dy}}{${dx}}`
 );
 
-
-
-// texte de p à droite du point (alignée horizontalement)
+// p (LaTeX)
 ecrireLatexSVG(
   0.7,
   p,
   `p = ${ecrireFractionTexte(p)}`
 );
+
 
 
 
