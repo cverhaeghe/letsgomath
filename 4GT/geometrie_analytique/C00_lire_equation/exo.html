@@ -370,10 +370,10 @@ const absDx = Math.abs(dx);
 let latexM;
 if (absDx === 1) {
   // cas m = ±entier
-  latexM = `m = ${signeM}${absDy}`;
+  latexM = `${signeM}${absDy}`;
 } else {
   // cas fraction
-  latexM = `m = ${signeM}\\frac{${absDy}}{${absDx}}`;
+  latexM = `${signeM}\\frac{${absDy}}{${absDx}}`;
 }
 
     ecrireLatexSVG(
@@ -391,7 +391,7 @@ if (absDx === 1) {
 ecrireLatexSVG(
   3.5,
   4.3,
-  `m = \\frac{\\Delta y}{\\Delta x} = latexM`
+  `m = \\frac{\\Delta y}{\\Delta x} = ${latexM}`
 );
 
 
