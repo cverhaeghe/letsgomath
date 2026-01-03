@@ -104,18 +104,18 @@ function genererEquation(){
   eq2Texte = `y = ${m}x ${p>0?'+':''} ${p}`
     .replace(/\+\s-/g,'- ');
 
-  /* ===== AFFICHAGE ===== */
+  /* ==================== AFFICHAGE ======================== */
 const eqDiv = document.getElementById("enonce");
   eqDiv.innerHTML = `
-    La droite \\(d_1\\) a pour équation :<br>
+    La droite \\(d_1\\) a pour équation :
     \\[ ${eq1Texte} \\]<br>
-    La droite \\(d_2\\) a pour équation :<br>
+    La droite \\(d_2\\) a pour équation :
     \\[ ${eq2Texte} \\]<br>
     Détermine la position relative de ces deux droites.
   `;
   renderMath(eqDiv);
 
-  /* ===== Préparation correction ===== */
+  /* ============== Préparation correction ================ */
   calculerBonneReponse();
 }
 
