@@ -58,7 +58,7 @@
 
 
   <div class="center-button">
-      <button onclick="genererEquation()">Nouvel exercice</button>
+        <button onclick="genererEquation()">Nouvel exercice</button>
   </div>
 
   <p id="feedback" class="feedback"></p>
@@ -305,12 +305,11 @@ on lit directement :
   m_1 = ${fractionLaTeX(m1Red.num, m1Red.den)}, \quad
   p_1 = ${fractionLaTeX(p1Red.num, p1Red.den)}
 \\]<br><br>
-`;
 
-texte += `
 <u>Étape 3 : comparaison</u><br>
 ${explication}
 `;
+
 
 
   f.innerHTML = texte;
