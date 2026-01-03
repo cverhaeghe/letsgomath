@@ -395,7 +395,7 @@ function afficherPointsCorrection(){
   // ===== 2) y = k =====
   else if (solutionCanonique.startsWith("y=")) {
 
-    const xs = [-2, 0, 2];
+    const xs = [-3, 0, 2];
     xs.forEach(x => {
       dessinerPoint(x, k);
 ecrireCoordonneesInclinees(
@@ -413,7 +413,7 @@ ecrireCoordonneesInclinees(
   // ===== 3) x = k =====
 else if (solutionCanonique.startsWith("x=")) {
 
-  const ys = [-2, 0, 2];
+  const ys = [-3, 0, 2];
 
   ys.forEach(y => {
     dessinerPoint(k, y);
