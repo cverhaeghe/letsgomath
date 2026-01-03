@@ -61,13 +61,14 @@ function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
 function nonZero(){ let x; do{x=rand(-6,6);}while(x===0); return x; }
 
 /* ====================== VARIABLES ====================== */
-let m1,p1,m2,p2;
-let bonneReponse="";
-let explication="";
+let a,b,c,p;
+let m1,p1;
+let mFrac;
+let bonneReponse="", explication="";
+let eq1Texte="", eq2Texte="";
   
 /* ====================== CONSTANTES ====================== */
-const m1 = { num: -a, den: b };
-const m2 = mFrac;
+
 
   const ENSEMBLE_M = [
   { num: 0, den: 1 },
@@ -136,7 +137,7 @@ function genererEquation(){
     .replace(/\+\s-/g,'- ');
 
   /* ===== DROITE d2 : y = mx + p ===== */
-  const mFrac = tirerDansEnsembleM();
+  mFrac = tirerDansEnsembleM();
   p = randCoeffNZ10();
 
 eq2Texte = `y = ${fractionLaTeX(mFrac.num, mFrac.den)}x ${p>0?'+':''} ${p}`
@@ -163,11 +164,12 @@ const eqDiv = document.getElementById("enonce");
 function calculerBonneReponse(){
 
   // pente et ordonnée à l'origine de d1
-  m1 = -a / b;
-  p1 = -c / b;
+m1 = { num: -a, den: b };
+p1 = { num: -c, den: b };
+
 
   // pente et ordonnée de d2
-  const m2 = m;
+  const m2 = mFrac;
   const p2 = p;
   
   if (fractionsEgales(m1, m2) && fractionsEgales(p1, p2)) {
