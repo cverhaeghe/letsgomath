@@ -311,24 +311,27 @@ if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
 
   // textes Δx et Δy
 ecrireLatexSurGraph(
-  (A.x + B.x)/2,
-  A.y - 0.4,
+  (A.x + B.x) / 2,   // centré horizontalement
+  A.y - 0.6,         // en bas du segment
   `\\Delta x = ${dx}`
 );
 
+
 ecrireLatexSurGraph(
-  B.x + 0.4,
-  (A.y + B.y)/2,
+  B.x + 0.6,              // décalage suffisant à droite du segment
+  (A.y + B.y) / 2,        // centré verticalement sur le segment
   `\\Delta y = ${dy}`
 );
 
 
+
   // texte de la pente
 ecrireLatexSurGraph(
-  B.x + 0.5,
-  (A.y + B.y) / 2,
+  4.5,
+  1.5,
   `m = \\frac{\\Delta y}{\\Delta x} = \\frac{${dy}}{${dx}}`
 );
+
 
 
 // Écriture de p à droite du point (alignée horizontalement)
