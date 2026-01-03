@@ -58,7 +58,7 @@
 
 
   <div class="center-button">
-    <button onclick="generer()">Nouvel exercice</button>
+      <button onclick="genererEquation()">Nouvel exercice</button>
   </div>
 
   <p id="feedback" class="feedback"></p>
@@ -240,6 +240,9 @@ function corriger(){
   const f = document.getElementById("feedback");
   f.style.color = "#000";
 
+  const m1Red = fractionIrreductible(-a, b);
+  const p1Red = fractionIrreductible(-c, b);
+  
   let texte = `
   📘 <strong>Correction détaillée</strong><br><br>
 
@@ -251,9 +254,6 @@ function corriger(){
 
   /* ===== CAS b > 0 ===== */
 if (b > 0) {
-
-const m1Red = fractionIrreductible(-a, b);
-const p1Red = fractionIrreductible(-c, b);
 
 texte += `
 \\[
@@ -274,9 +274,6 @@ y &= ${fractionLaTeX(m1Red.num, m1Red.den)}x
 /* ===== CAS b < 0 ===== */
 else {
 
-  const m1Red = fractionIrreductible(a, -b);
-  const p1Red = fractionIrreductible(c, -b);
-
 texte += `
 \\[
 \\begin{aligned}
@@ -295,9 +292,6 @@ y &= ${fractionLaTeX(m1Red.num, m1Red.den)}x
 
   /* ===== Étape 2 : lecture des coefficients ===== */
   
-const m1Red = fractionIrreductible(-a, b);
-const p1Red = fractionIrreductible(-c, b);
-
 texte += `
 <u>Étape 2 : identification des coefficients</u><br>
 À partir de l’équation réduite :
@@ -313,10 +307,11 @@ on lit directement :
 \\]<br><br>
 `;
 
+texte += `
+<u>Étape 3 : comparaison</u><br>
+${explication}
+`;
 
-  <u>Étape 3 : comparaison</u><br>
-  ${explication}
-  `;
 
   f.innerHTML = texte;
   renderMath(f);
