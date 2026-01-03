@@ -103,7 +103,35 @@ const P_POSSIBLES = [
   -1/2, -3/2, -5/2, -7/2
 ];
 
+function genererDroiteAvecPointsEntiers(){
+  let essais = 0;
 
+  while (essais < 100) {
+    essais++;
+
+    const mTest = randDansListe(M_POSSIBLES);
+
+    // on choisit un point entier A
+    const xA = randInt(-4, 4);
+    const yA = randInt(-4, 4);
+
+    const pTest = yA - mTest * xA;
+
+    // p doit être dans les valeurs autorisées
+    if (!P_POSSIBLES.includes(pTest)) continue;
+
+    // existe-t-il un deuxième point entier ?
+    const pts = trouverDeuxPointsEntiers(mTest, pTest);
+    if (pts && pts.length >= 2) {
+      return { m: mTest, p: pTest };
+    }
+  }
+
+  // sécurité absolue (ne devrait jamais arriver)
+  return { m: 1, p: 0 };
+}
+
+  
 function nettoyer(s){
   return s.toLowerCase()
           .replace(/\s+/g,"")
@@ -530,9 +558,10 @@ if(r < 0.2){
   solutionLatex     = `y=${ecrireMxLatex(m)}`;
   tracer("y=mx");
 }
-else if(r < 0.6){
-  m = randDansListe(M_POSSIBLES);
-  p = randDansListe(P_POSSIBLES);
+else if (r < 0.6){
+  const droite = genererDroiteAvecPointsEntiers();
+  m = droite.m;
+  p = droite.p;
 
   solutionCanonique =
     `y=${ecrireMxCanonique(m)}${ecrirePCanonique(p)}`;
