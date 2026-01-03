@@ -85,6 +85,15 @@ function randNonZero(min,max){
   return x;
 }
 
+  function coordAvecK(colonneFixe, valeurFixe, autre) {
+  // colonneFixe = "x" ou "y"
+  if (colonneFixe === "x") {
+    return `(<tspan fill="#FFA372">${valeurFixe}</tspan>; ${autre})`;
+  } else {
+    return `(${autre}; <tspan fill="#FFA372">${valeurFixe}</tspan>)`;
+  }
+}
+
   // Génère une fraction parmi une liste, avec signe ±
 function randFraction(liste){
   const frac = liste[Math.floor(Math.random() * liste.length)];
@@ -261,7 +270,7 @@ function fractionAB(val){
     <text
       x="${xToPx(x + dx)}"
       y="${yToPx(y + dy)}"
-      font-size="14"
+      font-size="18"
       fill="#0b3c5d"
       text-anchor="start"
       dominant-baseline="middle"
@@ -271,12 +280,13 @@ function fractionAB(val){
   `;
 }
 
+
 function ecrireCoordonneesHorizontales(x, y, texte, dx = 0.2, dy = 0) {
   svg.innerHTML += `
     <text
       x="${xToPx(x + dx)}"
       y="${yToPx(y + dy)}"
-      font-size="14"
+      font-size="18"
       fill="#0b3c5d"
       text-anchor="start"
       dominant-baseline="middle">
@@ -284,6 +294,7 @@ function ecrireCoordonneesHorizontales(x, y, texte, dx = 0.2, dy = 0) {
     </text>
   `;
 }
+
   
 function trouverDeuxPointsEntiers(m, p){
   const points = [];
@@ -387,14 +398,15 @@ function afficherPointsCorrection(){
     const xs = [-2, 0, 2];
     xs.forEach(x => {
       dessinerPoint(x, k);
-      ecrireCoordonneesInclinees(
-        x,
-        k,
-        `(${x}; ${k})`,
-        -30,
-        0.15,
-        0.15
-      );
+ecrireCoordonneesInclinees(
+  x,
+  k,
+  coordAvecK("y", k, x),
+  -30,
+  0.15,
+  0.15
+);
+
     });
   }
 
@@ -405,13 +417,14 @@ else if (solutionCanonique.startsWith("x=")) {
 
   ys.forEach(y => {
     dessinerPoint(k, y);
-    ecrireCoordonneesHorizontales(
-      k,
-      y,
-      `(${k}; ${y})`,
-      0.2,   // léger décalage à droite de la droite
-      0
-    );
+ecrireCoordonneesHorizontales(
+  k,
+  y,
+  coordAvecK("x", k, y),
+  0.2,
+  0
+);
+
   });
 }
 }
