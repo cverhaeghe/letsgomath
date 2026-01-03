@@ -185,26 +185,31 @@ function ecrirePLatex(p){
   if (abs === 7/2) return `${signe}\\frac{7}{2}`;
 }
 
+function ecrireLatexSVG(x, y, latex, largeur = 120){
+  const fx = xToPx(x) - largeur / 2;
+  const fy = yToPx(y) - 20;
 
-  function ecrireLatexSurGraph(x, y, latex){
-  const container = document.getElementById("graph-container");
+  const fo = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+  fo.setAttribute("x", fx);
+  fo.setAttribute("y", fy);
+  fo.setAttribute("width", largeur);
+  fo.setAttribute("height", 40);
 
   const div = document.createElement("div");
-  div.style.position = "absolute";
-  div.style.left = xToPx(x) + "px";
-  div.style.top  = yToPx(y) + "px";
-  div.style.transform = "translate(-50%, -50%)";
-  div.style.color = "#0b3c5d";
+  div.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
   div.style.fontSize = "16px";
-  div.style.pointerEvents = "none";
+  div.style.color = "#0b3c5d";
+  div.style.textAlign = "center";
 
   div.innerHTML = `\\(${latex}\\)`;
-  container.appendChild(div);
+
+  fo.appendChild(div);
+  svg.appendChild(fo);
 
   MathJax.typesetPromise([div]);
 }
 
-
+  
 function fractionAB(val){
   if (Number.isInteger(val)) {
     return { a: val, b: 1 };
@@ -295,23 +300,22 @@ if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
   const dy = B.y - A.y;
 
   // textes Δx et Δy
-ecrireLatexSurGraph(
-  (A.x + B.x) / 2,   // centré horizontalement
-  A.y - 0.6,         // en bas du segment
+ecrireLatexSVG(
+  (A.x + B.x)/2,
+  A.y - 0.7,
   `\\Delta x = ${dx}`
 );
 
-
-ecrireLatexSurGraph(
-  B.x + 0.6,              // décalage suffisant à droite du segment
-  (A.y + B.y) / 2,        // centré verticalement sur le segment
+ecrireTexteSVG(
+ecrireLatexSVG(
+  B.x + 0.7,
+  (A.y + B.y)/2,
   `\\Delta y = ${dy}`
 );
 
 
-
   // texte de la pente
-ecrireLatexSurGraph(
+ecrireLatexSVG(
   4.5,
   1.5,
   `m = \\frac{\\Delta y}{\\Delta x} = \\frac{${dy}}{${dx}}`
@@ -319,12 +323,14 @@ ecrireLatexSurGraph(
 
 
 
-// Écriture de p à droite du point (alignée horizontalement)
-ecrireLatexSurGraph(
-  0.4,   // léger décalage vers la droite
+// texte de p à droite du point (alignée horizontalement)
+ecrireLatexSVG(
+  0.7,
   p,
   `p = ${ecrireFractionTexte(p)}`
 );
+
+
 
 }
 
@@ -373,13 +379,18 @@ ecrireLatexSurGraph(
   
 function ecrireTexteSVG(x, y, texte){
   svg.innerHTML += `
-    <text x="${xToPx(x)}" y="${yToPx(y)}"
-          font-size="14"
-          fill="#0b3c5d">
+    <text
+      x="${xToPx(x)}"
+      y="${yToPx(y)}"
+      font-size="16"
+      fill="#0b3c5d"
+      text-anchor="middle"
+      dominant-baseline="middle">
       ${texte}
     </text>
   `;
 }
+
   
 function afficherCorrection(){
   const fb = document.getElementById("feedback");
