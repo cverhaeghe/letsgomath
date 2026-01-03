@@ -218,23 +218,67 @@ function corriger(){
   const f = document.getElementById("feedback");
   f.style.color = "#000";
 
-  f.innerHTML = `
+  let texte = `
   📘 <strong>Correction détaillée</strong><br><br>
 
-  <u>Étape 1</u> : on réduit l’équation de \\(d_1\\)<br>
-  \\(${eq1Texte}\\) <br>
-  \\(\\Rightarrow y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
-
-  <u>Étape 2</u> : on lit les pentes<br>
-\\(m_1 = -\\frac{${a}}{${b}}\\), 
-\\(m_2 = ${fractionLaTeX(mFrac.num, mFrac.den)}\\)<br>
-\\(p_1 = -\\frac{${c}}{${b}}\\), 
-\\(p_2 = ${fractionLaTeX(pFrac.num, pFrac.den)}\\)
-
-  <u>Conclusion</u> : ${explication}
+  <u>Étape 1 : réduction de l’équation de \\(d_1\\)</u><br>
+  On part de :<br>
+  \\[
+    ${eq1Texte}
+  \\]<br>
   `;
+
+  /* ===== CAS b > 0 ===== */
+  if (b > 0) {
+
+    texte += `
+    On isole \\(${b}y\\) à gauche :<br>
+    \\[
+      ${b}y = -${a}x - ${c}
+    \\]<br>
+
+    On divise tout par ${b} :<br>
+    \\[
+      y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}
+    \\]<br><br>
+    `;
+  }
+
+  /* ===== CAS b < 0 ===== */
+  else {
+
+    texte += `
+    Comme \\(${b}<0\\), on passe \\(${b}y\\) à droite :<br>
+    \\[
+      ${a}x + ${c} = ${Math.abs(b)}y
+    \\]<br>
+
+    On divise tout par ${-b} :<br>
+    \\[
+      y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}
+    \\]<br><br>
+    `;
+  }
+
+  /* ===== Étape 2 : lecture des coefficients ===== */
+  texte += `
+  <u>Étape 2 : identification des coefficients</u><br>
+  \\[
+    m_1 = -\\frac{${a}}{${b}}, \quad p_1 = -\\frac{${c}}{${b}}
+  \\]<br>
+  \\[
+    m_2 = ${fractionLaTeX(mFrac.num, mFrac.den)}, \quad
+    p_2 = ${fractionLaTeX(pFrac.num, pFrac.den)}
+  \\]<br><br>
+
+  <u>Étape 3 : comparaison</u><br>
+  ${explication}
+  `;
+
+  f.innerHTML = texte;
   renderMath(f);
 }
+
 
   
 /* ====================== VERIFICATION ====================== */
@@ -253,6 +297,11 @@ function verifier(rep, el){
       }
     });
   }
+
+    // affichage automatique de la correction
+  corriger();
+}
+
 }
 
 
