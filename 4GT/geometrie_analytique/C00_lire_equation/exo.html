@@ -394,16 +394,16 @@ ecrireLatexSVG(
   `m = \\frac{\\Delta y}{\\Delta x} = ${latexM}`
 );
 
+// Afficher p UNIQUEMENT pour y = mx + p
+if (solutionCanonique.includes("+")) {
+  dessinerPoint(0, p);
+  ecrireLatexSVG(
+    1.1,
+    p - 0.2,
+    `p = ${ecrireFractionLatex(p)}`
+  );
+}
 
-
-    if (typeof p !== "undefined") {
-      dessinerPoint(0, p);
-      ecrireLatexSVG(
-        1.1,
-        p - 0.2,
-        `p = ${ecrireFractionLatex(p)}`
-      );
-    }
   }
 
   // ===== 2) y = k =====
