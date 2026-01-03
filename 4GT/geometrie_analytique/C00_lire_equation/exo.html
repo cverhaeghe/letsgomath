@@ -172,16 +172,19 @@ function ecrirePCanonique(p){
 
 
 function ecrirePLatex(p){
+  if (Number.isInteger(p)) {
+    return p > 0 ? `+${p}` : `${p}`;
+  }
+
   const signe = p < 0 ? "-" : "+";
   const abs = Math.abs(p);
 
-  if (!Number.isInteger(p)) {
-    if (abs === 1/2) return `${signe}\\frac{1}{2}`;
-    if (abs === 3/2) return `${signe}\\frac{3}{2}`;
-    if (abs === 5/2) return `${signe}\\frac{5}{2}`;
-    if (abs === 7/2) return `${signe}\\frac{7}{2}`;
-  }
+  if (abs === 1/2) return `${signe}\\frac{1}{2}`;
+  if (abs === 3/2) return `${signe}\\frac{3}{2}`;
+  if (abs === 5/2) return `${signe}\\frac{5}{2}`;
+  if (abs === 7/2) return `${signe}\\frac{7}{2}`;
 }
+
 
   function ecrireLatexSurGraph(x, y, latex){
   const container = document.getElementById("graph-container");
@@ -258,32 +261,14 @@ function tracerSegmentPointille(x1, y1, x2, y2){
   `;
 }
 
-  function ecrireTexteCentreSegment(x1, y1, x2, y2, texte, dx = 0, dy = 0){
+
+function ecrireTexteCentreSegment(x1, y1, x2, y2, texte, dx = 0, dy = 0){
   const xm = (x1 + x2) / 2 + dx;
   const ym = (y1 + y2) / 2 + dy;
-
   ecrireTexteSVG(xm, ym, texte);
-    // Segments pédagogiques
-tracerSegmentPointille(xA, yA, xB, yA); // horizontal (Δx)
-tracerSegmentPointille(xB, yA, xB, yB); // vertical   (Δy)
-
-// Texte Δx (au milieu du segment horizontal)
-ecrireTexteCentreSegment(
-  xA, yA,
-  xB, yA,
-  `Δx = ${b}`,
-  0, -0.3   // léger décalage vers le bas
-);
-
-// Texte Δy (au milieu du segment vertical)
-ecrireTexteCentreSegment(
-  xB, yA,
-  xB, yB,
-  `Δy = ${a}`,
-  0.2, 0    // léger décalage vers la droite
-);
-
 }
+
+
 
   
 function afficherPointsCorrection(){
@@ -343,7 +328,7 @@ ecrireLatexSurGraph(
 
 }
 
-  }
+  
 
   // ----- DROITE y = k -----
   else if (solutionCanonique.startsWith("y=")) {
