@@ -64,63 +64,115 @@ function nonZero(){ let x; do{x=rand(-6,6);}while(x===0); return x; }
 let m1,p1,m2,p2;
 let bonneReponse="";
 let explication="";
+  
+/* ====================== FONCTIONS ====================== */
 
-/* ====================== GENERATION ====================== */
-function generer(){
-
-  document.querySelectorAll('.qcm-card').forEach(c=>{
-    c.classList.remove('correct','incorrect');
-    c.style.pointerEvents="auto";
-  });
-  document.getElementById("feedback").innerHTML="";
-
-  const type = rand(1,4);
-
-  if(type===1){
-    m1=nonZero(); p1=rand(-5,5);
-    m2=m1; p2=p1;
-    bonneReponse="confondue";
-    explication="Les pentes sont égales \\(m_1=m_2\\) et les ordonnées à l'origine aussi \\(p_1=p_2\\).";
-  }
-
-  if(type===2){
-    m1=nonZero(); p1=rand(-5,5);
-    m2=m1; do{p2=rand(-5,5);}while(p2===p1);
-    bonneReponse="paralleles";
-    explication="Les pentes sont égales \\(m_1=m_2\\) mais \\(p_1 \\neq p_2\\).";
-  }
-
-  if(type===3){
-    m1=nonZero();
-    m2=-1/m1;
-    p1=rand(-5,5); p2=rand(-5,5);
-    bonneReponse="perpendiculaires";
-    explication="Les pentes vérifient \\(m_1=-\\dfrac{1}{m_2}\\).";
-  }
-
-  if(type===4){
-    m1=nonZero(); m2=nonZero();
-    while(m2===m1 || m2===-1/m1){ m2=nonZero(); }
-    p1=rand(-5,5); p2=rand(-5,5);
-    bonneReponse="secantes";
-    explication="Les pentes sont différentes et non opposées inverses.";
-  }
-
-  const enonce = document.getElementById("enonce");
-  enonce.innerHTML = `
-  La droite \\(d_1\\) a pour équation :
-  \\[
-    ${m1}x ${p1>=0?'+':''} ${p1} = y
-  \\]
-  La droite \\(d_2\\) a pour équation :
-  \\[
-    ${m2}x ${p2>=0?'+':''} ${p2} = y
-  \\]
-  Détermine la position relative de ces deux droites.
-  `;
-  renderMath(enonce);
+  function randCoeffNZ10(){
+  let x;
+  do{
+    x = Math.floor(Math.random()*21) - 10;
+  } while(x === 0);
+  return x;
 }
 
+  /* ====================== GENERER EQUATION ====================== */
+
+let a,b,c,m,p;
+let eq1Texte="", eq2Texte="";
+
+function genererEquation(){
+
+  // ===== Remise à zéro =====
+  document.getElementById("feedback").innerHTML = "";
+  document.querySelectorAll('.qcm-card').forEach(card=>{
+    card.classList.remove('correct','incorrect');
+    card.style.pointerEvents = "auto";
+  });
+
+  /* ===== DROITE d1 : ax + by + c = 0 ===== */
+  a = randCoeffNZ10();
+  b = randCoeffNZ10();
+  c = randCoeffNZ10();
+
+  eq1Texte = `${a}x ${b>0?'+':''} ${b}y ${c>0?'+':''} ${c} = 0`
+    .replace(/\+\s-/g,'- ');
+
+  /* ===== DROITE d2 : y = mx + p ===== */
+  m = randCoeffNZ10();
+  p = randCoeffNZ10();
+
+  eq2Texte = `y = ${m}x ${p>0?'+':''} ${p}`
+    .replace(/\+\s-/g,'- ');
+
+  /* ===== AFFICHAGE ===== */
+  const eqDiv = document.getElementById("equation");
+  eqDiv.innerHTML = `
+    La droite \\(d_1\\) a pour équation :<br>
+    \\[ ${eq1Texte} \\]<br>
+    La droite \\(d_2\\) a pour équation :<br>
+    \\[ ${eq2Texte} \\]<br>
+    Détermine la position relative de ces deux droites.
+  `;
+  renderMath(eqDiv);
+
+  /* ===== Préparation correction ===== */
+  calculerBonneReponse();
+}
+
+  /* ====================== CALCUL ====================== */
+
+  let m1, p1, bonneReponse, explication;
+
+function calculerBonneReponse(){
+
+  // pente et ordonnée à l'origine de d1
+  m1 = -a / b;
+  p1 = -c / b;
+
+  // pente et ordonnée de d2
+  const m2 = m;
+  const p2 = p;
+
+  if (m1 === m2 && p1 === p2) {
+    bonneReponse = "confondue";
+    explication = "Les deux droites ont la même pente et la même ordonnée à l’origine.";
+  }
+  else if (m1 === m2) {
+    bonneReponse = "paralleles";
+    explication = "Les pentes sont égales mais les ordonnées à l’origine sont différentes.";
+  }
+  else if (m1 * m2 === -1) {
+    bonneReponse = "perpendiculaires";
+    explication = "Les pentes sont opposées inverses.";
+  }
+  else {
+    bonneReponse = "secantes";
+    explication = "Les pentes sont différentes et non opposées inverses.";
+  }
+}
+
+  /* ====================== CORRECTION DETAILLEE ====================== */
+
+function corriger(){
+  const f = document.getElementById("feedback");
+  f.style.color = "#000";
+
+  f.innerHTML = `
+  📘 <strong>Correction détaillée</strong><br><br>
+
+  <u>Étape 1</u> : on réduit l’équation de \\(d_1\\)<br>
+  \\(${eq1Texte}\\) <br>
+  \\(\\Rightarrow y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
+
+  <u>Étape 2</u> : on lit les pentes<br>
+  \\(m_1 = -\\frac{${a}}{${b}}\\), \\(m_2 = ${m}\\)<br><br>
+
+  <u>Conclusion</u> : ${explication}
+  `;
+  renderMath(f);
+}
+
+  
 /* ====================== VERIFICATION ====================== */
 function verifier(rep,el){
   document.querySelectorAll('.qcm-card').forEach(c=>c.style.pointerEvents="none");
@@ -135,9 +187,7 @@ function verifier(rep,el){
     });
   }
 
-  const f=document.getElementById("feedback");
-  f.innerHTML=`📘 <strong>Correction détaillée :</strong><br>${explication}`;
-  renderMath(f);
+
 }
 
 window.onload=generer;
