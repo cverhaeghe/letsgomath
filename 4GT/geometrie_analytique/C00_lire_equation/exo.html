@@ -308,24 +308,25 @@ ecrireLatexSVG(
 
 // Δy (LaTeX)
 ecrireLatexSVG(
-  B.x + 0.7,
+  B.x + 1,
   (A.y + B.y)/2,
   `\\Delta y = ${dy}`
 );
 
 // m (LaTeX, position fixe)
 ecrireLatexSVG(
-  4.5,
+  3.5,
   1.5,
   `m = \\frac{\\Delta y}{\\Delta x} = \\frac{${dy}}{${dx}}`
 );
 
 // p (LaTeX)
 ecrireLatexSVG(
-  0.7,
+  1,
   p,
-  `p = ${ecrireFractionTexte(p)}`
+  `p = ${ecrireFractionLatex(p)}`
 );
+
 
 
 
@@ -374,7 +375,24 @@ ecrireLatexSVG(
   return val;
 }
 
-  
+ function ecrireFractionLatex(val){
+  if (Number.isInteger(val)) return val.toString();
+
+  const abs = Math.abs(val);
+  const signe = val < 0 ? "-" : "";
+
+  if (abs === 1/2) return `${signe}\\frac{1}{2}`;
+  if (abs === 1/3) return `${signe}\\frac{1}{3}`;
+  if (abs === 1/4) return `${signe}\\frac{1}{4}`;
+  if (abs === 2/3) return `${signe}\\frac{2}{3}`;
+  if (abs === 3/2) return `${signe}\\frac{3}{2}`;
+  if (abs === 3/4) return `${signe}\\frac{3}{4}`;
+  if (abs === 5/2) return `${signe}\\frac{5}{2}`;
+  if (abs === 7/2) return `${signe}\\frac{7}{2}`;
+
+  return val.toString();
+}
+ 
 function ecrireTexteSVG(x, y, texte){
   svg.innerHTML += `
     <text
