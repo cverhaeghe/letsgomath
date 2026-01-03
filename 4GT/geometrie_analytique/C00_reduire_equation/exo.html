@@ -255,8 +255,8 @@ function verifier() {
 
   // format invalide
   if (!rep) {
-    f.style.color = "red";
-    f.innerHTML = "❌ Incorrect";
+    f.style.color = "black";
+    f.innerHTML = "❌ Réponse incorrecte";
     return;
   }
 
@@ -264,14 +264,14 @@ function verifier() {
   if (sol.type === "verticale") {
 
     if (rep.variable !== "x" || !rep.valeur) {
-      f.style.color = "red";
-      f.innerHTML = "❌ Incorrect";
+      f.style.color = "black";
+      f.innerHTML = "❌ Réponse incorrecte";
       return;
     }
 
     if (!memesValeurs(rep.valeur, sol.valeur)) {
-      f.style.color = "red";
-      f.innerHTML = "❌ Incorrect";
+      f.style.color = "black";
+      f.innerHTML = "❌ Réponse incorrecte";
       return;
     }
 
@@ -286,14 +286,14 @@ function verifier() {
   else if (sol.type === "horizontale") {
 
     if (rep.variable !== "y" || !rep.valeur) {
-      f.style.color = "red";
-      f.innerHTML = "❌ Incorrect";
+      f.style.color = "black";
+      f.innerHTML = "❌ Réponse incorrecte";
       return;
     }
 
     if (!memesValeurs(rep.valeur, sol.valeur)) {
-      f.style.color = "red";
-      f.innerHTML = "❌ Incorrect";
+      f.style.color = "black";
+      f.innerHTML = "❌ Réponse incorrecte";
       return;
     }
 
@@ -308,8 +308,8 @@ function verifier() {
   else {
 
     if (rep.variable !== "y" || !rep.m || !rep.p) {
-      f.style.color = "red";
-      f.innerHTML = "❌ Incorrect";
+      f.style.color = "black";
+      f.innerHTML = "❌ Réponse incorrecte";
       return;
     }
 
@@ -317,8 +317,8 @@ function verifier() {
       !memesValeurs(rep.m, sol.m) ||
       !memesValeurs(rep.p, sol.p)
     ) {
-      f.style.color = "red";
-      f.innerHTML = "❌ Incorrect";
+      f.style.color = "black";
+      f.innerHTML = "❌ Réponse incorrecte";
       return;
     }
 
@@ -333,8 +333,8 @@ function verifier() {
   }
 
   // tout est bon
-  f.style.color = "green";
-  f.innerHTML = "✅ Correct";
+  f.style.color = "black";
+  f.innerHTML = "✅ Bonne réponse !";
 }
 
 
