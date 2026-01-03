@@ -243,6 +243,19 @@ function fractionAB(val){
   `;
 }
 
+function ecrireCoordonneesHorizontales(x, y, texte, dx = 0.2, dy = 0) {
+  svg.innerHTML += `
+    <text
+      x="${xToPx(x + dx)}"
+      y="${yToPx(y + dy)}"
+      font-size="14"
+      fill="#0b3c5d"
+      text-anchor="start"
+      dominant-baseline="middle">
+      ${texte}
+    </text>
+  `;
+}
   
 function trouverDeuxPointsEntiers(m, p){
   const points = [];
@@ -358,22 +371,22 @@ function afficherPointsCorrection(){
   }
 
   // ===== 3) x = k =====
-  else if (solutionCanonique.startsWith("x=")) {
+else if (solutionCanonique.startsWith("x=")) {
 
-    const ys = [-2, 0, 2];
-    ys.forEach(y => {
-      dessinerPoint(k, y);
-      ecrireCoordonneesInclinees(
-        k,
-        y,
-        `(${k}; ${y})`,
-        30,
-        0.15,
-        0.15
-      );
-    });
-  }
+  const ys = [-2, 0, 2];
+
+  ys.forEach(y => {
+    dessinerPoint(k, y);
+    ecrireCoordonneesHorizontales(
+      k,
+      y,
+      `(${k}; ${y})`,
+      0.2,   // léger décalage à droite de la droite
+      0
+    );
+  });
 }
+
 
 
 
