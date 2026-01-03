@@ -146,19 +146,38 @@ function genererEquation(){
   renderMath(eqDiv);
 }
 
+const explications = {
+  "linéaire": {
+    texte: "Il s'agit d'une fonction linéaire",
+    forme: "y = mx"
+  },
+  "affine": {
+    texte: "Il s'agit d'une fonction affine",
+    forme: "y = mx + p"
+  },
+  "constante": {
+    texte: "Il s'agit d'une fonction constante",
+    forme: "y = k"
+  },
+  "pasfonction": {
+    texte: "Il ne s'agit pas d'une fonction",
+    forme: "x = k"
+  }
+};
 
 
 /* ====================== VERIFICATION ====================== */
 function verifier(reponseEleve, element) {
-  // Désactiver toutes les cartes pour éviter plusieurs clics
   const cards = document.querySelectorAll('.qcm-card');
   cards.forEach(card => card.style.pointerEvents = "none");
+
+  const feedback = document.getElementById("feedback");
 
   if (reponseEleve === typeEquation) {
     element.classList.add('correct');
   } else {
     element.classList.add('incorrect');
-    // Facultatif : montrer la bonne réponse en vert
+
     const bonneCarte = Array.from(cards).find(c => {
       return (typeEquation === "linéaire" && c.innerText.includes("linéaire")) ||
              (typeEquation === "affine" && c.innerText.includes("affine")) ||
@@ -167,7 +186,16 @@ function verifier(reponseEleve, element) {
     });
     if (bonneCarte) bonneCarte.classList.add('correct');
   }
+
+  /* ===== MESSAGE EXPLICATIF ===== */
+  const exp = explications[typeEquation];
+  feedback.innerHTML = `
+    ${exp.texte} car l'équation est du type
+    \\(${exp.forme}\\).
+  `;
+  renderMath(feedback);
 }
+
 
 
 // Générer le premier exercice au chargement
