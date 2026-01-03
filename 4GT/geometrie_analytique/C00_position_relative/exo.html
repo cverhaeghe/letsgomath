@@ -111,13 +111,12 @@ let eq1Texte="", eq2Texte="";
 }
 
   function fractionsEgales(f1, f2){
+  if(!f1 || !f2) return false;
   return f1.num * f2.den === f2.num * f1.den;
 }
 
+  
   /* ====================== GENERER EQUATION ====================== */
-
-let a,b,c,m,p;
-let eq1Texte="", eq2Texte="";
 
 function genererEquation(){
 
@@ -169,8 +168,8 @@ p1 = { num: -c, den: b };
 
 
   // pente et ordonnée de d2
-  const m2 = mFrac;
-  const p2 = p;
+const m2 = mFrac;
+const p2 = { num: p, den: 1 };
   
   if (fractionsEgales(m1, m2) && fractionsEgales(p1, p2)) {
   bonneReponse = "confondue";
