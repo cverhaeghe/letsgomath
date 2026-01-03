@@ -31,12 +31,14 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <p>Déterminer l’équation de la droite représentée.</p>
+  <p>Lis l’équation de la droite représentée.</p>
 
   <!-- GRAPHIQUE -->
-  <div style="display:flex;justify-content:center;margin-bottom:20px;">
-    <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
-  </div>
+<div id="graph-container"
+     style="position:relative; display:flex; justify-content:center; margin-bottom:20px;">
+  <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
+</div>
+
 
   <!-- SAISIE ELEVE -->
   <div class="equation-box">
@@ -82,27 +84,448 @@ function randNonZero(min,max){
   do{x=randInt(min,max);}while(x===0);
   return x;
 }
+
+  function coordAvecK(colonneFixe, valeurFixe, autre) {
+  // colonneFixe = "x" ou "y"
+  if (colonneFixe === "x") {
+    return `(<tspan fill="#FFA372">${valeurFixe}</tspan>; ${autre})`;
+  } else {
+    return `(${autre}; <tspan fill="#FFA372">${valeurFixe}</tspan>)`;
+  }
+}
+
+  // Génère une fraction parmi une liste, avec signe ±
+function randFraction(liste){
+  const frac = liste[Math.floor(Math.random() * liste.length)];
+  const signe = Math.random() < 0.5 ? 1 : -1;
+  return signe * frac;
+}
+const M_POSSIBLES = [
+  -3, -2, -1, 1, 2, 3,
+  1/2, 1/3, 1/4, 2/3, 3/2, 3/4,
+  -1/2, -1/3, -1/4, -2/3, -3/2, -3/4
+];
+
+const P_POSSIBLES = [
+  -4, -3, -2, -1, 1, 2, 3, 4,
+  1/2, 3/2, 5/2, 7/2,
+  -1/2, -3/2, -5/2, -7/2
+];
+
+function genererDroiteAvecPointsEntiers(){
+  let essais = 0;
+
+  while (essais < 100) {
+    essais++;
+
+    const mTest = randDansListe(M_POSSIBLES);
+
+    // on choisit un point entier A
+    const xA = randInt(-4, 4);
+    const yA = randInt(-4, 4);
+
+    const pTest = yA - mTest * xA;
+
+    // p doit être dans les valeurs autorisées
+    if (!P_POSSIBLES.includes(pTest)) continue;
+
+    // existe-t-il un deuxième point entier ?
+    const pts = trouverDeuxPointsEntiers(mTest, pTest);
+    if (pts && pts.length >= 2) {
+      return { m: mTest, p: pTest };
+    }
+  }
+
+  // sécurité absolue (ne devrait jamais arriver)
+  return { m: 1, p: 0 };
+}
+
+  
 function nettoyer(s){
   return s.toLowerCase()
           .replace(/\s+/g,"")
           .replace(/−/g,"-");
 }
 
+  function randDansListe(liste){
+  return liste[Math.floor(Math.random() * liste.length)];
+}
+
+  
+// Pour la comparaison (texte élève)
+function ecrireMxCanonique(m){
+  if (m === 1) return "x";
+  if (m === -1) return "-x";
+
+  if (!Number.isInteger(m)) {
+    const signe = m < 0 ? "-" : "";
+    const abs = Math.abs(m);
+
+    if (abs === 1/2) return `${signe}1/2x`;
+    if (abs === 1/3) return `${signe}1/3x`;
+    if (abs === 1/4) return `${signe}1/4x`;
+    if (abs === 2/3) return `${signe}2/3x`;
+    if (abs === 3/2) return `${signe}3/2x`;
+    if (abs === 3/4) return `${signe}3/4x`;
+  }
+
+  return m + "x";
+}
+
+// Pour l'affichage MathJax
+function ecrireMxLatex(m){
+  if (m === 1) return "x";
+  if (m === -1) return "-x";
+
+  if (!Number.isInteger(m)) {
+    const signe = m < 0 ? "-" : "";
+    const abs = Math.abs(m);
+
+    if (abs === 1/2) return `${signe}\\frac{1}{2}x`;
+    if (abs === 1/3) return `${signe}\\frac{1}{3}x`;
+    if (abs === 1/4) return `${signe}\\frac{1}{4}x`;
+    if (abs === 2/3) return `${signe}\\frac{2}{3}x`;
+    if (abs === 3/2) return `${signe}\\frac{3}{2}x`;
+    if (abs === 3/4) return `${signe}\\frac{3}{4}x`;
+  }
+
+  return m + "x";
+}
+
+
+function ecrirePCanonique(p){
+  if (Number.isInteger(p)) {
+    return p > 0 ? `+${p}` : `${p}`;
+  }
+
+  const signe = p < 0 ? "-" : "+";
+  const abs = Math.abs(p);
+
+  if (abs === 1/2) return `${signe}1/2`;
+  if (abs === 3/2) return `${signe}3/2`;
+  if (abs === 5/2) return `${signe}5/2`;
+  if (abs === 7/2) return `${signe}7/2`;
+}
+
+
+function ecrirePLatex(p){
+  if (Number.isInteger(p)) {
+    return p > 0 ? `+${p}` : `${p}`;
+  }
+
+  const signe = p < 0 ? "-" : "+";
+  const abs = Math.abs(p);
+
+  if (abs === 1/2) return `${signe}\\frac{1}{2}`;
+  if (abs === 3/2) return `${signe}\\frac{3}{2}`;
+  if (abs === 5/2) return `${signe}\\frac{5}{2}`;
+  if (abs === 7/2) return `${signe}\\frac{7}{2}`;
+}
+
+function ecrireLatexSVG(x, y, latex, largeur = 120){
+  const fx = xToPx(x) - largeur / 2;
+  const fy = yToPx(y) - 20;
+
+  const fo = document.createElementNS("http://www.w3.org/2000/svg", "foreignObject");
+  fo.setAttribute("x", fx);
+  fo.setAttribute("y", fy);
+  fo.setAttribute("width", largeur);
+  fo.setAttribute("height", 40);
+
+  const div = document.createElement("div");
+  div.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+  div.style.fontSize = "16px";
+  div.style.color = "#0b3c5d";
+  div.style.textAlign = "center";
+
+  div.innerHTML = `\\(${latex}\\)`;
+
+  fo.appendChild(div);
+  svg.appendChild(fo);
+
+  MathJax.typesetPromise([div]);
+}
+
+  
+function fractionAB(val){
+  if (Number.isInteger(val)) {
+    return { a: val, b: 1 };
+  }
+
+  const abs = Math.abs(val);
+  const signe = val < 0 ? -1 : 1;
+
+  if (abs === 1/2) return { a: signe*1, b: 2 };
+  if (abs === 1/3) return { a: signe*1, b: 3 };
+  if (abs === 1/4) return { a: signe*1, b: 4 };
+  if (abs === 2/3) return { a: signe*2, b: 3 };
+  if (abs === 3/2) return { a: signe*3, b: 2 };
+  if (abs === 3/4) return { a: signe*3, b: 4 };
+
+  return { a: val, b: 1 };
+}
+
+  function ecrireCoordonneesInclinees(x, y, texte, angle = -30, dx = 0.2, dy = 0.2) {
+  svg.innerHTML += `
+    <text
+      x="${xToPx(x + dx)}"
+      y="${yToPx(y + dy)}"
+      font-size="18"
+      fill="#0b3c5d"
+      text-anchor="start"
+      dominant-baseline="middle"
+      transform="rotate(${angle}, ${xToPx(x + dx)}, ${yToPx(y + dy)})">
+      ${texte}
+    </text>
+  `;
+}
+
+
+function ecrireCoordonneesHorizontales(x, y, texte, dx = 0.2, dy = 0.2) {
+  svg.innerHTML += `
+    <text
+      x="${xToPx(x + dx)}"
+      y="${yToPx(y + dy)}"
+      font-size="18"
+      fill="#0b3c5d"
+      text-anchor="start"
+      dominant-baseline="middle">
+      ${texte}
+    </text>
+  `;
+}
+
+  
+function trouverDeuxPointsEntiers(m, p){
+  const points = [];
+
+  for (let x = xmin; x <= xmax; x++) {
+    const y = m * x + p;
+
+    if (Number.isInteger(y) && y >= ymin && y <= ymax) {
+      points.push({ x, y });
+    }
+  }
+
+  // On prend deux points distincts
+  if (points.length >= 2) {
+    return [points[0], points[1]];
+  }
+
+  return null; // sécurité
+}
+  
+function dessinerPoint(x, y){
+  const cx = xToPx(x);
+  const cy = yToPx(y);
+
+  svg.innerHTML += `
+    <circle cx="${cx}" cy="${cy}" r="5" fill="#0b3c5d" />
+  `;
+}
+
+function tracerSegmentPointille(x1, y1, x2, y2){
+  svg.innerHTML += `
+    <line x1="${xToPx(x1)}" y1="${yToPx(y1)}"
+          x2="${xToPx(x2)}" y2="${yToPx(y2)}"
+          stroke="#0b3c5d"
+          stroke-width="2"
+          stroke-dasharray="5,5"/>
+  `;
+}
+
+
+function ecrireTexteCentreSegment(x1, y1, x2, y2, texte, dx = 0, dy = 0){
+  const xm = (x1 + x2) / 2 + dx;
+  const ym = (y1 + y2) / 2 + dy;
+  ecrireTexteSVG(xm, ym, texte);
+}
+
+
+
+  
+function afficherPointsCorrection(){
+
+  // ===== 1) y = mx ou y = mx + p =====
+  if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
+
+    const pts = trouverDeuxPointsEntiers(m, p);
+    if (!pts) return;
+
+    const A = pts[0];
+    const B = pts[1];
+
+    dessinerPoint(A.x, A.y);
+    dessinerPoint(B.x, B.y);
+
+    tracerSegmentPointille(A.x, A.y, B.x, A.y);
+    tracerSegmentPointille(B.x, A.y, B.x, B.y);
+
+    const dx = B.x - A.x;
+    const dy = B.y - A.y;
+const signeM = dy * dx < 0 ? "-" : "";
+const absDy = Math.abs(dy);
+const absDx = Math.abs(dx);
+
+let latexM;
+if (absDx === 1) {
+  // cas m = ±entier
+  latexM = `${signeM}${absDy}`;
+} else {
+  // cas fraction
+  latexM = `${signeM}\\frac{${absDy}}{${absDx}}`;
+}
+
+    ecrireLatexSVG(
+      (A.x + B.x) / 2,
+      A.y + 0.2,
+      `\\Delta x = ${dx}`
+    );
+
+    ecrireLatexSVG(
+      B.x + 1.1,
+      (A.y + B.y) / 2 - 0.2,
+      `\\Delta y = ${dy}`
+    );
+
+ecrireLatexSVG(
+  3.5,
+  4.3,
+  `m = \\frac{\\Delta y}{\\Delta x} = ${latexM}`
+);
+
+// Afficher p UNIQUEMENT pour y = mx + p
+if (typeof p !== 0) {
+  dessinerPoint(0, p);
+  ecrireLatexSVG(
+    1.1,
+    p - 0.2,
+    `p = ${ecrireFractionLatex(p)}`
+  );
+}
+
+  }
+
+  // ===== 2) y = k =====
+  else if (solutionCanonique.startsWith("y=")) {
+
+    const xs = [-3, 0, 2];
+    xs.forEach(x => {
+      dessinerPoint(x, k);
+ecrireCoordonneesInclinees(
+  x,
+  k,
+  coordAvecK("y", k, x),
+  -30,
+  0.15,
+  0.15
+);
+
+    });
+  }
+
+  // ===== 3) x = k =====
+else if (solutionCanonique.startsWith("x=")) {
+
+  const ys = [-3, 0, 2];
+
+  ys.forEach(y => {
+    dessinerPoint(k, y);
+ecrireCoordonneesHorizontales(
+  k,
+  y,
+  coordAvecK("x", k, y),
+  0.2,
+  0.2
+);
+
+  });
+}
+}
+
+
+
+  function relierPoints(x1,y1,x2,y2){
+  svg.innerHTML += `
+    <line x1="${xToPx(x1)}" y1="${yToPx(y1)}"
+          x2="${xToPx(x2)}" y2="${yToPx(y2)}"
+          stroke="#0d6efd" stroke-dasharray="4"/>
+  `;
+}
+
+  function ecrireFractionTexte(val){
+  if (Number.isInteger(val)) return val;
+
+  const abs = Math.abs(val);
+  const signe = val < 0 ? "-" : "";
+
+  if (abs === 1/2) return signe + "1/2";
+  if (abs === 1/3) return signe + "1/3";
+  if (abs === 1/4) return signe + "1/4";
+  if (abs === 2/3) return signe + "2/3";
+  if (abs === 3/2) return signe + "3/2";
+  if (abs === 3/4) return signe + "3/4";
+  if (abs === 5/2) return signe + "5/2";
+  if (abs === 7/2) return signe + "7/2";
+
+  return val;
+}
+
+ function ecrireFractionLatex(val){
+  if (Number.isInteger(val)) return val.toString();
+
+  const abs = Math.abs(val);
+  const signe = val < 0 ? "-" : "";
+
+  if (abs === 1/2) return `${signe}\\frac{1}{2}`;
+  if (abs === 1/3) return `${signe}\\frac{1}{3}`;
+  if (abs === 1/4) return `${signe}\\frac{1}{4}`;
+  if (abs === 2/3) return `${signe}\\frac{2}{3}`;
+  if (abs === 3/2) return `${signe}\\frac{3}{2}`;
+  if (abs === 3/4) return `${signe}\\frac{3}{4}`;
+  if (abs === 5/2) return `${signe}\\frac{5}{2}`;
+  if (abs === 7/2) return `${signe}\\frac{7}{2}`;
+
+  return val.toString();
+}
+ 
+function ecrireTexteSVG(x, y, texte){
+  svg.innerHTML += `
+    <text
+      x="${xToPx(x)}"
+      y="${yToPx(y)}"
+      font-size="16"
+      fill="#0b3c5d"
+      text-anchor="middle"
+      dominant-baseline="middle">
+      ${texte}
+    </text>
+  `;
+}
+
+  
 function afficherCorrection(){
   const fb = document.getElementById("feedback");
 
+  fb.classList.remove("visible");
+
   fb.innerHTML = `
-    <span style="font-size:1.1em;">
+    <span style="color:#000;">
       📘 <strong>Correction</strong><br>
       \\( ${solutionLatex} \\)
     </span>
   `;
 
   MathJax.typesetClear([fb]);
-  MathJax.typesetPromise([fb]);
+  MathJax.typesetPromise([fb]).then(() => {
+    setTimeout(() => fb.classList.add("visible"), 50);
+  });
+
+  afficherPointsCorrection();
 }
 
 
+  
 /* ====================== REPERE ====================== */
 function dessinerRepere(){
   svg.innerHTML="";
@@ -128,19 +551,22 @@ function dessinerRepere(){
 
 /* ====================== DROITE ====================== */
 function tracer(type){
-  if(type==="x=k"){
-    svg.innerHTML+=`<line x1="${xToPx(k)}" y1="0" x2="${xToPx(k)}" y2="${height}" stroke="red" stroke-width="3"/>`;
-  }
-  if(type==="y=k"){
-    svg.innerHTML+=`<line x1="0" y1="${yToPx(k)}" x2="${width}" y2="${yToPx(k)}" stroke="red" stroke-width="3"/>`;
-  }
+if(type==="x=k"){
+  svg.innerHTML+=`<line x1="${xToPx(k)}" y1="0" x2="${xToPx(k)}" y2="${height}"
+                       stroke="#FFA372" stroke-width="3"/>`;
+}
+if(type==="y=k"){
+  svg.innerHTML+=`<line x1="0" y1="${yToPx(k)}" x2="${width}" y2="${yToPx(k)}"
+                       stroke="#FFA372" stroke-width="3"/>`;
+}
   if(type==="y=mx"||type==="y=mx+p"){
     const x1=xmin,y1=m*x1+(p||0);
     const x2=xmax,y2=m*x2+(p||0);
     svg.innerHTML+=`
       <line x1="${xToPx(x1)}" y1="${yToPx(y1)}"
             x2="${xToPx(x2)}" y2="${yToPx(y2)}"
-            stroke="red" stroke-width="3"/>
+            stroke="#FFA372"
+            stroke-width="3"/>
     `;
   }
 }
@@ -153,20 +579,28 @@ function genererExercice(){
   dessinerRepere();
   const r=Math.random();
 
-  if(r<0.25){
-    m=randNonZero(-3,3);
-    solutionCanonique=`y=${m}x`;
-    solutionLatex=`y=${m}x`;
-    tracer("y=mx");
-  }
-  else if(r<0.5){
-    m=randNonZero(-3,3);
-    p=randNonZero(-4,4);
-    solutionCanonique=`y=${m}x${p>0?`+${p}`:p}`;
-    solutionLatex=`y=${m}x${p>0?`+${p}`:p}`;
-    tracer("y=mx+p");
-  }
-  else if(r<0.75){
+if (r < 0.2) {
+  m = randDansListe(M_POSSIBLES);
+  p = 0; // 🔥 OBLIGATOIRE
+  solutionCanonique = `y=${ecrireMxCanonique(m)}`;
+  solutionLatex     = `y=${ecrireMxLatex(m)}`;
+  tracer("y=mx");
+}
+
+else if (r < 0.6){
+  const droite = genererDroiteAvecPointsEntiers();
+  m = droite.m;
+  p = droite.p;
+
+  solutionCanonique =
+    `y=${ecrireMxCanonique(m)}${ecrirePCanonique(p)}`;
+
+  solutionLatex =
+    `y=${ecrireMxLatex(m)}${ecrirePLatex(p)}`;
+
+  tracer("y=mx+p");
+}
+  else if(r<0.8){
     k=randInt(-4,4);
     solutionCanonique=`x=${k}`;
     solutionLatex=`x=${k}`;
@@ -207,6 +641,8 @@ function verifier(){
 
 
 window.onload = genererExercice;
+console.log("JS chargé sans erreur");
+
 </script>
 
 <script src="../../../js/protection.js"></script>
