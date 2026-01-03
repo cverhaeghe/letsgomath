@@ -793,19 +793,23 @@ function verifier(){
 
   if(r!=="oui"&&r!=="non"){
     f.style.color="red";
-    f.innerHTML="❌ Incorrect";
+    f.innerHTML="";
     return;
   }
 
   if((r==="oui")===appartient){
-    f.style.color="green";
-    f.innerHTML="✅ Correct";
+    f.style.color="black";
+    f.innerHTML="✅ Bonne réponse !";
   }else{
-    f.style.color="red";
-    f.innerHTML="❌ Incorrect";
+    f.style.color="black";
+    f.innerHTML="❌ Réponse incorrecte";
   }
 }
 
+
+
+
+    
 /* =====================================================
    CORRECTION
 ===================================================== */
