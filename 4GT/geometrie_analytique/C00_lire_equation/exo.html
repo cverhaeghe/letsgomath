@@ -309,21 +309,21 @@ ecrireLatexSVG(
 // Δy (LaTeX)
 ecrireLatexSVG(
   B.x + 1,
-  (A.y + B.y)/2,
+  (A.y + B.y)/2 - 0.2,
   `\\Delta y = ${dy}`
 );
 
 // m (LaTeX, position fixe)
 ecrireLatexSVG(
   3.5,
-  1.5,
+  1.3,
   `m = \\frac{\\Delta y}{\\Delta x} = \\frac{${dy}}{${dx}}`
 );
 
 // p (LaTeX)
 ecrireLatexSVG(
   1,
-  p,
+  p  - 0.2,
   `p = ${ecrireFractionLatex(p)}`
 );
 
