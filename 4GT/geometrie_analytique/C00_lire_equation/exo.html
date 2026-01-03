@@ -290,7 +290,6 @@ if (solutionCanonique.startsWith("y=") && solutionCanonique.includes("x")) {
   // points
   dessinerPoint(A.x, A.y);
   dessinerPoint(B.x, B.y);
-  dessinerPoint(0, p);
 
   // segments pédagogiques
   tracerSegmentPointille(A.x, A.y, B.x, A.y); // horizontal
@@ -321,12 +320,15 @@ ecrireLatexSVG(
 );
 
 // p (LaTeX)
-ecrireLatexSVG(
-  1,
-  p  - 0.2,
-  `p = ${ecrireFractionLatex(p)}`
-);
+if (typeof p !== "undefined") {
+  dessinerPoint(0, p);
 
+  ecrireLatexSVG(
+    1,
+    p - 0;2,
+    `p = ${ecrireFractionLatex(p)}`
+  );
+}
 
 
 
