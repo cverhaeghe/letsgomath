@@ -65,6 +65,30 @@ let m1,p1,m2,p2;
 let bonneReponse="";
 let explication="";
   
+/* ====================== CONSTANTES ====================== */
+const m1 = { num: -a, den: b };
+const m2 = mFrac;
+
+  const ENSEMBLE_M = [
+  { num: 0, den: 1 },
+  { num: 1, den: 1 },
+  { num: 2, den: 1 },
+  { num: 3, den: 1 },
+  { num: 4, den: 1 },
+  { num: 5, den: 1 },
+  { num: 1, den: 2 },
+  { num: 1, den: 3 },
+  { num: 1, den: 4 },
+  { num: 1, den: 5 },
+  { num: 2, den: 3 },
+  { num: 2, den: 5 },
+  { num: 3, den: 2 },
+  { num: 3, den: 4 },
+  { num: 3, den: 5 },
+  { num: 4, den: 3 },
+  { num: 4, den: 5 }
+];
+
 /* ====================== FONCTIONS ====================== */
 
   function randCoeffNZ10(){
@@ -73,6 +97,20 @@ let explication="";
     x = Math.floor(Math.random()*21) - 10;
   } while(x === 0);
   return x;
+}
+
+  function tirerDansEnsembleM(){
+  const choix = ENSEMBLE_M[Math.floor(Math.random()*ENSEMBLE_M.length)];
+  return { num: choix.num, den: choix.den };
+}
+
+  function fractionLaTeX(num, den){
+  if(den === 1) return num.toString();
+  return `\\frac{${num}}{${den}}`;
+}
+
+  function fractionsEgales(f1, f2){
+  return f1.num * f2.den === f2.num * f1.den;
 }
 
   /* ====================== GENERER EQUATION ====================== */
@@ -98,11 +136,12 @@ function genererEquation(){
     .replace(/\+\s-/g,'- ');
 
   /* ===== DROITE d2 : y = mx + p ===== */
-  m = randCoeffNZ10();
+  const mFrac = tirerDansEnsembleM();
   p = randCoeffNZ10();
 
-  eq2Texte = `y = ${m}x ${p>0?'+':''} ${p}`
-    .replace(/\+\s-/g,'- ');
+eq2Texte = `y = ${fractionLaTeX(mFrac.num, mFrac.den)}x ${p>0?'+':''} ${p}`
+  .replace(/\+\s-/g,'- ');
+
 
   /* ==================== AFFICHAGE ======================== */
 const eqDiv = document.getElementById("enonce");
@@ -130,21 +169,21 @@ function calculerBonneReponse(){
   // pente et ordonnée de d2
   const m2 = m;
   const p2 = p;
-
-  if (m1 === m2 && p1 === p2) {
-    bonneReponse = "confondue";
+  
+  if (fractionsEgales(m1, m2) && fractionsEgales(p1, p2)) {
+  bonneReponse = "confondue";
     explication = "Les deux droites ont la même pente et la même ordonnée à l’origine.";
   }
-  else if (m1 === m2) {
-    bonneReponse = "paralleles";
+else if (fractionsEgales(m1, m2)) {
+  bonneReponse = "paralleles";
     explication = "Les pentes sont égales mais les ordonnées à l’origine sont différentes.";
   }
-  else if (m1 * m2 === -1) {
-    bonneReponse = "perpendiculaires";
+else if (m1.num * m2.num === -m1.den * m2.den) {
+  bonneReponse = "perpendiculaires";
     explication = "Les pentes sont opposées inverses.";
   }
-  else {
-    bonneReponse = "secantes";
+else {
+  bonneReponse = "secantes";
     explication = "Les pentes sont différentes et non opposées inverses.";
   }
 }
@@ -163,7 +202,7 @@ function corriger(){
   \\(\\Rightarrow y = -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}}\\)<br><br>
 
   <u>Étape 2</u> : on lit les pentes<br>
-  \\(m_1 = -\\frac{${a}}{${b}}\\), \\(m_2 = ${m}\\)<br><br>
+\\(m_1 = -\\frac{${a}}{${b}}\\), \\(m_2 = ${fractionLaTeX(mFrac.num, mFrac.den)}\\)
 
   <u>Conclusion</u> : ${explication}
   `;
