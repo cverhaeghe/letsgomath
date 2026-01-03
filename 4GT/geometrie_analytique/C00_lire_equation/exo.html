@@ -228,6 +228,22 @@ function fractionAB(val){
   return { a: val, b: 1 };
 }
 
+  function ecrireCoordonneesInclinees(x, y, texte, angle = -30, dx = 0.2, dy = 0.2) {
+  svg.innerHTML += `
+    <text
+      x="${xToPx(x + dx)}"
+      y="${yToPx(y + dy)}"
+      font-size="14"
+      fill="#0b3c5d"
+      text-anchor="start"
+      dominant-baseline="middle"
+      transform="rotate(${angle}, ${xToPx(x + dx)}, ${yToPx(y + dy)})">
+      ${texte}
+    </text>
+  `;
+}
+
+  
 function trouverDeuxPointsEntiers(m, p){
   const points = [];
 
@@ -307,7 +323,7 @@ ecrireLatexSVG(
 
 // Δy (LaTeX)
 ecrireLatexSVG(
-  B.x + 1,
+  B.x + 1.1,
   (A.y + B.y)/2 - 0.2,
   `\\Delta y = ${dy}`
 );
@@ -324,7 +340,7 @@ if (typeof p !== "undefined") {
   dessinerPoint(0, p);
 
   ecrireLatexSVG(
-    1,
+    1.1,
     p - 0.2,
     `p = ${ecrireFractionLatex(p)}`
   );
@@ -338,18 +354,42 @@ if (typeof p !== "undefined") {
   
 
   // ----- DROITE y = k -----
-  else if (solutionCanonique.startsWith("y=")) {
-    dessinerPoint(1, k);
-    dessinerPoint(2, k);
-    dessinerPoint(3, k);
-  }
+else if (solutionCanonique.startsWith("y=")) {
+
+  const xs = [-2, 0, 2]; // trois abscisses bien espacées
+
+  xs.forEach(x => {
+    dessinerPoint(x, k);
+    ecrireCoordonneesInclinees(
+      x,
+      k,
+      `(${x}; ${k})`,
+      -30,   // inclinaison
+      0.15,
+      0.15
+    );
+  });
+}
+
 
   // ----- DROITE x = k -----
-  else if (solutionCanonique.startsWith("x=")) {
-    dessinerPoint(k, 1);
-    dessinerPoint(k, 2);
-    dessinerPoint(k, 3);
-  }
+else if (solutionCanonique.startsWith("x=")) {
+
+  const ys = [-2, 0, 2]; // trois ordonnées bien espacées
+
+  ys.forEach(y => {
+    dessinerPoint(k, y);
+    ecrireCoordonneesInclinees(
+      k,
+      y,
+      `(${k}; ${y})`,
+      30,    // inclinaison opposée
+      0.15,
+      0.15
+    );
+  });
+}
+
 }
 
 
