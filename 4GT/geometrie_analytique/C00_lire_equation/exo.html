@@ -363,6 +363,9 @@ function afficherPointsCorrection(){
 
     const dx = B.x - A.x;
     const dy = B.y - A.y;
+const signeM = dy * dx < 0 ? "-" : "";
+const absDy = Math.abs(dy);
+const absDx = Math.abs(dx);
 
     ecrireLatexSVG(
       (A.x + B.x) / 2,
@@ -376,11 +379,12 @@ function afficherPointsCorrection(){
       `\\Delta y = ${dy}`
     );
 
-    ecrireLatexSVG(
-      3.5,
-      4.3,
-      `m = \\frac{\\Delta y}{\\Delta x} = \\frac{${dy}}{${dx}}`
-    );
+ecrireLatexSVG(
+  3.5,
+  4.3,
+  `m = ${signeM}\\frac{${absDy}}{${absDx}}`
+);
+
 
     if (typeof p !== "undefined") {
       dessinerPoint(0, p);
