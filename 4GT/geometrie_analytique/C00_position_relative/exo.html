@@ -170,6 +170,13 @@ function fractionIrreductible(num, den){
   return signe + fractionLaTeX(Math.abs(frac.num), frac.den);
 }
 
+  function afficherMx(frac) {
+  // frac est supposée déjà normalisée
+  if (frac.num === 1 && frac.den === 1) return 'x';
+  if (frac.num === -1 && frac.den === 1) return '-x';
+  return `${fractionAvecSigne(frac)}x`;
+}
+
   /* ====================== GENERER EQUATION ====================== */
 
 function genererEquation(){
@@ -256,7 +263,7 @@ if (pFrac.num !== 0) {
     : ` - ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}`;
 }
 
-eq2Texte = `y = ${fractionAvecSigne(mFrac)}x${pTexte}`;
+eq2Texte = `y = ${afficherMx(mFrac)}${pTexte}`;
 
 
 
@@ -345,7 +352,7 @@ p_1 = ${fractionAvecSigne(p1Aff)}
 \\]<br><br>
 
 \\[
-m_2 = ${fractionAvecSigne(mFrac)}, 
+m_2 = ${afficherMx(mFrac)}, 
 \,
 p_2 = ${fractionAvecSigne(pFrac)}
 \\]<br><br>
