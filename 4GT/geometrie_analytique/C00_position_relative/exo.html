@@ -212,15 +212,16 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     bonneReponse = "paralleles";
   }
 
-  else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
-    // === PERPENDICULAIRES ===
-    mFrac = {
-      num: -m1.den,
-      den:  m1.num
-    };
-    pFrac = tirerDansEnsembleM();
-    bonneReponse = "perpendiculaires";
-  }
+else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
+  mFrac = {
+    num: -m1.den,
+    den:  m1.num
+  };
+  mFrac = normaliserFraction(mFrac); 
+  pFrac = tirerDansEnsembleM();
+  bonneReponse = "perpendiculaires";
+}
+
 
   else {
     // === SÉCANTES NON PERPENDICULAIRES ===
