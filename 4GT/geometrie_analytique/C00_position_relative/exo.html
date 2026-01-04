@@ -232,7 +232,7 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     } while (fractionsEgales(pFrac, p1));
     bonneReponse = "paralleles";
     explication =
-    "Comme les droites ont la même pente \\((m_1=m_2)\\) mais des ordonnées à l’origine différentes \\((p_1 \neq p_2)\\) : elles sont parallèles distinctes.";
+    "Comme les droites ont la même pente \\((m_1=m_2)\\) mais des ordonnées à l’origine différentes \\((p_1 \\neq p_2)\\) : elles sont parallèles distinctes.";
 }
 
 else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
@@ -260,7 +260,7 @@ else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
     pFrac = tirerDansEnsembleM();
     bonneReponse = "secantes";
     explication =
-    "Comme les pentes sont différentes \\( (m_1 \neq m_2) \\) et non opposées inverses \\( (m_1 \neq -\\frac{1}{m_2} )\\): les droites sont sécantes non perpendiculaires.";
+    "Comme les pentes sont différentes \\( (m_1 \\neq m_2) \\) et non opposées inverses \\( (m_1 \\neq -\\frac{1}{m_2} )\\): les droites sont sécantes non perpendiculaires.";
 }
   
 let pTexte = "";
