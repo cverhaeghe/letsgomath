@@ -338,24 +338,28 @@ ${explication}
   
 /* ====================== VERIFICATION ====================== */
 function verifier(rep, el){
+
+  // Désactiver toutes les cartes
   document.querySelectorAll('.qcm-card')
     .forEach(c => c.style.pointerEvents = "none");
 
-  if(rep === bonneReponse){
+  // Gestion des couleurs
+  if (rep === bonneReponse) {
     el.classList.add('correct');
   } else {
     el.classList.add('incorrect');
 
     document.querySelectorAll('.qcm-card').forEach(c => {
-      if(c.dataset.reponse === bonneReponse){
+      if (c.dataset.reponse === bonneReponse) {
         c.classList.add('correct');
       }
     });
   }
 
-    // affichage automatique de la correction
+  // ✅ AFFICHAGE AUTOMATIQUE DE LA CORRECTION
   corriger();
 }
+
 
 
 window.onload = genererEquation;
