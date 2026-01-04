@@ -219,9 +219,9 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     mFrac = m1;
     pFrac = p1;
     bonneReponse = "confondue";
-    explication =
+    explication =`
     "Comme les droites ont la même pente \\( (m_1=m_2)\\) et la même ordonnée à l’origine \\( (p_1=p_2)\\) : 
-      elles sont <span style='color: var(--peps); font-weight: bold;'>parallèles confondues</span> \\((d_1=d_2)\\).";
+      elles sont <span style='color: var(--peps); font-weight: bold;'>parallèles confondues</span> \\((d_1=d_2)\\)."`;
   }
 
   else if (r < PROBA_CONFONDUE + PROBA_PARALLELES) {
@@ -232,9 +232,9 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
       pFrac = tirerDansEnsembleM();
     } while (fractionsEgales(pFrac, p1));
     bonneReponse = "paralleles";
-    explication =
+    explication =`
     "Comme les droites ont la même pente \\((m_1=m_2)\\) mais des ordonnées à l’origine différentes \\((p_1 \\neq p_2)\\) : 
-      elles sont <span style='color: var(--peps); font-weight: bold;'>parallèles distinctes</span>.";
+      elles sont <span style='color: var(--peps); font-weight: bold;'>parallèles distinctes</span>."`;
 }
 
 else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
@@ -245,9 +245,9 @@ else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
   mFrac = normaliserFraction(mFrac); 
   pFrac = tirerDansEnsembleM();
   bonneReponse = "perpendiculaires";
-  explication =
+  explication =`
     "Comme les pentes sont opposées inverses \\( (m_1 = -\\frac{1}{m_2}) \\): 
-    les droites sont <span style='color: var(--peps); font-weight: bold;'> perpendiculaires </span>.";
+    les droites sont <span style='color: var(--peps); font-weight: bold;'> perpendiculaires </span>."`;
 }
 
 
@@ -262,9 +262,9 @@ else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
 
     pFrac = tirerDansEnsembleM();
     bonneReponse = "secantes";
-    explication =
+    explication =`
     "Comme les pentes sont différentes \\( (m_1 \\neq m_2) \\) et non opposées inverses \\( (m_1 \\neq -\\frac{1}{m_2} )\\): 
-      les droites sont <span style='color: var(--peps); font-weight: bold;'>sécantes non perpendiculaires</span>.";
+      les droites sont <span style='color: var(--peps); font-weight: bold;'>sécantes non perpendiculaires</span>."`;
 }
   
 let pTexte = "";
