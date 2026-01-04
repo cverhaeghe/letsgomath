@@ -221,7 +221,7 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     bonneReponse = "confondue";
     explication =`
     Comme les droites ont la même pente \\( (m_1=m_2)\\) et la même ordonnée à l’origine \\( (p_1=p_2)\\) : 
-      elles sont <span style='color: var(--peps); font-weight: bold;'>parallèles confondues</span> \\((d_1=d_2)\\).`;
+      elles sont <span style='color: #475a93; font-weight: bold;'>parallèles confondues</span> \\((d_1=d_2)\\).`;
   }
 
   else if (r < PROBA_CONFONDUE + PROBA_PARALLELES) {
@@ -234,7 +234,7 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     bonneReponse = "paralleles";
     explication =`
     Comme les droites ont la même pente \\((m_1=m_2)\\) mais des ordonnées à l’origine différentes \\((p_1 \\neq p_2)\\) : 
-      elles sont <span style='color: var(--peps); font-weight: bold;'>parallèles distinctes</span>.`;
+      elles sont <span style='color: #475a93; font-weight: bold;'>parallèles distinctes</span>.`;
 }
 
 else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
@@ -247,7 +247,7 @@ else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
   bonneReponse = "perpendiculaires";
   explication =`
     Comme les pentes sont opposées inverses \\( (m_1 = -\\frac{1}{m_2}) \\): 
-    les droites sont <span style='color: var(--peps); font-weight: bold;'> perpendiculaires </span>.`;
+    les droites sont <span style='color: #475a93; font-weight: bold;'> perpendiculaires </span>.`;
 }
 
 
@@ -264,7 +264,7 @@ else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
     bonneReponse = "secantes";
     explication =`
     Comme les pentes sont différentes \\( (m_1 \\neq m_2) \\) et non opposées inverses \\( (m_1 \\neq -\\frac{1}{m_2} )\\): 
-      les droites sont <span style='color: var(--peps); font-weight: bold;'>sécantes non perpendiculaires</span>.`;
+      les droites sont <span style='color: #475a93; font-weight: bold;'>sécantes non perpendiculaires</span>.`;
 }
   
 let pTexte = "";
@@ -311,7 +311,7 @@ function corriger(){
 
   let texte = `
   📘 <strong>Correction détaillée</strong><br><br>
-  <span style='color: #475a93; font-weight: bold;'> Étape 1 : </span>  <span style='color: #475a93'>réduire l’équation de \\(d_1\\) </span> <br>
+  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_1\\) </span> <br>
   `;
 
 
@@ -358,7 +358,7 @@ y &= ${afficherMx(m1Aff)}
   /* ===== Étape 2 : lecture des coefficients ===== */
   
 texte += `
-<span style='color: #475a93; font-weight: bold;'> Étape 2 : </span>  <span style='color: #475a93'> identification des coefficients </span> <br><br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> identification des coefficients </span> <br><br>
 \\(
 m_1 = ${fractionAvecSigne(m1Aff)}, 
 \\quad
