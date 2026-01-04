@@ -269,6 +269,11 @@ footer {
 /*     Chemin compétences        */
 /* ============================= */
 
+:root {
+  --couleur-principale: #6c63ff;
+  --couleur-secondaire: #f28c28;
+}
+
 .parcours-competences {
   position: relative;
   max-width: 1000px;
