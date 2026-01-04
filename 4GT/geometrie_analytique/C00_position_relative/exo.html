@@ -185,8 +185,9 @@ function genererEquation(){
     .replace(/\+\s-/g,'- ');
 
   // pente et ordonnée à l'origine de d1
-m1 = fractionIrreductible(-a, b);
-p1 = fractionIrreductible(-c, b);
+m1 = normaliserFraction(fractionIrreductible(-a, b));
+p1 = normaliserFraction(fractionIrreductible(-c, b));
+
 
   
   /* ===== DROITE d2 : y = mx + p selon le type voulu ===== */
