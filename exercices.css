@@ -159,5 +159,22 @@
     line-height: 1.2;
     min-width: 0;          /* 🔑 empêche le débordement */
     word-break: break-word;
+}
+
+  .qcm-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-} 
+
+  .qcm-card {
+    width: 100%;
+    max-width: none;          /* 🔑 suppression du verrou */
+    box-sizing: border-box;   /* 🔑 padding inclus dans la largeur */
+    padding: 16px 10px;
+    font-size: 0.9rem;
+    line-height: 1.15;
+    word-break: break-word;
+  }
+}
+
+
+
