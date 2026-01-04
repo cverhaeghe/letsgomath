@@ -89,6 +89,10 @@ let eq1Texte="", eq2Texte="";
   
 /* ====================== CONSTANTES ====================== */
 
+const PROBA_CONFONDUE   = 0.20;
+const PROBA_PARALLELES = 0.20;
+const PROBA_PERP       = 0.30;
+// le reste = sécantes non perpendiculaires
 
   const ENSEMBLE_M = [
   { num: 2, den: 1 },
@@ -172,9 +176,51 @@ function genererEquation(){
     .replace(/\+\s-/g,'- ');
 
   /* ===== DROITE d2 : y = mx + p ===== */
-  mFrac = tirerDansEnsembleM();
-  pFrac = tirerDansEnsembleM();
+  /* ===== DROITE d2 selon le type voulu ===== */
 
+  const r = Math.random();
+
+  if (r < PROBA_CONFONDUE) {
+    // === PARALLÈLES CONFONDUES ===
+    mFrac = m1;
+    pFrac = p1;
+    bonneReponse = "confondue";
+  }
+
+  else if (r < PROBA_CONFONDUE + PROBA_PARALLELES) {
+    // === PARALLÈLES DISTINCTES ===
+    mFrac = m1;
+
+    do {
+      pFrac = tirerDansEnsembleM();
+    } while (fractionsEgales(pFrac, p1));
+
+    bonneReponse = "paralleles";
+  }
+
+  else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
+    // === PERPENDICULAIRES ===
+    mFrac = {
+      num: -m1.den,
+      den:  m1.num
+    };
+    pFrac = tirerDansEnsembleM();
+    bonneReponse = "perpendiculaires";
+  }
+
+  else {
+    // === SÉCANTES NON PERPENDICULAIRES ===
+    do {
+      mFrac = tirerDansEnsembleM();
+    } while (
+      fractionsEgales(mFrac, m1) ||
+      mFrac.num * m1.num === -mFrac.den * m1.den
+    );
+
+    pFrac = tirerDansEnsembleM();
+    bonneReponse = "secantes";
+  }
+  
 let pTexte = "";
 
 if (pFrac.num !== 0) {
@@ -187,6 +233,7 @@ eq2Texte = `y = ${fractionLaTeX(mFrac.num, mFrac.den)}x${pTexte}`;
 
 
 
+
   /* ==================== AFFICHAGE ======================== */
 const eqDiv = document.getElementById("enonce");
   eqDiv.innerHTML = `
@@ -196,41 +243,7 @@ const eqDiv = document.getElementById("enonce");
   `;
   renderMath(eqDiv);
 
-  /* ============== Préparation correction ================ */
-  calculerBonneReponse();
 }
-
-  /* ====================== CALCUL ====================== */
-
-function calculerBonneReponse(){
-
-  // d1 : ax + by + c = 0
-m1 = fractionIrreductible(-a, b);
-p1 = fractionIrreductible(-c, b);
-
-
-  // d2 : y = mx + p
-  const m2 = mFrac;
-  const p2 = pFrac;
-
-  if (fractionsEgales(m1, m2) && fractionsEgales(p1, p2)) {
-    bonneReponse = "confondue";
-    explication = "Les deux droites ont la même pente et la même ordonnée à l’origine.";
-  }
-  else if (fractionsEgales(m1, m2)) {
-    bonneReponse = "paralleles";
-    explication = "Les pentes sont égales mais les ordonnées à l’origine sont différentes.";
-  }
-  else if (m1.num * m2.num === -m1.den * m2.den) {
-    bonneReponse = "perpendiculaires";
-    explication = "Les pentes sont opposées inverses.";
-  }
-  else {
-    bonneReponse = "secantes";
-    explication = "Les pentes sont différentes et non opposées inverses.";
-  }
-}
-
 
   /* ====================== CORRECTION DETAILLEE ====================== */
 
