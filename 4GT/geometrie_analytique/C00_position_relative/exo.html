@@ -258,7 +258,12 @@ function corriger(){
   const m1Red = fractionIrreductible(-a, b);
   const p1Red = fractionIrreductible(-c, b);
   const cTexte = c > 0 ? `+ ${c}` : `- ${Math.abs(c)}`;
+const aAbs = Math.abs(a);
+const aSigneOppose = a > 0 ? '-' : '';
+const cAbs = Math.abs(c);
+const cSigne = c > 0 ? '-' : '+';
 
+  
   let texte = `
   📘 <strong>Correction détaillée</strong><br><br>
 
@@ -271,7 +276,7 @@ texte += `
 \\[
 \\begin{aligned}
 ${eq1Texte.replace('=', '&=')} \\\\
-${b}y &= -${a}x - ${c} \\\\
+${absB}y &= ${aSigneOppose}${aAbs}x ${cSigne} ${cAbs}\\\\
 y &= -\\frac{${a}}{${b}}x - \\frac{${c}}{${b}} \\\\
 y &= ${fractionLaTeX(m1Red.num, m1Red.den)}x
      ${p1Red.num >= 0 ? '+' : '-'}
