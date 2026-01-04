@@ -212,7 +212,7 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     pFrac = p1;
     bonneReponse = "confondue";
     explication =
-    "Les deux droites ont la même pente (m1=m2) et la même ordonnée à l’origine (p1=p2) : elles sont parallèles confondues (d1=d2).";
+    "Les droites ont la même pente \\( (m1=m2)\\) et la même ordonnée à l’origine \\( (p1=p2)\\) : elles sont parallèles confondues \\((d1=d2)\\).";
   }
 
   else if (r < PROBA_CONFONDUE + PROBA_PARALLELES) {
@@ -224,7 +224,7 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     } while (fractionsEgales(pFrac, p1));
     bonneReponse = "paralleles";
     explication =
-    "Les deux droites ont la même pente (m1=m2) mais des ordonnées à l’origine différentes (p1 \neq p2) : elles sont parallèles distinctes.";
+    "Les droites ont la même pente \\((m1=m2)\\) mais des ordonnées à l’origine différentes \\((p1 \neq p2)\\) : elles sont parallèles distinctes.";
 }
 
 else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
@@ -311,7 +311,7 @@ texte += `
 \\begin{aligned}
 ${eq1Texte.replace('=', '&=')} \\\\
 ${absB}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
-y &= ${m1Aff.num < 0 ? '-' : ''}${fractionLaTeX(Math.abs(m1Aff.num), m1Aff.den)}x
+y &= ${afficherMx(m1Aff)}x
      ${p1Aff.num >= 0 ? '+' : '-'}
      ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
 \\end{aligned}
@@ -328,7 +328,7 @@ texte += `
 \\begin{aligned}
 ${eq1Texte.replace('=', '&=')} \\\\
 ${absB}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
-y &= ${m1Aff.num < 0 ? '-' : ''}${fractionLaTeX(Math.abs(m1Aff.num), m1Aff.den)}x
+y &= ${afficherMx(m1Aff)}x
      ${p1Aff.num >= 0 ? '+' : '-'}
      ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
 \\end{aligned}
@@ -345,19 +345,19 @@ y &= ${m1Aff.num < 0 ? '-' : ''}${fractionLaTeX(Math.abs(m1Aff.num), m1Aff.den)}
   
 texte += `
 <u>Étape 2</u> : identification des coefficients<br>
-\\[
+\\(
 m_1 = ${fractionAvecSigne(m1Aff)}, 
-\,
+\\quad
 p_1 = ${fractionAvecSigne(p1Aff)}
-\\]<br><br>
+\\)<br>
 
-\\[
+\\(
 m_2 = ${afficherMx(mFrac)}, 
-\,
+\\quad
 p_2 = ${fractionAvecSigne(pFrac)}
-\\]<br><br>
+\\)<br><br>
 
-<u>Étape 3</u> : comparaison<br>
+<u>Étape 3</u> : comparaison des coefficients <br>
 ${explication}
 `;
 
