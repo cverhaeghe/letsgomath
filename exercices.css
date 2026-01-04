@@ -138,13 +138,6 @@
 
 
 
-
-
-
-
-
-
-
 /* ===============================
    RESPONSIVE - GSM
    =============================== */
@@ -153,4 +146,18 @@
 .exo-container {
          margin-top: 40px;
   }
-)   
+
+.qcm-grid {
+    max-width: 100%;       /* la grille peut respirer */
+    gap: 12px;             /* moins d’espace entre cartes */
+  }
+
+.qcm-card {
+    max-width: 100%;       /* 🔑 plus de limite rigide */
+    padding: 18px 12px;    /* 🔑 cartes plus compactes */
+    font-size: 0.95rem;    /* 🔑 texte plus petit */
+    line-height: 1.2;
+    min-width: 0;          /* 🔑 empêche le débordement */
+    word-break: break-word;
+  }
+} 
