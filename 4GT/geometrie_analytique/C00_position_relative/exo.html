@@ -177,6 +177,14 @@ function fractionIrreductible(num, den){
   return `${fractionAvecSigne(frac)}x`;
 }
 
+  function afficherM(frac) {
+  // frac normalisée
+  if (frac.num === 1 && frac.den === 1) return '1';
+  if (frac.num === -1 && frac.den === 1) return '-1';
+  return fractionAvecSigne(frac);
+}
+
+  
   /* ====================== GENERER EQUATION ====================== */
 
 function genererEquation(){
@@ -236,7 +244,7 @@ else if (r < PROBA_CONFONDUE + PROBA_PARALLELES + PROBA_PERP) {
   pFrac = tirerDansEnsembleM();
   bonneReponse = "perpendiculaires";
   explication =
-    "Les pentes sont opposées inverses (m1=-1/m2): les droites sont perpendiculaires.";
+    "Les pentes sont opposées inverses \\( (m1=-1/m2)\\): les droites sont perpendiculaires.";
 }
 
 
@@ -327,8 +335,8 @@ texte += `
 \\[
 \\begin{aligned}
 ${eq1Texte.replace('=', '&=')} \\\\
-${absB}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
-y &= ${afficherMx(m1Aff)}x
+${a}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${absB}y \\\\
+y &= ${afficherMx(m1Aff)}
      ${p1Aff.num >= 0 ? '+' : '-'}
      ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
 \\end{aligned}
@@ -352,7 +360,7 @@ p_1 = ${fractionAvecSigne(p1Aff)}
 \\)<br>
 
 \\(
-m_2 = ${afficherMx(mFrac)}, 
+m_2 = ${afficherM(mFrac)}, 
 \\quad
 p_2 = ${fractionAvecSigne(pFrac)}
 \\)<br><br>
