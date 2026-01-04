@@ -339,17 +339,16 @@ y &= ${m1Aff.num < 0 ? '-' : ''}${fractionLaTeX(Math.abs(m1Aff.num), m1Aff.den)}
 texte += `
 <u>Étape 2</u> : identification des coefficients<br>
 \\[
-m_1 = ${m1Aff.num < 0 ? '-' : ''}${fractionLaTeX(Math.abs(m1Aff.num), m1Aff.den)}, 
+m_1 = ${fractionAvecSigne(m1Aff)}, 
 \,
-p_1 = ${p1Aff.num >= 0 ? '' : '-'}${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
+p_1 = ${fractionAvecSigne(p1Aff)}
 \\]<br><br>
 
 \\[
 m_2 = ${fractionAvecSigne(mFrac)}, 
 \,
-p_2 = ${pTexte}
+p_2 = ${fractionAvecSigne(pFrac)}
 \\]<br><br>
-
 
 <u>Étape 3</u> : comparaison<br>
 ${explication}
