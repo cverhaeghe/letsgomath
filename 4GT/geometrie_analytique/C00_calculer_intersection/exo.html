@@ -402,7 +402,7 @@ ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\quad \\( (d_2)\\)
 \\]
 
 On égalise les deux expressions de \\(y\\) :
-\\[
+\\(
 ${afficherMx(m1Aff)}
 ${p1Aff.num >= 0 ? '+' : '-'}
 ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
@@ -410,10 +410,10 @@ ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
 ${afficherMx(mFrac)}
 ${pFrac.num >= 0 ? '+' : '-'}
 ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
-\\]
+\\)
 
 On met les quatre termes sur le même dénominateur :
-\\[
+\\(
 \\ ${m1Num <= 0 ? '-' : ''}frac{${m1NumAbs}}{${D}}x
 ${p1Num >= 0 ? '+' : '-'}
 \\frac{${Math.abs(p1Num)}}{${D}}
@@ -421,23 +421,15 @@ ${p1Num >= 0 ? '+' : '-'}
 \\frac{${m2Num}}{${D}}x
 ${p2Num >= 0 ? '+' : '-'}
 \\frac{${Math.abs(p2Num)}}{${D}}
-\\]
+\\)
 
 On supprime le dénominateur commun :
-\\[
+\\(
 ${A}x ${B >= 0 ? '+' : ''}${B} = ${C}x  ${E >= 0 ? '+' : ''}${E}
-\\]
-\\[
 ${A}x - ${C}x = ${E} - ${B}
-\\]
-
-\\[
 ${xInter.den} x = ${xInter.num}
-\\]
-
-\\[
 x = ${fractionLaTeX(xInter.num, xInter.den)}
-\\]
+\\)
 
 On remplace dans l’équation de \\(d_2\\) :
 \\[
