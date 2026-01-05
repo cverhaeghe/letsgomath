@@ -334,6 +334,76 @@ ${explication} <br><br>
 
 <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> calcul du point d'intersection  </span> <br><br>`;
 
+  if (bonneReponse === "secantes" || bonneReponse === "perpendiculaires") {
+
+  // dénominateur commun
+  const D =
+    m1Aff.den *
+    p1Aff.den *
+    mFrac.den *
+    pFrac.den;
+
+  // coefficients après mise au même dénominateur
+  const A = m1Aff.num * (D / m1Aff.den);
+  const B = p1Aff.num * (D / p1Aff.den);
+  const C = mFrac.num * (D / mFrac.den);
+  const E = pFrac.num * (D / pFrac.den);
+
+  const xNum = E - B;
+  const xDen = A - C;
+  const xInter = fractionIrreductible(xNum, xDen);
+
+  const yInter = additionFractions(
+    multiplicationFractions(mFrac, xInter),
+    pFrac
+  );
+
+  texte += `
+<span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>
+<span style='color: var(--peps)'> calcul de l’intersection </span><br><br>
+
+On égalise les deux expressions de \\(y\\) :
+\\[
+${fractionAvecSigne(m1Aff)}x + ${fractionAvecSigne(p1Aff)}
+=
+${fractionAvecSigne(mFrac)}x + ${fractionAvecSigne(pFrac)}
+\\]
+
+On met les quatre termes sur le même dénominateur :
+\\[
+\\frac{${A}x + ${B}}{${D}}
+=
+\\frac{${C}x + ${E}}{${D}}
+\\]
+
+On supprime le dénominateur commun :
+\\[
+${A}x + ${B} = ${C}x + ${E}
+\\]
+
+On isole \\(x\\) :
+\\[
+${A}x - ${C}x = ${E} - ${B}
+\\]
+
+\\[
+x = ${fractionLaTeX(xInter.num, xInter.den)}
+\\]
+
+On remplace dans l’équation de \\(d_2\\) :
+\\[
+y = ${fractionLaTeX(yInter.num, yInter.den)}
+\\]
+
+<span style="font-weight:bold">
+L’intersection des deux droites est le point
+\\(
+(${fractionLaTeX(xInter.num,xInter.den)} ; ${fractionLaTeX(yInter.num,yInter.den)})
+\\).
+</span>
+`;
+}
+
 
   f.innerHTML = texte;
   renderMath(f);
