@@ -181,6 +181,16 @@ function ppcmListe(tab){
   return tab.reduce((acc, val) => ppcm(acc, val));
 }
 
+function fractionFinale(num, den){
+  const signe = (num * den < 0) ? '-' : '';
+  const n = Math.abs(num);
+  const d = Math.abs(den);
+  const p = pgcd(n, d);
+
+  return signe + '\\frac{' + (n / p) + '}{' + (d / p) + '}';
+}
+
+
   /* ====================== GENERER EQUATION ====================== */
 
 function genererEquation(){
@@ -415,15 +425,15 @@ ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
 On met les quatre termes sur le même dénominateur :<br>
 \\(
 ${m1Num < 0 ? '-' : ''}
-\\frac{${Math.abs(m1Num)}x}{${D}}
+\\frac{${Math.abs(m1Num)}}{${D}}x
 ${p1Num < 0 ? '-' : '+'}
 \\frac{${Math.abs(p1Num)}}{${D}}
 =
 ${m2Num < 0 ? '-' : ''}
-\\frac{${Math.abs(m2Num)}x}{${D}}
+\\frac{${Math.abs(m2Num)}}{${D}}x
 ${p2Num < 0 ? '-' : '+'}
 \\frac{${Math.abs(p2Num)}}{${D}}
-\\)<br>
+\\)<br><br>
 
 
 
@@ -432,7 +442,8 @@ On supprime le dénominateur commun et on résout :<br>
 \\begin{aligned}
 ${A}x ${B >= 0 ? '+' : ''}${B} &= ${C}x ${E >= 0 ? '+' : ''}${E} \\\\
 ${A}x - ${C}x &= ${E} - ${B} \\\\
-x &= ${fractionLaTeX(xInter.num, xInter.den)}
+${A - C}x &= ${E - B} \\\\
+x &= ${fractionFinale(E - B, A - C)}
 \\end{aligned}
 \\)<br><br>
 
