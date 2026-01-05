@@ -481,39 +481,56 @@ x &= ${fractionFinale(EB, AC)}
 \\)<br><br>`;
 
     
-// --- simplification AVANT multiplication ---
-xInter = fractionIrreductible(xNum, xDen);
-const simp = pgcd(mFrac.den, xInter.num);
+// =================== REMPLACEMENT DANS d₂ ===================
 
-const mNumS = mFrac.num;
-const mDenS = mFrac.den / simp;
+// 1) Affichage de x avec parenthèses si négatif
+const xAff = afficherXPourRemplacement(xInter);
 
-const xNumS = xInter.num / simp;
-const xDenS = xInter.den;
+// 2) Simplification AVANT multiplication (simplification croisée)
+const simp1 = pgcd(Math.abs(mFrac.num), Math.abs(xInter.den));
+const simp2 = pgcd(Math.abs(xInter.num), Math.abs(mFrac.den));
 
-// --- multiplication après simplification ---
+const mNumS = mFrac.num / simp1;
+const mDenS = mFrac.den / simp2;
+
+const xNumS = xInter.num / simp2;
+const xDenS = xInter.den / simp1;
+
+// 3) Produit simplifié
 const prodNum = mNumS * xNumS;
 const prodDen = mDenS * xDenS;
 
-// --- mise au même dénominateur avec p ---
-const yDenCommun = ppcm(prodDen, pFrac.den);
-const yNum1 = prodNum * (yDenCommun / prodDen);
-const yNum2 = pFrac.num * (yDenCommun / pFrac.den);
-yFinal = fractionIrreductible(yNum1 + yNum2, yDenCommun);
+// 4) Normalisation du signe
+const prodFrac = normaliserFraction(
+  fractionIrreductible(prodNum, prodDen)
+);
 
-// --- affichage détaillé ---
+// 5) Mise au même dénominateur avec p
+const D2 = ppcm(prodFrac.den, pFrac.den);
+
+const yNum1 = prodFrac.num * (D2 / prodFrac.den);
+const yNum2 = pFrac.num * (D2 / pFrac.den);
+
+// 6) Somme finale et réduction
+yFinal = normaliserFraction(
+  fractionIrreductible(yNum1 + yNum2, D2)
+);
+
+// =================== AFFICHAGE DÉTAILLÉ ===================
+
 texte += `
 On remplace dans l’équation de \\(d_2\\) :
 \\[
 \\begin{aligned}
-y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${afficherXPourRemplacement(xInter)}
+y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${xAff}
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
-y &= ${fractionAffichee(prodNum, prodDen)}
-${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}\\\\
-y &= ${fractionAffichee(yNum1, yDenCommun)} + ${fractionAffichee(yNum2, yDenCommun)}\\\\
+y &= ${fractionLaTeX(prodFrac.num, prodFrac.den)}
+${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionLaTeX(yNum1, D2)} + ${fractionLaTeX(yNum2, D2)} \\\\
 y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
 \\end{aligned}
 \\]
+
 
 <span style="font-weight:bold">
 L’intersection des deux droites est le point
