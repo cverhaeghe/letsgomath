@@ -159,7 +159,20 @@ function fractionIrreductible(num, den){
   return fractionAvecSigne(frac);
 }
 
-  
+  function additionFractions(f1, f2){
+  return fractionIrreductible(
+    f1.num * f2.den + f2.num * f1.den,
+    f1.den * f2.den
+  );
+}
+
+function multiplicationFractions(f1, f2){
+  return fractionIrreductible(
+    f1.num * f2.num,
+    f1.den * f2.den
+  );
+}
+
   /* ====================== GENERER EQUATION ====================== */
 
 function genererEquation(){
@@ -332,9 +345,8 @@ p_2 = ${fractionAvecSigne(pFrac)}
 <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> comparaison des coefficients  </span> <br><br>
 ${explication} <br><br>
 
-<span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> calcul du point d'intersection  </span> <br><br>`;
 
-  if (bonneReponse === "secantes" || bonneReponse === "perpendiculaires") {
+  if (bonneReponse === "secantes") {
 
   // dénominateur commun
   const D =
