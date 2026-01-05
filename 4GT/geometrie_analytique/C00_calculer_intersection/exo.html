@@ -394,14 +394,14 @@ On résout le système formé par les deux équations :
 \\begin{cases}
 \\; y = ${afficherMx(m1Aff)}
 ${p1Aff.num >= 0 ? '+' : '-'}
-${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)} \\quad \\( (d_1)\\) \\\\
+${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)} \\quad  (d_1) \\\\
 \\; y = ${afficherMx(mFrac)}
 ${pFrac.num >= 0 ? '+' : '-'}
-${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\quad \\( (d_2)\\)
+${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\quad  (d_2)
 \\end{cases}
 \\]
 
-On égalise les deux expressions de \\(y\\) :
+On égalise les deux expressions de \\(y\\) :<br>
 \\(
 ${afficherMx(m1Aff)}
 ${p1Aff.num >= 0 ? '+' : '-'}
@@ -410,9 +410,9 @@ ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
 ${afficherMx(mFrac)}
 ${pFrac.num >= 0 ? '+' : '-'}
 ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
-\\)
+\\)<br><br>
 
-On met les quatre termes sur le même dénominateur :
+On met les quatre termes sur le même dénominateur :<br>
 \\(
 \\frac{${m1Num}x}{${D}}
 ${p1Num >= 0 ? '-' : '+'}
@@ -421,17 +421,17 @@ ${p1Num >= 0 ? '-' : '+'}
 \\frac{${m2Num}x}{${D}}
 ${p2Num >= 0 ? '+' : '-'}
 \\frac{${Math.abs(p2Num)}}{${D}}
-\\)
+\\)<br><br>
 
 
-On supprime le dénominateur commun :
-\\[
+On supprime le dénominateur commun :<br>
+\\(
 \\begin{aligned}
 ${A}x ${B >= 0 ? '+' : ''}${B} &= ${C}x ${E >= 0 ? '+' : ''}${E} \\\\
 ${A}x - ${C}x &= ${E} - ${B} \\\\
 x &= ${fractionLaTeX(xInter.num, xInter.den)}
 \\end{aligned}
-\\]
+\\)<br><br>
 
 
 On remplace dans l’équation de \\(d_2\\) :
