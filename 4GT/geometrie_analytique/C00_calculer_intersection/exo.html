@@ -28,7 +28,7 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <div class="equation-box" id="equation"></div>
+  <div class="equation-box" id="enonce"></div>
 
   <input type="text" id="reponse" placeholder="...">
 
@@ -333,10 +333,9 @@ p_2 = ${fractionAvecSigne(pFrac)}
 \\)<br><br>
 
 <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> comparaison des coefficients  </span> <br><br>
-${explication}
-`;
+${explication} <br>
 
-  <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> calcul du point d'intersection  </span> <br><br>`;
+<span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> calcul du point d'intersection  </span> <br><br>`;
 
 
   f.innerHTML = texte;
