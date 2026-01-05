@@ -392,12 +392,12 @@ texte += `
 On résout le système formé par les deux équations :
 \\[
 \\begin{cases}
-d_1 :\\; y = ${afficherMx(m1Aff)}
+\\; y = ${afficherMx(m1Aff)}
 ${p1Aff.num >= 0 ? '+' : '-'}
-${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)} \\\\
-d_2 :\\; y = ${afficherMx(mFrac)}
+${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)} (d_1) \\\\
+\\; y = ${afficherMx(mFrac)}
 ${pFrac.num >= 0 ? '+' : '-'}
-${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
+${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} (d_2)
 \\end{cases}
 \\]
 \\]
