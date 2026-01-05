@@ -441,7 +441,7 @@ On supprime le dénominateur commun et on résout :<br>
 \\(
 \\begin{aligned}
 ${A}x ${B >= 0 ? '+' : ''}${B} &= ${C}x ${E >= 0 ? '+' : ''}${E} \\\\
-${A}x - ${C}x &= ${E} - ${B} \\\\
+${A}x ${C < 0 ? '+' : '-'} ${Math.abs(C)} = ${E} ${B < 0 ? '+' : '-'} ${Math.abs(B)}\\\\
 ${A - C}x &= ${E - B} \\\\
 x &= ${fractionFinale(E - B, A - C)}
 \\end{aligned}
