@@ -385,15 +385,32 @@ const p2Num = pFrac.num * (D / pFrac.den);
     pFrac
   );
 
-  texte += `
+texte += `
 <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>
-<span style='color: var(--peps)'> calcul de l’intersection </span><br><br>
+<span style='color: var(--peps)'> calcul du point d’intersection </span><br><br>
+
+On résout le système formé par les deux équations :
+\\[
+\\begin{cases}
+d_1 :\\; y = ${afficherMx(m1Aff)}
+${p1Aff.num >= 0 ? '+' : '-'}
+${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)} \\\\
+d_2 :\\; y = ${afficherMx(mFrac)}
+${pFrac.num >= 0 ? '+' : '-'}
+${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
+\\end{cases}
+\\]
+`;
 
 On égalise les deux expressions de \\(y\\) :
 \\[
-${fractionAvecSigne(m1Aff)}x + ${fractionAvecSigne(p1Aff)}
+${afficherMx(m1Aff)}
+${p1Aff.num >= 0 ? '+' : '-'}
+${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
 =
-${fractionAvecSigne(mFrac)}x + ${fractionAvecSigne(pFrac)}
+${afficherMx(mFrac)}
+${pFrac.num >= 0 ? '+' : '-'}
+${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
 \\]
 
 On met les quatre termes sur le même dénominateur :
