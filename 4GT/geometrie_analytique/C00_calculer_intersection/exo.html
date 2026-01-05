@@ -213,8 +213,8 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     pFrac = p1;
     bonneReponse = "confondue";
     explication =`
-    Comme les droites ont la même pente \\( (m_1=m_2)\\) et la même ordonnée à l’origine \\( (p_1=p_2)\\) : 
-      elles sont parallèles confondues \\((d_1=d_2)\\) et <span style='color: #475a93; font-weight: bold;'> leur intersection est les droites elles-mêmes  \\( (d_1 \\cap d_2 = d_1 = d_2)\\) </span>.`;
+    Comme les droites ont la même pente \\( (m_1=m_2)\\) et la même ordonnée à l’origine \\( (p_1=p_2)\\), 
+      les droites sont parallèles confondues \\((d_1=d_2)\\) et <span style='color: #475a93; font-weight: bold;'> leur intersection est les droites elles-mêmes  \\( (d_1 \\cap d_2 = d_1 = d_2)\\) </span>.`;
   }
 
   else if (r < PROBA_CONFONDUE + PROBA_PARALLELES) {
@@ -226,8 +226,8 @@ p1 = normaliserFraction(fractionIrreductible(-c, b));
     } while (fractionsEgales(pFrac, p1));
     bonneReponse = "paralleles";
     explication =`
-    Comme les droites ont la même pente \\((m_1=m_2)\\) mais des ordonnées à l’origine différentes \\((p_1 \\neq p_2)\\) : 
-      elles sont parallèles distinctes et <span style='color: #475a93; font-weight: bold;'>leur intersection est vide \\(d_1 \\cap d_2 = \\varnothing\\) </span>.`;
+    Comme les droites ont la même pente \\((m_1=m_2)\\) mais des ordonnées à l’origine différentes \\((p_1 \\neq p_2)\\), 
+      les droites sont parallèles distinctes et <span style='color: #475a93; font-weight: bold;'>leur intersection est vide \\(d_1 \\cap d_2 = \\varnothing\\) </span>.`;
 }
 
   else {
