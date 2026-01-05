@@ -190,6 +190,13 @@ function fractionFinale(num, den){
   return signe + '\\frac{' + (n / p) + '}{' + (d / p) + '}';
 }
 
+function afficherXPourRemplacement(frac){
+  const latex = fractionLaTeX(Math.abs(frac.num), frac.den);
+  const signe = (frac.num * frac.den < 0) ? '-' : '';
+  const val = signe + latex;
+
+  return (signe === '-') ? `(${val})` : val;
+}
 
   /* ====================== GENERER EQUATION ====================== */
 
@@ -444,7 +451,7 @@ On supprime le dénominateur commun et on résout :<br>
 \\(
 \\begin{aligned}
 ${A}x ${B >= 0 ? '+' : ''}${B} &= ${C}x ${E >= 0 ? '+' : ''}${E} \\\\
-${A}x ${C < 0 ? '+' : '-'} ${Math.abs(C)} &= ${E} ${B < 0 ? '+' : '-'} ${Math.abs(B)}\\\\
+${A}x ${C < 0 ? '+' : '-'} ${Math.abs(C)}x &= ${E} ${B < 0 ? '+' : '-'} ${Math.abs(B)}\\\\
 ${AC}x &= ${EB} \\\\
 \\frac{${AC}}{${AC}}x &= \\frac{${EB}}{${AC}} \\\\
 x &= ${fractionFinale(EB, AC)}
@@ -477,9 +484,7 @@ texte += `
 On remplace dans l’équation de \\(d_2\\) :
 \\[
 \\begin{aligned}
-y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${fractionLaTeX(xInter.num, xInter.den)}
-${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
-y &= ${fractionLaTeX(mNumS, mDenS)} \\cdot ${fractionLaTeX(xNumS, xDenS)}
+y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${afficherXPourRemplacement(xInter)}
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
 y &= ${fractionLaTeX(prodNum, prodDen)}
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
@@ -491,7 +496,7 @@ y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
 <span style="font-weight:bold">
 L’intersection des deux droites est le point
 \\(
-(${fractionLaTeX(xInter.num, xInter.den)} ; ${fractionLaTeX(yFinal.num, yFinal.den)})
+(${fractionFinale(EB, AC)} ; ${fractionLaTeX(yFinal.num, yFinal.den)})
 \\).
 </span>
 `;
