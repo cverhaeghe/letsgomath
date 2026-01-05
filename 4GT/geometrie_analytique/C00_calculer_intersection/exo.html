@@ -453,15 +453,39 @@ x &= ${fractionFinale(EB, AC)}
 
 
 On remplace dans l’équation de \\(d_2\\) :
-\\[
-y = ${afficherM(mFrac)} ${fractionLaTeX(xInter.num, xInter.den)}
-${pFrac.num >= 0 ? '+' : '-'}
-${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
-\\]
+// --- simplification AVANT multiplication ---
+const simp = pgcd(mFrac.den, xInter.num);
 
+const mNumS = mFrac.num;
+const mDenS = mFrac.den / simp;
+
+const xNumS = xInter.num / simp;
+const xDenS = xInter.den;
+
+// --- multiplication après simplification ---
+const prodNum = mNumS * xNumS;
+const prodDen = mDenS * xDenS;
+
+// --- mise au même dénominateur avec p ---
+const yDenCommun = ppcm(prodDen, pFrac.den);
+const yNum1 = prodNum * (yDenCommun / prodDen);
+const yNum2 = pFrac.num * (yDenCommun / pFrac.den);
+const yFinal = fractionIrreductible(yNum1 + yNum2, yDenCommun);
+
+// --- affichage détaillé ---
+texte += `
+On remplace dans l’équation de \\(d_2\\) :
 \\[
-y = ${fractionLaTeX(yInter.num, yInter.den)}
+\\begin{aligned}
+y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${fractionLaTeX(xInter.num, xInter.den)} ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionLaTeX(mNumS, mDenS)} \\cdot ${fractionLaTeX(xNumS, xDenS)} ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionLaTeX(prodNum, prodDen)} + ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionLaTeX(yNum1, yDenCommun)} + ${fractionLaTeX(yNum2, yDenCommun)} \\\\
+y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
+\\end{aligned}
 \\]
+`;
+
 
 <span style="font-weight:bold">
 L’intersection des deux droites est le point
