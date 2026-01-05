@@ -414,22 +414,25 @@ ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
 
 On met les quatre termes sur le même dénominateur :
 \\(
-\\ ${m1Num <= 0 ? '-' : ''}frac{${m1NumAbs}}{${D}}x
-${p1Num >= 0 ? '+' : '-'}
+\\frac{${m1Num}x}{${D}}
+${p1Num >= 0 ? '-' : '+'}
 \\frac{${Math.abs(p1Num)}}{${D}}
 =
-\\frac{${m2Num}}{${D}}x
+\\frac{${m2Num}x}{${D}}
 ${p2Num >= 0 ? '+' : '-'}
 \\frac{${Math.abs(p2Num)}}{${D}}
 \\)
 
+
 On supprime le dénominateur commun :
-\\(
-${A}x ${B >= 0 ? '+' : ''}${B} = ${C}x  ${E >= 0 ? '+' : ''}${E}
-${A}x - ${C}x = ${E} - ${B}
-${xInter.den} x = ${xInter.num}
-x = ${fractionLaTeX(xInter.num, xInter.den)}
-\\)
+\\[
+\\begin{aligned}
+${A}x ${B >= 0 ? '+' : ''}${B} &= ${C}x ${E >= 0 ? '+' : ''}${E} \\\\
+${A}x - ${C}x &= ${E} - ${B} \\\\
+x &= ${fractionLaTeX(xInter.num, xInter.den)}
+\\end{aligned}
+\\]
+
 
 On remplace dans l’équation de \\(d_2\\) :
 \\[
