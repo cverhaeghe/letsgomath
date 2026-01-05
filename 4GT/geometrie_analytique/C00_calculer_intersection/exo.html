@@ -388,6 +388,9 @@ const p2Num = pFrac.num * (D / pFrac.den);
 
   const xNum = E - B;
   const xDen = A - C;
+  const AC = A - C;   // coefficient de x
+  const EB = E - B;   // terme constant
+
   const xInter = fractionIrreductible(xNum, xDen);
 
   const yInter = additionFractions(
@@ -442,8 +445,9 @@ On supprime le dénominateur commun et on résout :<br>
 \\begin{aligned}
 ${A}x ${B >= 0 ? '+' : ''}${B} &= ${C}x ${E >= 0 ? '+' : ''}${E} \\\\
 ${A}x ${C < 0 ? '+' : '-'} ${Math.abs(C)} = ${E} ${B < 0 ? '+' : '-'} ${Math.abs(B)}\\\\
-${A - C}x &= ${E - B} \\\\
-x &= ${fractionFinale(E - B, A - C)}
+${AC}x &= ${EB} \\\\
+\\frac{${AC}}{${AC}}x &= \\frac{${EB}}{${AC}} \\\\
+x &= ${fractionFinale(EB, AC)}
 \\end{aligned}
 \\)<br><br>
 
