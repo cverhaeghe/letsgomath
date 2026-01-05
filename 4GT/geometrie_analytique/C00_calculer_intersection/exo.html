@@ -428,8 +428,7 @@ const p2Num = pFrac.num * (D / pFrac.den);
   const AC = A - C;   // coefficient de x
   const EB = E - B;   // terme constant
 
-xInter = fractionIrreductible(xNum, xDen);
-yFinal = fractionIrreductible(yNum1 + yNum2, yDenCommun);
+
 
 
 texte += `
@@ -487,6 +486,7 @@ x &= ${fractionFinale(EB, AC)}
 
     
 // --- simplification AVANT multiplication ---
+xInter = fractionIrreductible(xNum, xDen);
 const simp = pgcd(mFrac.den, xInter.num);
 
 const mNumS = mFrac.num;
@@ -503,7 +503,7 @@ const prodDen = mDenS * xDenS;
 const yDenCommun = ppcm(prodDen, pFrac.den);
 const yNum1 = prodNum * (yDenCommun / prodDen);
 const yNum2 = pFrac.num * (yDenCommun / pFrac.den);
-const yFinal = fractionIrreductible(yNum1 + yNum2, yDenCommun);
+yFinal = fractionIrreductible(yNum1 + yNum2, yDenCommun);
 
 // --- affichage détaillé ---
 texte += `
