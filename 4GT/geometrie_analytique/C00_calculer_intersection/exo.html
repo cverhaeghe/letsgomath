@@ -191,11 +191,13 @@ function fractionFinale(num, den){
 }
 
 function afficherXPourRemplacement(frac){
-  const latex = fractionLaTeX(Math.abs(frac.num), frac.den);
-  const signe = frac.num < 0 ? '-' : '';
-  const val = signe + latex;
-  return frac.num < 0 ? `(${val})` : val;
+  const signe = frac.num * frac.den < 0 ? '-' : '';
+  const n = Math.abs(frac.num);
+  const d = Math.abs(frac.den);
+  const latex = '\\frac{' + n + '}{' + d + '}';
+  return signe ? `(${signe}${latex})` : latex;
 }
+
 
 function fractionAffichee(num, den){
   const signe = (num * den < 0) ? '-' : '';
