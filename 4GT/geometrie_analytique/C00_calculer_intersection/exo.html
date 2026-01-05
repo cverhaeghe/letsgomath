@@ -173,6 +173,14 @@ function multiplicationFractions(f1, f2){
   );
 }
 
+  function ppcm(a, b){
+  return Math.abs(a * b) / pgcd(a, b);
+}
+
+function ppcmListe(tab){
+  return tab.reduce((acc, val) => ppcm(acc, val));
+}
+
   /* ====================== GENERER EQUATION ====================== */
 
 function genererEquation(){
@@ -349,11 +357,18 @@ ${explication} <br><br>`;
   if (bonneReponse === "secantes") {
 
   // dénominateur commun
-  const D =
-    m1Aff.den *
-    p1Aff.den *
-    mFrac.den *
-    pFrac.den;
+const D = ppcmListe([
+  m1Aff.den,
+  p1Aff.den,
+  mFrac.den,
+  pFrac.den
+]);
+
+const m1Num = m1Aff.num * (D / m1Aff.den);
+const p1Num = p1Aff.num * (D / p1Aff.den);
+const m2Num = mFrac.num * (D / mFrac.den);
+const p2Num = pFrac.num * (D / pFrac.den);
+
 
   // coefficients après mise au même dénominateur
   const A = m1Aff.num * (D / m1Aff.den);
@@ -383,10 +398,15 @@ ${fractionAvecSigne(mFrac)}x + ${fractionAvecSigne(pFrac)}
 
 On met les quatre termes sur le même dénominateur :
 \\[
-\\frac{${A}x + ${B}}{${D}}
+\\frac{${m1Num}x}{${D}}
+${p1Num >= 0 ? '-' : '+'}
+\\frac{${Math.abs(p1Num)}}{${D}}
 =
-\\frac{${C}x + ${E}}{${D}}
+\\frac{${m2Num}x}{${D}}
+${p2Num >= 0 ? '+' : '-'}
+\\frac{${Math.abs(p2Num)}}{${D}}
 \\]
+
 
 On supprime le dénominateur commun :
 \\[
