@@ -28,15 +28,13 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <div class="equation-box" id="enonce"></div>
+  <div class="equation-box" id="equation"></div>
 
+  <input type="text" id="reponse" placeholder="...">
 
-
-
-
-  <div class="center-button">
-        <button onclick="genererEquation()">Nouvel exercice</button>
-  </div>
+  <button onclick="verifier()">Vérifier</button>
+  <button onclick="corriger()">Correction</button>
+  <button onclick="genererEquation()">Nouvel exercice</button>
 
   <p id="feedback" class="feedback"></p>
 
@@ -248,7 +246,7 @@ const eqDiv = document.getElementById("enonce");
   eqDiv.innerHTML = `
     La droite \\(d_1\\) a pour équation : \\[ ${eq1Texte} \\]<br>
     La droite \\(d_2\\) a pour équation : \\[ ${eq2Texte} \\]<br>
-    Détermine la position relative de ces deux droites.
+    Détermine l'intersection entre ces deux droites.
   `;
   renderMath(eqDiv);
 
