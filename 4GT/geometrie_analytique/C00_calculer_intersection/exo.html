@@ -400,7 +400,7 @@ ${pFrac.num >= 0 ? '+' : '-'}
 ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
 \\end{cases}
 \\]
-`;
+\\]
 
 On égalise les deux expressions de \\(y\\) :
 \\[
@@ -423,7 +423,6 @@ ${p1Num >= 0 ? '-' : '+'}
 ${p2Num >= 0 ? '+' : '-'}
 \\frac{${Math.abs(p2Num)}}{${D}}
 \\]
-
 
 On supprime le dénominateur commun :
 \\[
@@ -451,8 +450,8 @@ L’intersection des deux droites est le point
 \\).
 </span>
 `;
-}
 
+  }
 
   f.innerHTML = texte;
   renderMath(f);
