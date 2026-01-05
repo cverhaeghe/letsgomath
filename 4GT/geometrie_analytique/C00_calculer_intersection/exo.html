@@ -166,10 +166,7 @@ function genererEquation(){
 
   // ===== Remise à zéro =====
   document.getElementById("feedback").innerHTML = "";
-  document.querySelectorAll('.qcm-card').forEach(card=>{
-    card.classList.remove('correct','incorrect');
-    card.style.pointerEvents = "auto";
-  });
+
 
   /* ===== DROITE d1 : ax + by + c = 0 ===== */
   a = randCoeffNZ10();
@@ -345,28 +342,24 @@ ${explication} <br>
 
   
 /* ====================== VERIFICATION ====================== */
-function verifier(rep, el){
+function verifier(){
+  const rep = document.getElementById("reponse").value
+    .toLowerCase()
+    .trim();
 
-  // Désactiver toutes les cartes
-  document.querySelectorAll('.qcm-card')
-    .forEach(c => c.style.pointerEvents = "none");
+  const f = document.getElementById("feedback");
 
-  // Gestion des couleurs
   if (rep === bonneReponse) {
-    el.classList.add('correct');
+    f.innerHTML = "✅ Bonne réponse !";
+    f.style.color = "black";
   } else {
-    el.classList.add('incorrect');
-
-    document.querySelectorAll('.qcm-card').forEach(c => {
-      if (c.dataset.reponse === bonneReponse) {
-        c.classList.add('correct');
-      }
-    });
+    f.innerHTML = "❌ Réponse incorrecte";
+    f.style.color = "black";
   }
 
-  // ✅ AFFICHAGE AUTOMATIQUE DE LA CORRECTION
   corriger();
 }
+
 
 
 
