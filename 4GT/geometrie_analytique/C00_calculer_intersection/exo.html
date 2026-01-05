@@ -424,6 +424,9 @@ const p2Num = pFrac.num * (D / pFrac.den);
   const AC = A - C;   // coefficient de x
   const EB = E - B;   // terme constant
 
+xInter = normaliserFraction(
+  fractionIrreductible(xNum, xDen)
+);
 
 
 
@@ -598,7 +601,6 @@ if (bonneReponse === "secantes") {
   return;
 }
 
-  corriger();
 }
 
 
