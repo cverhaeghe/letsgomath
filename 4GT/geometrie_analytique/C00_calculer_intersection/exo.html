@@ -493,7 +493,7 @@ y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${afficherXPourRemplacement(x
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
 y &= ${fractionAffichee(prodNum, prodDen)}
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}\\\\
-y &= ${fractionLaTeX(yNum1, yDenCommun)} + ${fractionLaTeX(yNum2, yDenCommun)} \\\\
+y &= ${fractionAffichee(yNum1, yDenCommun)} + ${fractionAffichee(yNum2, yDenCommun)}\\\\
 y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
 \\end{aligned}
 \\]
