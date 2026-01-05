@@ -192,11 +192,11 @@ function fractionFinale(num, den){
 
 function afficherXPourRemplacement(frac){
   const latex = fractionLaTeX(Math.abs(frac.num), frac.den);
-  const signe = (frac.num * frac.den < 0) ? '-' : '';
+  const signe = frac.num < 0 ? '-' : '';
   const val = signe + latex;
-
-  return (signe === '-') ? `(${val})` : val;
+  return frac.num < 0 ? `(${val})` : val;
 }
+
 
   /* ====================== GENERER EQUATION ====================== */
 
@@ -456,10 +456,9 @@ ${AC}x &= ${EB} \\\\
 \\frac{${AC}}{${AC}}x &= \\frac{${EB}}{${AC}} \\\\
 x &= ${fractionFinale(EB, AC)}
 \\end{aligned}
-\\)<br><br>
+\\)<br><br>`;
 
-
-On remplace dans l’équation de \\(d_2\\) :`;
+    
 // --- simplification AVANT multiplication ---
 const simp = pgcd(mFrac.den, xInter.num);
 
