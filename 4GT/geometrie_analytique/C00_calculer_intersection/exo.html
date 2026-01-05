@@ -206,6 +206,25 @@ function fractionAffichee(num, den){
   return signe + '\\frac{' + n + '}{' + d + '}';
 }
 
+  function fracToString(frac){
+  const signe = frac.num * frac.den < 0 ? '-' : '';
+  const n = Math.abs(frac.num);
+  const d = Math.abs(frac.den);
+  const p = pgcd(n, d);
+  return signe + (n / p) + '/' + (d / p);
+}
+
+  function pointToString(xFrac, yFrac){
+  return `(${fracToString(xFrac)};${fracToString(yFrac)})`;
+}
+
+  function normaliserPointUtilisateur(rep){
+  return rep
+    .toLowerCase()
+    .replace(/\s+/g, '')   // enlève tous les espaces
+    .replace(',', ';');    // accepte , à la place de ;
+}
+
   /* ====================== GENERER EQUATION ====================== */
 
 function genererEquation(){
@@ -508,6 +527,8 @@ L’intersection des deux droites est le point
 </span>
 `;
 
+let xInter;   // fraction {num, den}
+let yFinal;  // fraction {num, den}
 
   }
 
@@ -521,17 +542,52 @@ L’intersection des deux droites est le point
 function verifier(){
   const rep = document.getElementById("reponse").value
     .toLowerCase()
-    .trim();
+    .replace(/\s+/g, '');
 
   const f = document.getElementById("feedback");
+  f.style.color = "black";
 
-  if (rep === bonneReponse) {
-    f.innerHTML = "✅ Bonne réponse !";
-    f.style.color = "black";
-  } else {
-    f.innerHTML = "❌ Réponse incorrecte";
-    f.style.color = "black";
+  // ===== CAS 1 : droites confondues =====
+  if (bonneReponse === "confondue") {
+    if (rep === "d1" || rep === "d2") {
+      f.innerHTML = "✅ Bonne réponse !";
+    } else {
+      f.innerHTML = "❌ Réponse incorrecte.";
+    }
+    return;
   }
+
+  // ===== CAS 2 : parallèles distinctes =====
+  if (bonneReponse === "paralleles") {
+    if (rep === "vide") {
+      f.innerHTML = "✅ Bonne réponse !";
+    } else {
+      f.innerHTML = "❌ Réponse incorrecte.";
+    }
+    return;
+  }
+
+  // ===== CAS 3 : sécantes =====
+if (bonneReponse === "secantes") {
+
+  const repUser = normaliserPointUtilisateur(
+    document.getElementById("reponse").value
+  );
+
+  const repAttendue = pointToString(xInter, yFinal);
+
+  if (repUser === repAttendue) {
+    f.innerHTML = "✅ Bonne réponse !";
+  } else {
+    f.innerHTML = `❌ Réponse incorrecte.<br>
+    Réponse attendue : <strong>${repAttendue}</strong>`;
+  }
+
+  return;
+}
+
+}
+
 
   corriger();
 }
