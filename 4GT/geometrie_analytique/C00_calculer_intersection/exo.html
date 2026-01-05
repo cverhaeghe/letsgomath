@@ -477,22 +477,25 @@ texte += `
 On remplace dans l’équation de \\(d_2\\) :
 \\[
 \\begin{aligned}
-y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${fractionLaTeX(xInter.num, xInter.den)} ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
-y &= ${fractionLaTeX(mNumS, mDenS)} \\cdot ${fractionLaTeX(xNumS, xDenS)} ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
-y &= ${fractionLaTeX(prodNum, prodDen)} + ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${fractionLaTeX(xInter.num, xInter.den)}
+${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionLaTeX(mNumS, mDenS)} \\cdot ${fractionLaTeX(xNumS, xDenS)}
+${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionLaTeX(prodNum, prodDen)}
+${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
 y &= ${fractionLaTeX(yNum1, yDenCommun)} + ${fractionLaTeX(yNum2, yDenCommun)} \\\\
 y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
 \\end{aligned}
 \\]
 
-
 <span style="font-weight:bold">
 L’intersection des deux droites est le point
 \\(
-(${fractionLaTeX(xInter.num,xInter.den)} ; ${fractionLaTeX(yInter.num,yInter.den)})
+(${fractionLaTeX(xInter.num, xInter.den)} ; ${fractionLaTeX(yFinal.num, yFinal.den)})
 \\).
 </span>
 `;
+
 
   }
 
