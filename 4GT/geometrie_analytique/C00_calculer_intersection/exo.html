@@ -61,6 +61,8 @@ let mFrac;
 let pFrac;
 let bonneReponse="", explication="";
 let eq1Texte="", eq2Texte="";
+let xInter;   // fraction {num, den}
+let yFinal;  // fraction {num, den}  
   
 /* ====================== CONSTANTES ====================== */
 
@@ -425,12 +427,9 @@ const p2Num = pFrac.num * (D / pFrac.den);
   const AC = A - C;   // coefficient de x
   const EB = E - B;   // terme constant
 
-  const xInter = fractionIrreductible(xNum, xDen);
+xInter = fractionIrreductible(xNum, xDen);
+yFinal = fractionIrreductible(yNum1 + yNum2, yDenCommun);
 
-  const yInter = additionFractions(
-    multiplicationFractions(mFrac, xInter),
-    pFrac
-  );
 
 texte += `
 <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>
@@ -527,8 +526,7 @@ L’intersection des deux droites est le point
 </span>
 `;
 
-let xInter;   // fraction {num, den}
-let yFinal;  // fraction {num, den}
+
 
   }
 
@@ -585,9 +583,6 @@ if (bonneReponse === "secantes") {
 
   return;
 }
-
-}
-
 
   corriger();
 }
