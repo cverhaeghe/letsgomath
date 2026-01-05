@@ -197,6 +197,12 @@ function afficherXPourRemplacement(frac){
   return frac.num < 0 ? `(${val})` : val;
 }
 
+function fractionAffichee(num, den){
+  const signe = (num * den < 0) ? '-' : '';
+  const n = Math.abs(num);
+  const d = Math.abs(den);
+  return signe + '\\frac{' + n + '}{' + d + '}';
+}
 
   /* ====================== GENERER EQUATION ====================== */
 
@@ -485,8 +491,8 @@ On remplace dans l’équation de \\(d_2\\) :
 \\begin{aligned}
 y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${afficherXPourRemplacement(xInter)}
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
-y &= ${fractionLaTeX(prodNum, prodDen)}
-${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
+y &= ${fractionAffichee(prodNum, prodDen)}
+${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}\\\\
 y &= ${fractionLaTeX(yNum1, yDenCommun)} + ${fractionLaTeX(yNum2, yDenCommun)} \\\\
 y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
 \\end{aligned}
