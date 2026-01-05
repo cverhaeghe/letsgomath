@@ -169,7 +169,9 @@ function parseFraction(txt) {
 }
 
 function parseReponse(txt) {
+  txt = txt.trim();
   txt = txt.replace(/\s+/g, "");
+  txt = txt.toLowerCase();   // ← ⭐ LA CORRECTION CLÉ
 
   let variable;
   if (txt.startsWith("x=")) variable = "x";
