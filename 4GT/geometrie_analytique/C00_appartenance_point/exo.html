@@ -636,7 +636,7 @@ if (eObj && eObj.num < 0) {
 }
 
 let texte = `
-<u>Étape 1</u> : on remplace les coordonnées du point A dans l'équation<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace les coordonnées du point A dans l'équation  </span> <br>
 \\[
 ${a}\\cdot ${eAffEtape1}
 ${termeAvecSigne(b)}\\cdot ${afficheCoordonnee(yCorr.num, yCorr.den)}
@@ -684,7 +684,7 @@ if (byDen === 1) {
 
 // ===== Affichage Étape 2 =====
 texte += `
-<u>Étape 2</u> : on effectue et/ou on simplifie les produits<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on effectue et/ou on simplifie les produits  </span> <br>
 \\[
 ${
   axEstFraction
@@ -710,7 +710,7 @@ if (!axEstFraction && !byEstFraction) {
   const somme = axFraction + byFraction + c;
 
   texte += `
-<u>Étape 3</u> : on additionne et on compare à zéro<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on additionne et on compare à zéro  </span> <br>
 \\[
 ${somme} ${somme === 0 ? "=" : "\\neq"} 0
 \\]
@@ -736,7 +736,7 @@ ${somme} ${somme === 0 ? "=" : "\\neq"} 0
   const n3 = c * den;
 
   texte += `
-<u>Étape 3</u> : il reste une fraction, on met sur le même dénominateur<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> il reste une fraction, on met sur le même dénominateur  </span> <br>
 \\[
 ${fractionSansPlus(n1, den)}
 ${fractionAvecSigne(n2, den)}
@@ -748,7 +748,7 @@ ${fractionAvecSigne(n3, den)}
   const numFinal = n1 + n2 + n3;
 
   texte += `
-<u>Étape 4</u> : on additionne et on compare avec zéro<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on additionne et on compare avec zéro  </span> <br>
 \\[
 ${numFinal === 0 ? "0" : fractionLatex(Math.abs(numFinal), den)}
 ${numFinal === 0 ? "=" : "\\neq"} 0
