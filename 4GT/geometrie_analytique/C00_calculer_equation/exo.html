@@ -69,8 +69,7 @@ function generer() {
 
   document.getElementById("feedback").innerHTML = "";
   document.getElementById("reponse").value = "";
-  document.getElementById("enonce").innerHTML = enonce;
-  MathJax.typeset();
+
 
   const r = Math.random() * 100;
 
@@ -158,6 +157,7 @@ function generer() {
     \\(A(${e};${f})\\) et perpendiculaire à la droite
     \\(d_2 : ${a}x + ${b}y + ${c} = 0\\).`;
   }
+
 
   document.getElementById("enonce").innerHTML = enonce;
   MathJax.typeset();
