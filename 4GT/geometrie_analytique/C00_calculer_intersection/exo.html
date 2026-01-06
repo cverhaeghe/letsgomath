@@ -224,6 +224,11 @@ function fractionAffichee(num, den){
     .replace(',', ';');    // accepte , à la place de ;
 }
 
+  function fractionLaTeXSignee(num, den){
+  const signe = num < 0 ? '-' : '';
+  return signe + '\\frac{' + Math.abs(num) + '}{' + den + '}';
+}
+
   /* ====================== GENERER EQUATION ====================== */
 
 function genererEquation(){
@@ -527,10 +532,10 @@ On remplace dans l’équation de \\(d_2\\) :
 \\begin{aligned}
 y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${xAff}
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
-y &= ${fractionLaTeX(prodFrac.num, prodFrac.den)}
+y &= ${fractionLaTeXSignee(prodFrac.num, prodFrac.den)}
 ${pFrac.num >= 0 ? '+' : '-'} ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)} \\\\
-y &= ${fractionLaTeX(yNum1, D2)} + ${fractionLaTeX(yNum2, D2)} \\\\
-y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
+y &= ${fractionLaTeXSignee(yNum1, D2)} + ${fractionLaTeX(yNum2, D2)} \\\\
+y &= ${fractionLaTeXSignee(yFinal.num, yFinal.den)}
 \\end{aligned}
 \\]
 
@@ -538,7 +543,7 @@ y &= ${fractionLaTeX(yFinal.num, yFinal.den)}
 <span style="font-weight:bold">
 L’intersection des deux droites est le point
 \\(
-(${fractionFinale(EB, AC)} ; ${fractionLaTeX(yFinal.num, yFinal.den)})
+(${fractionFinale(EB, AC)} ; ${fractionLaTeXSignee(yFinal.num, yFinal.den)})
 \\).
 </span>
 `;
