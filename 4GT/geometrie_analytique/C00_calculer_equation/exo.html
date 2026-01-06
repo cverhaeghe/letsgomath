@@ -31,13 +31,15 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <div class="equation-box" id="equation"></div>
+<div class="exo-enonce">
+  <p class="enonce" id="enonce"></p>
+</div>
 
   <input type="text" id="reponse" placeholder="...">
 
   <button onclick="verifier()">Vérifier</button>
   <button onclick="corriger()">Résolution</button>
-  <button onclick="genererEquation()">Nouvel exercice</button>
+  <button onclick="generer()">Nouvel exercice</button>
 
   <p id="feedback" class="feedback"></p>
 
@@ -51,12 +53,111 @@
 <script>
   /*==============VARIABLES========*/
 let m, e, f, p;
-  
+let cas;
   /*==============FONCTIONS========*/
 
+  function normaliser(str) {
+  return str
+    .replace(/\s+/g, "")
+    .replace(",", ".")
+    .toLowerCase();
+}
+
+  /*==============GENERATION========*/
 function generer() {
 
+  document.getElementById("feedback").innerHTML = "";
+  document.getElementById("reponse").value = "";
 
+  const r = Math.random() * 100;
+
+  // Point A
+  e = Math.floor(Math.random() * 7) - 3;
+  f = Math.floor(Math.random() * 7) - 3;
+
+  let enonce = "";
+
+  /* ===== CAS 1 : parallèle à l’axe des x (10%) ===== */
+  
+  if (r < 10) {
+    
+    cas = 1;
+
+    p = f;
+    m = 0;
+
+    enonce = `Calcule l'équation réduite de la droite \\(d_1\\) passant par le point
+    \\(A(${e};${f})\\) et parallèle à l’axe des abscisses.`;
+
+  }
+
+  /* ===== CAS 2 : parallèle à l’axe des y (10%) ===== */
+  else if (r < 20) {
+
+    cas = 2;
+
+    enonce = `Calcule l'équation de la droite \\(d_1\\) passant par le point
+    \\(A(${e};${f})\\) et parallèle à l’axe des ordonnées.`;
+
+    // Cas particulier : x = e
+    m = null;
+    p = null;
+  }
+
+  /* ===== CAS 3 : passant par A et B (30%) ===== */
+  else if (r < 50) {
+
+    cas = 3;
+
+    let xB, yB;
+    do {
+      xB = Math.floor(Math.random() * 7) - 3;
+      yB = Math.floor(Math.random() * 7) - 3;
+    } while (xB === e);
+
+    m = (yB - f) / (xB - e);
+    p = f - m * e;
+
+    enonce = `Calcule l'équation réduite de la droite \\(d_1\\) passant par les points
+    \\(A(${e};${f})\\) et \\(B(${xB};${yB})\\).`;
+  }
+
+  /* ===== CAS 4 : parallèle à d2 (25%) ===== */
+  else if (r < 75) {
+
+    cas = 4;
+
+    let a = Math.floor(Math.random() * 5) + 1;
+    let b = Math.floor(Math.random() * 5) + 1;
+    let c = Math.floor(Math.random() * 7) - 3;
+
+    m = -a / b;
+    p = f - m * e;
+
+    enonce = `Calcule l'équation réduite de la droite \\(d_1\\) passant par le point
+    \\(A(${e};${f})\\) et parallèle à la droite
+    \\(d_2 : ${a}x + ${b}y + ${c} = 0\\).`;
+  }
+
+  /* ===== CAS 5 : perpendiculaire à d2 (25%) ===== */
+  else {
+
+    cas = 5;
+
+    let a = Math.floor(Math.random() * 5) + 1;
+    let b = Math.floor(Math.random() * 5) + 1;
+    let c = Math.floor(Math.random() * 7) - 3;
+
+    m = b / a;
+    p = f - m * e;
+
+    enonce = `Calcule l'équation réduite de la droite \\(d_1\\) passant par le point
+    \\(A(${e};${f})\\) et perpendiculaire à la droite
+    \\(d_2 : ${a}x + ${b}y + ${c} = 0\\).`;
+  }
+
+  document.getElementById("enonce").innerHTML = enonce;
+  MathJax.typeset();
 }
 
 
@@ -64,13 +165,32 @@ function generer() {
  /*==============VERFICATION========*/
 
 function verifier() {
+
   const rep = normaliser(document.getElementById("reponse").value);
 
+  /* ===== CAS 2 : droite verticale ===== */
+  if (cas === 2) {
+
+    const attendu = `x=${e}`;
+
+    if (rep === normaliser(attendu)) {
+      document.getElementById("feedback").innerHTML =
+        "<span class='bon'>✅ Bonne réponse !</span>";
+    } else {
+      document.getElementById("feedback").innerHTML =
+        "<span class='faux'>❌ Réponse incorrecte (forme attendue : x = …)</span>";
+    }
+
+    return;
+  }
+
+  /* ===== AUTRES CAS : y = mx + p ===== */
   let attendu = `y=${m}x`;
+
   if (p > 0) attendu += `+${p}`;
   if (p < 0) attendu += `${p}`;
 
-  if (normaliser(attendu) === normaliser("y=" + rep)) {
+  if (rep === normaliser(attendu)) {
     document.getElementById("feedback").innerHTML =
       "<span class='bon'>✅ Bonne réponse !</span>";
   } else {
@@ -79,50 +199,75 @@ function verifier() {
   }
 }
 
+
   /*==============RESOLUTION========*/
+
+
   
 function corriger() {
-  let texte = `
-  <p><strong>On cherche une équation de la forme :</strong></p>`
-  \\[
-  y = mx + p
-  \\]
 
-  texte = `
+  let texte = "";
+
+     texte = `
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on cherche \\( m \\)  </span> <br>
     `;
+  
+  /* ===== CAS 2 : droite verticale ===== */
+  if (cas === 2) {
 
+    texte = `
+    <p><strong>La droite est parallèle à l’axe des ordonnées.</strong></p>
 
-  texte = `
-  <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on cherche \\( p \\)  </span> <br>
+    <p>Une droite parallèle à l’axe des ordonnées a une équation de la forme :</p>
 
-    
-  <p>On connaît \\(m = ${m}\\) et le point \\(A(${e};${f})\\).</p>
+    \\[
+    x = k
+    \\]
 
-  <p>On remplace :</p>
-  \\[
-  ${f} = ${m} \\cdot ${e} + p
-  \\]
+    <p>Comme la droite passe par le point \\(A(${e};${f})\\), on a :</p>
 
-  <p>On calcule :</p>
-  \\[
-  ${f} = ${m * e} + p
-  \\]
+    \\[
+    x = ${e}
+    \\]
+    `;
+  }
 
-  <p>Donc :</p>
-  \\[
-  p = ${f} - ${m * e} = ${p}
-  \\]
+  /* ===== AUTRES CAS ===== */
+  else {
 
-  <p><strong>Équation de la droite :</strong></p>
-  \\[
-  y = ${m}x ${p > 0 ? "+" + p : p < 0 ? p : ""}
-  \\]
-  `;
+    texte = `
+    <p><strong>On cherche une équation de la forme :</strong></p>
+
+    \\[
+    y = mx + p
+    \\]
+
+    <p>La droite passe par le point \\(A(${e};${f})\\).</p>
+
+    <p>On remplace les coordonnées du point dans l’équation :</p>
+
+    \\[
+    ${f} = ${m} \\cdot ${e} + p
+    \\]
+
+    <p>On calcule :</p>
+
+    \\[
+    p = ${f} - ${m * e} = ${p}
+    \\]
+
+    <p><strong>Équation de la droite :</strong></p>
+
+    \\[
+    y = ${m}x ${p > 0 ? "+" + p : p < 0 ? p : ""}
+    \\]
+    `;
+  }
 
   document.getElementById("solution").innerHTML = texte;
   MathJax.typeset();
 }
+
 
 generer();
 </script>
