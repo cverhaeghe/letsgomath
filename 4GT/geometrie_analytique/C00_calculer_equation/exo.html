@@ -55,31 +55,11 @@ let m, e, f, p;
   /*==============FONCTIONS========*/
 
 function generer() {
-  m = Math.floor(Math.random() * 7) - 3;
-  while (m === 0) m = Math.floor(Math.random() * 7) - 3;
 
-  e = Math.floor(Math.random() * 7) - 3;
-  f = Math.floor(Math.random() * 7) - 3;
-
-  p = f - m * e;
-
-document.getElementById("reponse").value = "";
-document.getElementById("feedback").innerHTML = "";
-document.getElementById("solution").innerHTML = "";
-
-document.getElementById("enonce").innerHTML =
-  `Calcule l'équation réduite de la droite \\(d\\) de pente ${m} passant par le point \\(A(${e};${f})\\).`;
-
-MathJax.typeset();
 
 }
 
-function normaliser(str) {
-  return str
-    .replace(/\s+/g, "")
-    .replace(/y=/, "")
-    .replace(/\+0$/, "");
-}
+
 
  /*==============VERFICATION========*/
 
