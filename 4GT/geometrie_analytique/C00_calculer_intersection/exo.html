@@ -461,7 +461,7 @@ ${pFrac.num >= 0 ? '+' : '-'}
 ${fractionLaTeX(Math.abs(pFrac.num), pFrac.den)}
 \\)<br><br>
 
-On met les quatre termes sur le même dénominateur :<br>
+On met tout sur le même dénominateur :<br>
 \\(
 ${m1Num < 0 ? '-' : ''}
 \\frac{${Math.abs(m1Num)}}{${D}}x
@@ -526,7 +526,7 @@ yFinal = normaliserFraction(
 // =================== AFFICHAGE DÉTAILLÉ ===================
 
 texte += `
-On remplace dans l’équation de \\(d_2\\) :
+On remplace x dans l’équation de \\(d_2\\) :
 \\[
 \\begin{aligned}
 y &= ${fractionLaTeX(mFrac.num, mFrac.den)} \\cdot ${xAff}
