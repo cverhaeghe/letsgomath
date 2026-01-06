@@ -103,11 +103,20 @@ function verifier() {
   
 function corriger() {
   let texte = `
-  <p><strong>On cherche une équation de la forme :</strong></p>
+  <p><strong>On cherche une équation de la forme :</strong></p>`
   \\[
   y = mx + p
   \\]
 
+  texte = `
+  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on cherche \\( m \\)  </span> <br>
+    `;
+
+
+  texte = `
+  <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on cherche \\( p \\)  </span> <br>
+
+    
   <p>On connaît \\(m = ${m}\\) et le point \\(A(${e};${f})\\).</p>
 
   <p>On remplace :</p>
