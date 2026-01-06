@@ -33,7 +33,7 @@
   <input type="text" id="reponse" placeholder="...">
 
   <button onclick="verifier()">Vérifier</button>
-  <button onclick="corriger()">Correction</button>
+  <button onclick="corriger()">Résolution</button>
   <button onclick="genererEquation()">Nouvel exercice</button>
 
   <p id="feedback" class="feedback"></p>
@@ -337,7 +337,7 @@ function corriger(){
   const absB = Math.abs(b);
 
   let texte = `
-  📘 <strong>Correction détaillée</strong><br><br>
+  📘 <strong>Résolution</strong><br><br>
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_1\\) </span> <br>
   `;
 
