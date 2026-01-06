@@ -33,7 +33,7 @@
   <input type="text" id="reponse" placeholder="Oui ou non ?">
 
   <button onclick="verifier()">Vérifier</button>
-  <button onclick="corriger()">Correction</button>
+  <button onclick="corriger()">Résolution</button>
   <button onclick="generer()">Nouvel exercice</button>
 
   <p id="feedback" class="feedback"></p>
@@ -816,7 +816,7 @@ function verifier(){
 function corriger(){
   const f=document.getElementById("feedback");
   f.style.color="#000";
-  f.innerHTML=`📘 <strong>Correction</strong><br><br>${texteCorrection}`;
+  f.innerHTML=`📘 <strong>Résolution</strong><br><br>${texteCorrection}`;
   renderMath(f);
 }
 
