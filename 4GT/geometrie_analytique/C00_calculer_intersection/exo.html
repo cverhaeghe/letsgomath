@@ -338,7 +338,7 @@ function corriger(){
 
   let texte = `
   📘 <strong>Résolution</strong><br><br>
-  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_1\\) </span> <br>
+  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on réduit l’équation de \\(d_1\\) </span> <br>
   `;
 
 
@@ -385,7 +385,7 @@ y &= ${afficherMx(m1Aff)}
   /* ===== Étape 2 : lecture des coefficients ===== */
   
 texte += `
-<span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> identifier les coefficients </span> <br><br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on identifie les coefficients </span> <br><br>
 \\(
 m_1 = ${fractionAvecSigne(m1Aff)}, 
 \\quad
@@ -398,7 +398,7 @@ m_2 = ${afficherM(mFrac)},
 p_2 = ${fractionAvecSigne(pFrac)}
 \\)<br><br>
 
-<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> comparer les coefficients  </span> <br><br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on compare les coefficients  </span> <br><br>
 ${explication} <br><br>`;
 
 
@@ -436,8 +436,7 @@ xInter = normaliserFraction(
 
 
 texte += `
-<span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>
-<span style='color: var(--peps)'> calculer le point d’intersection </span><br><br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span> <span style='color: var(--peps)'> on calcule le point d’intersection </span><br><br>
 
 On résout le système formé par les deux équations :
 \\[
