@@ -207,13 +207,14 @@ const p = tirerE();
       Complète les coordonnées du point \\( A(${valeurAff};\\dots) \\)<br>
       afin qu'il appartienne à la droite.
       `;
+      
 /*CORRECTION */
       
 const xAffProd = afficheProduit(valeurAff, valeur);
 
       /* ÉTAPE 1 */
       texte += `
-      <u>Étape 1</u> : on remplace x par l'abscisse du point A<br>
+      <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace x par l'abscisse du point A  </span> <br>
       \\[
       y = ${fractionLatex(m.num,m.den)}\\cdot ${valeurAff}
       ${p.num>=0?"+ ":"- "}${fractionLatex(Math.abs(p.num),p.den)}
@@ -237,7 +238,7 @@ const xAffProd = afficheProduit(valeurAff, valeur);
       }
 
       texte += `
-      <u>Étape 2</u> : on effectue et/ou on simplifie<br>
+      <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on effectue et/ou on simplifie  </span> <br>
       \\[
       y =
       ${mxEstFraction?fractionLatex(mx.num,mx.den):mx}
@@ -252,7 +253,7 @@ const xAffProd = afficheProduit(valeurAff, valeur);
         solution = {num:somme, den:1};
 
         texte += `
-        <u>Étape 3</u> : on calcule<br>
+        <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on calcule  </span> <br>
         \\[
         y = ${somme}
         \\]
@@ -269,7 +270,7 @@ const xAffProd = afficheProduit(valeurAff, valeur);
         const n2 = p.num*(den/p.den);
 
         texte += `
-        <u>Étape 3</u> : on met sur le même dénominateur<br>
+        <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on met sur le même dénominateur  </span> <br>
         \\[
         y =
         ${fractionLatex(n1,den)}
@@ -281,7 +282,7 @@ const xAffProd = afficheProduit(valeurAff, valeur);
         solution = somme;
 
         texte += `
-        <u>Étape 4</u> : on calcule<br>
+        <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> on calcule  </span> <br>
         \\[
         y = ${fractionLatex(somme.num,somme.den)}
         \\]
@@ -317,7 +318,7 @@ else {
   /*  ÉTAPE 1 : substitution
   ================================================= */
 texte += `
-<u>Étape 1</u> : on remplace y par l'ordonnée du point A<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace y par l'ordonnée du point A  </span> <br>
 \\[
 ${valeurAff} =
 ${fractionLatex(m.num,m.den)}x
@@ -333,7 +334,7 @@ const n1 = valeur * den;           // y
 const n2 = p.num;                  // p
 
 texte += `
-<u>Étape 2</u> : on isole le terme en x <br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on isole le terme en x </span> <br>
 \\[
 ${valeur} ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(p.num),p.den)}=
 ${fractionLatex(m.num,m.den)}x
@@ -344,7 +345,7 @@ ${fractionLatex(m.num,m.den)}x
   ================================================= */
 
 texte += `
-<u>Étape 2</u> : on met sur le même dénominateur à gauche<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on met sur le même dénominateur à gauche </span> <br>
 \\[
 ${fractionLatex(n1,den)}
 ${p.num>=0?"- ":"+ "}${fractionLatex(Math.abs(n2),den)}
@@ -359,7 +360,7 @@ const numGauche = n1 - n2;
 const gauche = fractionIrreductible(numGauche, den);
 
 texte += `
-<u>Étape 3</u> : on calcule <br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> on calcule </span> <br>
 \\[
 ${fractionLatex(gauche.num,gauche.den)}
 = ${fractionLatex(m.num,m.den)}x
@@ -375,7 +376,7 @@ const xDen = gauche.den * m.num;
 solution = fractionIrreductible(xNum, xDen);
 
 texte += `
-<u>Étape 4</u> : on isole x et on calcule <br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 5 : </span>  <span style='color: var(--peps)'> on isole x et on calcule </span> <br>
 \\[
 x = ${fractionLatex(gauche.num,gauche.den)} \\cdot ${fractionLatex(m.den,m.num)} =  ${fractionLatex(solution.num, solution.den)}
 
@@ -425,7 +426,7 @@ if (coordDonnee === "x") {
   const xAffProd = afficheProduit(valeurAff, valeur);
 
   texte += `
-  <u>Étape 1</u> : on remplace x par l’abscisse du point A<br>
+  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace x par l’abscisse du point A </span> <br>
   \\[
   ${a}\\cdot ${xAffProd}
   ${termeSigne(b, "y")}
@@ -462,7 +463,7 @@ if (coordDonnee === "x") {
     terme2 = -c;
 
     texte += `
-    <u>Étape 2</u> : on effectue et on isole le terme en y<br>
+      <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on effectue et on isole le terme en y </span> <br>
     \\[
     ${b}y =
     ${axEstFraction
@@ -477,7 +478,7 @@ if (coordDonnee === "x") {
     terme2 = c;
 
     texte += `
-    <u>Étape 2</u> : on effectue et on isole le terme en y<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on effectue et on isole le terme en y </span> <br>
     \\[
     ${axEstFraction
       ? fractionLatex(ax.num, ax.den)
@@ -501,7 +502,7 @@ if (coordDonnee === "x") {
     const resultat = terme1 + terme2;
 
     texte += `
-    <u>Étape 3</u> : on calcule<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on calcule </span> <br>
     \\[
     ${b > 0 ? `${coefY}y = ${resultat}` : `${resultat} = ${coefY}y`}
     \\]
@@ -510,7 +511,7 @@ if (coordDonnee === "x") {
     solution = fractionIrreductible(resultat, coefY);
 
     texte += `
-    <u>Étape 4</u> : on isole y<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> on isole y </span> <br>
     \\[
     y = ${fractionLatex(solution.num, solution.den)}
     \\]
@@ -526,7 +527,7 @@ if (coordDonnee === "x") {
     const n2 = terme2 * den;
 
 texte += `
-<u>Étape 3</u> : on met sur le même dénominateur<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on met sur le même dénominateur </span> <br>
 \\[
 ${fractionLatex(n1, den)} 
 ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)} 
@@ -538,7 +539,7 @@ ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
     const somme = fractionIrreductible(n1 + n2, den);
 
     texte += `
-    <u>Étape 4</u> : on calcule<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> on calcule </span> <br>
     \\[
     ${b > 0
       ? `${coefY}y = ${fractionLatex(somme.num, somme.den)}`
@@ -549,7 +550,7 @@ ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)}
     solution = fractionIrreductible(somme.num, somme.den * coefY);
 
 texte += `
-<u>Étape 5</u> : on isole y<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 5 : </span>  <span style='color: var(--peps)'> on isole y </span> <br>
 \\[
 y = ${fractionLatex(somme.num, somme.den)}
 \\cdot ${fractionLatex(1, coefY)}
@@ -585,7 +586,7 @@ else if (coordDonnee === "y") {
   /* ========= ÉTAPE 1 : substitution ========= */
 
   texte += `
-  <u>Étape 1</u> : on remplace y par l’ordonnée du point A<br>
+  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace y par l’ordonnée du point A </span> <br>
   \\[
   ${a}x
   ${b > 0 ? "+ " : "- "}${Math.abs(b)} \\cdot ${yAffProd}
@@ -625,7 +626,7 @@ const byDen = eObj.den;
     terme2 = -c;
 
     texte += `
-    <u>Étape 2</u> : on effectue et on isole le terme en x<br>
+      <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on effectue et on isole le terme en x </span> <br>
     \\[
     ${a}x =
     ${byEstFraction
@@ -640,7 +641,7 @@ const byDen = eObj.den;
     terme2 = c;
 
     texte += `
-    <u>Étape 2</u> : on effectue et on isole le terme en x<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on effectue et on isole le terme en x </span> <br>
     \\[
     ${byEstFraction
       ? fractionLatex(by.num, by.den)
@@ -664,7 +665,7 @@ const byDen = eObj.den;
     const resultat = terme1 + terme2;
 
     texte += `
-    <u>Étape 3</u> : on calcule<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on calcule </span> <br>
     \\[
     ${a > 0 ? `${coefX}x = ${resultat}` : `${resultat} = ${coefX}x`}
     \\]
@@ -673,7 +674,7 @@ const byDen = eObj.den;
     solution = fractionIrreductible(resultat, coefX);
 
     texte += `
-    <u>Étape 4</u> : on isole x<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> on isole x </span> <br>
     \\[
     x = ${fractionLatex(solution.num, solution.den)}
     \\]
@@ -689,7 +690,7 @@ const byDen = eObj.den;
     const n2 = terme2 * den;
 
     texte += `
-    <u>Étape 3</u> : on met sur le même dénominateur<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on met sur le même dénominateur </span> <br>
     \\[
     ${coefX}x = ${fractionLatex(n1, den)}
     ${terme2 >= 0 ? "+ " : "- "}${fractionLatex(Math.abs(n2), den)} 
@@ -699,7 +700,7 @@ const byDen = eObj.den;
     const somme = fractionIrreductible(n1 + n2, den);
 
     texte += `
-    <u>Étape 4</u> : on calcule<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> on calcule </span> <br>
     \\[
     ${a > 0
       ? `${coefX}x = ${fractionLatex(somme.num, somme.den)}`
@@ -710,7 +711,7 @@ const byDen = eObj.den;
     solution = fractionIrreductible(somme.num, somme.den * coefX);
 
     texte += `
-    <u>Étape 5</u> : on isole x<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 5 : </span>  <span style='color: var(--peps)'> on isole x </span> <br>
     \\[
     x = ${fractionLatex(somme.num, somme.den)}
     \\cdot ${fractionLatex(1, coefX)}
