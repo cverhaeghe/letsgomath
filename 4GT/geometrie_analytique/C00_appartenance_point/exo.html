@@ -336,7 +336,7 @@ if (eObj && eObj.valeur < 0) {
 
 // ---------- Étape 1 : substitution ----------
 let texte = `
-<u>Étape 1</u> : on remplace les coordonnées du point A dans l’équation<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace les coordonnées du point A dans l'équation  </span> <br>
 \\[
 ${fractionLatex(yCorr.num, yCorr.den)}
 \\stackrel{?}{=}
@@ -362,7 +362,7 @@ if (mxDen === 1) {
 }
 
 texte += `
-<u>Étape 2</u> : on effectue et/ou on simplifie le produit<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on effectue et/ou on simplifie le produit  </span> <br>
 \\[
 ${fractionLatex(yCorr.num, yCorr.den)}
 \\stackrel{?}{=}
@@ -382,7 +382,7 @@ if (!mxEstFraction && pDen === 1) {
   const somme = mx + pNum;
 
   texte += `
-<u>Étape 3</u> : on additionne et on compare<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on additionne et on compare  </span> <br>
 \\[
 ${fractionLatex(yCorr.num, yCorr.den)}
 ${somme === yCorr.num ? "=" : "\\neq"}
@@ -407,7 +407,7 @@ somme = fractionIrreductible(n1 + n2, den);
 sommeEstFraction = true;
   
 texte += `
-<u>Étape 3</u> : on met les termes de droite sur le même dénominateur<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> on met les termes de droite sur le même dénominateur </span> <br>
 \\[
 ${fractionLatex(yCorr.num, yCorr.den)}
 \\stackrel{?}{=}
@@ -422,7 +422,7 @@ const egalite = sommeEstFraction
   : (somme === yCorr.num);
 
 texte += `
-<u>Étape 4</u> : on additionne, on simplifie éventuellement et on compare<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 4 : </span>  <span style='color: var(--peps)'> on additionne, on simplifie éventuellement et on compare </span> <br>
 \\[
 ${fractionLatex(yCorr.num, yCorr.den)}
 ${egalite ? "=" : "\\neq"}
@@ -478,7 +478,7 @@ const kAff = fractionLatex(k.num, k.den);
 
 // ===== Étape 1 : substitution =====
 let texte = `
-<u>Étape 1</u> : on remplace l’abscisse du point A dans l’équation<br>
+  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace l’abscisse du point A dans l’équation </span> <br>
 \\[
 ${eAff} \\stackrel{?}{=} ${kAff}
 \\]
@@ -488,7 +488,7 @@ ${eAff} \\stackrel{?}{=} ${kAff}
 const egalite = eObj.valeur === k.num / k.den;
 
 texte += `
-<u>Étape 2</u> : on compare<br>
+<span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on compare  </span> <br>
 \\[
 ${eAff} ${egalite ? "=" : "\\neq"} ${kAff}
 \\]
@@ -540,7 +540,7 @@ else if (tirage < 0.6) {
 
   // Étape 1 : substitution
   let texte = `
-  <u>Étape 1</u> : on remplace l’ordonnée du point A dans l’équation<br>
+  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'> on remplace l’ordonnée du point A dans l’équation </span> <br>
   \\[
   ${fAff} \\stackrel{?}{=} ${kAff}
   \\]
@@ -550,7 +550,7 @@ else if (tirage < 0.6) {
   const egalite = fObj.valeur === k.num / k.den;
 
   texte += `
-  <u>Étape 2</u> : on compare<br>
+    <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> on compare </span> <br>
   \\[
   ${fAff} ${egalite ? "=" : "\\neq"} ${kAff}
   \\]
