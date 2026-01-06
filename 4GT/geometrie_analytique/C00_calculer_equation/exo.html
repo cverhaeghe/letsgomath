@@ -47,7 +47,10 @@
 </div>
 
 <script>
+  /*==============VARIABLES========*/
 let m, e, f, p;
+  
+  /*==============FONCTIONS========*/
 
 function nouvelExo() {
   m = Math.floor(Math.random() * 7) - 3;
@@ -75,6 +78,8 @@ function normaliser(str) {
     .replace(/\+0$/, "");
 }
 
+ /*==============VERFICATION========*/
+
 function verifier() {
   const rep = normaliser(document.getElementById("reponse").value);
 
@@ -84,13 +89,15 @@ function verifier() {
 
   if (normaliser(attendu) === normaliser("y=" + rep)) {
     document.getElementById("feedback").innerHTML =
-      "<span class='bon'>✅ Réponse correcte</span>";
+      "<span class='bon'>✅ Bonne réponse !</span>";
   } else {
     document.getElementById("feedback").innerHTML =
       "<span class='faux'>❌ Réponse incorrecte</span>";
   }
 }
 
+  /*==============RESOLUTION========*/
+  
 function afficherResolution() {
   let texte = `
   <p><strong>On cherche une équation de la forme :</strong></p>
