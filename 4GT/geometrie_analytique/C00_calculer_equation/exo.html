@@ -63,14 +63,15 @@ function nouvelExo() {
 
   p = f - m * e;
 
-  document.getElementById("reponse").value = "";
-  document.getElementById("feedback").innerHTML = "";
-  document.getElementById("solution").innerHTML = "";
+document.getElementById("reponse").value = "";
+document.getElementById("feedback").innerHTML = "";
+document.getElementById("solution").innerHTML = "";
 
-  document.getElementById("enonce").innerHTML =
-    `Calcule l'équation réduite de la droite \\( d \\) de pente \\(${m}\\) passant par le point \\(A(${e};${f})\\).`;
+document.getElementById("enonce").innerHTML =
+  `Calcule l'équation réduite de la droite \\(d\\) de pente ${m} passant par le point \\(A(${e};${f})\\).`;
 
-  MathJax.typeset();
+MathJax.typeset();
+
 }
 
 function normaliser(str) {
