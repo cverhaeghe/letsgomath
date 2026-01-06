@@ -35,6 +35,7 @@
   <p class="enonce" id="enonce"></p>
 </div>
 
+
   <input type="text" id="reponse" placeholder="...">
 
   <button onclick="verifier()">Vérifier</button>
@@ -68,6 +69,8 @@ function generer() {
 
   document.getElementById("feedback").innerHTML = "";
   document.getElementById("reponse").value = "";
+  document.getElementById("enonce").innerHTML = enonce;
+  MathJax.typeset();
 
   const r = Math.random() * 100;
 
