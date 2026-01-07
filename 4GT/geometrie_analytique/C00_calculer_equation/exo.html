@@ -323,6 +323,9 @@ function corriger() {
   
   let texte = `📘 <strong>Résolution</strong><br><br>  `;
 
+  const aAbs = Math.abs(a);
+  const cAbs = Math.abs(c);
+  const bAbs = Math.abs(b);
   
   /* ===== CAS 1 : droite horizontale ===== */
 
@@ -376,7 +379,7 @@ texte += `
 \\begin{aligned}
 ${equationCartesienne(a, b, c)} \\\\
 ${b}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
-\\frac{${absB}}{${absB}}y &= ${a >= 0 ? '-' : '+'} \\frac{${aAbs}}{${absB}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${absB}}  \\\\
+\\frac{${bAbs}}{${absB}}y &= ${a >= 0 ? '-' : '+'} \\frac{${aAbs}}{${bAbs}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${bAbs}}  \\\\
 y &= ${afficherMx(m1Aff)}
      ${p1Aff.num >= 0 ? '+' : '-'}
      ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
@@ -393,8 +396,8 @@ texte += `
 \\[
 \\begin{aligned}
 ${eq1Texte.replace('=', '&=')} \\\\
-${a}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${absB}y \\\\
-${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${absB}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${absB}} &= \\frac{${absB}}{${absB}}y \\\\
+${a}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${bAbs}y \\\\
+${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${bAbs}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${bAbs}} &= \\frac{${absB}}{${bAbs}}y \\\\
 y &= ${afficherMx(m1Aff)}
      ${p1Aff.num >= 0 ? '+' : '-'}
      ${fractionLaTeX(Math.abs(p1Aff.num), p1Aff.den)}
