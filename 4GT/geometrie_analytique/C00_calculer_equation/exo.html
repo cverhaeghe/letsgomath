@@ -414,9 +414,9 @@ function corriger() {
 
   if (cas === 1) {
 
-      texte += `Une droite parallèle à l'axe des abscisses est une droite horizontale (une constante) d'équation \\( y=k\\).<br>
-      Ainsi, en considérant l'abscisse du point A, on obtient <br><br> 
-      <strong>\\( d \\equiv y = ${f} \\)</strong>`;
+      texte += `Une droite parallèle à l'axe des abscisses est une droite horizontale d'équation \\( y=k\\).<br><br>
+      Ainsi, en considérant l'ordonnée du point A, on obtient <br><br> 
+      <span style='font-weight: bold;'>  \\( d \\equiv y = ${f} \\) </span>`;
 
     document.getElementById("correction").innerHTML = texte;
     MathJax.typeset();
@@ -426,9 +426,9 @@ function corriger() {
   /* ===== CAS 2 : droite verticale ===== */
   if (cas === 2) {
     
-      texte += `Une droite parallèle à l'axe des ordonnées est une droite verticale d'équation \\( x=k\\).<br>
-      Ainsi, en considérant l'ordonnée du point A, on obtient <br><br> 
-      <strong>\\( d \\equiv x = ${e} \\)</strong>`;
+      texte += `Une droite parallèle à l'axe des ordonnées est une droite verticale d'équation \\( x=k\\).<br><br>
+      Ainsi, en considérant l'abscisse du point A, on obtient <br><br> 
+      <span style='font-weight: bold;'>     \\( d \\equiv x = ${e} \\) </span>`;
 
     document.getElementById("correction").innerHTML = texte;
     MathJax.typeset();
