@@ -472,7 +472,7 @@ texte += `
 ${Aff(a)}x   + ${Aff(b)}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 \\frac{${b}}{${b}}y &= ${a >= 0 ? '-' : ''} \\frac{${aAbs}}{${b}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${b}}  \\\\
-y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(p)Frac}\\\\
+y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}\\\\
 \\end{aligned}
 \\]
 `;
@@ -488,7 +488,7 @@ texte += `
 ${Aff(a)}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${Aff(a)}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${-b}y \\\\
 ${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${-b}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${-b}} &= \\frac{${-b}}{${-b}}y \\\\
-y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(p)Frac}\\\\ 
+y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}\\\\ 
 \\end{aligned}
 \\]
 `;
