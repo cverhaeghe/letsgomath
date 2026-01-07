@@ -499,47 +499,22 @@ y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
  `;
     if (cas === 4) {
 
-  texte += ` \\(d_1 // d_2\\)<br>
+  texte += ` \\(d_1 // d_2 \\quad (m_2 = ${afficherCoefX(m)})\\)<br>
   \\( \\Rightarrow m_1 = m_2 = ${afficherCoefX(m)} \\) <br>
-  \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(m)} x +p \\)`;
+  \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(m)} x +p \\) <br><br>`;
 
     } 
     else {
 
   const m1Latex = opposeInverseLatex(m2); // pente de d1 si ⟂
 
-  texte += ` \\(d_1 \\perp d_2\\)<br>
+  texte += ` \\(d_1 \\perp d_2   \\quad (m_2 = ${afficherCoefX(m)}) \\)<br>
   \\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\) <br>
-  \\( \\Rightarrow d_1 \\equiv y = ${m1Latex}x +p \\)`;
+  \\( \\Rightarrow d_1 \\equiv y = ${m1Latex}x +p \\) <br><br>`;
     }
 
 
-    texte += `
-    <p><strong>On cherche une équation de la forme :</strong></p>
 
-\\[
-${equationReduite(m, p)}
-\\]
-
-
-    <p>La droite passe par le point \\(A(${e};${f})\\).</p>
-
-    <p>On remplace les coordonnées du point dans l’équation :</p>
-
-    \\[
-    ${f} = ${m} \\cdot ${e} + p
-    \\]
-
-    <p>On calcule :</p>
-
-    \\[
-    p = ${f} - ${m * e} = ${p}
-    \\]
-
-    <p><strong>Équation de la droite :</strong></p>
-\\[
-y = ${termeX(m)}${termeConstante(p)}
-\\]
 
     `;
   }
