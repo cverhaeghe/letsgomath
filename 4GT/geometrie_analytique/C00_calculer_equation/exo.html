@@ -459,8 +459,8 @@ else {
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
 
-const m = fractionIrreductible(-a, b);
-const p = fractionIrreductible(-c, b); 
+const mFrac = fractionIrreductible(-a, b);
+const pFrac = fractionIrreductible(-c, b); 
 
   
   /* ===== CAS b > 0 ===== */
@@ -472,7 +472,7 @@ texte += `
 ${Aff(a)}x   + ${Aff(b)}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 \\frac{${b}}{${b}}y &= ${a >= 0 ? '-' : ''} \\frac{${aAbs}}{${b}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${b}}  \\\\
-y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
+y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(p)Frac}\\\\
 \\end{aligned}
 \\]
 `;
@@ -488,7 +488,7 @@ texte += `
 ${Aff(a)}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${Aff(a)}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${-b}y \\\\
 ${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${-b}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${-b}} &= \\frac{${-b}}{${-b}}y \\\\
-y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\ 
+y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(p)Frac}\\\\ 
 \\end{aligned}
 \\]
 `;
@@ -499,16 +499,16 @@ y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
  `;
     if (cas === 4) {
 
-  texte += ` \\(d_1 // d_2 \\quad (m_2 = ${afficherCoefX(m)})\\)<br>
-  \\( \\Rightarrow m_1 = m_2 = ${afficherCoefX(m)} \\) <br>
-  \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(m)} x +p \\) <br><br>`;
+  texte += ` \\(d_1 // d_2 \\quad (m_2 = ${afficherCoefX(mFrac)})\\)<br>
+  \\( \\Rightarrow m_1 = m_2 = ${afficherCoefX(mFrac)} \\) <br>
+  \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(mFrac)} x +p \\) <br><br>`;
 
     } 
     else {
 
-  const m1Latex = opposeInverseLatex(m); // pente de d1 si ⟂
+  const m1Latex = opposeInverseLatex(mFrac); // pente de d1 si ⟂
 
-  texte += ` \\(d_1 \\perp d_2   \\quad (m_2 = ${afficherCoefX(m)}) \\)<br>
+  texte += ` \\(d_1 \\perp d_2   \\quad (m_2 = ${afficherCoefX(mFrac)}) \\)<br>
   \\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\) <br>
   \\( \\Rightarrow d_1 \\equiv y = ${m1Latex}x +p \\) <br><br>`;
     }
