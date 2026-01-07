@@ -114,10 +114,19 @@ let a, b, c;
   return c > 0 ? `+${c}` : `${c}`;
 }
 
-      function fractionLaTeX(num, den){
+  function fractionLaTeX(num, den){
   if(den === 1) return num.toString();
   return `\\frac{${num}}{${den}}`;
 }
+
+  function Aff(a) {
+  if (a === 1) return "";
+  if (a === -1) return "-";
+  if (a>0) return "$(a)";
+  if (a<0) return "-$(-a)";
+}
+
+
   
 function afficherCoefX(frac) {
   const { num, den } = frac;
@@ -425,7 +434,7 @@ if (b > 0) {
 texte += `
 \\[
 \\begin{aligned}
-${a}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
+${Aff(a)}x   + ${b}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${b}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 \\frac{${b}}{${b}}y &= ${a >= 0 ? '-' : '+'} \\frac{${aAbs}}{${b}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${b}}  \\\\
 y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
