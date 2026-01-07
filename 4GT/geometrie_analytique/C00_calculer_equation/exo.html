@@ -53,6 +53,7 @@
   /*==============VARIABLES========*/
 let m, e, f, p;
 let cas;
+let a, b, c;
   /*==============FONCTIONS========*/
 
   function normaliser(str) {
@@ -232,9 +233,9 @@ function generer() {
 
     cas = 4;
 
-    let a = Math.floor(Math.random() * 5) + 1;
-    let b = Math.floor(Math.random() * 5) + 1;
-    let c = Math.floor(Math.random() * 7) - 3;
+    a = Math.floor(Math.random() * 5) + 1;
+    b = Math.floor(Math.random() * 5) + 1;
+    c = Math.floor(Math.random() * 7) - 3;
 
     m = -a / b;
     p = f - m * e;
@@ -249,9 +250,9 @@ function generer() {
 
     cas = 5;
 
-    let a = Math.floor(Math.random() * 5) + 1;
-    let b = Math.floor(Math.random() * 5) + 1;
-    let c = Math.floor(Math.random() * 7) - 3;
+    a = Math.floor(Math.random() * 5) + 1;
+    b = Math.floor(Math.random() * 5) + 1;
+    c = Math.floor(Math.random() * 7) - 3;
 
     m = b / a;
     p = f - m * e;
@@ -314,7 +315,9 @@ if (tp !== "") {
 }
 
 
-  /*==============CORRECTION========*/
+  /*==============
+    CORRECTION
+  ===============*/
 
 function corriger() {
   
@@ -371,8 +374,8 @@ if (b > 0) {
 texte += `
 \\[
 \\begin{aligned}
-${eq1Texte.replace('=', '&=')} \\\\
-${absB}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
+${equationCartesienne(a, b, c)} \\\\
+${b}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 \\frac{${absB}}{${absB}}y &= ${a >= 0 ? '-' : '+'} \\frac{${aAbs}}{${absB}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${absB}}  \\\\
 y &= ${afficherMx(m1Aff)}
      ${p1Aff.num >= 0 ? '+' : '-'}
