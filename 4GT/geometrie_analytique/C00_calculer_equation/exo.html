@@ -154,6 +154,31 @@ function afficherCoefX(frac) {
     : `-\\frac{${Math.abs(num)}}{${den}}`;
 }
 
+function opposeInverseLatex(frac) {
+  let { num, den } = frac;
+
+  // Inversion
+  let invNum = den;
+  let invDen = num;
+
+  // Opposé
+  invNum = -invNum;
+
+  // Normalisation du signe
+  if (invDen < 0) {
+    invNum = -invNum;
+    invDen = -invDen;
+  }
+
+  // Cas entier
+  if (invDen === 1) {
+    return invNum.toString();
+  }
+
+  // Affichage LaTeX avec signe DEVANT
+  const signe = invNum < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(invNum)}}{${invDen}}`;
+}
 
   
   function equationCartesienne(a, b, c) {
@@ -434,9 +459,9 @@ else {
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
 
-const m = fractionIrreductible(-a, b);
-const p = fractionIrreductible(-c, b); 
-  
+const m2 = fractionIrreductible(-a, b);
+const p2 = fractionIrreductible(-c, b); 
+
   
   /* ===== CAS b > 0 ===== */
 if (b > 0) {
@@ -480,7 +505,9 @@ y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
     } 
     else {
 
-  texte += ` \\(d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} =  \\) <br><br>
+  const m1Latex = opposeInverseLatex(m2); // pente de d1 si ⟂
+
+  texte += ` \\(d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\) <br><br>
   \\( \\Rightarrow d_1 \\equiv y = mx +p \\)`;
     }
 
