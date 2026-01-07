@@ -405,10 +405,14 @@ y &= ${afficherMx(m1Aff)}
  `;
     if (cas === 4) {
 
-  texte += ` Comme \\(d_1 // d_2 \\), \\(m_1 = m_2 = ${afficherMx(m1Aff)} \\)  `;
+  texte += ` \\(d_1 // d_2 \\Rightarrow m_1 = m_2 = ${afficherM(m1Aff)} \\) <br>
+  \\( \\Rightarrow d_1 \\equiv y = ${afficherMx(m1Aff)} +p \\)`;
 
-    } else {
-      
+    } 
+    else {
+
+  texte += ` \\(d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} = ${afficherM(m1Aff)} \\) <br>
+  \\( \\Rightarrow d_1 \\equiv y = ${afficherMx(m1Aff)} +p \\)`;
     }
 
 
