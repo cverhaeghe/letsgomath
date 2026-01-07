@@ -336,7 +336,7 @@ function corriger() {
 
   if (cas === 1) {
 
-      texte += `Une droite parallèle à l'axe des abscisses est une droite horizontale (une constante) d'équation \\( y=k\\).<br>
+      texte = `Une droite parallèle à l'axe des abscisses est une droite horizontale (une constante) d'équation \\( y=k\\).<br>
       Ainsi, en considérant l'abscisse du point A, on obtient <br><br> 
       \\( d \\equiv y = ${f} \\)`;
 
@@ -345,7 +345,7 @@ function corriger() {
   /* ===== CAS 2 : droite verticale ===== */
   if (cas === 2) {
     
-      texte += `Une droite parallèle à l'axe des odronnées est une droite verticale d'équation \\( x=k\\).<br>
+      texte = `Une droite parallèle à l'axe des odronnées est une droite verticale d'équation \\( x=k\\).<br>
       Ainsi, en considérant l'ordonnée du point A, on obtient <br><br> 
       \\( d \\equiv x = ${e} \\)`;
   }
@@ -354,7 +354,7 @@ function corriger() {
 
   if (cas === 3) {
 
-      texte += ` "Hello" `;
+      texte = ` "Hello" `;
 
   }
 
@@ -362,7 +362,7 @@ function corriger() {
   
 else {
 
-  texte += `
+  texte = `
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
 
