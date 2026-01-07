@@ -459,8 +459,8 @@ else {
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
 
-const m2 = fractionIrreductible(-a, b);
-const p2 = fractionIrreductible(-c, b); 
+const m = fractionIrreductible(-a, b);
+const p = fractionIrreductible(-c, b); 
 
   
   /* ===== CAS b > 0 ===== */
@@ -506,7 +506,7 @@ y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
     } 
     else {
 
-  const m1Latex = opposeInverseLatex(m2); // pente de d1 si ⟂
+  const m1Latex = opposeInverseLatex(m); // pente de d1 si ⟂
 
   texte += ` \\(d_1 \\perp d_2   \\quad (m_2 = ${afficherCoefX(m)}) \\)<br>
   \\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\) <br>
