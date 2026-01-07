@@ -166,7 +166,10 @@ let a, b, c;
 
 
   
-  /*==============GENERATION========*/
+/*===============
+    GENERATION
+================*/
+  
 function generer() {
 
   document.getElementById("feedback").innerHTML = "";
@@ -333,26 +336,18 @@ function corriger() {
 
   if (cas === 1) {
 
-      texte += ` "Hello" `;
+      texte += `Une droite parallèle à l'axe des abscisses est une droite horizontale (une constante) d'équation \\( y=k\\).<br>
+      Ainsi, en considérant l'abscisse du point A, on obtient <br><br> 
+      \\( d \\equiv y = ${f} \\)`;
 
   }
   
   /* ===== CAS 2 : droite verticale ===== */
   if (cas === 2) {
-
-    texte += `
-    <p>Une droite parallèle à l’axe des ordonnées a une équation de la forme :</p>
-
-    \\[
-    x = k
-    \\]
-
-    <p>Comme la droite passe par le point \\(A(${e};${f})\\), on a :</p>
-
-    \\[
-    x = ${e}
-    \\]
-    `;
+    
+      texte += `Une droite parallèle à l'axe des odronnées est une droite verticale d'équation \\( x=k\\).<br>
+      Ainsi, en considérant l'ordonnée du point A, on obtient <br><br> 
+      \\( d \\equiv x = ${e} \\)`;
   }
 
   /* ===== CAS 3 : droite passant par 2 points ===== */
