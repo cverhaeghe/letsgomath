@@ -115,11 +115,11 @@ function afficherCoefX(frac) {
   const { num, den } = frac;
 
   if (num === 0) return "0";
-  if (num === den) return "x";
-  if (num === -den) return "-x";
+  if (num === den) return "";
+  if (num === -den) return "-";
 
-  if (den === 1) return `${num}x`;
-  return `\\frac{${num}}{${den}}x`;
+  if (den === 1) return `${num}`;
+  return `\\frac{${num}}{${den}}`;
 }
 
   function afficherConstante(frac) {
@@ -417,7 +417,7 @@ texte += `
 ${a}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${b}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 \\frac{${b}}{${b}}y &= ${a >= 0 ? '-' : '+'} \\frac{${aAbs}}{${b}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${b}}  \\\\
-y &=  ${afficherCoefX(m)} x + ${afficherConstante(p)}\\\\
+y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
 \\end{aligned}
 \\]
 `;
@@ -433,7 +433,7 @@ texte += `
 ${a}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${a}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${-b}y \\\\
 ${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${-b}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${-b}} &= \\frac{${-b}}{${-b}}y \\\\
-y &=  ${afficherCoefX(m)} x + ${afficherConstante(p)}\\\\ 
+y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\ 
 \\end{aligned}
 \\]
 `;
