@@ -371,9 +371,10 @@ else {
 if (b > 0) {
 
 texte += `
+\\( ${equationCartesienne(a, b, c)}\\)
 \\[
 \\begin{aligned}
-${equationCartesienne(a, b, c)} \\\\
+${a}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${b}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 \\frac{${b}}{${b}}y &= ${a >= 0 ? '-' : '+'} \\frac{${aAbs}}{${b}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${b}}  \\\\
 \\end{aligned}
@@ -386,9 +387,10 @@ ${b}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 else {
 
 texte += `
+\\( ${equationCartesienne(a, b, c)}\\)
 \\[
 \\begin{aligned}
-${equationCartesienne(a, b, c)} \\\\
+${a}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${a}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${-b}y \\\\
 ${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${-b}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${-b}} &= \\frac{${-b}}{${-b}}y \\\\
 y &= 
