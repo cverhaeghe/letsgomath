@@ -74,6 +74,31 @@ let cas;
   return c > 0 ? `+${c}` : `${c}`;
 }
 
+      function fractionLaTeX(num, den){
+  if(den === 1) return num.toString();
+  return `\\frac{${num}}{${den}}`;
+}
+  
+    function fractionAvecSigne(frac) {
+  const signe = frac.num < 0 ? '-' : '';
+  return signe + fractionLaTeX(Math.abs(frac.num), frac.den);
+}
+
+  function afficherMx(frac) {
+  // frac est supposée déjà normalisée
+  if (frac.num === 1 && frac.den === 1) return 'x';
+  if (frac.num === -1 && frac.den === 1) return '-x';
+  return `${fractionAvecSigne(frac)}x`;
+}
+
+  function afficherM(frac) {
+  // frac normalisée
+  if (frac.num === 1 && frac.den === 1) return '1';
+  if (frac.num === -1 && frac.den === 1) return '-1';
+  return fractionAvecSigne(frac);
+}
+
+  
   function equationCartesienne(a, b, c) {
 
   let eq = "";
@@ -138,10 +163,7 @@ let cas;
   return eq;
 }
 
-    function fractionLaTeX(num, den){
-  if(den === 1) return num.toString();
-  return `\\frac{${num}}{${den}}`;
-}
+
   
   /*==============GENERATION========*/
 function generer() {
