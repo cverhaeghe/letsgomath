@@ -73,6 +73,38 @@ let cas;
   return c > 0 ? `+${c}` : `${c}`;
 }
 
+  function equationCartesienne(a, b, c) {
+
+  let eq = "";
+
+  // --- terme ax ---
+  if (a !== 0) {
+    if (a === 1) eq += "x";
+    else if (a === -1) eq += "-x";
+    else eq += `${a}x`;
+  }
+
+  // --- terme by ---
+  if (b !== 0) {
+    if (eq !== "") eq += b > 0 ? " + " : " - ";
+    else if (b < 0) eq += "-";
+
+    const absB = Math.abs(b);
+    if (absB === 1) eq += "y";
+    else eq += `${absB}y`;
+  }
+
+  // --- terme constant ---
+  if (c !== 0) {
+    if (eq !== "") eq += c > 0 ? " + " : " - ";
+    else if (c < 0) eq += "-";
+
+    eq += Math.abs(c);
+  }
+
+  return eq + " = 0";
+}
+
   function equationReduite(m, p) {
 
   // Cas particulier : droite verticale (sécurité)
@@ -181,7 +213,7 @@ function generer() {
 
     enonce = `Calcule l'équation réduite de la droite \\(d_1\\) <br>
     passant par le point \\(A(${e};${f})\\) et <br>
-    parallèle à la droite \\(d_2 : ${a}x + ${b}y + ${c} = 0\\).`;
+    parallèle à la droite \\(d_2 \\equiv ${equationCartesienne(a, b, c)}\\).`;
   }
 
   /* ===== CAS 5 : perpendiculaire à d2 (25%) ===== */
