@@ -119,8 +119,10 @@ function afficherCoefX(frac) {
   if (num === -den) return "-";
 
   if (den === 1) return `${num}`;
-  return `\\frac{${num}}{${den}}`;
-}
+    // signe DEVANT la fraction
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}x`;
+  }
 
   function afficherConstante(frac) {
   const { num, den } = frac;
