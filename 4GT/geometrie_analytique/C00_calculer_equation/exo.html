@@ -130,12 +130,12 @@ let a, b, c;
 function afficherCoefX(frac) {
   const { num, den } = frac;
 
-  if (num === 0) return "0";
+  if (num === 0) return "";
   if (num === den) return "";
   if (num === -den) return "-";
 
-  if (den === 1) return `${num}`;
-    // signe DEVANT la fraction
+  if (den === 1) return num.toString();
+
   const signe = num < 0 ? "-" : "";
   return `${signe}\\frac{${Math.abs(num)}}{${den}}`;
   }
@@ -513,10 +513,6 @@ y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(p)Frac}\\\\
   \\( \\Rightarrow d_1 \\equiv y = ${m1Latex}x +p \\) <br><br>`;
     }
 
-
-
-
-    `;
   }
 
   document.getElementById("correction").innerHTML = texte;
