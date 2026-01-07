@@ -464,13 +464,15 @@ y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
  `;
     if (cas === 4) {
 
-  texte += ` \\(d_1 // d_2 \\Rightarrow m_1 = m_2 = ${afficherCoefX(m)} \\) <br>
-  \\( \\Rightarrow d_1 \\equiv y = mx +p \\)`;
+  texte += ` \\(d_1 // d_2 \\)<br>
+  \\Rightarrow m_1 = m_2 = ${afficherCoefX(m)} \\) <br>
+  \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(m)} x +p \\)`;
 
     } 
     else {
 
-  texte += ` \\(d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} = m \\) <br>
+  texte += ` \\(d_1 \\perp d_2 \\)<br>
+  \\Rightarrow m_1 = -\\frac{1}{m_2} =  \\) <br>
   \\( \\Rightarrow d_1 \\equiv y = mx +p \\)`;
     }
 
