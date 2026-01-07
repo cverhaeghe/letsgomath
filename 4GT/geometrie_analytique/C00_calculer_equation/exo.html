@@ -56,6 +56,37 @@ let cas;
 let a, b, c;
   /*==============FONCTIONS========*/
 
+  function pgcd(a, b) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b !== 0) {
+    const r = a % b;
+    a = b;
+    b = r;
+  }
+  return a;
+}
+
+  function fractionIrreductible(a, b) {
+  if (b === 0) throw new Error("Division par 0 interdite");
+
+  let num = a;
+  let den = b;
+
+  const d = pgcd(num, den);
+  num /= d;
+  den /= d;
+
+  // normalisation du signe
+  if (den < 0) {
+    num = -num;
+    den = -den;
+  }
+
+  return { num, den };
+}
+
+  
   function normaliser(str) {
   return str
     .replace(/\s+/g, "")
@@ -80,24 +111,31 @@ let a, b, c;
   return `\\frac{${num}}{${den}}`;
 }
   
-    function fractionAvecSigne(frac) {
-  const signe = frac.num < 0 ? '-' : '';
-  return signe + fractionLaTeX(Math.abs(frac.num), frac.den);
+function afficherCoefX(frac) {
+  const { num, den } = frac;
+
+  if (num === 0) return "0";
+  if (num === den) return "x";
+  if (num === -den) return "-x";
+
+  if (den === 1) return `${num}x`;
+  return `\\frac{${num}}{${den}}x`;
 }
 
-  function afficherMx(frac) {
-  // frac est supposée déjà normalisée
-  if (frac.num === 1 && frac.den === 1) return 'x';
-  if (frac.num === -1 && frac.den === 1) return '-x';
-  return `${fractionAvecSigne(frac)}x`;
+  function afficherConstante(frac) {
+  const { num, den } = frac;
+
+  if (num === 0) return "";
+
+  if (den === 1) {
+    return num > 0 ? `+${num}` : `${num}`;
+  }
+
+  return num > 0
+    ? `+\\frac{${num}}{${den}}`
+    : `-\\frac{${Math.abs(num)}}{${den}}`;
 }
 
-  function afficherM(frac) {
-  // frac normalisée
-  if (frac.num === 1 && frac.den === 1) return '1';
-  if (frac.num === -1 && frac.den === 1) return '-1';
-  return fractionAvecSigne(frac);
-}
 
   
   function equationCartesienne(a, b, c) {
@@ -366,6 +404,9 @@ else {
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
 
+const m = fractionIrreductible(-a, b);
+const p = fractionIrreductible(-c, b); 
+  
   
   /* ===== CAS b > 0 ===== */
 if (b > 0) {
@@ -376,6 +417,7 @@ texte += `
 ${a}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${b}y &= ${-a}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
 \\frac{${b}}{${b}}y &= ${a >= 0 ? '-' : '+'} \\frac{${aAbs}}{${b}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${b}}  \\\\
+y &=  ${afficherCoefX(m)} x + ${afficherConstante(p)}\\\\
 \\end{aligned}
 \\]
 `;
@@ -391,7 +433,7 @@ texte += `
 ${a}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
 ${a}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${-b}y \\\\
 ${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${-b}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${-b}} &= \\frac{${-b}}{${-b}}y \\\\
-y &= 
+y &=  ${afficherCoefX(m)} x + ${afficherConstante(p)}\\\\ 
 \\end{aligned}
 \\]
 `;
