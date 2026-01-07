@@ -61,6 +61,50 @@ let cas;
     .toLowerCase();
 }
 
+  function termeX(coef) {
+  if (coef === 0) return "";
+  if (coef === 1) return "x";
+  if (coef === -1) return "-x";
+  return `${coef}x`;
+}
+
+  function termeConstante(c) {
+  if (c === 0) return "";
+  return c > 0 ? `+${c}` : `${c}`;
+}
+
+  function equationReduite(m, p) {
+
+  // Cas particulier : droite verticale (sécurité)
+  if (m === null) return "";
+
+  let eq = "y=";
+
+  /* --- terme en x --- */
+  if (m !== 0) {
+    if (m === 1) eq += "x";
+    else if (m === -1) eq += "-x";
+    else eq += `${m}x`;
+  }
+
+  /* --- terme constant --- */
+  if (p !== 0) {
+    if (m === 0) {
+      // éviter y=+2
+      eq += p;
+    } else {
+      eq += p > 0 ? `+${p}` : `${p}`;
+    }
+  }
+
+  /* --- cas m=0 --- */
+  if (m === 0 && p !== 0) {
+    eq = `y=${p}`;
+  }
+
+  return eq;
+}
+
   /*==============GENERATION========*/
 function generer() {
 
@@ -171,24 +215,32 @@ function verifier() {
   /* ===== CAS 2 : droite verticale ===== */
   if (cas === 2) {
 
-    const attendu = `x=${e}`;
+const attendu = equationReduite(m, p);
 
-    if (rep === normaliser(attendu)) {
-      document.getElementById("feedback").innerHTML =
-        "<span class='bon'>✅ Bonne réponse !</span>";
-    } else {
-      document.getElementById("feedback").innerHTML =
-        "<span class='faux'>❌ Réponse incorrecte (forme attendue : x = …)</span>";
-    }
+if (rep === normaliser(attendu)) {
+  document.getElementById("feedback").innerHTML =
+    "<span class='bon'>✅ Bonne réponse !</span>";
+} else {
+  document.getElementById("feedback").innerHTML =
+    "<span class='faux'>❌ Réponse incorrecte</span>";
+}
 
     return;
   }
 
   /* ===== AUTRES CAS : y = mx + p ===== */
-  let attendu = `y=${m}x`;
+let attendu = "y=";
 
-  if (p > 0) attendu += `+${p}`;
-  if (p < 0) attendu += `${p}`;
+const tx = termeX(m);
+const tp = termeConstante(p);
+
+attendu += tx;
+
+if (tp !== "") {
+  // cas où m = 0 → éviter y=+2
+  if (tx === "") attendu += tp.replace("+", "");
+  else attendu += tp;
+}
 
   if (rep === normaliser(attendu)) {
     document.getElementById("feedback").innerHTML =
@@ -200,7 +252,7 @@ function verifier() {
 }
 
 
-  /*==============RESOLUTION========*/
+  /*==============CORRECTION========*/
 
 
   
@@ -238,9 +290,10 @@ function corriger() {
     texte = `
     <p><strong>On cherche une équation de la forme :</strong></p>
 
-    \\[
-    y = mx + p
-    \\]
+\\[
+${equationReduite(m, p)}
+\\]
+
 
     <p>La droite passe par le point \\(A(${e};${f})\\).</p>
 
@@ -257,10 +310,10 @@ function corriger() {
     \\]
 
     <p><strong>Équation de la droite :</strong></p>
+\\[
+y = ${termeX(m)}${termeConstante(p)}
+\\]
 
-    \\[
-    y = ${m}x ${p > 0 ? "+" + p : p < 0 ? p : ""}
-    \\]
     `;
   }
 
