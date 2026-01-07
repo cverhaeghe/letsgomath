@@ -138,6 +138,11 @@ let cas;
   return eq;
 }
 
+    function fractionLaTeX(num, den){
+  if(den === 1) return num.toString();
+  return `\\frac{${num}}{${den}}`;
+}
+  
   /*==============GENERATION========*/
 function generer() {
 
