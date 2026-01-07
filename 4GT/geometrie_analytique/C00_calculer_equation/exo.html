@@ -495,11 +495,12 @@ y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
 }
 
     texte += `
-  <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> trouver la pente de \\(d_1\\) </span> <br>
+  <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> trouver la pente de \\(d_1\\) </span> <br><br>
  `;
     if (cas === 4) {
 
-  texte += ` \\(d_1 // d_2 \\Rightarrow m_1 = m_2 = ${afficherCoefX(m)} \\) <br><br>
+  texte += ` \\(d_1 // d_2\\)<br>
+  \\( \\Rightarrow m_1 = m_2 = ${afficherCoefX(m)} \\) <br>
   \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(m)} x +p \\)`;
 
     } 
@@ -507,8 +508,9 @@ y &=  ${afficherCoefX(m)} x  ${afficherConstante(p)}\\\\
 
   const m1Latex = opposeInverseLatex(m2); // pente de d1 si ⟂
 
-  texte += ` \\(d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\) <br><br>
-  \\( \\Rightarrow d_1 \\equiv y = mx +p \\)`;
+  texte += ` \\(d_1 \\perp d_2\\)<br>
+  \\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\) <br>
+  \\( \\Rightarrow d_1 \\equiv y = ${m1Latex}x +p \\)`;
     }
 
 
