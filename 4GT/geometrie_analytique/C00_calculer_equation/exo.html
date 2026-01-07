@@ -385,10 +385,6 @@ if (tp !== "") {
 function corriger() {
   
   let texte = `📘 <strong>Résolution</strong><br><br>  `;
-
-  const aAbs = Math.abs(a);
-  const cAbs = Math.abs(c);
-  const bAbs = Math.abs(b);
   
   /* ===== CAS 1 : droite horizontale ===== */
 
@@ -420,6 +416,10 @@ function corriger() {
   
 else {
 
+  const aAbs = Math.abs(a);
+  const cAbs = Math.abs(c);
+  const bAbs = Math.abs(b);
+  
   texte = `
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
