@@ -590,7 +590,8 @@ const m1Frac = {
 }; // pente perpendiculaire
 
 const m1Latex = opposeInverseLatex(mFrac);
-const m1Value = m1Frac.num / m1Frac.den;
+const m1Value = -mFrac.den / mFrac.num;
+
 
 p1 = f - m1Value * e;
 
