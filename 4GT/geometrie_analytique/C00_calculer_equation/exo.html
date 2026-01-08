@@ -109,6 +109,10 @@ let a, b, c;
   return `${coef}x`;
 }
 
+  function afficherEntierAvecParentheses(n) {
+  return n < 0 ? `(${n})` : n.toString();
+}
+
   function termeConstante(c) {
   if (c === 0) return "";
   return c > 0 ? `+${c}` : `${c}`;
@@ -604,7 +608,7 @@ texte += `
 \\[
 \\begin{aligned}
 A(${e};${f}) \\in d_1
-&\\Rightarrow ${f} = ${afficherPente(m1Frac)} \\cdot ${e} + p \\\\
+&\\Rightarrow ${f} = ${afficherPente(m1Frac)} \\cdot ${afficherEntierAvecParentheses(e)} + p \\\\
 &\\Rightarrow ${f} = ${afficherPente(meFrac)} + p \\\\
 &\\Rightarrow ${f} - ${afficherPente(meFrac)} = p \\\\
 &\\Rightarrow p = ${afficherPente(pFrac)}
@@ -620,7 +624,7 @@ A(${e};${f}) \\in d_1
     
   \\[
   \\boxed{
-  y = ${m1Latex}x ${afficherConstante(pFrac)}
+  d_1 \\equiv y = ${m1Latex}x ${afficherConstante(pFrac)}
   }
   \\]
   `;
