@@ -387,6 +387,9 @@ function generer() {
 
 function verifier() {
 
+  // 🔁 reset du feedback à CHAQUE tentative
+  document.getElementById("feedback").innerHTML = "";
+
   const rep = normaliser(document.getElementById("reponse").value);
 
   /* ===== CAS 2 : droite verticale ===== */
