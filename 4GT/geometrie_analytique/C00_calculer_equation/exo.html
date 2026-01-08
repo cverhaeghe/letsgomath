@@ -583,15 +583,23 @@ texte += `
 `;
 
   } else {
-    m1 = null; // pente en fraction latex
-    const m1Latex = opposeInverseLatex(mFrac);
-    p1 = f - (mFrac.den / mFrac.num) * e;
     
+const m1Frac = { 
+  num: -mFrac.den, 
+  den: mFrac.num 
+}; // pente perpendiculaire
+
+const m1Latex = opposeInverseLatex(mFrac);
+const m1Value = m1Frac.num / m1Frac.den;
+
+p1 = f - m1Value * e;
+
 texte += `
 \\( d_1 \\perp d_2 \\)<br>
 \\( \\Rightarrow m_1 = ${m1Latex} \\)<br>
 \\( \\Rightarrow \\mathbf{ y = ${m1Latex}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
 `;
+
 
   }
 }
