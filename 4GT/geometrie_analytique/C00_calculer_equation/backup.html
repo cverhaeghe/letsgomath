@@ -120,6 +120,12 @@ let xB, yB;
   return c > 0 ? `+${c}` : `${c}`;
 }
 
+  function normaliserFractions(str) {
+  return str
+    .replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, "$1/$2");
+}
+
+  
   function fractionLaTeX(num, den){
   if(den === 1) return num.toString();
   return `\\frac{${num}}{${den}}`;
@@ -131,6 +137,19 @@ let xB, yB;
   return a.toString();
 }
 
+function coefXPourEquation(frac) {
+  const { num, den } = frac;
+
+  if (num === 0) return "";
+  if (den === 1) {
+    if (num === 1) return "x";
+    if (num === -1) return "-x";
+    return `${num}x`;
+  }
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}x`;
+}
 
   
 function afficherCoefX(frac) {
@@ -331,7 +350,7 @@ function generer() {
 do {
   xB = Math.floor(Math.random() * 11) - 5;
   yB = Math.floor(Math.random() *11) - 5;
-} while (xB === e);
+} while (xB === e || yB === f);
 
 
     m = (yB - f) / (xB - e);
@@ -421,10 +440,14 @@ if (cas === 3) {
   const pFrac  = soustractionEntierFraction(f, meFrac);
 
   let attendu = "y=";
-  attendu += afficherCoefX(mFrac);
-  attendu += afficherConstante(pFrac);
+attendu += coefXPourEquation(mFrac);
+attendu += afficherConstante(pFrac);
 
-  if (normaliser(document.getElementById("reponse").value) === normaliser(attendu)) {
+
+if (
+  normaliser(normaliserFractions(rep)) ===
+  normaliser(normaliserFractions(attendu))
+) {
     document.getElementById("feedback").innerHTML =
       "<span class='bon'>✅ Bonne réponse !</span>";
   } else {
