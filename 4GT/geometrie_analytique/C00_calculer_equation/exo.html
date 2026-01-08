@@ -409,7 +409,17 @@ if (tp !== "") {
 
 function corriger() {
 
-  document.getElementById("correction").style.display = "block";
+  const bloc = document.getElementById("correction");
+
+  // 🔁 TOGGLE : si visible → cacher
+  if (bloc.style.display === "block") {
+    bloc.style.display = "none";
+    return;
+  }
+
+  // sinon → afficher et générer la correction
+  bloc.style.display = "block";
+
   
   let texte = `📘 <strong>Résolution</strong><br><br>  `;
   
