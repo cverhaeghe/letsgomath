@@ -535,26 +535,45 @@ y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${af
 `;
 }
   }
+
+  
     texte += `
   <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> trouver la pente de \\(d_1\\) </span> <br><br>
  `;
     if (cas === 4) {
 
-  texte += ` \\(d_1 // d_2 \\quad \\)<br>
-  \\( \\Rightarrow m_1 = m_2 = ${afficherCoefX(mFrac)} \\) <br>
-  \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(mFrac)} x +p \\) <br><br>`;
-
-    } 
+  if (Math.abs(b) === 1) {
+    texte += `
+    \\( d_1 // d_2 \\)<br>
+    \\( \\Rightarrow m_1 = m_2 = ${m2} \\)<br>
+    \\( \\Rightarrow d_1 \\equiv y = ${m2Texte}x + p \\)
+    `;
+  } else {
+    texte += `
+    \\( d_1 // d_2 \\)<br>
+    \\( \\Rightarrow m_1 = m_2 = ${afficherCoefX(mFrac)} \\)<br>
+    \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(mFrac)}x + p \\)
+    `;
+  }
+}
+ 
     else {
 
-  const m1Latex = opposeInverseLatex(mFrac); // pente de d1 si ⟂
-
-  texte += ` \\(d_1 \\perp d_2   \\)<br>
-  \\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\) <br>
-  \\( \\Rightarrow d_1 \\equiv y = ${m1Latex}x +p \\) <br><br>`;
-    }
-
+  if (Math.abs(b) === 1) {
+    const m1 = -1 / m2;
+    texte += `
+    \\( d_1 \\perp d_2 \\)<br>
+    \\( \\Rightarrow m_1 = ${m1} \\)
+    `;
+  } else {
+    const m1Latex = opposeInverseLatex(mFrac);
+    texte += `
+    \\( d_1 \\perp d_2 \\)<br>
+    \\( \\Rightarrow m_1 = ${m1Latex} \\)
+    `;
   }
+}
+
 
   document.getElementById("correction").innerHTML = texte;
   MathJax.typeset();
