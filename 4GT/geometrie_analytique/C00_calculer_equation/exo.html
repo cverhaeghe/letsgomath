@@ -595,7 +595,11 @@ const m1Value = -mFrac.den / mFrac.num;
 
 p1 = f - m1Value * e;
 
-texte += "TEST";
+texte += `
+\\( d_1 \\perp d_2 \\)<br>
+\\( \\Rightarrow m_1 = ${m1Latex} \\)<br>
+\\( \\Rightarrow \\mathbf{ y = ${m1Latex}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
+`;
 
 
 
@@ -607,7 +611,7 @@ texte += "TEST";
   document.getElementById("correction").innerHTML = texte;
   MathJax.typeset();
 }
-
+}
 
 generer();
 </script>
