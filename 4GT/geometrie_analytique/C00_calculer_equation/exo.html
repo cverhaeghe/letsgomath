@@ -524,9 +524,14 @@ if (cas === 4 || cas === 5) {
     m1Latex = m2Latex;
 
     texte += `
-    \\( d_1 // d_2 \\Rightarrow m_1 = m_2 = ${m1Latex} \\)<br><br>
-    \\( \\Rightarrow  d_1 \equiv y = ${m1Latex} x + p \\)
+    \\[
+    \\begin{aligned}
+    d_1 // d_2 &\\Rightarrow m_1 = m_2 = ${m1Latex} \\\\
+    &\\Rightarrow  d_1 \equiv y = ${m1Latex} x + p
+    \\end{aligned}
+    \\]
     `;
+
   }
 
   if (cas === 5) {
@@ -534,8 +539,12 @@ if (cas === 4 || cas === 5) {
     m1Latex = opposeInverseLatex(m2Frac);
 
     texte += `
-    \\( d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\)<br><br>
-    \\( \\Rightarrow  d_1 \\equiv y = ${m1Latex} x + p \\) <br><br>
+    \\[
+    \\begin{aligned}
+    d_1 \\perp d_2  &\\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\\\
+    &\\Rightarrow  d_1 \\equiv y = ${m1Latex} x + p
+    \\end{aligned}
+    \\]
     `;
   }
 
