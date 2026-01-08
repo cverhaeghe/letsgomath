@@ -472,22 +472,31 @@ else {
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
 
-  if (Math.abs(b) === 1) {
+if (Math.abs(b) === 1) {
 
-  // ✅ CAS b = ±1 → pas de lignes inutiles
-  const signeY = b === 1 ? "" : "-";
+  // b = ±1 → pente entière
   const m2 = -a * b;
   const p2 = -c * b;
+
+  const m2Texte =
+    m2 === 1 ? "" :
+    m2 === -1 ? "-" :
+    m2.toString();
+
+  const p2Texte =
+    p2 === 0 ? "" :
+    p2 > 0 ? `+${p2}` : `${p2}`;
 
   texte += `
   \\[
   \\begin{aligned}
-  ${Aff(a)}x   + ${Aff(b)}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
-  y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${afficherCoefX(mFrac)})\\\\
+  ${equationCartesienne(a, b, c)} \\\\
+  y &= ${m2Texte}x ${p2Texte} \\quad (m_2 = ${m2})
   \\end{aligned}
   \\]
   `;
-  }
+}
+
     
   else { 
     
