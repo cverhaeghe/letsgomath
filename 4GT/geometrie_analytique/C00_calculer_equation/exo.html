@@ -432,7 +432,10 @@ if (cas === 3) {
 
 
 
-  if (rep === normaliser(attendu)) {
+if (
+  normaliser(normaliserFractions(rep)) ===
+  normaliser(normaliserFractions(attendu))
+) {
     document.getElementById("feedback").innerHTML =
       "<span class='bon'>✅ Bonne réponse !</span>";
   } else {
