@@ -578,8 +578,8 @@ else {
 
 texte += `
 \\( d_1 \\perp d_2 \\)<br>
-\\( \\Rightarrow m_1 = ${m1} \\)<br>
-\\( \\Rightarrow \\mathbf{ y = ${m1}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
+\\( \\Rightarrow m_1 = m_2 = ${m1} \\)<br>
+\\( \\Rightarrow y = ${m1}x +p } \\)
 `;
 
   } else {
@@ -598,7 +598,7 @@ p1 = f - m1Value * e;
 texte += `
 \\( d_1 \\perp d_2 \\)<br>
 \\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\)<br>
-\\( \\Rightarrow \\mathbf{ y = ${m1Latex}x +p } \\)
+\\( \\Rightarrow  y = ${m1Latex}x + p  \\)
 `;
 
   }
@@ -612,11 +612,21 @@ texte += `
 \\[
 \\begin{aligned}
 ${f} &= ${m1Latex} \\cdot ${e} + p \\\\
-p &= ${f} - ${m1Latex} \\cdot ${e}
+p &= ${f} - ${m1Latex} \\cdot ${e} \\\\
 \\end{aligned}
 \\]
 `;
 
+texte += `
+\\[
+\\begin{aligned}
+A(${e};${f}) \\in d_1
+&\\Rightarrow f = m_1 e + p \\\\
+&\\Rightarrow p = f - m_1 e \\\\
+&\\Rightarrow p = ${f} - ${m1Latex} \\cdot ${e}
+\\end{aligned}
+\\]
+`;
 
   
   document.getElementById("correction").innerHTML = texte;
