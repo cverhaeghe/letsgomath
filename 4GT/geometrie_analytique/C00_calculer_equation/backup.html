@@ -54,6 +54,8 @@
 let m, e, f, p;
 let cas;
 let a, b, c;
+let xB, yB;
+
   /*==============FONCTIONS========*/
 
   function randNonZero(min, max) {
@@ -326,11 +328,11 @@ function generer() {
 
     cas = 3;
 
-    let xB, yB;
-    do {
-      xB = Math.floor(Math.random() * 7) - 3;
-      yB = Math.floor(Math.random() * 7) - 3;
-    } while (xB === e);
+do {
+  xB = Math.floor(Math.random() * 11) - 5;
+  yB = Math.floor(Math.random() *11) - 5;
+} while (xB === e);
+
 
     m = (yB - f) / (xB - e);
     p = f - m * e;
@@ -408,6 +410,31 @@ if (rep === normaliser(attendu)) {
     return;
   }
 
+  /* ===== CAS 3 : droite passant par A et B ===== */
+if (cas === 3) {
+
+  const dx = xB - e;
+  const dy = yB - f;
+
+  const mFrac = fractionIrreductible(dy, dx);
+  const meFrac = produitFractionEntier(mFrac, e);
+  const pFrac  = soustractionEntierFraction(f, meFrac);
+
+  let attendu = "y=";
+  attendu += afficherCoefX(mFrac);
+  attendu += afficherConstante(pFrac);
+
+  if (normaliser(document.getElementById("reponse").value) === normaliser(attendu)) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
+}
+
   /* ===== AUTRES CAS : y = mx + p ===== */
 let attendu = "y=";
 
@@ -477,27 +504,94 @@ function corriger() {
     return; 
   }
 
-  /* ===== CAS 3 : droite passant par 2 points ===== */
 
-  if (cas === 3) {
+/* ===== CAS 3 : droite passant par 2 points ===== */
+
+if (cas === 3) {
+
+  // Données du point B (déjà générées dans generer)
+  const dx = xB - e;
+  const dy = yB - f;
+
+  // pente sous forme de fraction
+  const mFrac = fractionIrreductible(dy, dx);
+  const mLatex = afficherPente(mFrac);
+
+  // produit m * e
+  const meFrac = produitFractionEntier(mFrac, e);
+
+  // calcul de p
+  const pFrac = soustractionEntierFraction(f, meFrac);
+
+  const meFracAbs = {
+    num: Math.abs(meFrac.num),
+    den: meFrac.den
+  };
 
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(d_1\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(AB\\)</span><br>
 
   \\[
   \\begin{aligned}
-  m_1 &= \\frac{\\Delta y}{\\Delta x} \\\\
-  &= \\\\
+  m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
+         &= \\frac{${f}-${afficherEntierAvecParentheses(yB)}}{${e}-${afficherEntierAvecParentheses(xB)}} \\\\
+         &= ${mLatex}
+  \\end{aligned}
+  \\]
+  
+   \\[  
+   \\Rightarrow AB \\equiv y = ${mLatex}x + p  
+   \\]<br>
+  `;
+
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span>
+  <span style='color: var(--peps)'> calculer le \\(p\\) de \\(AB\\)</span><br>
+
+  \\[
+  \\begin{aligned}
+  A(${e};${f}) \\in AB
+  `;
+
+  // ligne 1 : toujours
+  texte += `
+  &\\Rightarrow ${f} = ${mLatex} \\cdot ${afficherEntierAvecParentheses(e)} + p \\\\
+  `;
+
+  // ligne 2 : toujours
+  texte += `
+  &\\Rightarrow ${f} = ${afficherPente(meFrac)} + p \\\\
+  `;
+
+  // ligne 3 : seulement si le produit n'est pas nul
+  if (meFrac.num !== 0) {
+    texte += `
+  &\\Rightarrow ${f} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
+  `;
+  }
+
+  // ligne finale
+  texte += `
+  &\\Rightarrow p = ${afficherPente(pFrac)}
   \\end{aligned}
   \\]
   `;
 
-    
-    document.getElementById("correction").innerHTML = texte;
-    MathJax.typeset();
-    return;
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span>
+  <span style='color: var(--peps)'> donner l'équation finale</span><br>
 
+  \\[
+  \\boxed{
+  AB \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
   }
+  \\]
+  `;
+
+  document.getElementById("correction").innerHTML = texte;
+  MathJax.typeset();
+  return;
+}
 
 /* ===== CAS 4 / 5 : parallèle ou perpendiculaire ===== */
 
