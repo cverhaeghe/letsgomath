@@ -486,6 +486,8 @@ function corriger() {
 
 if (cas === 4 || cas === 5) {
 
+  let m1Frac = null;
+  let m1Latex = "";
   let m2Frac = null;
   let m2Valeur = null;
   let m2Latex = "";
@@ -513,7 +515,7 @@ if (cas === 4 || cas === 5) {
   `;
 }
 
-  if (b > 0 & b!==1) {
+  if (b > 0 && b!==1) {
 
     m2Frac = fractionIrreductible(-a, b);
     const p2Frac = fractionIrreductible(-c, b);
@@ -547,8 +549,9 @@ if (cas === 4 || cas === 5) {
     `;
   }
 
-  m2Latex = ${afficherPente(m2Frac)};
-  m1Latex = ${afficherCoefX(m2Frac)}
+m2Latex = afficherPente(m2Frac);
+m1Latex = afficherCoefX(m2Frac);
+
 
   /* ===== ÉTAPE 2 : pente de d1 ===== */
 
@@ -559,35 +562,38 @@ if (cas === 4 || cas === 5) {
   `;
 
   if (cas === 4) {
+  m1Frac = m2Frac;
+  m1Latex = afficherCoefX(m1Frac);
 
-    texte += `
-    \\[
-    \\begin{aligned}
-    d_1 // d_2 &\\Rightarrow m_1 = m_2 = ${m2Latex} \\\\
-    &\\Rightarrow  d_1 \\equiv y = ${m1Latex} x + p
-    \\end{aligned}
-    \\]
-    `;
+  texte += `
+  \\[
+  \\begin{aligned}
+  d_1 // d_2 &\\Rightarrow m_1 = m_2 = ${afficherPente(m1Frac)} \\\\
+  &\\Rightarrow d_1 \\equiv y = ${m1Latex}x + p
+  \\end{aligned}
+  \\]
+  `;
+}
 
-  }
 
-  if (cas === 5) {
-    m1Latex = opposeInverseLatex(m2Frac);
 
-    texte += `
-    \\[
-    \\begin{aligned}
-    d_1 \\perp d_2  &\\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\\\
-    &\\Rightarrow  d_1 \\equiv y = ${m1Latex} x + p
-    \\end{aligned}
-    \\]
-    `;
-  }
+if (cas === 5) {
+  m1Frac = { num: -m2Frac.den, den: m2Frac.num };
+  m1Frac = fractionIrreductible(m1Frac.num, m1Frac.den);
+  m1Latex = afficherCoefX(m1Frac);
+
+  texte += `
+  \\[
+  \\begin{aligned}
+  d_1 \\perp d_2 &\\Rightarrow m_1 = -\\frac{1}{m_2} = ${afficherPente(m1Frac)} \\\\
+  &\\Rightarrow d_1 \\equiv y = ${m1Latex}x + p
+  \\end{aligned}
+  \\]
+  `;
+}
+
 
 /* ===== ÉTAPE 3 : calcul de p ===== */
-
-const meFrac = produitFractionEntier(m1Frac, e);
-const pFrac = soustractionEntierFraction(f, meFrac);
 
 texte += `
 <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
@@ -611,7 +617,7 @@ A(${e};${f}) \\in d_1
     
   \\[
   \\boxed{
-  y = ${m1Latex}x ${p1 >= 0 ? "+" : ""}${p1}
+  y = ${m1Latex}x ${afficherConstante(pFrac)}
   }
   \\]
   `;
