@@ -485,7 +485,7 @@ if (cas === 4 || cas === 5) {
     \\begin{aligned}
     ${Aff(a)}x + ${Aff(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
     ${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? "-" : "+"} ${Math.abs(c)} \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)}
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad \\( (m_2 = ${m2Latex}) \\)
     \\end{aligned}
     \\]
     `;
@@ -501,7 +501,7 @@ if (cas === 4 || cas === 5) {
     \\begin{aligned}
     ${Aff(a)}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
     ${Aff(a)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= ${-b}y \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)}
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad \\( (m_2 = ${m2Latex}) \\) 
     \\end{aligned}
     \\]
     `;
@@ -510,7 +510,6 @@ if (cas === 4 || cas === 5) {
   m2Valeur = m2Frac.num / m2Frac.den;
   m2Latex = afficherCoefX(m2Frac);
 
-  texte += `\\( m_2 = ${m2Latex} \\)<br><br>`;
 
   /* ===== ÉTAPE 2 : pente de d1 ===== */
 
@@ -528,6 +527,7 @@ if (cas === 4 || cas === 5) {
 
     texte += `
     \\( d_1 // d_2 \\Rightarrow m_1 = m_2 = ${m1Latex} \\)<br><br>
+    \\( \\Rightarrow  d_1 \equiv y = ${m1Latex} x + p \\)
     `;
   }
 
@@ -537,6 +537,8 @@ if (cas === 4 || cas === 5) {
 
     texte += `
     \\( d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\)<br><br>
+    \\( \\Rightarrow  d_1 \equiv y = ${m1Latex} x + p \\)
+
     `;
   }
 
@@ -550,9 +552,8 @@ if (cas === 4 || cas === 5) {
 
   \\[
   \\begin{aligned}
-  A(${e};${f}) \\in d_1 &\\Rightarrow f = m_1 e + p \\\\
-  &\\Rightarrow p = f - m_1 e \\\\
-  &\\Rightarrow p = ${f} - (${m1Latex}) \\cdot ${e} \\\\
+  A(${e};${f}) \\in d_1 &\\Rightarrow ${f} = ${m1Latex} ${e} + p \\\\
+  &\\Rightarrow ${f} - (${m1Latex}) \\cdot ${e}  = p \\\\  
   &\\Rightarrow p = ${p1}
   \\end{aligned}
   \\]
@@ -561,7 +562,7 @@ if (cas === 4 || cas === 5) {
   /* ===== ÉTAPE 4 : équation finale ===== */
 
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Conclusion :</span><br><br>
+  <span style='color: var(--peps); font-weight: bold;'> donner l'équation finale  :</span><br>
 
   \\[
   \\boxed{
