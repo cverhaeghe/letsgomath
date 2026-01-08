@@ -625,7 +625,8 @@ texte += `
 
 \\[
 \\begin{aligned}
-A(${e};${f}) \\in d_1
+A(${e};${f}) \\in d_1 
+`;
 
 if (meFrac.num !== 1) {
   texte += `
@@ -633,7 +634,7 @@ if (meFrac.num !== 1) {
 `;
 }
 
-&\\Rightarrow ${f} = ${afficherPente(meFrac)} + p \\\\
+`&\\Rightarrow ${f} = ${afficherPente(meFrac)} + p \\\\
 `;
 
 if (meFrac.num !== 0) {
