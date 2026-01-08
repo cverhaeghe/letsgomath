@@ -488,7 +488,24 @@ if (cas === 4 || cas === 5) {
   <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> réduire l’équation de \\(d_2\\)</span><br>
   `;
 
-  if (b > 0) {
+  if (b === 1) {
+
+  m2Frac = fractionIrreductible(-a, b);
+  const p2Frac = fractionIrreductible(-c, b);
+  m2Latex = afficherPente(m2Frac);
+
+  texte += `
+  \\[
+  \\begin{aligned}
+  ${Aff(a)}x + y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
+  y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)}
+  \\quad (m_2 = ${afficherPente(m2Frac)})
+  \\end{aligned}
+  \\]
+  `;
+}
+
+  if (b > 0 & b!==1) {
 
     m2Frac = fractionIrreductible(-a, b);
     const p2Frac = fractionIrreductible(-c, b);
@@ -569,7 +586,7 @@ if (cas === 4 || cas === 5) {
   const p1 = f - m1Valeur * e;
 
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
 
   \\[
   \\begin{aligned}
