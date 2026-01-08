@@ -458,6 +458,43 @@ if (
   return;
 }
 
+  /* ===== CAS 4 / 5 : parallèle ou perpendiculaire ===== */
+if (cas === 4 || cas === 5) {
+
+  // pente de d2
+  const m2Frac = fractionIrreductible(-a, b);
+
+  // pente de d1
+  let m1Frac;
+  if (cas === 4) {
+    m1Frac = m2Frac;
+  } else {
+    m1Frac = fractionIrreductible(-m2Frac.den, m2Frac.num);
+  }
+
+  // calcul de p avec fractions
+  const meFrac = produitFractionEntier(m1Frac, e);
+  const pFrac  = soustractionEntierFraction(f, meFrac);
+
+  let attendu = "y=";
+  attendu += coefXPourEquation(m1Frac);
+  attendu += afficherConstante(pFrac);
+
+  if (
+    normaliser(normaliserFractions(rep)) ===
+    normaliser(normaliserFractions(attendu))
+  ) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
+}
+
+  
   /* ===== AUTRES CAS : y = mx + p ===== */
 let attendu = "y=";
 
