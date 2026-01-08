@@ -597,17 +597,26 @@ p1 = f - m1Value * e;
 
 texte += `
 \\( d_1 \\perp d_2 \\)<br>
-\\( \\Rightarrow m_1 = ${m1Latex} \\)<br>
-\\( \\Rightarrow \\mathbf{ y = ${m1Latex}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
+\\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\)<br>
+\\( \\Rightarrow \\mathbf{ y = ${m1Latex}x +p } \\)
 `;
-
-
 
   }
 }
 
+    texte += `
+  <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> trouver le \\(p \\) de  \\(d_1\\) </span> <br><br>
 
+  \\(A(${e};${f}) \\in d_1\\)
+  \\[
+  \\begin{aligned}
+  \\Rightarrow ${f} &= ${m1Latex} ${e} +p \\) \\\\
+  \\Leftrightarrow ${f} &=  p \\) \\\\
+  \\end{aligned}
+  \\]
+ `;
 
+  
   document.getElementById("correction").innerHTML = texte;
   MathJax.typeset();
 }
