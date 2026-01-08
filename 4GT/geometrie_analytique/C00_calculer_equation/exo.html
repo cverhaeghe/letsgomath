@@ -504,16 +504,17 @@ if (cas === 3) {
   };
 
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span>
-  <span style='color: var(--peps)'> calculer la pente de \\(AB\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(AB\\)</span><br>
 
   \\[
   \\begin{aligned}
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
-         &= \\frac{${yB}-${f}}{${xB}-${e}} \\\\
+         &= \\frac{${f}-${yB}}{${e}-${xB}} \\\\
          &= ${mLatex}
   \\end{aligned}
   \\]
+  
+   \\(  \\Rightarrow AB \\equiv y = ${mLatex}x + p\\)
   `;
 
   texte += `
