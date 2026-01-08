@@ -604,17 +604,19 @@ texte += `
   }
 }
 
-    texte += `
-  <span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span>  <span style='color: var(--peps)'> trouver le \\(p \\) de  \\(d_1\\) </span> <br><br>
+texte += `
+<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span> <span style='color: var(--peps)'> trouver le \\(p\\) de \\(d_1\\) </span> <br><br>
 
-  \\(A(${e};${f}) \\in d_1\\)
-  \\[
-  \\begin{aligned}
-  \\Rightarrow ${f} &= ${m1Latex} ${e} +p \\) \\\\
-  \\Leftrightarrow ${f} &=  p \\) \\\\
-  \\end{aligned}
-  \\]
- `;
+\\( A(${e};${f}) \\in d_1 \\)
+
+\\[
+\\begin{aligned}
+${f} &= ${m1Latex} \\cdot ${e} + p \\\\
+p &= ${f} - ${m1Latex} \\cdot ${e}
+\\end{aligned}
+\\]
+`;
+
 
   
   document.getElementById("correction").innerHTML = texte;
