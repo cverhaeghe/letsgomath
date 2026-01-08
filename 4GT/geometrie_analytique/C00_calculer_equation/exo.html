@@ -54,6 +54,8 @@
 let m, e, f, p;
 let cas;
 let a, b, c;
+let xB, yB;
+
   /*==============FONCTIONS========*/
 
   function randNonZero(min, max) {
@@ -326,11 +328,11 @@ function generer() {
 
     cas = 3;
 
-    let xB, yB;
-    do {
-      xB = Math.floor(Math.random() * 7) - 3;
-      yB = Math.floor(Math.random() * 7) - 3;
-    } while (xB === e);
+do {
+  xB = Math.floor(Math.random() * 11) - 5;
+  yB = Math.floor(Math.random() *11) - 5;
+} while (xB === e);
+
 
     m = (yB - f) / (xB - e);
     p = f - m * e;
