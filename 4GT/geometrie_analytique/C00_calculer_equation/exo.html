@@ -471,8 +471,7 @@ if (cas === 4 || cas === 5) {
   /* ===== ÉTAPE 1 : réduire d2 ===== */
 
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span>
-  <span style='color: var(--peps)'> réduire l’équation de \\(d_2\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> réduire l’équation de \\(d_2\\)</span><br>
   `;
 
   if (b > 0) {
@@ -485,7 +484,7 @@ if (cas === 4 || cas === 5) {
     \\begin{aligned}
     ${Aff(a)}x + ${Aff(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
     ${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? "-" : "+"} ${Math.abs(c)} \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad \\( (m_2 = ${m2Latex}) \\)
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad  (m_2 = ${afficherCoefX(m2Frac)}) 
     \\end{aligned}
     \\]
     `;
@@ -501,7 +500,7 @@ if (cas === 4 || cas === 5) {
     \\begin{aligned}
     ${Aff(a)}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
     ${Aff(a)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= ${-b}y \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad \\( (m_2 = ${m2Latex}) \\) 
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad (m_2 = ${afficherCoefX(m2Frac)} ) 
     \\end{aligned}
     \\]
     `;
@@ -517,8 +516,7 @@ if (cas === 4 || cas === 5) {
   let m1Latex = "";
 
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span>
-  <span style='color: var(--peps)'> déterminer la pente de \\(d_1\\)</span><br><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> déterminer la pente de \\(d_1\\)</span><br><br>
   `;
 
   if (cas === 4) {
