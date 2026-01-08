@@ -120,6 +120,12 @@ let xB, yB;
   return c > 0 ? `+${c}` : `${c}`;
 }
 
+  function normaliserFractions(str) {
+  return str
+    .replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, "$1/$2");
+}
+
+  
   function fractionLaTeX(num, den){
   if(den === 1) return num.toString();
   return `\\frac{${num}}{${den}}`;
@@ -424,7 +430,9 @@ if (cas === 3) {
   attendu += afficherCoefX(mFrac);
   attendu += afficherConstante(pFrac);
 
-  if (normaliser(document.getElementById("reponse").value) === normaliser(attendu)) {
+
+
+  if (rep === normaliser(attendu)) {
     document.getElementById("feedback").innerHTML =
       "<span class='bon'>✅ Bonne réponse !</span>";
   } else {
