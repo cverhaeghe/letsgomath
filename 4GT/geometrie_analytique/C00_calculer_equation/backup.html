@@ -481,8 +481,18 @@ function corriger() {
 
   if (cas === 3) {
 
-    texte += ` "Hello" `;
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(d_1\\)</span><br>
 
+  \\[
+  \\begin{aligned}
+  m_1 &= \\frac{\\Delta y}{\\Delta x} \\\\
+  &= \\\\
+  \\end{aligned}
+  \\]
+  `;
+
+    
     document.getElementById("correction").innerHTML = texte;
     MathJax.typeset();
     return;
