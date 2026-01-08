@@ -167,7 +167,15 @@ function afficherCoefX(frac) {
   return `${signe}\\frac{${Math.abs(num)}}{${den}}`;
 }
 
-  
+  function produitFractionEntier(frac, k) {
+  return fractionIrreductible(frac.num * k, frac.den);
+}
+
+  function soustractionEntierFraction(f, frac) {
+  // f - (num/den) = (f*den - num) / den
+  return fractionIrreductible(f * frac.den - frac.num, frac.den);
+}
+
 function opposeInverseLatex(frac) {
   let { num, den } = frac;
 
@@ -581,22 +589,25 @@ if (cas === 4 || cas === 5) {
     `;
   }
 
-  /* ===== ÉTAPE 3 : calcul de p ===== */
+/* ===== ÉTAPE 3 : calcul de p ===== */
 
-  const p1 = f - m1Valeur * e;
+const meFrac = produitFractionEntier(m1Frac, e);
+const pFrac = soustractionEntierFraction(f, meFrac);
 
-  texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
+texte += `
+<span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
 
-  \\[
-  \\begin{aligned}
-  A(${e};${f}) \\in d_1 &\\Rightarrow ${f} = ${m1Latex} \\cdot ${e} + p \\\\
-  &\\Rightarrow ${f} = ${m1Latex * e} + p \\\\
-  &\\Rightarrow ${f} - (${m1Latex * e}  = p \\\\  
-  &\\Rightarrow p = ${p1}
-  \\end{aligned}
-  \\]
-  `;
+\\[
+\\begin{aligned}
+A(${e};${f}) \\in d_1
+&\\Rightarrow ${f} = ${afficherPente(m1Frac)} \\cdot ${e} + p \\\\
+&\\Rightarrow ${f} = ${afficherPente(meFrac)} + p \\\\
+&\\Rightarrow ${f} - ${afficherPente(meFrac)} = p \\\\
+&\\Rightarrow p = ${afficherPente(pFrac)}
+\\end{aligned}
+\\]
+`;
+
 
   /* ===== ÉTAPE 4 : équation finale ===== */
 
