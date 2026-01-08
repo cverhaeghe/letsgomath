@@ -255,7 +255,8 @@ function generer() {
 
   document.getElementById("feedback").innerHTML = "";
   document.getElementById("reponse").value = "";
-
+  document.getElementById("correction").innerHTML = "";
+  document.getElementById("correction").style.display = "none";
 
   const r = Math.random() * 100;
 
@@ -407,6 +408,8 @@ if (tp !== "") {
   ===============*/
 
 function corriger() {
+
+  document.getElementById("correction").style.display = "block";
   
   let texte = `📘 <strong>Résolution</strong><br><br>  `;
   
