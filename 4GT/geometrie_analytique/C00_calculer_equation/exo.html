@@ -472,6 +472,25 @@ else {
   <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
   `;
 
+  if (Math.abs(b) === 1) {
+
+  // ✅ CAS b = ±1 → pas de lignes inutiles
+  const signeY = b === 1 ? "" : "-";
+  const m2 = -a * b;
+  const p2 = -c * b;
+
+  texte += `
+  \\[
+  \\begin{aligned}
+  ${Aff(a)}x   + ${Aff(b)}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
+  y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${afficherCoefX(mFrac)})\\\\
+  \\end{aligned}
+  \\]
+  `;
+  }
+    
+  else { 
+    
 const mFrac = fractionIrreductible(-a, b);
 const pFrac = fractionIrreductible(-c, b); 
 
@@ -506,7 +525,7 @@ y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${af
 \\]
 `;
 }
-
+  }
     texte += `
   <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> trouver la pente de \\(d_1\\) </span> <br><br>
  `;
