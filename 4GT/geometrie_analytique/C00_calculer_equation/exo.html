@@ -626,7 +626,13 @@ texte += `
 \\[
 \\begin{aligned}
 A(${e};${f}) \\in d_1
+
+if (meFrac.num !== 1) {
+  texte += `
 &\\Rightarrow ${f} = ${afficherPente(m1Frac)} \\cdot ${afficherEntierAvecParentheses(e)} + p \\\\
+`;
+}
+
 &\\Rightarrow ${f} = ${afficherPente(meFrac)} + p \\\\
 `;
 
