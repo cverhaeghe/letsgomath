@@ -154,6 +154,20 @@ function afficherCoefX(frac) {
     : `-\\frac{${Math.abs(num)}}{${den}}`;
 }
 
+  function afficherPente(frac) {
+  const { num, den } = frac;
+
+  if (den === 1) {
+    if (num === 1) return "1";
+    if (num === -1) return "-1";
+    return num.toString();
+  }
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}`;
+}
+
+  
 function opposeInverseLatex(frac) {
   let { num, den } = frac;
 
@@ -478,13 +492,14 @@ if (cas === 4 || cas === 5) {
 
     m2Frac = fractionIrreductible(-a, b);
     const p2Frac = fractionIrreductible(-c, b);
+    m2Latex = afficherPente(m2Frac);
 
     texte += `
     \\[
     \\begin{aligned}
     ${Aff(a)}x + ${Aff(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
     ${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? "-" : "+"} ${Math.abs(c)} \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad  (m_2 = ${afficherCoefX(m2Frac)}) 
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad  (m_2 = ${afficherPente(m2Frac)}) 
     \\end{aligned}
     \\]
     `;
@@ -494,20 +509,21 @@ if (cas === 4 || cas === 5) {
 
     m2Frac = fractionIrreductible(-a, b);
     const p2Frac = fractionIrreductible(-c, b);
+    m2Latex = afficherPente(m2Frac);
 
     texte += `
     \\[
     \\begin{aligned}
     ${Aff(a)}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
     ${Aff(a)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= ${-b}y \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad (m_2 = ${afficherCoefX(m2Frac)} ) 
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad (m_2 = ${afficherPente(m2Frac)} ) 
     \\end{aligned}
     \\]
     `;
   }
 
   m2Valeur = m2Frac.num / m2Frac.den;
-  m2Latex = afficherCoefX(m2Frac);
+  m2Latex = afficherConstante(m2Frac);
 
 
   /* ===== ÉTAPE 2 : pente de d1 ===== */
