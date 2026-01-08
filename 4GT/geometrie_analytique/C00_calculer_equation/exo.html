@@ -598,6 +598,10 @@ if (cas === 5) {
 
 const meFrac = produitFractionEntier(m1Frac, e);
 const pFrac  = soustractionEntierFraction(f, meFrac);
+const meFracAbs = {
+  num: Math.abs(meFrac.num),
+  den: meFrac.den
+};
   
 texte += `
 <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
@@ -611,7 +615,7 @@ A(${e};${f}) \\in d_1
 
 if (meFrac.num !== 0) {
   texte += `
-&\\Rightarrow ${f} - ${afficherPente(meFrac)} = p \\\\
+&\\Rightarrow ${f} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
 `;
 }
 
