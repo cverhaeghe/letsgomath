@@ -137,6 +137,19 @@ let xB, yB;
   return a.toString();
 }
 
+function coefXPourEquation(frac) {
+  const { num, den } = frac;
+
+  if (num === 0) return "";
+  if (den === 1) {
+    if (num === 1) return "x";
+    if (num === -1) return "-x";
+    return `${num}x`;
+  }
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}x`;
+}
 
   
 function afficherCoefX(frac) {
@@ -427,9 +440,8 @@ if (cas === 3) {
   const pFrac  = soustractionEntierFraction(f, meFrac);
 
   let attendu = "y=";
-  attendu += afficherCoefX(mFrac);
-  attendu += afficherConstante(pFrac);
-
+attendu += coefXPourEquation(mFrac);
+attendu += afficherConstante(pFrac);
 
 
 if (
