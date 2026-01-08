@@ -410,6 +410,31 @@ if (rep === normaliser(attendu)) {
     return;
   }
 
+  /* ===== CAS 3 : droite passant par A et B ===== */
+if (cas === 3) {
+
+  const dx = xB - e;
+  const dy = yB - f;
+
+  const mFrac = fractionIrreductible(dy, dx);
+  const meFrac = produitFractionEntier(mFrac, e);
+  const pFrac  = soustractionEntierFraction(f, meFrac);
+
+  let attendu = "y=";
+  attendu += afficherCoefX(mFrac);
+  attendu += afficherConstante(pFrac);
+
+  if (normaliser(document.getElementById("reponse").value) === normaliser(attendu)) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
+}
+
   /* ===== AUTRES CAS : y = mx + p ===== */
 let attendu = "y=";
 
