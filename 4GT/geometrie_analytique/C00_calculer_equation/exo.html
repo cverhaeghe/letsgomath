@@ -535,6 +535,8 @@ y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${af
 
 let m1 = null;
 let p1 = null;
+let m1Texte = ""; // TEXTE affiché de la pente
+let m1Valeur = null; // VALEUR numérique pour calculer p
 
   
     texte += `
@@ -543,14 +545,23 @@ let p1 = null;
 if (cas === 4) {
 
   if (Math.abs(b) === 1) {
-    m1 = m2;
-    p1 = f - m1 * e;
+    m1Valeur = m2;
+    m1Texte = m2.toString();
+  } else {
+    m1Valeur = mFrac.num / mFrac.den;
+    m1Texte = afficherCoefX(mFrac);
+  }
 
-texte += `
-\\( d_1 // d_2 \\)<br>
-\\( \\Rightarrow m_1 = ${m1} \\)<br>
-\\( \\Rightarrow \\mathbf{ y = ${m1}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
-`;
+  p1 = f - m1Valeur * e;
+
+  texte += `
+  \\( d_1 // d_2 \\)<br>
+  \\( \\Rightarrow m_1 = m_2 = ${m1Texte} \\)<br>
+  \\( \\Rightarrow  y = ${m1Texte}x ${p1 >= 0 ? "+" : ""}${p1} \\)
+  `;
+}
+
+
 
   } else {
     m1 = mFrac.num / mFrac.den;
@@ -569,14 +580,21 @@ texte += `
 else {
 
   if (Math.abs(b) === 1) {
-    m1 = -1 / m2;
-    p1 = f - m1 * e;
+    m1Valeur = -1 / m2;
+    m1Texte = m1Valeur.toString();
+  } else {
+    m1Valeur = -mFrac.den / mFrac.num;
+    m1Texte = opposeInverseLatex(mFrac);
+  }
 
-texte += `
-\\( d_1 \\perp d_2 \\)<br>
-\\( \\Rightarrow m_1 = m_2 = ${m1} \\)<br>
-\\( \\Rightarrow y = ${m1}x +p } \\)
-`;
+  p1 = f - m1Valeur * e;
+
+  texte += `
+  \\( d_1 \\perp d_2 \\)<br>
+  \\( \\Rightarrow m_1 = - \\frac{1}{m_2} = ${m1Texte} \\)<br>
+  \\( \\Rightarrow y = ${m1Texte}x + p \\)
+  `;
+}
 
   } else {
     
@@ -607,11 +625,12 @@ texte += `
 
 \\[
 \\begin{aligned}
-${f} &= ${m1Latex} \\cdot ${e} + p \\\\
-p &= ${f} - ${m1Latex} \\cdot ${e} \\\\
+${f} &= ${m1Texte} \\cdot ${e} + p \\\\
+p &= ${f} - ${m1Texte} \\cdot ${e}
 \\end{aligned}
 \\]
 `;
+
 
 texte += `
 \\[
