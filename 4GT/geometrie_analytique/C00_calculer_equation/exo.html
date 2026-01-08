@@ -537,6 +537,9 @@ y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${af
 }
   }
 
+let m1 = null;
+let p1 = null;
+
   
     texte += `
   <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> trouver la pente de \\(d_1\\) </span> <br><br>
@@ -544,17 +547,25 @@ y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${af
 if (cas === 4) {
 
   if (Math.abs(b) === 1) {
-    texte += `
-    \\( d_1 // d_2 \\)<br>
-    \\( \\Rightarrow m_1 = ${m2} \\)<br>
-    \\( \\Rightarrow d_1 \\equiv y = ${m2Texte}x + p \\)
-    `;
+    m1 = m2;
+    p1 = f - m1 * e;
+
+texte += `
+\\( d_1 // d_2 \\)<br>
+\\( \\Rightarrow m_1 = ${m1} \\)<br>
+\\( \\Rightarrow \\mathbf{ y = ${m1}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
+`;
+
   } else {
-    texte += `
-    \\( d_1 // d_2 \\)<br>
-    \\( \\Rightarrow m_1 = ${afficherCoefX(mFrac)} \\)<br>
-    \\( \\Rightarrow d_1 \\equiv y = ${afficherCoefX(mFrac)}x + p \\)
-    `;
+    m1 = mFrac.num / mFrac.den;
+    p1 = f - m1 * e;
+
+texte += `
+\\( d_1 // d_2 \\)<br>
+\\( \\Rightarrow m_1 = ${m1} \\)<br>
+\\( \\Rightarrow \\mathbf{ y = ${m1}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
+`;
+
   }
 }
 
@@ -562,17 +573,26 @@ if (cas === 4) {
 else {
 
   if (Math.abs(b) === 1) {
-    const m1 = -1 / m2;
-    texte += `
-    \\( d_1 \\perp d_2 \\)<br>
-    \\( \\Rightarrow m_1 = ${m1} \\)
-    `;
+    m1 = -1 / m2;
+    p1 = f - m1 * e;
+
+texte += `
+\\( d_1 \\perp d_2 \\)<br>
+\\( \\Rightarrow m_1 = ${m1Latex} \\)<br>
+\\( \\Rightarrow \\mathbf{ y = ${m1Latex}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
+`;
+
   } else {
+    m1 = null; // pente en fraction latex
     const m1Latex = opposeInverseLatex(mFrac);
-    texte += `
-    \\( d_1 \\perp d_2 \\)<br>
-    \\( \\Rightarrow m_1 = ${m1Latex} \\)
-    `;
+    p1 = f - (mFrac.den / mFrac.num) * e;
+    
+texte += `
+\\( d_1 \\perp d_2 \\)<br>
+\\( \\Rightarrow m_1 = ${m1Latex} \\)<br>
+\\( \\Rightarrow \\mathbf{ y = ${m1Latex}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
+`;
+
   }
 }
 
