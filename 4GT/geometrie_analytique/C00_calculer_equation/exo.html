@@ -534,12 +534,14 @@ if (cas === 3) {
   \\[
   \\begin{aligned}
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
-         &= \\frac{${f}-${yB}}{${e}-${xB}} \\\\
+         &= \\frac{${f}-${afficherEntierAvecParentheses(yB)}}{${e}-${afficherEntierAvecParentheses(xB)}} \\\\
          &= ${mLatex}
   \\end{aligned}
   \\]
   
-   \\(  \\Rightarrow AB \\equiv y = ${mLatex}x + p\\)
+   \\[  
+   \\Rightarrow AB \\equiv y = ${mLatex}x + p  
+   \\]<br><br>
   `;
 
   texte += `
