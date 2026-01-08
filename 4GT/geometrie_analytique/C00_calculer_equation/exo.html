@@ -550,12 +550,9 @@ if (cas === 4 || cas === 5) {
   }
 
 m2Latex = afficherPente(m2Frac);
-m1Latex = afficherCoefX(m2Frac);
 
 
   /* ===== ÉTAPE 2 : pente de d1 ===== */
-
-  let m1Latex = "";
 
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> déterminer la pente de \\(d_1\\)</span><br>
@@ -595,8 +592,14 @@ if (cas === 5) {
 
 /* ===== ÉTAPE 3 : calcul de p ===== */
 
+const meFrac = produitFractionEntier(m1Frac, e);
+const pFrac  = soustractionEntierFraction(f, meFrac);
+  
 texte += `
 <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
+
+
+
 
 \\[
 \\begin{aligned}
