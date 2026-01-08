@@ -460,186 +460,116 @@ function corriger() {
 
   }
 
-  /* ===== CAS 4/5 : D_2 PARALLELES OU PERPENDICULAIRES ===== */
-  
-else {
+/* ===== CAS 4 / 5 : parallèle ou perpendiculaire ===== */
 
-  const aAbs = Math.abs(a);
-  const cAbs = Math.abs(c);
-  const bAbs = Math.abs(b);
-  let m2 = null;
-  let m2Texte = "";
-  let mFrac = null;
+if (cas === 4 || cas === 5) {
 
-  
-  texte += `
-  <span style='color: var(--peps); font-weight: bold;'> Étape 1 : </span>  <span style='color: var(--peps)'>réduire l’équation de \\(d_2\\) </span> <br>
-  `;
+  let m2Frac = null;
+  let m2Valeur = null;
+  let m2Latex = "";
 
-if (Math.abs(b) === 1) {
-
-  m2 = -a * b;
-
-  m2Texte =
-    m2 === 1 ? "" :
-    m2 === -1 ? "-" :
-    m2.toString();
-
-  const p2 = -c * b;
-  const p2Texte =
-    p2 === 0 ? "" :
-    p2 > 0 ? `+${p2}` : `${p2}`;
+  /* ===== ÉTAPE 1 : réduire d2 ===== */
 
   texte += `
-  \\( ${equationCartesienne(a, b, c)} \\)  <br>
-  \\( y &= ${m2Texte}x ${p2Texte} \\quad (m_2 = ${m2}) \\)<br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span>
+  <span style='color: var(--peps)'> réduire l’équation de \\(d_2\\)</span><br>
   `;
-}
-else {
 
-  mFrac = fractionIrreductible(-a, b);
-  const pFrac = fractionIrreductible(-c, b);
+  if (b > 0) {
 
-  
-  /* ===== CAS b > 0 ===== */
-if (b > 0) {
+    m2Frac = fractionIrreductible(-a, b);
+    const p2Frac = fractionIrreductible(-c, b);
 
-texte += `
-\\[
-\\begin{aligned}
-${Aff(a)}x   + ${Aff(b)}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
-${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? '-' : '+'} ${cAbs} \\\\
-\\frac{${b}}{${b}}y &= ${a >= 0 ? '-' : ''} \\frac{${aAbs}}{${b}}x ${c >= 0 ? '-' : '+'} \\frac{${cAbs}}{${b}}  \\\\
-y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${afficherCoefX(mFrac)})\\\\
-\\end{aligned}
-\\]
-`;
-}
-
-
-/* ===== CAS b < 0 ===== */
-else {
-
-texte += `
-\\[
-\\begin{aligned}
-${Aff(a)}x ${b >= 0 ? '+' : '-'} ${bAbs}y ${c >= 0 ? '+' : '-'} ${cAbs}&= 0 \\\\
-${Aff(a)}x ${c >= 0 ? '+' : '-'} ${cAbs} &= ${-b}y \\\\
-${a >= 0 ? '' : '-'}\\frac{${aAbs}}{${-b}}x ${c >= 0 ? '+' : '-'} \\frac{${cAbs}}{${-b}} &= \\frac{${-b}}{${-b}}y \\\\
-y &=  ${afficherCoefX(mFrac)} x  ${afficherConstante(pFrac)}  \\quad (m_2 = ${afficherCoefX(mFrac)})\\\\ 
-\\end{aligned}
-\\]
-`;
-}
-  }
-
-let m1 = null;
-let p1 = null;
-let m1Texte = ""; // TEXTE affiché de la pente
-let m1Valeur = null; // VALEUR numérique pour calculer p
-
-  
     texte += `
-  <span style='color: var(--peps); font-weight: bold;'> Étape 2 : </span>  <span style='color: var(--peps)'> trouver la pente de \\(d_1\\) </span> <br><br>
- `;
-if (cas === 4) {
-
-  if (Math.abs(b) === 1) {
-    m1Valeur = m2;
-    m1Texte = m2.toString();
-  } else {
-    m1Valeur = mFrac.num / mFrac.den;
-    m1Texte = afficherCoefX(mFrac);
+    \\[
+    \\begin{aligned}
+    ${Aff(a)}x + ${Aff(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
+    ${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? "-" : "+"} ${Math.abs(c)} \\\\
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)}
+    \\end{aligned}
+    \\]
+    `;
   }
 
-  p1 = f - m1Valeur * e;
+  if (b < 0) {
+
+    m2Frac = fractionIrreductible(-a, b);
+    const p2Frac = fractionIrreductible(-c, b);
+
+    texte += `
+    \\[
+    \\begin{aligned}
+    ${Aff(a)}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
+    ${Aff(a)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= ${-b}y \\\\
+    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)}
+    \\end{aligned}
+    \\]
+    `;
+  }
+
+  m2Valeur = m2Frac.num / m2Frac.den;
+  m2Latex = afficherCoefX(m2Frac);
+
+  texte += `\\( m_2 = ${m2Latex} \\)<br><br>`;
+
+  /* ===== ÉTAPE 2 : pente de d1 ===== */
+
+  let m1Valeur = null;
+  let m1Latex = "";
 
   texte += `
-  \\( d_1 // d_2 \\)<br>
-  \\( \\Rightarrow m_1 = m_2 = ${m1Texte} \\)<br>
-  \\( \\Rightarrow  y = ${m1Texte}x ${p1 >= 0 ? "+" : ""}${p1} \\)
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span>
+  <span style='color: var(--peps)'> déterminer la pente de \\(d_1\\)</span><br><br>
   `;
 
+  if (cas === 4) {
+    m1Valeur = m2Valeur;
+    m1Latex = m2Latex;
 
-  } else {
-    m1 = mFrac.num / mFrac.den;
-    p1 = f - m1 * e;
-
-texte += `
-\\( d_1 // d_2 \\)<br>
-\\( \\Rightarrow m_1 = ${m1} \\)<br>
-\\( \\Rightarrow \\mathbf{ y = ${m1}x ${p1 >= 0 ? "+" : ""}${p1} } \\)
-`;
-
-  }
-}
-
- 
-else {
-
-  if (Math.abs(b) === 1) {
-    m1Valeur = -1 / m2;
-    m1Texte = m1Valeur.toString();
-  } else {
-    m1Valeur = -mFrac.den / mFrac.num;
-    m1Texte = opposeInverseLatex(mFrac);
+    texte += `
+    \\( d_1 // d_2 \\Rightarrow m_1 = m_2 = ${m1Latex} \\)<br><br>
+    `;
   }
 
-  p1 = f - m1Valeur * e;
+  if (cas === 5) {
+    m1Valeur = -1 / m2Valeur;
+    m1Latex = opposeInverseLatex(m2Frac);
+
+    texte += `
+    \\( d_1 \\perp d_2 \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\)<br><br>
+    `;
+  }
+
+  /* ===== ÉTAPE 3 : calcul de p ===== */
+
+  const p1 = f - m1Valeur * e;
 
   texte += `
-  \\( d_1 \\perp d_2 \\)<br>
-  \\( \\Rightarrow m_1 = - \\frac{1}{m_2} = ${m1Texte} \\)<br>
-  \\( \\Rightarrow y = ${m1Texte}x + p \\)
+  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span>
+  <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br><br>
+
+  \\[
+  \\begin{aligned}
+  A(${e};${f}) \\in d_1 &\\Rightarrow f = m_1 e + p \\\\
+  &\\Rightarrow p = f - m_1 e \\\\
+  &\\Rightarrow p = ${f} - (${m1Latex}) \\cdot ${e} \\\\
+  &\\Rightarrow p = ${p1}
+  \\end{aligned}
+  \\]
+  `;
+
+  /* ===== ÉTAPE 4 : équation finale ===== */
+
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Conclusion :</span><br><br>
+
+  \\[
+  \\boxed{
+  y = ${m1Latex}x ${p1 >= 0 ? "+" : ""}${p1}
+  }
+  \\]
   `;
 }
-
-  } else {
-    
-const m1Frac = { 
-  num: -mFrac.den, 
-  den: mFrac.num 
-}; // pente perpendiculaire
-
-const m1Latex = opposeInverseLatex(mFrac);
-const m1Value = -mFrac.den / mFrac.num;
-
-
-p1 = f - m1Value * e;
-
-texte += `
-\\( d_1 \\perp d_2 \\)<br>
-\\( \\Rightarrow m_1 = -\\frac{1}{m_2} = ${m1Latex} \\)<br>
-\\( \\Rightarrow  y = ${m1Latex}x + p  \\)
-`;
-
-  }
-}
-
-texte += `
-<span style='color: var(--peps); font-weight: bold;'> Étape 3 : </span> <span style='color: var(--peps)'> trouver le \\(p\\) de \\(d_1\\) </span> <br><br>
-
-\\( A(${e};${f}) \\in d_1 \\)
-
-\\[
-\\begin{aligned}
-${f} &= ${m1Texte} \\cdot ${e} + p \\\\
-p &= ${f} - ${m1Texte} \\cdot ${e}
-\\end{aligned}
-\\]
-`;
-
-
-texte += `
-\\[
-\\begin{aligned}
-A(${e};${f}) \\in d_1
-&\\Rightarrow f = m_1 e + p \\\\
-&\\Rightarrow p = f - m_1 e \\\\
-&\\Rightarrow p = ${f} - ${m1Latex} \\cdot ${e}
-\\end{aligned}
-\\]
-`;
 
   
   document.getElementById("correction").innerHTML = texte;
