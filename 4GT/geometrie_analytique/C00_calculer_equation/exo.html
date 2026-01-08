@@ -527,7 +527,7 @@ if (cas === 4 || cas === 5) {
     \\[
     \\begin{aligned}
     d_1 // d_2 &\\Rightarrow m_1 = m_2 = ${m1Latex} \\\\
-    &\\Rightarrow  d_1 \equiv y = ${m1Latex} x + p
+    &\\Rightarrow  d_1 \\equiv y = ${m1Latex} x + p
     \\end{aligned}
     \\]
     `;
@@ -557,8 +557,9 @@ if (cas === 4 || cas === 5) {
 
   \\[
   \\begin{aligned}
-  A(${e};${f}) \\in d_1 &\\Rightarrow ${f} = ${m1Latex} ${e} + p \\\\
-  &\\Rightarrow ${f} - (${m1Latex}) \\cdot ${e}  = p \\\\  
+  A(${e};${f}) \\in d_1 &\\Rightarrow ${f} = ${m1Latex} \\cdot ${e} + p \\\\
+  &\\Rightarrow ${f} = ${m1Latex * e} + p \\\\
+  &\\Rightarrow ${f} - (${m1Latex * e}  = p \\\\  
   &\\Rightarrow p = ${p1}
   \\end{aligned}
   \\]
