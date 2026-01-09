@@ -461,13 +461,35 @@ function verifier() {
 
   const rep = normaliser(document.getElementById("reponse").value);
 
+  /* ===== CAS 1 : droite horizontale ===== */
+if (cas === 1) {
+
+  const attendu = `y=${normaliserFractions(afficherFraction(f))}`;
+
+  if (
+    normaliser(normaliserFractions(rep)) ===
+    normaliser(attendu)
+  ) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
+}
+
   /* ===== CAS 2 : droite verticale ===== */
   
 if (cas === 2) {
 
-  const attendu = `x=${e}`;
+const attendu = `x=${normaliserFractions(afficherFraction(e))}`;
 
-  if (rep === normaliser(attendu)) {
+if (
+  normaliser(normaliserFractions(rep)) ===
+  normaliser(attendu)
+) {
     document.getElementById("feedback").innerHTML =
       "<span class='bon'>✅ Bonne réponse !</span>";
   } else {
@@ -595,7 +617,7 @@ function corriger() {
 
       texte += `Une droite parallèle à l'axe des abscisses est une droite horizontale d'équation \\( y=k\\).<br><br>
       Ainsi, en considérant l'ordonnée du point A, on obtient <br><br> 
-      \\( \\mathbf{ y = ${f} } \\) `;
+      \\( \\mathbf{ y = ${afficherFraction(f)} } \\) `;
 
     document.getElementById("correction").innerHTML = texte;
     MathJax.typeset();
@@ -607,7 +629,7 @@ function corriger() {
     
       texte += `Une droite parallèle à l'axe des ordonnées est une droite verticale d'équation \\( x=k\\).<br><br>
       Ainsi, en considérant l'abscisse du point A, on obtient <br><br> 
-      \\( \\mathbf{  x = ${e} } \\) `;
+       \\( \\mathbf{ x = ${afficherFraction(e)} } \\) `;
 
     document.getElementById("correction").innerHTML = texte;
     MathJax.typeset();
