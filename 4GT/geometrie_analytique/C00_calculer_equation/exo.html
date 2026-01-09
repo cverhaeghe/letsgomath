@@ -88,21 +88,31 @@ let xB, yB;
 }
 
   function afficherFractionDoubleAvecSigne(numFrac, denFrac) {
-  // signe global
   const signe = (numFrac.num * denFrac.num < 0) ? "- " : "";
 
-  const num = {
+  const numAbs = {
     num: Math.abs(numFrac.num),
     den: numFrac.den
   };
 
-  const den = {
+  const denAbs = {
     num: Math.abs(denFrac.num),
     den: denFrac.den
   };
 
-  return `${signe}\\frac{\\frac{${num.num}}{${num.den}}}{\\frac{${den.num}}{${den.den}}}`;
+  const numStr =
+    numAbs.den === 1
+      ? numAbs.num.toString()
+      : `\\frac{${numAbs.num}}{${numAbs.den}}`;
+
+  const denStr =
+    denAbs.den === 1
+      ? denAbs.num.toString()
+      : `\\frac{${denAbs.num}}{${denAbs.den}}`;
+
+  return `${signe}\\frac{${numStr}}{${denStr}}`;
 }
+
 
 
     
@@ -346,6 +356,14 @@ function opposeInverseLatex(frac) {
   return `${signe}\\frac{${Math.abs(invNum)}}{${invDen}}`;
 }
 
+  function afficherFacteur(frac) {
+  if (frac.den === 1) {
+    return Math.abs(frac.num).toString();
+  }
+  return afficherFraction(frac);
+}
+
+  
   function afficherProduitFractions(f1, f2) {
   // déterminer le signe global
   const signe = (f1.num * f2.num < 0) ? "- " : "";
