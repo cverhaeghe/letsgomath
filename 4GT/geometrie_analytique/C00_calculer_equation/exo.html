@@ -230,6 +230,14 @@ function afficherCoefX(frac) {
     : `-\\frac{${Math.abs(num)}}{${den}}`;
 }
 
+  function afficherAvecParentheses(frac) {
+  if (frac.den === 1 && frac.num >= 0) return frac.num.toString();
+  if (frac.den === 1 && frac.num < 0) return `(${frac.num})`;
+  if (frac.num < 0) return `(-\\frac{${Math.abs(frac.num)}}{${frac.den}})`;
+  return `\\frac{${frac.num}}{${frac.den}}`;
+}
+
+  
   function afficherPente(frac) {
   const { num, den } = frac;
 
@@ -688,14 +696,30 @@ if (cas === 3) {
     den: meFrac.den
   };
 
+  // numérateurs AVANT réduction
+const dyNumBrut = yB.num * f.den - f.num * yB.den;
+const dxNumBrut = xB.num * e.den - e.num * xB.den;
+
+// dénominateurs communs
+const dyDenBrut = yB.den * f.den;
+const dxDenBrut = xB.den * e.den;
+
+// fractions NON réduites (pour affichage pédagogique)
+const dyBrut = { num: dyNumBrut, den: dyDenBrut };
+const dxBrut = { num: dxNumBrut, den: dxDenBrut };
+
+
+  
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(AB\\)</span><br>
 
   \\[
   \\begin{aligned}
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
-         &= \\frac{${afficherFraction(f)} - ${afficherFraction(yB)}}{${afficherFraction(e)} - ${afficherFraction(xB)}} \\\\
+         &= \\frac{${afficherFraction(f)}-${afficherAvecParentheses(yB)}} {${afficherFraction(e)}-${afficherAvecParentheses(xB)}} \\\\
+         &= \\frac{${afficherFraction(dyBrut)}}{${afficherFraction(dxBrut)}} \\\\
          &= \\frac{${afficherFraction(dy)}}{${afficherFraction(dx)}} \\\\
+         &= ${afficherFraction({num: dy.num,den: dy.den})} \\times ${afficherFraction({num: dx.den,den: dx.num})} \\\\
          &= ${mLatex}
   \\end{aligned}
   \\]
