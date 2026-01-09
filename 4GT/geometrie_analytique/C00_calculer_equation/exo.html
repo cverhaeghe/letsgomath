@@ -853,7 +853,7 @@ if (!fractionEntiers) {
   \\begin{aligned}
   A(${afficherFraction(e)};${afficherFraction(f)}) \\in AB   
   &\\Rightarrow ${afficherFraction(f)} = ${afficherCoefX(mFrac)} \\cdot ${afficherAvecParentheses(e)} + p \\\\
-  &\\Rightarrow ${afficherFraction(f)} - ${afficherFraction(meFrac)} &= p \\\\
+  &\\Rightarrow ${afficherFraction(f)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
   `;
 
   // ligne 3 : seulement si le produit n'est pas nul
@@ -865,7 +865,7 @@ if (!fractionEntiers) {
 
   // ligne finale
   texte += `
-  &\\Rightarrow p &= ${afficherFraction(pFrac)}
+  &\\Rightarrow p = ${afficherFraction(pFrac)}
   \\end{aligned}
   \\]
   `;
