@@ -694,13 +694,14 @@ if (cas === 3) {
   \\[
   \\begin{aligned}
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
+         &= \\frac{${afficherFraction(f)} - ${afficherFraction(yB)}}{${afficherFraction(e)} - ${afficherFraction(xB)}} \\\\
          &= \\frac{${afficherFraction(dy)}}{${afficherFraction(dx)}} \\\\
          &= ${mLatex}
   \\end{aligned}
   \\]
   
    \\[  
-   \\Rightarrow AB \\equiv y = ${mLatex}x + p  
+   \\Rightarrow AB \\equiv y = ${afficherCoefX(mFrac)}x + p   
    \\]<br>
   `;
 
@@ -713,13 +714,8 @@ if (cas === 3) {
   A(${afficherFraction(e)};${afficherFraction(f)}) &\\in AB   
   `;
 
-  // ligne 1 : toujours
   texte += `
-  &\\Rightarrow ${afficherFraction(f)} &= ${mLatex} \\cdot ${afficherFraction(e)} + p \\\\
-  `;
-
-  // ligne 2 : toujours
-  texte += `
+  &\\Rightarrow ${afficherFraction(f)} = ${afficherCoefX(mFrac)} \\cdot ${afficherFraction(e)} + p \\\\
   &\\Rightarrow ${afficherFraction(f)} - ${afficherFraction(meFrac)} &= p \\\\
   `;
 
