@@ -87,6 +87,22 @@ let xB, yB;
   return a;
 }
 
+  function afficherFractionDoubleAvecSigne(numFrac, denFrac) {
+  const signe = (numFrac.num * denFrac.num < 0) ? "- " : "";
+
+  const numPos = {
+    num: Math.abs(numFrac.num),
+    den: numFrac.den
+  };
+
+  const denPos = {
+    num: Math.abs(denFrac.num),
+    den: denFrac.den
+  };
+
+  return
+
+    
   function fractionIrreductible(a, b) {
   if (b === 0) throw new Error("Division par 0 interdite");
 
@@ -792,7 +808,7 @@ const fracNorm = normaliserFractionDouble(dyN, dxN);
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
          &= \\frac{${afficherFraction(f)}-${afficherAvecParentheses(yB)}} {${afficherFraction(e)}-${afficherAvecParentheses(xB)}} \\\\
          &= \\frac{${afficherSommeFractions(dyTerme1, dyTerme2)}} {${afficherSommeFractions(dxTerme1, dxTerme2)}} \\\\
-         &= \\frac{${afficherFraction(fracNorm.num)}}{${afficherFraction(fracNorm.den)}} \\\\
+         &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
         `;
 if (!fractionEntiers) {
   texte += `
