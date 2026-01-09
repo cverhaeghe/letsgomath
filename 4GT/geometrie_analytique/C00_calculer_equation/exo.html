@@ -370,6 +370,13 @@ function opposeInverseLatex(frac) {
   return afficherFraction(frac);
 }
 
+function produitFractions(f1, f2) {
+  return fractionIrreductible(
+    f1.num * f2.num,
+    f1.den * f2.den
+  );
+}
+
   
 function afficherProduitFractions(f1, f2) {
   // normalisation des signes AVANT affichage
@@ -633,7 +640,7 @@ if (cas === 3) {
   );
 
   // p = f - m*e  (attention : f.num et e.num sont des entiers)
-  const meFrac = produitFractionEntier(mFrac, e.num);
+  const meFrac = produitFractions(mFrac, e);
   const pFrac  = soustractionEntierFraction(f.num, meFrac);
 
   let attendu = "y=";
@@ -670,7 +677,7 @@ if (cas === 4 || cas === 5) {
   }
 
   // calcul de p avec fractions
-  const meFrac = produitFractionEntier(m1Frac, e);
+  const meFrac = produitFractions(m1Frac, e);
   const pFrac  = soustractionEntierFraction(f, meFrac);
 
   let attendu = "y=";
@@ -1050,7 +1057,7 @@ if (cas === 5) {
 
 /* ===== ÉTAPE 3 : calcul de p ===== */
 
-const meFrac = produitFractionEntier(m1Frac, e);
+const meFrac = produitFractions(m1Frac, e);
 const pFrac  = soustractionEntierFraction(f, meFrac);
 const meFracAbs = {
   num: Math.abs(meFrac.num),
