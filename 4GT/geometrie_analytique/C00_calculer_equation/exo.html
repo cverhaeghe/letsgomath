@@ -850,9 +850,21 @@ if (!fractionEntiers) {
    \\]<br>
   `;
 
+  const denCommun = f.den * meFracAbs.den;
+
+const fMD = {
+  num: f.num * meFracAbs.den,
+  den: denCommun
+};
+
+const meMD = {
+  num: meFracAbs.num * f.den,
+  den: denCommun
+};
+
+  
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span>
-  <span style='color: var(--peps)'> calculer le \\(p\\) de \\(AB\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer le \\(p\\) de \\(AB\\)</span><br>
 
   \\[
   \\begin{aligned}
@@ -867,6 +879,13 @@ if (!fractionEntiers) {
   &\\Rightarrow ${afficherFraction(f)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
   `;
   }
+
+  // ligne "mise au même dénominateur"
+if (f.den !== meFracAbs.den) {
+  texte += `
+&\\Rightarrow ${afficherFraction(fMD)} + ${afficherFraction(meMD)} = p \\\\
+`;
+}
 
   // ligne finale
   texte += `
