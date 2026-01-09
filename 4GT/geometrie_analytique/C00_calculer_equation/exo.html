@@ -56,6 +56,16 @@ let cas;
 let a, b, c;
 let xB, yB;
 
+  const FRACTIONS_COORD = [
+  { num: 1, den: 2 },
+  { num: 1, den: 3 },
+  { num: 1, den: 4 },
+  { num: 2, den: 3 },
+  { num: 4, den: 3 },
+  { num: 3, den: 2 },
+  { num: 3, den: 4 }
+];
+
   /*==============FONCTIONS========*/
 
   function randNonZero(min, max) {
@@ -356,9 +366,6 @@ f = randomCoord();
     
     cas = 1;
 
-    p = f;
-    m = 0;
-
     enonce = `Calcule l'équation réduite de la droite <br>
     passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et <br>
     parallèle à l’axe des abscisses.`;
@@ -393,12 +400,8 @@ do {
 );
 
 
-
-    m = (yB - f) / (xB - e);
-    p = f - m * e;
-
     enonce = `Calcule l'équation réduite de la droite \\(AB\\) <br>
-    étant donné  \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et \\(B(${xB};${yB})\\).`;
+    étant donné  \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et \\(B(${afficherFraction(xB)};${afficherFraction(yB)})\\).`;
 
   }
 
@@ -413,7 +416,6 @@ do {
 
 
     m = -a / b;
-    p = f - m * e;
 
     enonce = `Calcule l'équation réduite de la droite \\(d_1\\) <br>
     passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et <br>
@@ -430,7 +432,6 @@ do {
     c = Math.floor(Math.random() * 11) - 5;
 
     m = b / a;
-    p = f - m * e;
 
     enonce = `Calcule l'équation réduite de la droite \\(d_1\\) <br>
     passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et <br>
