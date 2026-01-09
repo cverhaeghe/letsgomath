@@ -501,25 +501,39 @@ if (
 }
 
 
-  /* ===== CAS 3 : droite passant par A et B ===== */
+/* ===== CAS 3 : droite passant par A et B ===== */
 if (cas === 3) {
 
-  const dx = xB - e;
-  const dy = yB - f;
+  // dy = yB - f
+  const dy = fractionIrreductible(
+    yB.num * f.den - f.num * yB.den,
+    yB.den * f.den
+  );
 
-  const mFrac = fractionIrreductible(dy, dx);
-  const meFrac = produitFractionEntier(mFrac, e);
-  const pFrac  = soustractionEntierFraction(f, meFrac);
+  // dx = xB - e
+  const dx = fractionIrreductible(
+    xB.num * e.den - e.num * xB.den,
+    xB.den * e.den
+  );
+
+  // pente m = dy / dx
+  const mFrac = fractionIrreductible(
+    dy.num * dx.den,
+    dy.den * dx.num
+  );
+
+  // p = f - m*e  (attention : f.num et e.num sont des entiers)
+  const meFrac = produitFractionEntier(mFrac, e.num);
+  const pFrac  = soustractionEntierFraction(f.num, meFrac);
 
   let attendu = "y=";
-attendu += coefXPourEquation(mFrac);
-attendu += afficherConstante(pFrac);
+  attendu += coefXPourEquation(mFrac);
+  attendu += afficherConstante(pFrac);
 
-
-if (
-  normaliser(normaliserFractions(rep)) ===
-  normaliser(normaliserFractions(attendu))
-) {
+  if (
+    normaliser(normaliserFractions(rep)) ===
+    normaliser(normaliserFractions(attendu))
+  ) {
     document.getElementById("feedback").innerHTML =
       "<span class='bon'>✅ Bonne réponse !</span>";
   } else {
@@ -529,6 +543,7 @@ if (
 
   return;
 }
+
 
   /* ===== CAS 4 / 5 : parallèle ou perpendiculaire ===== */
 if (cas === 4 || cas === 5) {
@@ -641,19 +656,36 @@ function corriger() {
 
 if (cas === 3) {
 
-  // Données du point B (déjà générées dans generer)
-  const dx = xB - e;
-  const dy = yB - f;
+/* ===== CAS 3 : droite passant par 2 points ===== */
 
-  // pente sous forme de fraction
-  const mFrac = fractionIrreductible(dy, dx);
+if (cas === 3) {
+
+  // dy = yB - f
+  const dy = fractionIrreductible(
+    yB.num * f.den - f.num * yB.den,
+    yB.den * f.den
+  );
+
+  // dx = xB - e
+  const dx = fractionIrreductible(
+    xB.num * e.den - e.num * xB.den,
+    xB.den * e.den
+  );
+
+  // pente
+  const mFrac = fractionIrreductible(
+    dy.num * dx.den,
+    dy.den * dx.num
+  );
+
   const mLatex = afficherPente(mFrac);
 
-  // produit m * e
-  const meFrac = produitFractionEntier(mFrac, e);
+  // m * e
+  const meFrac = produitFractionEntier(mFrac, e.num);
 
-  // calcul de p
-  const pFrac = soustractionEntierFraction(f, meFrac);
+  // p = f - m*e
+  const pFrac = soustractionEntierFraction(f.num, meFrac);
+
 
   const meFracAbs = {
     num: Math.abs(meFrac.num),
