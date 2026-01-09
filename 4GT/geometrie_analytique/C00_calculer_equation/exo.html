@@ -87,6 +87,13 @@ let xB, yB;
   return a;
 }
 
+  function sommeFractions(f1, f2) {
+  const den = f1.den * f2.den;
+  const num = f1.num * f2.den + f2.num * f1.den;
+  return fractionIrreductible(num, den);
+}
+
+  
   function afficherFractionDoubleAvecSigne(numFrac, denFrac) {
   const signe = (numFrac.num * denFrac.num < 0) ? "- " : "";
 
@@ -861,6 +868,8 @@ const meMD = {
   num: meFracAbs.num * f.den,
   den: denCommun
 };
+
+  const pFrac = sommeFractions(f, meFracAbs);
 
   
   texte += `
