@@ -106,6 +106,13 @@ let xB, yB;
   return { num, den };
 }
 
+  function afficherFractionAvecParentheses(frac) {
+  const f = normaliserSigne(frac);
+  const s = afficherFraction(f);
+  return f.num < 0 ? `(${s})` : s;
+}
+
+  
   
   function normaliser(str) {
   return str
@@ -121,6 +128,14 @@ let xB, yB;
   return `${coef}x`;
 }
 
+  function normaliserSigne(frac) {
+  if (frac.den < 0) {
+    return { num: -frac.num, den: -frac.den };
+  }
+  return frac;
+}
+
+  
   function randomCoord() {
 
   // 50 % entier / 50 % fraction (modifiable si tu veux)
@@ -708,6 +723,21 @@ const dxDenBrut = xB.den * e.den;
 const dyBrut = { num: dyNumBrut, den: dyDenBrut };
 const dxBrut = { num: dxNumBrut, den: dxDenBrut };
 
+// écriture pédagogique : mêmes dénominateurs
+const dyNum1 = f.num * yB.den;
+const dyNum2 = yB.num * f.den;
+const dyDenPedago = f.den * yB.den;
+
+const dxNum1 = e.num * xB.den;
+const dxNum2 = xB.num * e.den;
+const dxDenPedago = e.den * xB.den;
+
+// objets "termes" pour affichage
+const dyTerme1 = { num: dyNum1, den: dyDenPedago };
+const dyTerme2 = { num: -dyNum2, den: dyDenPedago };
+
+const dxTerme1 = { num: dxNum1, den: dxDenPedago };
+const dxTerme2 = { num: -dxNum2, den: dxDenPedago };
 
   
   texte += `
@@ -717,9 +747,9 @@ const dxBrut = { num: dxNumBrut, den: dxDenBrut };
   \\begin{aligned}
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
          &= \\frac{${afficherFraction(f)}-${afficherAvecParentheses(yB)}} {${afficherFraction(e)}-${afficherAvecParentheses(xB)}} \\\\
-         &= \\frac{${afficherFraction(dyBrut)}}{${afficherFraction(dxBrut)}} \\\\
-         &= \\frac{${afficherFraction(dy)}}{${afficherFraction(dx)}} \\\\
-         &= ${afficherFraction({num: dy.num,den: dy.den})} \\times ${afficherFraction({num: dx.den,den: dx.num})} \\\\
+         &= \\frac{${afficherFraction(dyTerme1)} + ${afficherFraction(dyTerme2)}}{${afficherFraction(dxTerme1)} + ${afficherFraction(dxTerme2)}} \\\\
+         &= \\frac{${afficherFraction(normaliserSigne(dy))}}{${afficherFraction(normaliserSigne(dx))}} \\\\
+         &= ${afficherFractionAvecParentheses(dy)} \\times ${afficherFractionAvecParentheses({ num: dx.den, den: dx.num })} \\\\
          &= ${mLatex}
   \\end{aligned}
   \\]
