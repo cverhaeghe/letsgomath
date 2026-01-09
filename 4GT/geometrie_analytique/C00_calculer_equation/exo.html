@@ -111,6 +111,42 @@ let xB, yB;
   return `${coef}x`;
 }
 
+  function randomCoord() {
+
+  // 50 % entier / 50 % fraction (modifiable si tu veux)
+  if (Math.random() < 0.5) {
+
+    // entier entre -5 et 5
+    let n;
+    do {
+      n = Math.floor(Math.random() * 11) - 5;
+    } while (n === 0 && Math.random() < 0.2); // évite trop de zéros
+
+    return { num: n, den: 1 };
+
+  } else {
+
+    // fraction parmi la liste
+    const f = FRACTIONS_COORD[
+      Math.floor(Math.random() * FRACTIONS_COORD.length)
+    ];
+
+    const sign = Math.random() < 0.5 ? -1 : 1;
+
+    return {
+      num: sign * f.num,
+      den: f.den
+    };
+  }
+}
+
+
+  function afficherFraction(frac) {
+  if (frac.den === 1) return frac.num.toString();
+  return `\\frac{${frac.num}}{${frac.den}}`;
+}
+
+  
   function afficherEntierAvecParentheses(n) {
   return n < 0 ? `(${n})` : n.toString();
 }
@@ -308,8 +344,9 @@ function generer() {
   const r = Math.random() * 100;
 
   // Point A
-  e = Math.floor(Math.random() * 11) - 5;
-  f = Math.floor(Math.random() * 11) - 5;
+e = randomCoord();
+f = randomCoord();
+
 
   let enonce = "";
 
@@ -323,7 +360,7 @@ function generer() {
     m = 0;
 
     enonce = `Calcule l'équation réduite de la droite <br>
-    passant par le point \\(A(${e};${f})\\) et <br>
+    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et <br>
     parallèle à l’axe des abscisses.`;
 
   }
@@ -334,7 +371,7 @@ function generer() {
     cas = 2;
 
     enonce = `Calcule l'équation de la droite <br>
-    passant par le point \\(A(${e};${f})\\) et <br>
+    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et <br>
     parallèle à l’axe des ordonnées.`;
 
     // Cas particulier : x = e
@@ -348,16 +385,21 @@ function generer() {
     cas = 3;
 
 do {
-  xB = Math.floor(Math.random() * 11) - 5;
-  yB = Math.floor(Math.random() *11) - 5;
-} while (xB === e || yB === f);
+  xB = randomCoord();
+  yB = randomCoord();
+} while (
+  xB.num === e.num && xB.den === e.den &&
+  yB.num === f.num && yB.den === f.den
+);
+
 
 
     m = (yB - f) / (xB - e);
     p = f - m * e;
 
     enonce = `Calcule l'équation réduite de la droite \\(AB\\) <br>
-    étant donné  \\(A(${e};${f})\\) et \\(B(${xB};${yB})\\).`;
+    étant donné  \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et \\(B(${xB};${yB})\\).`;
+
   }
 
   /* ===== CAS 4 : parallèle à d2 (25%) ===== */
@@ -374,7 +416,7 @@ do {
     p = f - m * e;
 
     enonce = `Calcule l'équation réduite de la droite \\(d_1\\) <br>
-    passant par le point \\(A(${e};${f})\\) et <br>
+    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et <br>
     parallèle à la droite \\(d_2 \\equiv ${equationCartesienne(a, b, c)}\\).`;
   }
 
@@ -391,7 +433,7 @@ do {
     p = f - m * e;
 
     enonce = `Calcule l'équation réduite de la droite \\(d_1\\) <br>
-    passant par le point \\(A(${e};${f})\\) et <br>
+    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)}))\\) et <br>
     perpendiculaire à la droite \\(d_2 \\equiv ${equationCartesienne(a, b, c)}\\).`;
   }
 
