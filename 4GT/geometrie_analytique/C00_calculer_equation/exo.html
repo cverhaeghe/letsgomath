@@ -414,20 +414,22 @@ function verifier() {
   const rep = normaliser(document.getElementById("reponse").value);
 
   /* ===== CAS 2 : droite verticale ===== */
-  if (cas === 2) {
+  
+if (cas === 2) {
 
-const attendu = equationReduite(m, p);
+  const attendu = `x=${e}`;
 
-if (rep === normaliser(attendu)) {
-  document.getElementById("feedback").innerHTML =
-    "<span class='bon'>✅ Bonne réponse !</span>";
-} else {
-  document.getElementById("feedback").innerHTML =
-    "<span class='faux'>❌ Réponse incorrecte</span>";
+  if (rep === normaliser(attendu)) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
 }
 
-    return;
-  }
 
   /* ===== CAS 3 : droite passant par A et B ===== */
 if (cas === 3) {
