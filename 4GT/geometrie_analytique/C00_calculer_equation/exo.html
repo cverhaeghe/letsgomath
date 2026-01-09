@@ -785,7 +785,7 @@ const fracNorm = normaliserFractionDouble(dyN, dxN);
         `;
 if (!fractionEntiers) {
   texte += `
-        &= ${afficherFractionAvecParentheses(dyN)} \\times ${afficherFractionAvecParentheses({ num: dxN.den, den: dxN.num })} \\\\
+        &= ${afficherFractionAvecParentheses(dyN)} \\cdot ${afficherFractionAvecParentheses({ num: dxN.den, den: dxN.num })} \\\\
   `;}
   texte += `
         &= ${afficherPente(mFrac)} \\\\
