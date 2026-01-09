@@ -770,13 +770,13 @@ const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
         `;
 if (!fractionEntiers) {
   texte += `
-        &= ${afficherFractionAvecParentheses(dyN)} \\times ${afficherFractionAvecParentheses({ num: dxN.den, den: dxN.num })} \\\\`;
-}
+        &= ${afficherFractionAvecParentheses(dyN)} \\times ${afficherFractionAvecParentheses({ num: dxN.den, den: dxN.num })} \\\\
+  `;}
   texte += `
-         &= ${mLatex}
+        &= ${afficherPente(mFrac)}
+`;
   \\end{aligned}
   \\]
-`;
 
   
    \\[  
