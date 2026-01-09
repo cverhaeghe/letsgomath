@@ -751,6 +751,12 @@ const dyTerme2 = { num: -dyNum2, den: dyDenPedago };
 const dxTerme1 = { num: dxNum1, den: dxDenPedago };
 const dxTerme2 = { num: -dxNum2, den: dxDenPedago };
 
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
+
+// vrai si Δy et Δx sont des entiers
+const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
+
   
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(AB\\)</span><br>
@@ -760,11 +766,18 @@ const dxTerme2 = { num: -dxNum2, den: dxDenPedago };
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
          &= \\frac{${afficherFraction(f)}-${afficherAvecParentheses(yB)}} {${afficherFraction(e)}-${afficherAvecParentheses(xB)}} \\\\
          &= \\frac{${afficherSommeFractions(dyTerme1, dyTerme2)}} {${afficherSommeFractions(dxTerme1, dxTerme2)}} \\\\
-         &= \\frac{${afficherFraction(normaliserSigne(dy))}}{${afficherFraction(normaliserSigne(dx))}} \\\\
-         &= ${afficherFractionAvecParentheses(dy)} \\times ${afficherFractionAvecParentheses({ num: dx.den, den: dx.num })} \\\\
+         &= \\frac{${afficherFraction(dyN)}}{${afficherFraction(dxN)}} \\\\
+        `;
+if (!fractionEntiers) {
+  texte += `
+        &= ${afficherFractionAvecParentheses(dyN)} \\times ${afficherFractionAvecParentheses({ num: dxN.den, den: dxN.num })} \\\\`;
+}
+  texte += `
          &= ${mLatex}
   \\end{aligned}
   \\]
+`;
+
   
    \\[  
    \\Rightarrow AB \\equiv y = ${afficherCoefX(mFrac)}x + p   
