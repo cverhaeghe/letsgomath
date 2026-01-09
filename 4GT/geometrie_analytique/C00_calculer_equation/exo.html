@@ -88,19 +88,20 @@ let xB, yB;
 }
 
   function afficherFractionDoubleAvecSigne(numFrac, denFrac) {
+  // signe global
   const signe = (numFrac.num * denFrac.num < 0) ? "- " : "";
 
-  const numPos = {
+  const num = {
     num: Math.abs(numFrac.num),
     den: numFrac.den
   };
 
-  const denPos = {
+  const den = {
     num: Math.abs(denFrac.num),
     den: denFrac.den
   };
 
-  return `${signe}\\frac{${afficherFraction(numPos)}}{${afficherFraction(denPos)}}`;
+  return `${signe}\\frac{\\frac{${num.num}}{${num.den}}}{\\frac{${den.num}}{${den.den}}}`;
 }
 
 
