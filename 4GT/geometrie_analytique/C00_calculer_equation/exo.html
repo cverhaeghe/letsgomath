@@ -151,10 +151,15 @@ let xB, yB;
 }
 
 
-  function afficherFraction(frac) {
-  if (frac.den === 1) return frac.num.toString();
-  return `\\frac{${frac.num}}{${frac.den}}`;
+function afficherFraction(frac) {
+  const { num, den } = frac;
+
+  if (den === 1) return num.toString();
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}`;
 }
+
 
   
   function afficherEntierAvecParentheses(n) {
