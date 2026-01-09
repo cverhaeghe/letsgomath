@@ -327,6 +327,17 @@ function opposeInverseLatex(frac) {
   return `${signe}\\frac{${Math.abs(invNum)}}{${invDen}}`;
 }
 
+  function afficherProduitFractions(f1, f2) {
+  // déterminer le signe global
+  const signe = (f1.num * f2.num < 0) ? "- " : "";
+
+  // fractions rendues positives
+  const a = { num: Math.abs(f1.num), den: f1.den };
+  const b = { num: Math.abs(f2.num), den: f2.den };
+
+  return `${signe}${afficherFraction(a)} \\cdot ${afficherFraction(b)}`;
+}
+
   
   function equationCartesienne(a, b, c) {
 
@@ -785,10 +796,10 @@ const fracNorm = normaliserFractionDouble(dyN, dxN);
         `;
 if (!fractionEntiers) {
   texte += `
-        &= ${afficherFractionAvecParentheses(dyN)} \\cdot ${afficherFractionAvecParentheses({ num: dxN.den, den: dxN.num })} \\\\
+         &= ${afficherProduitFractions(dyN, { num: dxN.den, den: dxN.num })} \\\\
   `;}
   texte += `
-        &= ${afficherPente(mFrac)} \\\\
+         &= ${afficherPente(mFrac)} \\\\
   \\end{aligned}
   \\]
 
