@@ -270,6 +270,18 @@ function afficherCoefX(frac) {
   return fractionIrreductible(frac.num * k, frac.den);
 }
 
+  function afficherSommeFractions(f1, f2) {
+  const f2Norm = normaliserSigne(f2);
+
+  const signe = f2Norm.num < 0 ? " - " : " + ";
+  const terme2 = afficherFraction({
+    num: Math.abs(f2Norm.num),
+    den: f2Norm.den
+  });
+
+  return `${afficherFraction(f1)}${signe}${terme2}`;
+}
+
   function soustractionEntierFraction(f, frac) {
   // f - (num/den) = (f*den - num) / den
   return fractionIrreductible(f * frac.den - frac.num, frac.den);
@@ -747,7 +759,7 @@ const dxTerme2 = { num: -dxNum2, den: dxDenPedago };
   \\begin{aligned}
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
          &= \\frac{${afficherFraction(f)}-${afficherAvecParentheses(yB)}} {${afficherFraction(e)}-${afficherAvecParentheses(xB)}} \\\\
-         &= \\frac{${afficherFraction(dyTerme1)} + ${afficherFraction(dyTerme2)}}{${afficherFraction(dxTerme1)} + ${afficherFraction(dxTerme2)}} \\\\
+         &= \\frac{${afficherSommeFractions(dyTerme1, dyTerme2)}} {${afficherSommeFractions(dxTerme1, dxTerme2)}} \\\\
          &= \\frac{${afficherFraction(normaliserSigne(dy))}}{${afficherFraction(normaliserSigne(dx))}} \\\\
          &= ${afficherFractionAvecParentheses(dy)} \\times ${afficherFractionAvecParentheses({ num: dx.den, den: dx.num })} \\\\
          &= ${mLatex}
