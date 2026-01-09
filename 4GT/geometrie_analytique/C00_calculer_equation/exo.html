@@ -869,7 +869,11 @@ const meMD = {
   den: denCommun
 };
 
-  const pFrac = sommeFractions(f, meFracAbs);
+const pFrac = fractionIrreductible(
+  f.num * meFrac.den - meFrac.num * f.den,
+  f.den * meFrac.den
+);
+
 
   
   texte += `
@@ -892,7 +896,7 @@ const meMD = {
   // ligne "mise au même dénominateur"
 if (f.den !== meFracAbs.den) {
   texte += `
-&\\Rightarrow ${afficherFraction(fMD)} + ${afficherFraction(meMD)} = p \\\\
+&\\Rightarrow ${afficherFraction(fMD)} ${meFrac.num < 0 ? "+" : "-"} ${afficherFraction(meMD)} = p \\\\
 `;
 }
 
