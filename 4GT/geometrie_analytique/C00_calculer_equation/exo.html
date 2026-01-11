@@ -1072,6 +1072,16 @@ const meFracAbs = {
   num: Math.abs(meFrac.num),
   den: meFrac.den
 };
+const denCommun = f.den * meFracAbs.den;
+const fMD = {
+  num: f.num * meFracAbs.den,
+  den: denCommun
+};
+const meMD = {
+  num: meFracAbs.num * f.den,
+  den: denCommun
+};
+
   
 texte += `
 <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
@@ -1079,7 +1089,7 @@ texte += `
   \\[
   \\begin{aligned}
   A(${afficherFraction(e)};${afficherFraction(f)}) \\in AB   
-  &\\Rightarrow ${afficherFraction(f)} = ${afficherCoefX(mFrac)} \\cdot ${afficherAvecParentheses(e)} + p \\\\
+  &\\Rightarrow ${afficherFraction(f)} = ${afficherCoefX(m1Frac)} \\cdot ${afficherAvecParentheses(e)} + p \\\\
   &\\Rightarrow ${afficherFraction(f)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
   `;
 
@@ -1113,7 +1123,7 @@ if (f.den !== meFracAbs.den) {
     
   \\[
   \\boxed{
-  AB \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
+  d_1 \\equiv y = ${afficherCoefX(m1Frac)}x ${afficherConstante(pFrac)}
   }
   \\]
   `;
