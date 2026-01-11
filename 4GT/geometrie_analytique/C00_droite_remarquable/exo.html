@@ -688,33 +688,39 @@ if (cas === 3) {
 
   texte += `Une médiane est une droite passant par un sommet et par le milieu du côté opposé à ce sommet.<br><br>`;
 
-  // dy = yB - f
-  const dy = fractionIrreductible(
-    yB.num * f.den - f.num * yB.den,
-    yB.den * f.den
-  );
+  const xM = fractionIrreductible(
+  xB.num * xC.den + xC.num * xB.den,
+  2 * xB.den * xC.den
+);
 
-  // dx = xB - e
-  const dx = fractionIrreductible(
-    xB.num * e.den - e.num * xB.den,
-    xB.den * e.den
-  );
+const yM = fractionIrreductible(
+  yB.num * yC.den + yC.num * yB.den,
+  2 * yB.den * yC.den
+);
+  
+const dy = fractionIrreductible(
+  yM.num * yA.den - yA.num * yM.den,
+  yM.den * yA.den
+);
 
-  // pente
-  const mFrac = fractionIrreductible(
-    dy.num * dx.den,
-    dy.den * dx.num
-  );
+const dx = fractionIrreductible(
+  xM.num * xA.den - xA.num * xM.den,
+  xM.den * xA.den
+);
 
-  const mLatex = afficherPente(mFrac);
+const mFrac = fractionIrreductible(
+  dy.num * dx.den,
+  dy.den * dx.num
+);
 
-  // m * e
-const meFrac = produitFractions(mFrac, e);
+const mLatex = afficherPente(mFrac);
+const meFrac = produitFractions(mFrac, xA);
+const pFrac = fractionIrreductible(
+  yA.num * meFrac.den - meFrac.num * yA.den,
+  yA.den * meFrac.den
+);
 
-  // p = f - m*e
-
-
-  const meFracAbs = {
+const meFracAbs = {
     num: Math.abs(meFrac.num),
     den: meFrac.den
   };
@@ -843,12 +849,12 @@ if (f.den !== meFracAbs.den) {
   <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span>
   <span style='color: var(--peps)'> donner l'équation finale</span><br>
 
-  \\[
-  \\boxed{
-  AB \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
-  }
-  \\]
-  `;
+\\[
+\\boxed{
+g \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
+}
+\\]`
+
 
   document.getElementById("correction").innerHTML = texte;
   MathJax.typeset();
