@@ -809,6 +809,8 @@ const yM = diviserFractionPar2(sumY);
 const xEntiers = sontDeuxEntiers(xB, xC);
 const yEntiers = sontDeuxEntiers(yB, yC);
 const deuxEntiers = xEntiers && yEntiers;
+const xBesoinDetail = !(xB.den === 1 && xC.den === 1 && (xB.num + xC.num) % 2 === 0);
+const yBesoinDetail = !(yB.den === 1 && yC.den === 1 && (yB.num + yC.num) % 2 === 0);
 
 // ─── AFFICHAGE MATHJAX
 texte += `
@@ -834,8 +836,20 @@ M
 \\]
 `;
 
- if(!deuxEntiers){ 
-   texte += ``;}
+ if (xBesoinDetail || yBesoinDetail) {
+  texte += `
+\\[
+\\begin{aligned}
+&=
+\\left(
+\\frac{${xBesoinDetail ? lignesX.at(-1) : afficherFraction(sumX)}}{2}
+\\ ;\\
+\\frac{${yBesoinDetail ? lignesY.at(-1) : afficherFraction(sumY)}}{2}
+\\right)
+\\end{aligned}
+\\]
+`;
+}
   else{
 // affichage intermédiaire X / Y
 if (lignesX.length === 1 && lignesY.length === 1) {
