@@ -217,6 +217,17 @@ return {
   }
 }
 
+function afficherSommeCoord(f1, f2) {
+  const f2Norm = normaliserSigne(f2);
+
+  const signe = f2Norm.num < 0 ? " - " : " + ";
+  const terme2 = afficherFraction({
+    num: Math.abs(f2Norm.num),
+    den: f2Norm.den
+  });
+
+  return `${afficherFraction(f1)}${signe}${terme2}`;
+}
 
 function afficherFraction(frac) {
   const { num, den } = frac;
@@ -734,16 +745,16 @@ M_{BC}
 
 &=
 \\left(
-\\frac{${afficherFraction(xB)} + ${afficherFraction(xC)}}{2}
+\\frac{${afficherSommeCoord(xB, xC)}}{2}
 \\ ;\\
-\\frac{${afficherFraction(yB)} + ${afficherFraction(yC)}}{2}
+\\frac{${afficherSommeCoord(yB, yC)}}{2}
 \\right) \\\\
 
 &=
 \\left(
-\\frac{${afficherFraction(xB_MD)} + ${afficherFraction(xC_MD)}}{2}
+\\frac{${afficherSommeCoord(xB_MD, xC_MD)}}{2}
 \\ ;\\
-\\frac{${afficherFraction(yB_MD)} + ${afficherFraction(yC_MD)}}{2}
+\\frac{${afficherSommeCoord(yB_MD, yC_MD)}}{2}
 \\right) \\\\
 
 &=
