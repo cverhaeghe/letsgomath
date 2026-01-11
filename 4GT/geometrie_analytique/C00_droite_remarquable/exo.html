@@ -51,9 +51,10 @@
   
 <script>
   /*==============VARIABLES========*/
-let m, e, f, p;
+let m, p;
 let cas;
 let a, b, c;
+let xA, yA;
 let xB, yB;
 let xC, yC;
 
@@ -189,8 +190,8 @@ let xC, yC;
   
   function randomCoord() {
 
-  // 60 % entier / 40 % fraction (modifiable si tu veux)
-  if (Math.random() < 0.6) {
+  // 70 % entier / 40 % fraction (modifiable si tu veux)
+  if (Math.random() < 0.7) {
 
     // entier entre -4 et 4
     let n;
@@ -476,9 +477,12 @@ function generer() {
   const r = Math.random() * 100;
 
   // Point A
-e = randomCoord();
-f = randomCoord();
-
+xA = randomCoord();
+yA = randomCoord();
+xB = randomCoord();
+yB = randomCoord();
+xC = randomCoord();
+yC = randomCoord();
 
   let enonce = "";
 
@@ -489,9 +493,9 @@ f = randomCoord();
     cas = 1;
 
     enonce = `Soit un triangle dont les sommets sont 
-    \\(A(${afficherFraction(e)};${afficherFraction(f)})\\), 
+    \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
     \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
-    \\(C(${afficherFraction(xB)};${afficherFraction(yB)}) \\). <br>
+    \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
     Calcule l'équation réduite de la hauteur \\(h\\) issue du sommet \\( A\\).
     `;
 
@@ -503,9 +507,9 @@ f = randomCoord();
     cas = 2;
 
     enonce = `Soit un triangle dont les sommets sont 
-    \\(A(${afficherFraction(e)};${afficherFraction(f)})\\), 
+    \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
     \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
-    \\(C(${afficherFraction(xB)};${afficherFraction(yB)}) \\). <br>
+    \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
     Calcule l'équation réduite de la médiatrice \\(f\\) de \\( \\[AB\\]\\).
     `;
 
@@ -527,9 +531,9 @@ do {
 
 
     enonce = `Soit un triangle dont les sommets sont 
-    \\(A(${afficherFraction(e)};${afficherFraction(f)})\\), 
+    \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
     \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
-    \\(C(${afficherFraction(xB)};${afficherFraction(yB)}) \\). <br>
+    \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
     Calcule l'équation réduite de la médiane \\(g\\) issue du sommet \\( A\\).
     `;
 
