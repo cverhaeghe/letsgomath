@@ -769,6 +769,30 @@ M_{BC} &=
 \\]
 `;
 
+&=
+\\left(
+\\frac{${afficherFraction(xB)}-${afficherFraction(xC_MD)}}{2}
+\\ ;\\
+\\frac{${afficherFraction(yB)}+${afficherFraction(yC_MD)}}{2}
+\\right) \\\\
+
+&=
+\\left(
+\\frac{${afficherFraction(sumX)}}{2}
+\\ ;\\
+\\frac{${afficherFraction(sumY)}}{2}
+\\right) \\\\
+
+&=
+\\left(
+${afficherFraction(xM)}
+\\ ;\\
+${afficherFraction(yM)}
+\\right)
+\\end{aligned}
+\\]
+`;
+
 if (xB.den === 1 && xC.den === 1) {
   // deux entiers
   texte += `
