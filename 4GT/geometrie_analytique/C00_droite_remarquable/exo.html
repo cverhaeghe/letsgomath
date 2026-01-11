@@ -154,6 +154,16 @@ let xC, yC;
   return fractionIrreductible(num, den);
 }
 
+  function diviserFractionPar2(frac) {
+  // si le numérateur est pair → on divise le numérateur
+  if (frac.num % 2 === 0) {
+    return fractionIrreductible(frac.num / 2, frac.den);
+  }
+
+  // sinon → on multiplie le dénominateur
+  return fractionIrreductible(frac.num, frac.den * 2);
+}
+
   
   function afficherFractionDoubleAvecSigne(numFrac, denFrac) {
   const signe = (numFrac.num * denFrac.num < 0) ? "- " : "";
@@ -789,8 +799,9 @@ const lignesY = decomposerSommePourMilieu(yB, yC);
 
 const sumX = sommeFractions(xB, xC);
 const sumY = sommeFractions(yB, yC);
-const xM = fractionIrreductible(sumX.num, sumX.den * 2);
-const yM = fractionIrreductible(sumY.num, sumY.den * 2);
+const xM = diviserFractionPar2(sumX);
+const yM = diviserFractionPar2(sumY);
+
 
 // ─── AFFICHAGE MATHJAX
 texte += `
