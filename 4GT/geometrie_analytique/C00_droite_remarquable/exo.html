@@ -738,23 +738,79 @@ const meFracAbs = {
     den: meFrac.den
   };
 
-// vrai si Δy et Δx sont des entiers
 const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
 const fracNorm = normaliserFractionDouble(dyN, dxN);
 
+const sumX = sommeFractions(xB, xC);
+const sumY = sommeFractions(yB, yC);
+
+const xMfinal = fractionIrreductible(sumX.num, sumX.den * 2);
+const yMfinal = fractionIrreductible(sumY.num, sumY.den * 2);
+
 texte += `
-<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer le milieu de [BC]</span><br>
+<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer le milieu de \\([BC]\\)</span><br>
 
 \\[
 \\begin{aligned}
-\\text{Milieu de } [BC] &: 
-\\left( \\frac{x_B + x_C}{2} \\,;\\, \\frac{y_B + y_C}{2} \\right) \\\\
-&= \\left(
-\\frac{${afficherFraction(xB)} + ${afficherAvecParentheses(xC)}}{2}
-\\,;\\,
-\\frac{${afficherFraction(yB)} + ${afficherAvecParentheses(yC)}}{2}
+M_{BC} &=
+\\left(
+\\frac{x_B+x_C}{2}
+\\ ;\\
+\\frac{y_B+y_C}{2}
+\\right) \\\\
+
+&=
+\\left(
+\\frac{${afficherFraction(xB)}+${afficherAvecParentheses(xC)}}{2}
+\\ ;\\
+\\frac{${afficherFraction(yB)}+${afficherAvecParentheses(yC)}}{2}
 \\right)
 \\end{aligned}
+\\]
+`;
+
+if (xB.den === 1 && xC.den === 1) {
+  // deux entiers
+  texte += `
+  \\[
+  ${xB.num}+${xC.num} = ${sumX.num}
+  \\]
+  `;
+} else {
+  // au moins une fraction
+  texte += `
+  \\[
+  ${afficherFraction(xB)}+${afficherFraction(xC)}
+  = ${afficherFraction(sumX)}
+  \\]
+  `;
+}
+
+  if (yB.den === 1 && yC.den === 1) {
+  // deux entiers
+  texte += `
+  \\[
+  ${yB.num}+${yC.num} = ${sumY.num}
+  \\]
+  `;
+} else {
+  // au moins une fraction → mise au même dénominateur
+  texte += `
+  \\[
+  ${afficherFraction(yB)}+${afficherFraction(yC)}
+  = ${afficherFraction(sumY)}
+  \\]
+  `;
+}
+
+  texte += `
+\\[
+M_{BC} =
+\\left(
+${afficherFraction(xMfinal)}
+\\ ;\\
+${afficherFraction(yMfinal)}
+\\right)
 \\]
 `;
 
