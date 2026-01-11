@@ -147,6 +147,10 @@ let xC, yC;
   return lignes;
 }
 
+  function sontDeuxEntiers(f1, f2) {
+  return f1.den === 1 && f2.den === 1;
+}
+
   
   function sommeFractions(f1, f2) {
   const den = f1.den * f2.den;
@@ -802,6 +806,7 @@ const sumY = sommeFractions(yB, yC);
 const xM = diviserFractionPar2(sumX);
 const yM = diviserFractionPar2(sumY);
 
+const xEntiers = sontDeuxEntiers(xB, xC);
 
 // ─── AFFICHAGE MATHJAX
 texte += `
@@ -826,7 +831,10 @@ M
 \\end{aligned}
 \\]
 `;
-  
+
+ if(!deuxEntiers){ 
+   texte += ``;}
+  else{
 // affichage intermédiaire X / Y
 if (lignesX.length === 1 && lignesY.length === 1) {
   texte += `
@@ -853,7 +861,7 @@ if (lignesX.length === 1 && lignesY.length === 1) {
 \\end{aligned}
 \\]
 `;
-}
+}}
 
 texte += `  
 \\[
