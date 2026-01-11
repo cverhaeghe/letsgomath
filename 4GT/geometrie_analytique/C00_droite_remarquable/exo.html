@@ -549,7 +549,7 @@ function verifier() {
   /* ===== CAS 1 : hauteur ===== */
 if (cas === 1) {
 
-  const attendu = `y=${normaliserFractions(afficherFraction(f))}`;
+  const attendu = `y=${normaliserFractions(afficherFraction(yA))}`;
 
   if (
     normaliser(normaliserFractions(rep)) ===
@@ -569,7 +569,7 @@ if (cas === 1) {
   
 if (cas === 2) {
 
-const attendu = `x=${normaliserFractions(afficherFraction(e))}`;
+const attendu = `x=${normaliserFractions(afficherFraction(xA))}`;
 
 if (
   normaliser(normaliserFractions(rep)) ===
@@ -597,8 +597,8 @@ if (cas === 3) {
 
   // dx = xB - e
   const dx = fractionIrreductible(
-    xB.num * e.den - e.num * xB.den,
-    xB.den * e.den
+    xB.num * xA.den - xA.num * xB.den,
+    xB.den * xA.den
   );
 
   // pente m = dy / dx
@@ -608,7 +608,7 @@ if (cas === 3) {
   );
 
   // p = f - m*e  (attention : f.num et e.num sont des entiers)
-  const meFrac = produitFractions(mFrac, e);
+  const meFrac = produitFractions(mFrac, xA);
   const pFrac = fractionIrreductible(
   f.num * meFrac.den - meFrac.num * f.den,
   f.den * meFrac.den
@@ -726,25 +726,25 @@ const meFracAbs = {
   };
 
   // numérateurs AVANT réduction
-const dyNumBrut = yB.num * f.den - f.num * yB.den;
-const dxNumBrut = xB.num * e.den - e.num * xB.den;
+const dyNumBrut = yB.num * yA.den - yA.num * yB.den;
+const dxNumBrut = xB.num * xA.den - xA.num * xB.den;
 
 // dénominateurs communs
-const dyDenBrut = yB.den * f.den;
-const dxDenBrut = xB.den * e.den;
+const dyDenBrut = yB.den * yA.den;
+const dxDenBrut = xB.den * xA.den;
 
 // fractions NON réduites (pour affichage pédagogique)
 const dyBrut = { num: dyNumBrut, den: dyDenBrut };
 const dxBrut = { num: dxNumBrut, den: dxDenBrut };
 
 // écriture pédagogique : mêmes dénominateurs
-const dyNum1 = f.num * yB.den;
-const dyNum2 = yB.num * f.den;
-const dyDenPedago = f.den * yB.den;
+const dyNum1 = yA.num * yB.den;
+const dyNum2 = yB.num * yA.den;
+const dyDenPedago = yA.den * yB.den;
 
-const dxNum1 = e.num * xB.den;
-const dxNum2 = xB.num * e.den;
-const dxDenPedago = e.den * xB.den;
+const dxNum1 = xA.num * xB.den;
+const dxNum2 = xB.num * xA.den;
+const dxDenPedago = xA.den * xB.den;
 
 // objets "termes" pour affichage
 const dyTerme1 = { num: dyNum1, den: dyDenPedago };
@@ -795,21 +795,21 @@ if (!fractionEntiers) {
    \\]<br>
   `;
 
-  const denCommun = f.den * meFracAbs.den;
+  const denCommun = yA.den * meFracAbs.den;
 
 const fMD = {
-  num: f.num * meFracAbs.den,
+  num: yA.num * meFracAbs.den,
   den: denCommun
 };
 
 const meMD = {
-  num: meFracAbs.num * f.den,
+  num: meFracAbs.num * yA.den,
   den: denCommun
 };
 
 const pFrac = fractionIrreductible(
-  f.num * meFrac.den - meFrac.num * f.den,
-  f.den * meFrac.den
+  yA.num * meFrac.den - meFrac.num * yA.den,
+  yA.den * meFrac.den
 );
 
 
@@ -819,9 +819,9 @@ const pFrac = fractionIrreductible(
 
   \\[
   \\begin{aligned}
-  A(${afficherFraction(e)};${afficherFraction(f)}) \\in AB   
-  &\\Rightarrow ${afficherFraction(f)} = ${afficherCoefX(mFrac)} \\cdot ${afficherAvecParentheses(e)} + p \\\\
-  &\\Rightarrow ${afficherFraction(f)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
+  A(${afficherFraction(xA)};${afficherFraction(yA)}) \\in AB   
+  &\\Rightarrow ${afficherFraction(yA)} = ${afficherCoefX(mFrac)} \\cdot ${afficherAvecParentheses(xA)} + p \\\\
+  &\\Rightarrow ${afficherFraction(yA)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
   `;
 
   // ligne 3 : seulement si le produit n'est pas nul
@@ -855,122 +855,10 @@ g \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
 }
 \\]`
 
-
-  document.getElementById("correction").innerHTML = texte;
-  MathJax.typeset();
-  return;
-}
-
-/* ===== CAS 4 / 5 : parallèle ou perpendiculaire ===== */
-
-if (cas === 4 || cas === 5) {
-
-  let m1Frac = null;
-  let m1Latex = "";
-  let m2Frac = null;
-  let m2Valeur = null;
-  let m2Latex = "";
-
-  /* ===== ÉTAPE 1 : réduire d2 ===== */
-
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> réduire l’équation de \\(d_2\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> déterminer la pente de \\(g\\)</span><br>
   `;
 
-  if (b === 1) {
-
-  m2Frac = fractionIrreductible(-a, b);
-  const p2Frac = fractionIrreductible(-c, b);
-  m2Latex = afficherPente(m2Frac);
-
-  texte += `
-  \\[
-  \\begin{aligned}
-  ${Aff(a)}x + y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
-  y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)}
-  \\quad (m_2 = ${afficherPente(m2Frac)})
-  \\end{aligned}
-  \\]
-  `;
-}
-
-  if (b === -1) {
-
-  m2Frac = fractionIrreductible(-a, b);
-  const p2Frac = fractionIrreductible(-c, b);
-  m2Latex = afficherPente(m2Frac);
-
-  texte += `
-  \\[
-  \\begin{aligned}
-  ${Aff(a)}x - y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
-  y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)}
-  \\quad (m_2 = ${afficherPente(m2Frac)})
-  \\end{aligned}
-  \\]
-  `;
-}
-  
-  if (b > 0 && b!==1) {
-
-    m2Frac = fractionIrreductible(-a, b);
-    const p2Frac = fractionIrreductible(-c, b);
-    m2Latex = afficherPente(m2Frac);
-
-    texte += `
-    \\[
-    \\begin{aligned}
-    ${Aff(a)}x + ${Aff(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
-    ${Aff(b)}y &= ${Aff(-a)}x ${c >= 0 ? "-" : "+"} ${Math.abs(c)} \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad  (m_2 = ${afficherPente(m2Frac)}) 
-    \\end{aligned}
-    \\]
-    `;
-  }
-
-  if (b < 0) {
-
-    m2Frac = fractionIrreductible(-a, b);
-    const p2Frac = fractionIrreductible(-c, b);
-    m2Latex = afficherPente(m2Frac);
-
-    texte += `
-    \\[
-    \\begin{aligned}
-    ${Aff(a)}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}y ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= 0 \\\\
-    ${Aff(a)}x ${c >= 0 ? "+" : "-"} ${Math.abs(c)} &= ${-b}y \\\\
-    y &= ${afficherCoefX(m2Frac)}x ${afficherConstante(p2Frac)} \\quad (m_2 = ${afficherPente(m2Frac)} ) 
-    \\end{aligned}
-    \\]
-    `;
-  }
-
-m2Latex = afficherPente(m2Frac);
-
-
-  /* ===== ÉTAPE 2 : pente de d1 ===== */
-
-  texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> déterminer la pente de \\(d_1\\)</span><br>
-  `;
-
-  if (cas === 4) {
-  m1Frac = m2Frac;
-  m1Latex = afficherCoefX(m1Frac);
-
-  texte += `
-  \\[
-  \\begin{aligned}
-  d_1 // d_2 &\\Rightarrow m_1 = m_2 = ${afficherPente(m1Frac)} \\\\
-  &\\Rightarrow d_1 \\equiv y = ${m1Latex}x + p
-  \\end{aligned}
-  \\]
-  `;
-}
-
-
-
-if (cas === 5) {
   m1Frac = { num: -m2Frac.den, den: m2Frac.num };
   m1Frac = fractionIrreductible(m1Frac.num, m1Frac.den);
   m1Latex = afficherCoefX(m1Frac);
@@ -978,8 +866,8 @@ if (cas === 5) {
   texte += `
   \\[
   \\begin{aligned}
-  d_1 \\perp d_2 &\\Rightarrow m_1 = -\\frac{1}{m_2} = ${afficherPente(m1Frac)} \\\\
-  &\\Rightarrow d_1 \\equiv y = ${m1Latex}x + p
+  g \\perp BC &\\Rightarrow m_g = -\\frac{1}{m_{BC}} = ${afficherPente(m1Frac)} \\\\
+  &\\Rightarrow g \\equiv y = ${m1Latex}x + p
   \\end{aligned}
   \\]
   `;
@@ -988,22 +876,22 @@ if (cas === 5) {
 
 /* ===== ÉTAPE 3 : calcul de p ===== */
 
-const meFrac = produitFractions(m1Frac, e);
+const meFrac = produitFractions(m1Frac, xA);
 const pFrac = fractionIrreductible(
-  f.num * meFrac.den - meFrac.num * f.den,
-  f.den * meFrac.den
+  yA.num * meFrac.den - meFrac.num * yA.den,
+  yA.den * meFrac.den
 );
 const meFracAbs = {
   num: Math.abs(meFrac.num),
   den: meFrac.den
 };
-const denCommun = f.den * meFracAbs.den;
+const denCommun = yA.den * meFracAbs.den;
 const fMD = {
-  num: f.num * meFracAbs.den,
+  num: yA.num * meFracAbs.den,
   den: denCommun
 };
 const meMD = {
-  num: meFracAbs.num * f.den,
+  num: meFracAbs.num * yA.den,
   den: denCommun
 };
 
@@ -1013,9 +901,9 @@ texte += `
 
   \\[
   \\begin{aligned}
-  A(${afficherFraction(e)};${afficherFraction(f)}) \\in d_1   
-  &\\Rightarrow ${afficherFraction(f)} = ${afficherCoefX(m1Frac)} \\cdot ${afficherAvecParentheses(e)} + p \\\\
-  &\\Rightarrow ${afficherFraction(f)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
+  A(${afficherFraction(xA)};${afficherFraction(yA)}) \\in d_1   
+  &\\Rightarrow ${afficherFraction(yA)} = ${afficherCoefX(m1Frac)} \\cdot ${afficherAvecParentheses(xA)} + p \\\\
+  &\\Rightarrow ${afficherFraction(yA)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
   `;
 
   // ligne 3 : seulement si le produit n'est pas nul
