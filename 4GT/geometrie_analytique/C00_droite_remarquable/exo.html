@@ -89,6 +89,65 @@ let xC, yC;
   return a;
 }
 
+  function decomposerSommePourMilieu(f1, f2) {
+  const lignes = [];
+
+  // Cas 0 + f ou f + 0
+  if (f1.num === 0) {
+    lignes.push(afficherFraction(f2));
+    return lignes;
+  }
+  if (f2.num === 0) {
+    lignes.push(afficherFraction(f1));
+    return lignes;
+  }
+
+  // Deux entiers
+  if (f1.den === 1 && f2.den === 1) {
+    lignes.push((f1.num + f2.num).toString());
+    return lignes;
+  }
+
+  // Même dénominateur
+  if (f1.den === f2.den) {
+    lignes.push(
+      afficherFraction({
+        num: f1.num + f2.num,
+        den: f1.den
+      })
+    );
+    return lignes;
+  }
+
+  // 🔥 Mise au même dénominateur (seulement ici)
+  const f1MD = {
+    num: f1.num * f2.den,
+    den: f1.den * f2.den
+  };
+
+  const f2MD = {
+    num: f2.num * f1.den,
+    den: f1.den * f2.den
+  };
+
+  lignes.push(
+    `${afficherFraction(f1MD)} ${f2MD.num < 0 ? "-" : "+"} ${afficherFraction({
+      num: Math.abs(f2MD.num),
+      den: f2MD.den
+    })}`
+  );
+
+  lignes.push(
+    afficherFraction({
+      num: f1MD.num + f2MD.num,
+      den: f1MD.den
+    })
+  );
+
+  return lignes;
+}
+
+  
   function sommeFractions(f1, f2) {
   const den = f1.den * f2.den;
   const num = f1.num * f2.den + f2.num * f1.den;
@@ -725,9 +784,13 @@ const sumY_MD = {
   den: yB_MD.den
 };
 
-// ─── Division par 2 (CALCUL RÉEL)
-const xM = fractionIrreductible(sumX_MD.num, sumX_MD.den * 2);
-const yM = fractionIrreductible(sumY_MD.num, sumY_MD.den * 2);
+const lignesX = decomposerSommePourMilieu(xB, xC);
+const lignesY = decomposerSommePourMilieu(yB, yC);
+
+const sumX = sommeFractions(xB, xC);
+const sumY = sommeFractions(yB, yC);
+const xM = fractionIrreductible(sumX.num, sumX.den * 2);
+const yM = fractionIrreductible(sumY.num, sumY.den * 2);
 
 // ─── AFFICHAGE MATHJAX
 texte += `
@@ -750,12 +813,26 @@ M
 \\frac{${afficherSommeCoord(yB, yC)}}{2}
 \\right) \\\\
 
+// affichage intermédiaire X / Y
+if (lignesX.length === 1 && lignesY.length === 1) {
+  texte += `
 &=
 \\left(
-\\frac{${afficherSommeCoord(xB_MD, xC_MD)}}{2}
+\\frac{${lignesX[0]}}{2}
 \\ ;\\
-\\frac{${afficherSommeCoord(yB_MD, yC_MD)}}{2}
+\\frac{${lignesY[0]}}{2}
 \\right) \\\\
+`;
+} else {
+  texte += `
+&=
+\\left(
+\\frac{${lignesX[lignesX.length - 1]}}{2}
+\\ ;\\
+\\frac{${lignesY[lignesY.length - 1]}}{2}
+\\right) \\\\
+`;
+}
 
 &=
 \\left(
