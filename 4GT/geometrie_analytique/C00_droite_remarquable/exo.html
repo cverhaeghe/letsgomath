@@ -146,7 +146,7 @@ let xC, yC;
 
   function afficherFractionAvecParentheses(frac) {
   const f = normaliserSigne(frac);
-  const s = afficherFraction(f);
+  const s = afficherFraction(yA);
   return f.num < 0 ? `(${s})` : s;
 }
 
@@ -211,8 +211,8 @@ let xC, yC;
     const sign = Math.random() < 0.5 ? -1 : 1;
 
     return {
-      num: sign * f.num,
-      den: f.den
+      num: sign * yA.num,
+      den: yA.den
     };
   }
 }
@@ -591,8 +591,8 @@ if (cas === 3) {
 
   // dy = yB - f
   const dy = fractionIrreductible(
-    yB.num * f.den - f.num * yB.den,
-    yB.den * f.den
+    yB.num * yA.den - yA.num * yB.den,
+    yB.den * yA.den
   );
 
   // dx = xB - e
@@ -610,8 +610,8 @@ if (cas === 3) {
   // p = f - m*e  (attention : f.num et e.num sont des entiers)
   const meFrac = produitFractions(mFrac, xA);
   const pFrac = fractionIrreductible(
-  f.num * meFrac.den - meFrac.num * f.den,
-  f.den * meFrac.den
+  yA.num * meFrac.den - meFrac.num * yA.den,
+  yA.den * meFrac.den
 );
 
   let attendu = "y=";
@@ -827,12 +827,12 @@ const pFrac = fractionIrreductible(
   // ligne 3 : seulement si le produit n'est pas nul
   if (meFrac.num !== 0) {
     texte += `
-  &\\Rightarrow ${afficherFraction(f)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
+  &\\Rightarrow ${afficherFraction(yA)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
   `;
   }
 
   // ligne "mise au même dénominateur"
-if (f.den !== meFracAbs.den) {
+if (yA.den !== meFracAbs.den) {
   texte += `
 &\\Rightarrow ${afficherFraction(fMD)} ${meFrac.num < 0 ? "+" : "-"} ${afficherFraction(meMD)} = p \\\\
 `;
@@ -871,7 +871,7 @@ g \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
   \\end{aligned}
   \\]
   `;
-}
+
 
 
 /* ===== ÉTAPE 3 : calcul de p ===== */
@@ -909,12 +909,12 @@ texte += `
   // ligne 3 : seulement si le produit n'est pas nul
   if (meFrac.num !== 0) {
     texte += `
-  &\\Rightarrow ${afficherFraction(f)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
+  &\\Rightarrow ${afficherFraction(yA)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
   `;
   }
 
   // ligne "mise au même dénominateur"
-if (f.den !== meFracAbs.den) {
+if (yA.den !== meFracAbs.den) {
   texte += `
 &\\Rightarrow ${afficherFraction(fMD)} ${meFrac.num < 0 ? "+" : "-"} ${afficherFraction(meMD)} = p \\\\
 `;
@@ -941,7 +941,7 @@ if (f.den !== meFracAbs.den) {
   \\]
   `;
 }
-
+}
   
   document.getElementById("correction").innerHTML = texte;
   MathJax.typeset();
