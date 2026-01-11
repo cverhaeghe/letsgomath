@@ -510,7 +510,7 @@ yC = randomCoord();
     \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
     \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
     \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
-    Calcule l'équation réduite de la médiatrice \\(f\\) de \\( \\[AB\\]\\).
+    Calcule l'équation réduite de la médiatrice \\(f\\) de \\( \[AB\]\\).
     `;
 
   }
@@ -519,16 +519,6 @@ yC = randomCoord();
   else {
 
     cas = 3;
-
-do {
-  xB = randomCoord();
-  yB = randomCoord();
-} while (
-  (xB.num === e.num && xB.den === e.den) || // même x → verticale
-  (yB.num === f.num && yB.den === f.den)    // même y → horizontale
-);
-
-
 
     enonce = `Soit un triangle dont les sommets sont 
     \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
