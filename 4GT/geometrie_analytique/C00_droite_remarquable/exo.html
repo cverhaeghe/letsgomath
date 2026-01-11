@@ -482,34 +482,37 @@ f = randomCoord();
 
   let enonce = "";
 
-  /* ===== CAS 1 : parallèle à l’axe des x (10%) ===== */
+  /* ===== CAS 1 : hauteur (33%) ===== */
   
-  if (r < 10) {
+  if (r < 33) {
     
     cas = 1;
 
-    enonce = `Calcule l'équation réduite de la droite <br>
-    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)})\\) et <br>
-    parallèle à l’axe des abscisses.`;
+    enonce = `Soit un triangle dont les sommets sont 
+    \\(A(${afficherFraction(e)};${afficherFraction(f)})\\), 
+    \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
+    \\(C(${afficherFraction(xB)};${afficherFraction(yB)}) \\). <br>
+    Calcule l'équation réduite de la hauteur \\(h\\) issue du sommet \\( A\\).
+    `;
 
   }
 
-  /* ===== CAS 2 : parallèle à l’axe des y (10%) ===== */
-  else if (r < 20) {
+  /* ===== CAS 2 : médiatrice (33%) ===== */
+  else if (r < 67) {
 
     cas = 2;
 
-    enonce = `Calcule l'équation de la droite <br>
-    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)})\\) et <br>
-    parallèle à l’axe des ordonnées.`;
+    enonce = `Soit un triangle dont les sommets sont 
+    \\(A(${afficherFraction(e)};${afficherFraction(f)})\\), 
+    \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
+    \\(C(${afficherFraction(xB)};${afficherFraction(yB)}) \\). <br>
+    Calcule l'équation réduite de la médiatrice \\(f\\) de \\( \\[AB\\]\\).
+    `;
 
-    // Cas particulier : x = e
-    m = null;
-    p = null;
   }
 
-  /* ===== CAS 3 : passant par A et B (30%) ===== */
-  else if (r < 50) {
+  /* ===== CAS 3 : médiane g (33%) ===== */
+  else {
 
     cas = 3;
 
@@ -523,43 +526,16 @@ do {
 
 
 
-    enonce = `Calcule l'équation réduite de la droite \\(AB\\) <br>
-    étant donné  \\(A(${afficherFraction(e)};${afficherFraction(f)})\\) et \\(B(${afficherFraction(xB)};${afficherFraction(yB)})\\).`;
+    enonce = `Soit un triangle dont les sommets sont 
+    \\(A(${afficherFraction(e)};${afficherFraction(f)})\\), 
+    \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
+    \\(C(${afficherFraction(xB)};${afficherFraction(yB)}) \\). <br>
+    Calcule l'équation réduite de la médiane \\(g\\) issue du sommet \\( A\\).
+    `;
 
   }
 
-  /* ===== CAS 4 : parallèle à d2 (25%) ===== */
-  else if (r < 75) {
-
-    cas = 4;
-
-    a = randNonZero(-5, 5);
-    b = randNonZero(-5, 5); 
-    c = Math.floor(Math.random() * 11) - 5;
-
-
-    m = -a / b;
-
-    enonce = `Calcule l'équation réduite de la droite \\(d_1\\) <br>
-    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)})\\) et <br>
-    parallèle à la droite \\(d_2 \\equiv ${equationCartesienne(a, b, c)}\\).`;
-  }
-
-  /* ===== CAS 5 : perpendiculaire à d2 (25%) ===== */
-  else {
-
-    cas = 5;
-
-    a = randNonZero(-5, 5);
-    b = randNonZero(-5, 5); 
-    c = Math.floor(Math.random() * 11) - 5;
-
-    m = b / a;
-
-    enonce = `Calcule l'équation réduite de la droite \\(d_1\\) <br>
-    passant par le point \\(A(${afficherFraction(e)};${afficherFraction(f)})\\) et <br>
-    perpendiculaire à la droite \\(d_2 \\equiv ${equationCartesienne(a, b, c)}\\).`;
-  }
+ 
 
 
   document.getElementById("equation").innerHTML = enonce;
@@ -665,69 +641,9 @@ if (cas === 3) {
   return;
 }
 
-
-  /* ===== CAS 4 / 5 : parallèle ou perpendiculaire ===== */
-if (cas === 4 || cas === 5) {
-
-  // pente de d2
-  const m2Frac = fractionIrreductible(-a, b);
-
-  // pente de d1
-  let m1Frac;
-  if (cas === 4) {
-    m1Frac = m2Frac;
-  } else {
-    m1Frac = fractionIrreductible(-m2Frac.den, m2Frac.num);
-  }
-
-  // calcul de p avec fractions
-  const meFrac = produitFractions(m1Frac, e);
-const pFrac = fractionIrreductible(
-  f.num * meFrac.den - meFrac.num * f.den,
-  f.den * meFrac.den
-);
-
-  let attendu = "y=";
-  attendu += coefXPourEquation(m1Frac);
-  attendu += afficherConstante(pFrac);
-
-  if (
-    normaliser(normaliserFractions(rep)) ===
-    normaliser(normaliserFractions(attendu))
-  ) {
-    document.getElementById("feedback").innerHTML =
-      "<span class='bon'>✅ Bonne réponse !</span>";
-  } else {
-    document.getElementById("feedback").innerHTML =
-      "<span class='faux'>❌ Réponse incorrecte</span>";
-  }
-
-  return;
 }
 
-  
-  /* ===== AUTRES CAS : y = mx + p ===== */
-let attendu = "y=";
-
-const tx = termeX(m);
-const tp = termeConstante(p);
-
-attendu += tx;
-
-if (tp !== "") {
-  // cas où m = 0 → éviter y=+2
-  if (tx === "") attendu += tp.replace("+", "");
-  else attendu += tp;
-}
-
-  if (rep === normaliser(attendu)) {
-    document.getElementById("feedback").innerHTML =
-      "<span class='bon'>✅ Bonne réponse !</span>";
-  } else {
-    document.getElementById("feedback").innerHTML =
-      "<span class='faux'>❌ Réponse incorrecte</span>";
-  }
-}
+ 
 
 
   /*==============
