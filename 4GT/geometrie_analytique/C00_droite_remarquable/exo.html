@@ -698,61 +698,31 @@ if (cas === 3) {
 
   texte += `Une médiane est une droite passant par un sommet et par le milieu du côté opposé à ce sommet.<br><br>`;
 
-  const xM = fractionIrreductible(
-  xB.num * xC.den + xC.num * xB.den,
-  2 * xB.den * xC.den
-);
+const xC_MD = {
+  num: xC.num * xB.den,
+  den: xB.den
+};
 
-const yM = fractionIrreductible(
-  yB.num * yC.den + yC.num * yB.den,
-  2 * yB.den * yC.den
-);
-  
-const dy = fractionIrreductible(
-  yM.num * yA.den - yA.num * yM.den,
-  yM.den * yA.den
-);
+const yC_MD = {
+  num: yC.num * yB.den,
+  den: yB.den
+};
 
-const dx = fractionIrreductible(
-  xM.num * xA.den - xA.num * xM.den,
-  xM.den * xA.den
-);
-
-const dyN = normaliserSigne(dy);
-const dxN = normaliserSigne(dx);
-
-const mFrac = fractionIrreductible(
-  dy.num * dx.den,
-  dy.den * dx.num
-);
-
-const mLatex = afficherPente(mFrac);
-const meFrac = produitFractions(mFrac, xA);
-const pFrac = fractionIrreductible(
-  yA.num * meFrac.den - meFrac.num * yA.den,
-  yA.den * meFrac.den
-);
-
-const meFracAbs = {
-    num: Math.abs(meFrac.num),
-    den: meFrac.den
-  };
-
-const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
-const fracNorm = normaliserFractionDouble(dyN, dxN);
-
+// sommes
 const sumX = sommeFractions(xB, xC);
 const sumY = sommeFractions(yB, yC);
 
-const xMfinal = fractionIrreductible(sumX.num, sumX.den * 2);
-const yMfinal = fractionIrreductible(sumY.num, sumY.den * 2);
+// division par 2
+const xM = fractionIrreductible(sumX.num, sumX.den * 2);
+const yM = fractionIrreductible(sumY.num, sumY.den * 2);
 
 texte += `
-<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer le milieu de \\([BC]\\)</span><br>
+<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span><span style='color: var(--peps)'> calculer le milieu de \\([BC]\\)</span><br>
 
 \\[
 \\begin{aligned}
-M_{BC} &=
+M_{BC}
+&=
 \\left(
 \\frac{x_B+x_C}{2}
 \\ ;\\
@@ -761,13 +731,10 @@ M_{BC} &=
 
 &=
 \\left(
-\\frac{${afficherFraction(xB)}+${afficherAvecParentheses(xC)}}{2}
+\\frac{${afficherFraction(xB)}-${afficherEntierAvecParentheses(xC.num)}}{2}
 \\ ;\\
-\\frac{${afficherFraction(yB)}+${afficherAvecParentheses(yC)}}{2}
-\\right)
-\\end{aligned}
-\\]
-`;
+\\frac{${afficherFraction(yB)}+${afficherEntierAvecParentheses(yC.num)}}{2}
+\\right) \\\\
 
 &=
 \\left(
@@ -793,50 +760,6 @@ ${afficherFraction(yM)}
 \\]
 `;
 
-if (xB.den === 1 && xC.den === 1) {
-  // deux entiers
-  texte += `
-  \\[
-  ${xB.num}+${xC.num} = ${sumX.num}
-  \\]
-  `;
-} else {
-  // au moins une fraction
-  texte += `
-  \\[
-  ${afficherFraction(xB)}+${afficherFraction(xC)}
-  = ${afficherFraction(sumX)}
-  \\]
-  `;
-}
-
-  if (yB.den === 1 && yC.den === 1) {
-  // deux entiers
-  texte += `
-  \\[
-  ${yB.num}+${yC.num} = ${sumY.num}
-  \\]
-  `;
-} else {
-  // au moins une fraction → mise au même dénominateur
-  texte += `
-  \\[
-  ${afficherFraction(yB)}+${afficherFraction(yC)}
-  = ${afficherFraction(sumY)}
-  \\]
-  `;
-}
-
-  texte += `
-\\[
-M_{BC} =
-\\left(
-${afficherFraction(xMfinal)}
-\\ ;\\
-${afficherFraction(yMfinal)}
-\\right)
-\\]
-`;
 
 
   
