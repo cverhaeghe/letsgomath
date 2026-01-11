@@ -520,7 +520,7 @@ yC = randomCoord();
 
     cas = 3;
 
-    enonce = `Soit un triangle dont les sommets sont 
+    enonce = `Soit un triangle dont les sommets sont <br>
     \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
     \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
     \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
@@ -657,25 +657,24 @@ function corriger() {
   
   let texte = `📘 <strong>Résolution</strong><br><br>  `;
   
-  /* ===== CAS 1 : droite horizontale ===== */
+  /* ===== CAS 1 : hauteur ===== */
 
   if (cas === 1) {
 
-      texte += `Une droite parallèle à l'axe des abscisses est une droite horizontale d'équation \\( y=k\\).<br><br>
-      Ainsi, en considérant l'ordonnée du point A, on obtient <br><br> 
-      \\(  y = ${afficherFraction(f)}  \\) `;
+      texte += `Une hauteur est une droite passant par un sommet et perpendiculaire au côté opposé.<br><br>`;
+
 
     document.getElementById("correction").innerHTML = texte;
     MathJax.typeset();
     return;
   }
   
-  /* ===== CAS 2 : droite verticale ===== */
+  /* ===== CAS 2 : médiatrice ===== */
   if (cas === 2) {
-    
-      texte += `Une droite parallèle à l'axe des ordonnées est une droite verticale d'équation \\( x=k\\).<br><br>
-      Ainsi, en considérant l'abscisse du point A, on obtient <br><br> 
-       \\(  x = ${afficherFraction(e)}  \\) `;
+
+      texte += `Une médiatrice est une droite perpendiculaire au côté opposé et passant par le milieu de ce côté.<br><br>`;
+
+
 
     document.getElementById("correction").innerHTML = texte;
     MathJax.typeset();
@@ -683,9 +682,11 @@ function corriger() {
   }
 
 
-/* ===== CAS 3 : droite passant par 2 points ===== */
+/* ===== CAS 3 : médiane ===== */
 
 if (cas === 3) {
+
+  texte += `Une médiane est une droite passant par un sommet et par le milieu du côté opposé à ce sommet.<br><br>`;
 
   // dy = yB - f
   const dy = fractionIrreductible(
@@ -753,6 +754,16 @@ const dxN = normaliserSigne(dx);
 const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
 const fracNorm = normaliserFractionDouble(dyN, dxN);
 
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer le milieu de \\( \[BC\] \\)</span><br>
+
+  \\[
+  \\begin{aligned}
+  Milieu de \( [BC] \) &: \( \left( \\frac{x_B + x_C}{2} \,;\, \frac{y_B + y_C}{2} \right) \)  \\\\
+  &=  \left( \\frac{${afficherFraction(xB)} + ${afficherAvecParentheses(xC)}}{2} ; \\frac{${afficherFraction(yB)} + ${afficherAvecParentheses(yC)}}{2}  \right) \\\\
+  \\end{aligned}
+  \\] `
+
   
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(AB\\)</span><br>
@@ -760,7 +771,7 @@ const fracNorm = normaliserFractionDouble(dyN, dxN);
   \\[
   \\begin{aligned}
   m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
-         &= \\frac{${afficherFraction(f)}-${afficherAvecParentheses(yB)}} {${afficherFraction(e)}-${afficherAvecParentheses(xB)}} \\\\
+         &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yB)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xB)}} \\\\
          &= \\frac{${afficherSommeFractions(dyTerme1, dyTerme2)}} {${afficherSommeFractions(dxTerme1, dxTerme2)}} \\\\
          &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
         `;
