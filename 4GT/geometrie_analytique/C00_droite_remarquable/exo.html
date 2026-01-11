@@ -698,6 +698,23 @@ if (cas === 3) {
 
   texte += `Une médiane est une droite passant par un sommet et par le milieu du côté opposé à ce sommet.<br><br>`;
 
+  const dy = fractionIrreductible(
+  yM.num * yA.den - yA.num * yM.den,
+  yM.den * yA.den
+);
+
+const dx = fractionIrreductible(
+  xM.num * xA.den - xA.num * xM.den,
+  xM.den * xA.den
+);
+
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
+
+const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
+const fracNorm = normaliserFractionDouble(dyN, dxN);
+
+  
 const xC_MD = {
   num: xC.num * xB.den,
   den: xB.den
