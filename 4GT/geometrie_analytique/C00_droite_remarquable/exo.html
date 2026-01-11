@@ -819,21 +819,28 @@ M
 // affichage intermédiaire X / Y
 if (lignesX.length === 1 && lignesY.length === 1) {
   texte += `
+\\[
+\\begin{aligned}
 &=
 \\left(
 \\frac{${lignesX[0]}}{2}
 \\ ;\\
 \\frac{${lignesY[0]}}{2}
 \\right) \\\\
+\\end{aligned}
+\\]
 `;
 } else {
   texte += `
-&=
+\\[
+\\begin{aligned}&=
 \\left(
 \\frac{${lignesX[lignesX.length - 1]}}{2}
 \\ ;\\
 \\frac{${lignesY[lignesY.length - 1]}}{2}
 \\right) \\\\
+\\end{aligned}
+\\]
 `;
 }
 
