@@ -698,31 +698,59 @@ if (cas === 3) {
 
   texte += `Une médiane est une droite passant par un sommet et par le milieu du côté opposé à ce sommet.<br><br>`;
 
-  const sumX = sommeFractions(xB, xC);
-  const sumY = sommeFractions(yB, yC);
+const xB_MD = { num: xB.num * xC.den, den: xB.den * xC.den };
+const xC_MD = { num: xC.num * xB.den, den: xB.den * xC.den };
 
-  const xM = fractionIrreductible(sumX.num, sumX.den * 2);
-  const yM = fractionIrreductible(sumY.num, sumY.den * 2);
+const yB_MD = { num: yB.num * yC.den, den: yB.den * yC.den };
+const yC_MD = { num: yC.num * yB.den, den: yB.den * yC.den };
 
-  texte += `
-<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span>
-<span style='color: var(--peps)'> calculer le milieu de \\([BC]\\)</span><br>
+const sumX_MD = {
+  num: xB_MD.num + xC_MD.num,
+  den: xB_MD.den
+};
+
+const sumY_MD = {
+  num: yB_MD.num + yC_MD.num,
+  den: yB_MD.den
+};
+
+// ─── Division par 2 (CALCUL RÉEL)
+const xM = fractionIrreductible(sumX_MD.num, sumX_MD.den * 2);
+const yM = fractionIrreductible(sumY_MD.num, sumY_MD.den * 2);
+
+// ─── AFFICHAGE MATHJAX
+texte += `
+<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span><span style='color: var(--peps)'> calculer le milieu de \\([BC]\\)</span><br>
 
 \\[
 \\begin{aligned}
 M_{BC}
 &=
 \\left(
-\\frac{x_B+x_C}{2}
+\\frac{x_B + x_C}{2}
 \\ ;\\
-\\frac{y_B+y_C}{2}
+\\frac{y_B + y_C}{2}
 \\right) \\\\
 
 &=
 \\left(
-\\frac{${afficherFraction(sumX)}}{2}
+\\frac{${afficherFraction(xB)} + ${afficherFraction(xC)}}{2}
 \\ ;\\
-\\frac{${afficherFraction(sumY)}}{2}
+\\frac{${afficherFraction(yB)} + ${afficherFraction(yC)}}{2}
+\\right) \\\\
+
+&=
+\\left(
+\\frac{${afficherFraction(xB_MD)} + ${afficherFraction(xC_MD)}}{2}
+\\ ;\\
+\\frac{${afficherFraction(yB_MD)} + ${afficherFraction(yC_MD)}}{2}
+\\right) \\\\
+
+&=
+\\left(
+\\frac{${afficherFraction(sumX_MD)}}{2}
+\\ ;\\
+\\frac{${afficherFraction(sumY_MD)}}{2}
 \\right) \\\\
 
 &=
@@ -734,6 +762,7 @@ ${afficherFraction(yM)}
 \\end{aligned}
 \\]
 `;
+
 
   const dy = fractionIrreductible(
   yM.num * yA.den - yA.num * yM.den,
