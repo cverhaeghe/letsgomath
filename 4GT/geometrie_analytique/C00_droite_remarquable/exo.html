@@ -589,6 +589,16 @@ if (
 /* ===== CAS 3 : médiane ===== */
 if (cas === 3) {
 
+const xM = fractionIrreductible(
+  xB.num * xC.den + xC.num * xB.den,
+  2 * xB.den * xC.den
+);
+
+const yM = fractionIrreductible(
+  yB.num * yC.den + yC.num * yB.den,
+  2 * yB.den * yC.den
+);
+
 const dy = fractionIrreductible(
   yM.num * yA.den - yA.num * yM.den,
   yM.den * yA.den
@@ -707,6 +717,9 @@ const dx = fractionIrreductible(
   xM.num * xA.den - xA.num * xM.den,
   xM.den * xA.den
 );
+
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
 
 const mFrac = fractionIrreductible(
   dy.num * dx.den,
