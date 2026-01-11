@@ -191,10 +191,10 @@ let xB, yB;
   // 60 % entier / 40 % fraction (modifiable si tu veux)
   if (Math.random() < 0.6) {
 
-    // entier entre -5 et 5
+    // entier entre -4 et 4
     let n;
     do {
-      n = Math.floor(Math.random() * 11) - 5;
+      n = Math.floor(Math.random() * 9) - 4;
     } while (n === 0 && Math.random() < 0.2); // évite trop de zéros
 
     return { num: n, den: 1 };
