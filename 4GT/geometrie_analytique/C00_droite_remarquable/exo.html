@@ -742,15 +742,22 @@ const meFracAbs = {
 const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
 const fracNorm = normaliserFractionDouble(dyN, dxN);
 
-  texte += `
-<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer le milieu de \( [BC] \)</span><br>
+texte += `
+<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer le milieu de [BC]</span><br>
 
-  \\[
-  \\begin{aligned}
-  Milieu de \( [BC] \) &: \( \left( \\frac{x_B + x_C}{2} \,;\, \frac{y_B + y_C}{2} \right) \)  \\\\
-  &=  \left( \\frac{${afficherFraction(xB)} + ${afficherAvecParentheses(xC)}}{2} ; \\frac{${afficherFraction(yB)} + ${afficherAvecParentheses(yC)}}{2}  \right) \\\\
-  \\end{aligned}
-  \\] `
+\\[
+\\begin{aligned}
+\\text{Milieu de } [BC] &: 
+\\left( \\frac{x_B + x_C}{2} \\,;\\, \\frac{y_B + y_C}{2} \\right) \\\\
+&= \\left(
+\\frac{${afficherFraction(xB)} + ${afficherAvecParentheses(xC)}}{2}
+\\,;\\,
+\\frac{${afficherFraction(yB)} + ${afficherAvecParentheses(yC)}}{2}
+\\right)
+\\end{aligned}
+\\]
+`;
+
 
   
   texte += `
