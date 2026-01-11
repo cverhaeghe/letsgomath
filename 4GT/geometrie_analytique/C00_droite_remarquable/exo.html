@@ -144,12 +144,11 @@ let xC, yC;
   return { num, den };
 }
 
-  function afficherFractionAvecParentheses(frac) {
+function afficherFractionAvecParentheses(frac) {
   const f = normaliserSigne(frac);
-  const s = afficherFraction(yA);
+  const s = afficherFraction(f);
   return f.num < 0 ? `(${s})` : s;
 }
-
   
   
   function normaliser(str) {
@@ -210,10 +209,11 @@ let xC, yC;
 
     const sign = Math.random() < 0.5 ? -1 : 1;
 
-    return {
-      num: sign * yA.num,
-      den: yA.den
-    };
+return {
+  num: sign * f.num,
+  den: f.den
+};
+
   }
 }
 
@@ -772,12 +772,12 @@ const fracNorm = normaliserFractionDouble(dyN, dxN);
 
   
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span> <span style='color: var(--peps)'> calculer la pente de \\(AB\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\)</span><br>
 
   \\[
   \\begin{aligned}
-  m_{AB} &= \\frac{\\Delta y}{\\Delta x} \\\\
-         &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yB)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xB)}} \\\\
+  m_{g} &= \\frac{\\Delta y}{\\Delta x} \\\\
+         &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
          &= \\frac{${afficherSommeFractions(dyTerme1, dyTerme2)}} {${afficherSommeFractions(dxTerme1, dxTerme2)}} \\\\
          &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
         `;
@@ -791,7 +791,7 @@ if (!fractionEntiers) {
   \\]
 
    \\[  
-   \\Rightarrow AB \\equiv y = ${afficherCoefX(mFrac)}x + p   
+   \\Rightarrow g \\equiv y = ${afficherCoefX(mFrac)}x + p   
    \\]<br>
   `;
 
@@ -815,11 +815,11 @@ const pFrac = fractionIrreductible(
 
   
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer le \\(p\\) de \\(AB\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> calculer le \\(p\\) de \\(AB\\)</span><br>
 
   \\[
   \\begin{aligned}
-  A(${afficherFraction(xA)};${afficherFraction(yA)}) \\in AB   
+  A(${afficherFraction(xA)};${afficherFraction(yA)}) \\in g   
   &\\Rightarrow ${afficherFraction(yA)} = ${afficherCoefX(mFrac)} \\cdot ${afficherAvecParentheses(xA)} + p \\\\
   &\\Rightarrow ${afficherFraction(yA)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
   `;
@@ -846,8 +846,7 @@ if (yA.den !== meFracAbs.den) {
   `;
 
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span>
-  <span style='color: var(--peps)'> donner l'équation finale</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 4 :</span> <span style='color: var(--peps)'> donner l'équation finale</span><br>
 
 \\[
 \\boxed{
@@ -871,76 +870,6 @@ g \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
   \\end{aligned}
   \\]
   `;
-
-
-
-/* ===== ÉTAPE 3 : calcul de p ===== */
-
-const meFrac = produitFractions(m1Frac, xA);
-const pFrac = fractionIrreductible(
-  yA.num * meFrac.den - meFrac.num * yA.den,
-  yA.den * meFrac.den
-);
-const meFracAbs = {
-  num: Math.abs(meFrac.num),
-  den: meFrac.den
-};
-const denCommun = yA.den * meFracAbs.den;
-const fMD = {
-  num: yA.num * meFracAbs.den,
-  den: denCommun
-};
-const meMD = {
-  num: meFracAbs.num * yA.den,
-  den: denCommun
-};
-
-  
-texte += `
-<span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
-
-  \\[
-  \\begin{aligned}
-  A(${afficherFraction(xA)};${afficherFraction(yA)}) \\in d_1   
-  &\\Rightarrow ${afficherFraction(yA)} = ${afficherCoefX(m1Frac)} \\cdot ${afficherAvecParentheses(xA)} + p \\\\
-  &\\Rightarrow ${afficherFraction(yA)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
-  `;
-
-  // ligne 3 : seulement si le produit n'est pas nul
-  if (meFrac.num !== 0) {
-    texte += `
-  &\\Rightarrow ${afficherFraction(yA)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
-  `;
-  }
-
-  // ligne "mise au même dénominateur"
-if (yA.den !== meFracAbs.den) {
-  texte += `
-&\\Rightarrow ${afficherFraction(fMD)} ${meFrac.num < 0 ? "+" : "-"} ${afficherFraction(meMD)} = p \\\\
-`;
-}
-
-  // ligne finale
-  texte += `
-  &\\Rightarrow p = ${afficherFraction(pFrac)}
-  \\end{aligned}
-  \\]
-  `;
-
-
-
-  /* ===== ÉTAPE 4 : équation finale ===== */
-
-  texte += `
-    <span style='color: var(--peps); font-weight: bold;'>Étape 4 :</span> <span style='color: var(--peps)'> donner l'équation finale </span><br>
-    
-  \\[
-  \\boxed{
-  d_1 \\equiv y = ${afficherCoefX(m1Frac)}x ${afficherConstante(pFrac)}
-  }
-  \\]
-  `;
-}
 }
   
   document.getElementById("correction").innerHTML = texte;
