@@ -1076,33 +1076,33 @@ const meFracAbs = {
 texte += `
 <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> déterminer l’ordonnée à l’origine</span><br>
 
-\\[
-\\begin{aligned}
-A(${afficherFraction(e)};${afficherFraction(f)})
- \\in d_1 
-`;
+  \\[
+  \\begin{aligned}
+  A(${afficherFraction(e)};${afficherFraction(f)}) \\in AB   
+  &\\Rightarrow ${afficherFraction(f)} = ${afficherCoefX(mFrac)} \\cdot ${afficherAvecParentheses(e)} + p \\\\
+  &\\Rightarrow ${afficherFraction(f)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
+  `;
 
-if (meFrac.num !== 1) {
+  // ligne 3 : seulement si le produit n'est pas nul
+  if (meFrac.num !== 0) {
+    texte += `
+  &\\Rightarrow ${afficherFraction(f)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
+  `;
+  }
+
+  // ligne "mise au même dénominateur"
+if (f.den !== meFracAbs.den) {
   texte += `
-&\\Rightarrow ${f} = ${afficherPente(m1Frac)} \\cdot ${afficherAvecParentheses(e)} + p \\\\
+&\\Rightarrow ${afficherFraction(fMD)} ${meFrac.num < 0 ? "+" : "-"} ${afficherFraction(meMD)} = p \\\\
 `;
 }
 
-texte += `
-&\\Rightarrow ${f} = ${afficherPente(meFrac)} + p \\\\
-`;
-
-if (meFrac.num !== 0) {
+  // ligne finale
   texte += `
-&\\Rightarrow ${f} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
-`;
-}
-
-texte += `
-&\\Rightarrow p = ${afficherPente(pFrac)}
-\\end{aligned}
-\\]
-`;
+  &\\Rightarrow p = ${afficherFraction(pFrac)}
+  \\end{aligned}
+  \\]
+  `;
 
 
 
@@ -1113,7 +1113,7 @@ texte += `
     
   \\[
   \\boxed{
-  d_1 \\equiv y = ${m1Latex}x ${afficherConstante(pFrac)}
+  AB \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
   }
   \\]
   `;
