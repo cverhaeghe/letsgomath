@@ -492,7 +492,7 @@ yC = randomCoord();
     
     cas = 1;
 
-    enonce = `Soit un triangle dont les sommets sont 
+    enonce = `Soit un triangle dont les sommets sont <br>
     \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
     \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
     \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
@@ -506,7 +506,7 @@ yC = randomCoord();
 
     cas = 2;
 
-    enonce = `Soit un triangle dont les sommets sont 
+    enonce = `Soit un triangle dont les sommets sont <br>
     \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
     \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
     \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
@@ -529,9 +529,6 @@ yC = randomCoord();
 
   }
 
- 
-
-
   document.getElementById("equation").innerHTML = enonce;
   MathJax.typeset();
 }
@@ -549,7 +546,7 @@ function verifier() {
 
   const rep = normaliser(document.getElementById("reponse").value);
 
-  /* ===== CAS 1 : droite horizontale ===== */
+  /* ===== CAS 1 : hauteur ===== */
 if (cas === 1) {
 
   const attendu = `y=${normaliserFractions(afficherFraction(f))}`;
@@ -568,7 +565,7 @@ if (cas === 1) {
   return;
 }
 
-  /* ===== CAS 2 : droite verticale ===== */
+  /* ===== CAS 2 : médiatrice ===== */
   
 if (cas === 2) {
 
@@ -589,7 +586,7 @@ if (
 }
 
 
-/* ===== CAS 3 : droite passant par A et B ===== */
+/* ===== CAS 3 : médiane ===== */
 if (cas === 3) {
 
   // dy = yB - f
