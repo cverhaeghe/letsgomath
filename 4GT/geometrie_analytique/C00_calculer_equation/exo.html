@@ -641,7 +641,10 @@ if (cas === 3) {
 
   // p = f - m*e  (attention : f.num et e.num sont des entiers)
   const meFrac = produitFractions(mFrac, e);
-  const pFrac  = soustractionEntierFraction(f.num, meFrac);
+  const pFrac = fractionIrreductible(
+  f.num * meFrac.den - meFrac.num * f.den,
+  f.den * meFrac.den
+);
 
   let attendu = "y=";
   attendu += coefXPourEquation(mFrac);
