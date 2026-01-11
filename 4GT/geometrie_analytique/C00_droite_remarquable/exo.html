@@ -589,31 +589,27 @@ if (
 /* ===== CAS 3 : médiane ===== */
 if (cas === 3) {
 
-  // dy = yB - f
-  const dy = fractionIrreductible(
-    yB.num * yA.den - yA.num * yB.den,
-    yB.den * yA.den
-  );
+const dy = fractionIrreductible(
+  yM.num * yA.den - yA.num * yM.den,
+  yM.den * yA.den
+);
 
-  // dx = xB - e
-  const dx = fractionIrreductible(
-    xB.num * xA.den - xA.num * xB.den,
-    xB.den * xA.den
-  );
+const dx = fractionIrreductible(
+  xM.num * xA.den - xA.num * xM.den,
+  xM.den * xA.den
+);
 
 const dyN = normaliserSigne(dy);
 const dxN = normaliserSigne(dx);
 
   
-  // pente m = dy / dx
-  const mFrac = fractionIrreductible(
+const mFrac = fractionIrreductible(
     dy.num * dx.den,
     dy.den * dx.num
   );
 
-  // p = f - m*e  (attention : f.num et e.num sont des entiers)
-  const meFrac = produitFractions(mFrac, xA);
-  const pFrac = fractionIrreductible(
+const meFrac = produitFractions(mFrac, xA);
+const pFrac = fractionIrreductible(
   yA.num * meFrac.den - meFrac.num * yA.den,
   yA.den * meFrac.den
 );
@@ -751,7 +747,7 @@ const fracNorm = normaliserFractionDouble(dyN, dxN);
   \\begin{aligned}
   m_{g} &= \\frac{\\Delta y}{\\Delta x} \\\\
          &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
-         &= \\frac{${afficherSommeFractions(dyTerme1, dyTerme2)}} {${afficherSommeFractions(dxTerme1, dxTerme2)}} \\\\
+         &= \\frac{${afficherFraction(dy)}}{${afficherFraction(dx)}} \\\\
          &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
         `;
 if (!fractionEntiers) {
@@ -785,7 +781,7 @@ const meMD = {
 
   
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> calculer le \\(p\\) de \\(AB\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> calculer le \\(p\\) de \\(g\\)</span><br>
 
   \\[
   \\begin{aligned}
