@@ -698,43 +698,15 @@ if (cas === 3) {
 
   texte += `Une médiane est une droite passant par un sommet et par le milieu du côté opposé à ce sommet.<br><br>`;
 
-  const dy = fractionIrreductible(
-  yM.num * yA.den - yA.num * yM.den,
-  yM.den * yA.den
-);
+  const sumX = sommeFractions(xB, xC);
+  const sumY = sommeFractions(yB, yC);
 
-const dx = fractionIrreductible(
-  xM.num * xA.den - xA.num * xM.den,
-  xM.den * xA.den
-);
+  const xM = fractionIrreductible(sumX.num, sumX.den * 2);
+  const yM = fractionIrreductible(sumY.num, sumY.den * 2);
 
-const dyN = normaliserSigne(dy);
-const dxN = normaliserSigne(dx);
-
-const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
-const fracNorm = normaliserFractionDouble(dyN, dxN);
-
-  
-const xC_MD = {
-  num: xC.num * xB.den,
-  den: xB.den
-};
-
-const yC_MD = {
-  num: yC.num * yB.den,
-  den: yB.den
-};
-
-// sommes
-const sumX = sommeFractions(xB, xC);
-const sumY = sommeFractions(yB, yC);
-
-// division par 2
-const xM = fractionIrreductible(sumX.num, sumX.den * 2);
-const yM = fractionIrreductible(sumY.num, sumY.den * 2);
-
-texte += `
-<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span><span style='color: var(--peps)'> calculer le milieu de \\([BC]\\)</span><br>
+  texte += `
+<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span>
+<span style='color: var(--peps)'> calculer le milieu de \\([BC]\\)</span><br>
 
 \\[
 \\begin{aligned}
@@ -744,20 +716,6 @@ M_{BC}
 \\frac{x_B+x_C}{2}
 \\ ;\\
 \\frac{y_B+y_C}{2}
-\\right) \\\\
-
-&=
-\\left(
-\\frac{${afficherFraction(xB)}-${afficherEntierAvecParentheses(xC.num)}}{2}
-\\ ;\\
-\\frac{${afficherFraction(yB)}+${afficherEntierAvecParentheses(yC.num)}}{2}
-\\right) \\\\
-
-&=
-\\left(
-\\frac{${afficherFraction(xB)}-${afficherFraction(xC_MD)}}{2}
-\\ ;\\
-\\frac{${afficherFraction(yB)}+${afficherFraction(yC_MD)}}{2}
 \\right) \\\\
 
 &=
@@ -777,7 +735,21 @@ ${afficherFraction(yM)}
 \\]
 `;
 
+  const dy = fractionIrreductible(
+  yM.num * yA.den - yA.num * yM.den,
+  yM.den * yA.den
+);
 
+const dx = fractionIrreductible(
+  xM.num * xA.den - xA.num * xM.den,
+  xM.den * xA.den
+);
+
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
+
+const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
+const fracNorm = normaliserFractionDouble(dyN, dxN);
 
   
   texte += `
