@@ -812,7 +812,10 @@ M
 \\ ;\\
 \\frac{${afficherSommeCoord(yB, yC)}}{2}
 \\right) \\\\
-
+\\end{aligned}
+\\]
+`;
+  
 // affichage intermédiaire X / Y
 if (lignesX.length === 1 && lignesY.length === 1) {
   texte += `
@@ -834,6 +837,9 @@ if (lignesX.length === 1 && lignesY.length === 1) {
 `;
 }
 
+texte += `  
+\\[
+\\begin{aligned}
 &=
 \\left(
 \\frac{${afficherFraction(sumX_MD)}}{2}
