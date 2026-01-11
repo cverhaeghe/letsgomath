@@ -601,6 +601,10 @@ if (cas === 3) {
     xB.den * xA.den
   );
 
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
+
+  
   // pente m = dy / dx
   const mFrac = fractionIrreductible(
     dy.num * dx.den,
