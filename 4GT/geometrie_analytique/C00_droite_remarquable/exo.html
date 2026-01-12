@@ -879,23 +879,6 @@ if (lignesX.length === 1 && lignesY.length === 1) {
 `;
 }}
 
-if (xBesoinDetail || yBesoinDetail) {
-  texte += `
-\\[
-\\begin{aligned}
-&=
-\\left(
-\\frac{${xBesoinDetail ? lignesX.at(-1) : afficherFraction(sumX)}}{2}
-\\ ;\\
-\\frac{${yBesoinDetail ? lignesY.at(-1) : afficherFraction(sumY)}}{2}
-\\right)
-\\end{aligned}
-\\]
-`;
-}
-
-
-
 
 texte += `  
 \\[
@@ -969,25 +952,27 @@ const afficherLigneMD = dyBesoinMD || dxBesoinMD;
 if (afficherLigneMD) {
   texte += `
   &= \\frac{
-      ${afficherFraction({
-        num: yA.num * yM.den,
-        den: yA.den * yM.den
-      })}
-      ${yM.num < 0 ? "+" : "-"}
-      ${afficherFraction({
-        num: Math.abs(yM.num * yA.den),
-        den: yA.den * yM.den
-      })}
+      ${dyBesoinMD
+        ? `${afficherFraction({
+            num: yA.num * yM.den,
+            den: yA.den * yM.den
+          })} ${yM.num < 0 ? "+" : "-"} ${afficherFraction({
+            num: Math.abs(yM.num * yA.den),
+            den: yA.den * yM.den
+          })}`
+        : afficherFraction(dy)
+      }
      }{
-      ${afficherFraction({
-        num: xA.num * xM.den,
-        den: xA.den * xM.den
-      })}
-      ${xM.num < 0 ? "+" : "-"}
-      ${afficherFraction({
-        num: Math.abs(xM.num * xA.den),
-        den: xA.den * xM.den
-      })}
+      ${dxBesoinMD
+        ? `${afficherFraction({
+            num: xA.num * xM.den,
+            den: xA.den * xM.den
+          })} ${xM.num < 0 ? "+" : "-"} ${afficherFraction({
+            num: Math.abs(xM.num * xA.den),
+            den: xA.den * xM.den
+          })}`
+        : afficherFraction(dx)
+      }
      } \\\\
   `;
 }
