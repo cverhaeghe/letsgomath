@@ -780,7 +780,7 @@ function corriger() {
 
 if (cas === 3) {
 
-  texte += `Une médiane est une droite passant par un sommet et par le milieu du côté opposé à ce sommet.<br><br>`;
+  texte += `La médiane g est la droite passant par le sommet A et par le milieu M du côté opposé à ce sommet càd [BC].<br><br>`;
 
 const xB_MD = { num: xB.num * xC.den, den: xB.den * xC.den };
 const xC_MD = { num: xC.num * xB.den, den: xB.den * xC.den };
@@ -950,11 +950,12 @@ const pFrac = fractionIrreductible(
 
   
   texte += `
-  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\)</span><br>
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\) qui passe par \\(A\\) et \\(M\\) </span><br>
 
   \\[
   \\begin{aligned}
   m_{g} &= \\frac{\\Delta y}{\\Delta x} \\\\
+        &= \\frac{y_A-y_M}{x_A-x_M} \\\\
          &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
          &= \\frac{${afficherFraction(dy)}}{${afficherFraction(dx)}} \\\\
          &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
