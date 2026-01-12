@@ -879,16 +879,27 @@ if (lignesX.length === 1 && lignesY.length === 1) {
 `;
 }}
 
-texte += `  
+if (xBesoinDetail || yBesoinDetail) {
+  texte += `
 \\[
 \\begin{aligned}
 &=
 \\left(
-\\frac{${afficherFraction(sumX_MD)}}{2}
+\\frac{${xBesoinDetail ? lignesX.at(-1) : afficherFraction(sumX)}}{2}
 \\ ;\\
-\\frac{${afficherFraction(sumY_MD)}}{2}
-\\right) \\\\
+\\frac{${yBesoinDetail ? lignesY.at(-1) : afficherFraction(sumY)}}{2}
+\\right)
+\\end{aligned}
+\\]
+`;
+}
 
+
+
+
+texte += `  
+\\[
+\\begin{aligned}
 &=
 \\left(
 ${afficherFraction(xM)}
