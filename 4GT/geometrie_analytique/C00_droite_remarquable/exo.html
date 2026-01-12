@@ -997,19 +997,20 @@ if (denomBesoinDetail) {
   `;
 }
 
-texte += `
-         &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
-        `;
-  
+// Affichage intermédiaire seulement si ce n'est PAS déjà un entier
 if (!fractionEntiers) {
   texte += `
+         &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
          &= ${afficherProduitFractions(dyN, { num: dxN.den, den: dxN.num })} \\\\
-  `;}
-  texte += `
-         &= ${afficherPente(mFrac)} \\\\
-  \\end{aligned}
-  \\]
+  `;
+}
 
+// Affichage final UNIQUE
+texte += `
+         &= ${afficherPente(mFrac)} \\\\
+`;
+
+texte += `
    \\[  
    \\Rightarrow g \\equiv y = ${afficherCoefX(mFrac)}x + p   
    \\]<br>
