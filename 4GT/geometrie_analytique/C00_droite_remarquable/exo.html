@@ -939,6 +939,9 @@ const dxBesoinMD =
   xA.den !== xM.den && xA.den !== 1 && xM.den !== 1;
 
 const afficherLigneMD = dyBesoinMD || dxBesoinMD;
+const denomBesoinDetail =
+  xA.den !== xM.den && xA.den !== 1 && xM.den !== 1;
+
   
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\) qui passe par \\(A\\) et \\(M\\) </span><br>
@@ -977,10 +980,24 @@ if (afficherLigneMD) {
      } \\\\
   `;
 }
-  
+
+if (denomBesoinDetail) {
+  texte += `
+  &= \\frac{
+      ${afficherFraction(dy)}
+     }{
+      ${afficherFraction({
+        num: xA.num * xM.den,
+        den: xA.den * xM.den
+      })} ${xM.num < 0 ? "+" : "-"} ${afficherFraction({
+        num: Math.abs(xM.num * xA.den),
+        den: xA.den * xM.den
+      })}
+     } \\\\
+  `;
+}
+
 texte += `
-         &= ${afficherFraction({num: dyBrut.num,den: dyBrut.den})} \\\\
-         &= ${afficherFraction(dy)} \\\\
          &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
         `;
   
