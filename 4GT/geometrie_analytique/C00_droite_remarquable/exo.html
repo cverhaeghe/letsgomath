@@ -948,6 +948,13 @@ const pFrac = fractionIrreductible(
   yA.den * meFrac.den
 );
 
+const dyBesoinMD =
+  yA.den !== yM.den && yA.den !== 1 && yM.den !== 1;
+
+const dxBesoinMD =
+  xA.den !== xM.den && xA.den !== 1 && xM.den !== 1;
+
+const afficherLigneMD = dyBesoinMD || dxBesoinMD;
   
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\) qui passe par \\(A\\) et \\(M\\) </span><br>
@@ -957,9 +964,39 @@ const pFrac = fractionIrreductible(
   m_{g} &= \\frac{\\Delta y}{\\Delta x} \\\\
         &= \\frac{y_A-y_M}{x_A-x_M} \\\\
          &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
+  `;
+
+if (afficherLigneMD) {
+  texte += `
+  &= \\frac{
+      ${afficherFraction({
+        num: yA.num * yM.den,
+        den: yA.den * yM.den
+      })}
+      ${yM.num < 0 ? "+" : "-"}
+      ${afficherFraction({
+        num: Math.abs(yM.num * yA.den),
+        den: yA.den * yM.den
+      })}
+     }{
+      ${afficherFraction({
+        num: xA.num * xM.den,
+        den: xA.den * xM.den
+      })}
+      ${xM.num < 0 ? "+" : "-"}
+      ${afficherFraction({
+        num: Math.abs(xM.num * xA.den),
+        den: xA.den * xM.den
+      })}
+     } \\\\
+  `;
+}
+  
+  texte += `
          &= \\frac{${afficherFraction(dy)}}{${afficherFraction(dx)}} \\\\
          &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
         `;
+  
 if (!fractionEntiers) {
   texte += `
          &= ${afficherProduitFractions(dyN, { num: dxN.den, den: dxN.num })} \\\\
