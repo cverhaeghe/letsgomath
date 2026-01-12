@@ -893,17 +893,6 @@ ${afficherFraction(yM)}
 \\]
 `;
 
-const dyBrut = {
-  num: yM.num * yA.den - yA.num * yM.den,
-  den: yM.den * yA.den
-};
-
-const dy = fractionIrreductible(dyBrut.num, dyBrut.den);
-  
-const dx = fractionIrreductible(
-  xM.num * xA.den - xA.num * xM.den,
-  xM.den * xA.den
-);
 
 const dyN = normaliserSigne(dy);
 const dxN = normaliserSigne(dx);
@@ -954,7 +943,19 @@ const dxMD = {
   den: xA.den * xM.den
 };
 
-  
+ const dyBrut = {
+  num: dyMD.a.num * dyMD.b.den - dyMD.b.num * dyMD.a.den,
+  den: dyMD.den
+};
+
+const dxBrut = {
+  num: dxMD.a.num * dxMD.b.den - dxMD.b.num * dxMD.a.den,
+  den: dxMD.den
+};
+
+const dy = fractionIrreductible(dyBrut.num, dyBrut.den);
+const dx = fractionIrreductible(dxBrut.num, dxBrut.den);
+ 
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\) qui passe par \\(A\\) et \\(M\\) </span><br>
 
