@@ -699,10 +699,18 @@ const mFrac = fractionIrreductible(
 );
 
   
+const mFrac = fractionIrreductible(
+  dy.num * dx.den,
+  dy.den * dx.num
+);
+
+const meFrac = produitFractions(mFrac, xA);
+
 const pFrac = fractionIrreductible(
   yA.num * meFrac.den - meFrac.num * yA.den,
   yA.den * meFrac.den
 );
+
 
   let attendu = "y=";
   attendu += coefXPourEquation(mFrac);
@@ -902,13 +910,6 @@ ${afficherFraction(yM)}
 \\end{aligned}
 \\]
 `;
-
-
-// 🔹 p = yA - m*xA
-const pFrac = fractionIrreductible(
-  yA.num * meFrac.den - meFrac.num * yA.den,
-  yA.den * meFrac.den
-);
 
 const dyBesoinMD =
   yA.den !== yM.den && yA.den !== 1 && yM.den !== 1;
