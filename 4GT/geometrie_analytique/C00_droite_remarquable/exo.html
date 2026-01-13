@@ -698,7 +698,7 @@ const mFrac = fractionIrreductible(
   dy.den * dx.num
 );
 
-const meFrac = produitFractions(mFrac, xA);
+  
 const pFrac = fractionIrreductible(
   yA.num * meFrac.den - meFrac.num * yA.den,
   yA.den * meFrac.den
@@ -904,16 +904,6 @@ ${afficherFraction(yM)}
 `;
 
 
-
-// 🔹 m * xA
-const meFrac = produitFractions(mFrac, xA);
-
-// 🔹 valeur absolue de m*xA (pour affichage)
-const meFracAbs = {
-  num: Math.abs(meFrac.num),
-  den: meFrac.den
-};
-
 // 🔹 p = yA - m*xA
 const pFrac = fractionIrreductible(
   yA.num * meFrac.den - meFrac.num * yA.den,
@@ -966,7 +956,16 @@ const mFrac = fractionIrreductible(
   dy.den * dx.num
 );
 
- 
+// 🔹 m * xA
+const meFrac = produitFractions(mFrac, xA);
+
+// 🔹 valeur absolue de m*xA (pour affichage)
+const meFracAbs = {
+  num: Math.abs(meFrac.num),
+  den: meFrac.den
+}; 
+
+  
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\) qui passe par \\(A\\) et \\(M\\) </span><br>
 
