@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MathJax v3 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+<div class="equation-box" id="equation"></div>
+
+  <input type="text" id="reponse" placeholder="...">
+
+  <button onclick="verifier()">Vérifier</button>
+  <button onclick="corriger()">Résolution</button>
+  <button onclick="generer()">Nouvel exercice</button>
+
+  <p id="feedback" class="feedback"></p>
+  <div id="correction" class="correction"></div>
+
+  <div class="exo-links">
+    <a href="../../4GT_geo_analytique.html">Retour au menu</a>
+  </div>
+</div>
+
+
+  
+<script>
+  /*==============VARIABLES========*/
+let m, p;
+let cas;
+let a, b, c;
+let xA, yA;
+let xB, yB;
+let xC, yC;
+
+  const FRACTIONS_COORD = [
+  { num: 1, den: 2 },
+  { num: 1, den: 3 },
+  { num: 1, den: 4 },
+  { num: 2, den: 3 },
+  { num: 4, den: 3 },
+  { num: 3, den: 2 },
+  { num: 3, den: 4 }
+];
+
+  /*==============FONCTIONS========*/
+
+  function randNonZero(min, max) {
+  let x;
+  do {
+    x = Math.floor(Math.random() * (max - min + 1)) + min;
+  } while (x === 0);
+  return x;
+}
+
+  function pgcd(a, b) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b !== 0) {
+    const r = a % b;
+    a = b;
+    b = r;
+  }
+  return a;
+}
+
+  function decomposerSommePourMilieu(f1, f2) {
+  const lignes = [];
+
+  // Cas 0 + f ou f + 0
+  if (f1.num === 0) {
+    lignes.push(afficherFraction(f2));
+    return lignes;
+  }
+  if (f2.num === 0) {
+    lignes.push(afficherFraction(f1));
+    return lignes;
+  }
+
+  // Deux entiers
+  if (f1.den === 1 && f2.den === 1) {
+    lignes.push((f1.num + f2.num).toString());
+    return lignes;
+  }
+
+  // Même dénominateur
+  if (f1.den === f2.den) {
+    lignes.push(
+      afficherFraction({
+        num: f1.num + f2.num,
+        den: f1.den
+      })
+    );
+    return lignes;
+  }
+
+  // 🔥 Mise au même dénominateur (seulement ici)
+  const f1MD = {
+    num: f1.num * f2.den,
+    den: f1.den * f2.den
+  };
+
+  const f2MD = {
+    num: f2.num * f1.den,
+    den: f1.den * f2.den
+  };
+
+  lignes.push(
+    `${afficherFraction(f1MD)} ${f2MD.num < 0 ? "-" : "+"} ${afficherFraction({
+      num: Math.abs(f2MD.num),
+      den: f2MD.den
+    })}`
+  );
+
+  lignes.push(
+    afficherFraction({
+      num: f1MD.num + f2MD.num,
+      den: f1MD.den
+    })
+  );
+
+  return lignes;
+}
+
+  function sontDeuxEntiers(f1, f2) {
+  return f1.den === 1 && f2.den === 1;
+}
+
+  
+  function sommeFractions(f1, f2) {
+  const den = f1.den * f2.den;
+  const num = f1.num * f2.den + f2.num * f1.den;
+  return fractionIrreductible(num, den);
+}
+
+  function diviserFractionPar2(frac) {
+  // si le numérateur est pair → on divise le numérateur
+  if (frac.num % 2 === 0) {
+    return fractionIrreductible(frac.num / 2, frac.den);
+  }
+
+  // sinon → on multiplie le dénominateur
+  return fractionIrreductible(frac.num, frac.den * 2);
+}
+
+  
+  function afficherFractionDoubleAvecSigne(numFrac, denFrac) {
+  const signe = (numFrac.num * denFrac.num < 0) ? "- " : "";
+
+  const numAbs = {
+    num: Math.abs(numFrac.num),
+    den: numFrac.den
+  };
+
+  const denAbs = {
+    num: Math.abs(denFrac.num),
+    den: denFrac.den
+  };
+
+  const numStr =
+    numAbs.den === 1
+      ? numAbs.num.toString()
+      : `\\frac{${numAbs.num}}{${numAbs.den}}`;
+
+  const denStr =
+    denAbs.den === 1
+      ? denAbs.num.toString()
+      : `\\frac{${denAbs.num}}{${denAbs.den}}`;
+
+  return `${signe}\\frac{${numStr}}{${denStr}}`;
+}
+
+
+
+    
+  function fractionIrreductible(a, b) {
+  if (b === 0) throw new Error("Division par 0 interdite");
+
+  let num = a;
+  let den = b;
+
+  const d = pgcd(num, den);
+  num /= d;
+  den /= d;
+
+  // normalisation du signe
+  if (den < 0) {
+    num = -num;
+    den = -den;
+  }
+
+  return { num, den };
+}
+
+function afficherFractionAvecParentheses(frac) {
+  const f = normaliserSigne(frac);
+  const s = afficherFraction(f);
+  return f.num < 0 ? `(${s})` : s;
+}
+  
+  
+  function normaliser(str) {
+  return str
+    .replace(/\s+/g, "")
+    .replace(",", ".")
+    .toLowerCase();
+}
+
+  function normaliserFractionDouble(numFrac, denFrac) {
+  // copie pour ne pas modifier les originaux
+  let n = { ...numFrac };
+  let d = { ...denFrac };
+
+  // si le dénominateur est négatif → on remonte le signe
+  if (d.num < 0) {
+    d.num = -d.num;
+    n.num = -n.num;
+  }
+
+  return { num: n, den: d };
+}
+
+  function termeX(coef) {
+  if (coef === 0) return "";
+  if (coef === 1) return "x";
+  if (coef === -1) return "-x";
+  return `${coef}x`;
+}
+
+  function normaliserSigne(frac) {
+  if (frac.den < 0) {
+    return { num: -frac.num, den: -frac.den };
+  }
+  return frac;
+}
+
+  
+  function randomCoord() {
+
+  // 70 % entier / 40 % fraction (modifiable si tu veux)
+  if (Math.random() < 0.7) {
+
+    // entier entre -4 et 4
+    let n;
+    do {
+      n = Math.floor(Math.random() * 9) - 4;
+    } while (n === 0 && Math.random() < 0.2); // évite trop de zéros
+
+    return { num: n, den: 1 };
+
+  } else {
+
+    // fraction parmi la liste
+    const f = FRACTIONS_COORD[
+      Math.floor(Math.random() * FRACTIONS_COORD.length)
+    ];
+
+    const sign = Math.random() < 0.5 ? -1 : 1;
+
+return {
+  num: sign * f.num,
+  den: f.den
+};
+
+  }
+}
+
+function afficherSommeCoord(f1, f2) {
+  const f2Norm = normaliserSigne(f2);
+
+  const signe = f2Norm.num < 0 ? " - " : " + ";
+  const terme2 = afficherFraction({
+    num: Math.abs(f2Norm.num),
+    den: f2Norm.den
+  });
+
+  return `${afficherFraction(f1)}${signe}${terme2}`;
+}
+
+function afficherFraction(frac) {
+  const { num, den } = frac;
+
+  if (den === 1) return num.toString();
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}`;
+}
+
+
+  
+  function afficherEntierAvecParentheses(n) {
+  return n < 0 ? `(${n})` : n.toString();
+}
+
+  function termeConstante(c) {
+  if (c === 0) return "";
+  return c > 0 ? `+${c}` : `${c}`;
+}
+
+  function normaliserFractions(str) {
+  return str
+    .replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, "$1/$2");
+}
+
+  
+  function fractionLaTeX(num, den){
+  if(den === 1) return num.toString();
+  return `\\frac{${num}}{${den}}`;
+}
+
+  function Aff(a) {
+  if (a === 1) return "";
+  if (a === -1) return "-";
+  return a.toString();
+}
+
+function coefXPourEquation(frac) {
+  const { num, den } = frac;
+
+  if (num === 0) return "";
+  if (den === 1) {
+    if (num === 1) return "x";
+    if (num === -1) return "-x";
+    return `${num}x`;
+  }
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}x`;
+}
+
+  
+function afficherCoefX(frac) {
+  const { num, den } = frac;
+
+  if (num === 0) return "";
+  if (num === den) return "";
+  if (num === -den) return "-";
+
+  if (den === 1) return num.toString();
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}`;
+  }
+
+  function afficherConstante(frac) {
+  const { num, den } = frac;
+
+  if (num === 0) return "";
+
+  if (den === 1) {
+    return num > 0 ? `+${num}` : `${num}`;
+  }
+
+  return num > 0
+    ? `+\\frac{${num}}{${den}}`
+    : `-\\frac{${Math.abs(num)}}{${den}}`;
+}
+
+  function afficherAvecParentheses(frac) {
+  if (frac.den === 1 && frac.num >= 0) return frac.num.toString();
+  if (frac.den === 1 && frac.num < 0) return `(${frac.num})`;
+  if (frac.num < 0) return `(-\\frac{${Math.abs(frac.num)}}{${frac.den}})`;
+  return `\\frac{${frac.num}}{${frac.den}}`;
+}
+
+  
+  function afficherPente(frac) {
+  const { num, den } = frac;
+
+  if (den === 1) {
+    if (num === 1) return "1";
+    if (num === -1) return "-1";
+    return num.toString();
+  }
+
+  const signe = num < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(num)}}{${den}}`;
+}
+
+  function produitFractionEntier(frac, k) {
+  return fractionIrreductible(frac.num * k, frac.den);
+}
+
+  function afficherSommeFractions(f1, f2) {
+  const f2Norm = normaliserSigne(f2);
+
+  const signe = f2Norm.num < 0 ? " - " : " + ";
+  const terme2 = afficherFraction({
+    num: Math.abs(f2Norm.num),
+    den: f2Norm.den
+  });
+
+  return `${afficherFraction(f1)}${signe}${terme2}`;
+}
+
+  function soustractionEntierFraction(f, frac) {
+  // f - (num/den) = (f*den - num) / den
+  return fractionIrreductible(f * frac.den - frac.num, frac.den);
+}
+
+function opposeInverseLatex(frac) {
+  let { num, den } = frac;
+
+  // Inversion
+  let invNum = den;
+  let invDen = num;
+
+  // Opposé
+  invNum = -invNum;
+
+  // Normalisation du signe
+  if (invDen < 0) {
+    invNum = -invNum;
+    invDen = -invDen;
+  }
+
+  // Cas entier
+  if (invDen === 1) {
+    return invNum.toString();
+  }
+
+  // Affichage LaTeX avec signe DEVANT
+  const signe = invNum < 0 ? "-" : "";
+  return `${signe}\\frac{${Math.abs(invNum)}}{${invDen}}`;
+}
+
+  function afficherFacteur(frac) {
+  if (frac.den === 1) {
+    return Math.abs(frac.num).toString();
+  }
+  return afficherFraction(frac);
+}
+
+function produitFractions(f1, f2) {
+  return fractionIrreductible(
+    f1.num * f2.num,
+    f1.den * f2.den
+  );
+}
+
+  
+function afficherProduitFractions(f1, f2) {
+  // normalisation des signes AVANT affichage
+  const n1 = normaliserSigne(f1);
+  const n2 = normaliserSigne(f2);
+
+  // signe global
+  const signe = (n1.num * n2.num < 0) ? "- " : "";
+
+  // valeurs positives
+  const a = { num: Math.abs(n1.num), den: n1.den };
+  const b = { num: Math.abs(n2.num), den: n2.den };
+
+  return `${signe}${afficherFraction(a)} \\cdot ${afficherFraction(b)}`;
+}
+
+
+  
+  function equationCartesienne(a, b, c) {
+
+  let eq = "";
+
+  // --- terme ax ---
+  if (a !== 0) {
+    if (a === 1) eq += "x";
+    else if (a === -1) eq += "-x";
+    else eq += `${a}x`;
+  }
+
+  // --- terme by ---
+  if (b !== 0) {
+    if (eq !== "") eq += b > 0 ? " + " : " - ";
+    else if (b < 0) eq += "-";
+
+    const absB = Math.abs(b);
+    if (absB === 1) eq += "y";
+    else eq += `${absB}y`;
+  }
+
+  // --- terme constant ---
+  if (c !== 0) {
+    if (eq !== "") eq += c > 0 ? " + " : " - ";
+    else if (c < 0) eq += "-";
+
+    eq += Math.abs(c);
+  }
+
+  return eq + " = 0";
+}
+
+  function equationReduite(m, p) {
+
+  // Cas particulier : droite verticale (sécurité)
+  if (m === null) return "";
+
+  let eq = "y=";
+
+  /* --- terme en x --- */
+  if (m !== 0) {
+    if (m === 1) eq += "x";
+    else if (m === -1) eq += "-x";
+    else eq += `${m}x`;
+  }
+
+  /* --- terme constant --- */
+  if (p !== 0) {
+    if (m === 0) {
+      // éviter y=+2
+      eq += p;
+    } else {
+      eq += p > 0 ? `+${p}` : `${p}`;
+    }
+  }
+
+  /* --- cas m=0 --- */
+  if (m === 0 && p !== 0) {
+    eq = `y=${p}`;
+  }
+
+  return eq;
+}
+
+
+  
+/*===============
+    GENERATION
+================*/
+  
+function generer() {
+
+  document.getElementById("feedback").innerHTML = "";
+  document.getElementById("reponse").value = "";
+  document.getElementById("correction").innerHTML = "";
+  document.getElementById("correction").style.display = "none";
+
+  const r = Math.random() * 100;
+
+  // Point A
+xA = randomCoord();
+yA = randomCoord();
+xB = randomCoord();
+yB = randomCoord();
+xC = randomCoord();
+yC = randomCoord();
+
+  let enonce = "";
+
+  /* ===== CAS 1 : hauteur (33%) ===== */
+  
+  if (r < 1) {
+    
+    cas = 1;
+
+    enonce = `Soit un triangle dont les sommets sont <br>
+    \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
+    \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
+    \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
+    Calcule l'équation réduite de la hauteur \\(h\\) issue du sommet \\( A\\).
+    `;
+
+  }
+
+  /* ===== CAS 2 : médiatrice (33%) ===== */
+  else if (r < 2) {
+
+    cas = 2;
+
+    enonce = `Soit un triangle dont les sommets sont <br>
+    \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
+    \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
+    \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
+    Calcule l'équation réduite de la médiatrice \\(f\\) de \\( [AB] \\).
+    `;
+
+  }
+
+  /* ===== CAS 3 : médiane g (33%) ===== */
+  else {
+
+    cas = 3;
+
+    enonce = `Soit un triangle dont les sommets sont <br>
+    \\(A(${afficherFraction(xA)};${afficherFraction(yA)})\\), 
+    \\(B(${afficherFraction(xB)};${afficherFraction(yB)}) \\) et 
+    \\(C(${afficherFraction(xC)};${afficherFraction(yC)}) \\). <br>
+    Calcule l'équation réduite de la médiane \\(g\\) issue du sommet \\( A\\).
+    `;
+
+  }
+
+  document.getElementById("equation").innerHTML = enonce;
+  MathJax.typeset();
+}
+
+
+
+ /*==============
+     VERFICATION
+==================*/
+
+function verifier() {
+
+  // 🔁 reset du feedback à CHAQUE tentative
+  document.getElementById("feedback").innerHTML = "";
+
+  const rep = normaliser(document.getElementById("reponse").value);
+
+  /* ===== CAS 1 : hauteur ===== */
+if (cas === 1) {
+
+  const attendu = `y=${normaliserFractions(afficherFraction(yA))}`;
+
+  if (
+    normaliser(normaliserFractions(rep)) ===
+    normaliser(attendu)
+  ) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
+}
+
+  /* ===== CAS 2 : médiatrice ===== */
+  
+if (cas === 2) {
+
+const attendu = `x=${normaliserFractions(afficherFraction(xA))}`;
+
+if (
+  normaliser(normaliserFractions(rep)) ===
+  normaliser(attendu)
+) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
+}
+
+
+/* ===== CAS 3 : médiane ===== */
+if (cas === 3) {
+
+const xM = fractionIrreductible(
+  xB.num * xC.den + xC.num * xB.den,
+  2 * xB.den * xC.den
+);
+
+const yM = fractionIrreductible(
+  yB.num * yC.den + yC.num * yB.den,
+  2 * yB.den * yC.den
+);
+
+const dy = fractionIrreductible(
+  yM.num * yA.den - yA.num * yM.den,
+  yM.den * yA.den
+);
+
+const dx = fractionIrreductible(
+  xM.num * xA.den - xA.num * xM.den,
+  xM.den * xA.den
+);
+
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
+
+  
+const mFrac = fractionIrreductible(
+    dy.num * dx.den,
+    dy.den * dx.num
+  );
+
+const meFrac = produitFractions(mFrac, xA);
+const pFrac = fractionIrreductible(
+  yA.num * meFrac.den - meFrac.num * yA.den,
+  yA.den * meFrac.den
+);
+
+  let attendu = "y=";
+  attendu += coefXPourEquation(mFrac);
+  attendu += afficherConstante(pFrac);
+
+  if (
+    normaliser(normaliserFractions(rep)) ===
+    normaliser(normaliserFractions(attendu))
+  ) {
+    document.getElementById("feedback").innerHTML =
+      "<span class='bon'>✅ Bonne réponse !</span>";
+  } else {
+    document.getElementById("feedback").innerHTML =
+      "<span class='faux'>❌ Réponse incorrecte</span>";
+  }
+
+  return;
+}
+
+}
+
+ 
+
+
+  /*==============
+    CORRECTION
+  ===============*/
+
+function corriger() {
+
+  const bloc = document.getElementById("correction");
+
+  // 🔁 TOGGLE : si visible → cacher
+  if (bloc.style.display === "block") {
+    bloc.style.display = "none";
+    return;
+  }
+
+  // sinon → afficher et générer la correction
+  bloc.style.display = "block";
+
+  
+  let texte = `📘 <strong>Résolution</strong><br><br>  `;
+  
+  /* ===== CAS 1 : hauteur ===== */
+
+  if (cas === 1) {
+
+      texte += `Une hauteur est une droite passant par un sommet et perpendiculaire au côté opposé.<br><br>`;
+
+
+    document.getElementById("correction").innerHTML = texte;
+    MathJax.typeset();
+    return;
+  }
+  
+  /* ===== CAS 2 : médiatrice ===== */
+  if (cas === 2) {
+
+      texte += `Une médiatrice est une droite perpendiculaire au côté opposé et passant par le milieu de ce côté.<br><br>`;
+
+
+
+    document.getElementById("correction").innerHTML = texte;
+    MathJax.typeset();
+    return; 
+  }
+
+
+/* ===== CAS 3 : médiane ===== */
+
+if (cas === 3) {
+
+  texte += `La médiane \\( g \\) est la droite passant par le sommet \\( A \\) et par le milieu \\( M \\) du côté opposé à \\( A \\) càd \\( [BC] \\).<br><br>`;
+
+const xB_MD = { num: xB.num * xC.den, den: xB.den * xC.den };
+const xC_MD = { num: xC.num * xB.den, den: xB.den * xC.den };
+
+const yB_MD = { num: yB.num * yC.den, den: yB.den * yC.den };
+const yC_MD = { num: yC.num * yB.den, den: yB.den * yC.den };
+
+const sumX_MD = {
+  num: xB_MD.num + xC_MD.num,
+  den: xB_MD.den
+};
+
+const sumY_MD = {
+  num: yB_MD.num + yC_MD.num,
+  den: yB_MD.den
+};
+
+const lignesX = decomposerSommePourMilieu(xB, xC);
+const lignesY = decomposerSommePourMilieu(yB, yC);
+
+const sumX = sommeFractions(xB, xC);
+const sumY = sommeFractions(yB, yC);
+const xM = diviserFractionPar2(sumX);
+const yM = diviserFractionPar2(sumY);
+
+const xEntiers = sontDeuxEntiers(xB, xC);
+const yEntiers = sontDeuxEntiers(yB, yC);
+const deuxEntiers = xEntiers && yEntiers;
+const xBesoinDetail = !(xB.den === 1 && xC.den === 1 && (xB.num + xC.num) % 2 === 0);
+const yBesoinDetail = !(yB.den === 1 && yC.den === 1 && (yB.num + yC.num) % 2 === 0);
+
+// ─── AFFICHAGE MATHJAX
+texte += `
+<span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span><span style='color: var(--peps)'> calculer le milieu \\( M \\)  de \\([BC]\\)</span><br>
+
+\\[
+\\begin{aligned}
+M
+&=
+\\left(
+\\frac{x_B + x_C}{2}
+\\ ;\\
+\\frac{y_B + y_C}{2}
+\\right) \\\\
+
+&=
+\\left(
+\\frac{${afficherSommeCoord(xB, xC)}}{2}
+\\ ;\\
+\\frac{${afficherSommeCoord(yB, yC)}}{2}
+\\right) \\\\
+\\end{aligned}
+\\]
+`;
+
+ if (xBesoinDetail || yBesoinDetail) {
+  texte += `
+\\[
+\\begin{aligned}
+&=
+\\left(
+\\frac{${xBesoinDetail ? lignesX.at(-1) : afficherFraction(sumX)}}{2}
+\\ ;\\
+\\frac{${yBesoinDetail ? lignesY.at(-1) : afficherFraction(sumY)}}{2}
+\\right)
+\\end{aligned}
+\\]
+`;
+}
+  else{
+// affichage intermédiaire X / Y
+if (lignesX.length === 1 && lignesY.length === 1) {
+  texte += `
+\\[
+\\begin{aligned}
+&=
+\\left(
+\\frac{${lignesX[0]}}{2}
+\\ ;\\
+\\frac{${lignesY[0]}}{2}
+\\right) \\\\
+\\end{aligned}
+\\]
+`;
+} else {
+  texte += `
+\\[
+\\begin{aligned}&=
+\\left(
+\\frac{${lignesX[lignesX.length - 1]}}{2}
+\\ ;\\
+\\frac{${lignesY[lignesY.length - 1]}}{2}
+\\right) \\\\
+\\end{aligned}
+\\]
+`;
+}}
+
+
+texte += `  
+\\[
+\\begin{aligned}
+&=
+\\left(
+${afficherFraction(xM)}
+\\ ;\\
+${afficherFraction(yM)}
+\\right)
+\\end{aligned}
+\\]
+`;
+
+
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
+
+const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
+const fracNorm = normaliserFractionDouble(dyN, dxN);
+
+  // 🔹 pente de la médiane
+const mFrac = fractionIrreductible(
+  dy.num * dx.den,
+  dy.den * dx.num
+);
+
+// 🔹 m * xA
+const meFrac = produitFractions(mFrac, xA);
+
+// 🔹 valeur absolue de m*xA (pour affichage)
+const meFracAbs = {
+  num: Math.abs(meFrac.num),
+  den: meFrac.den
+};
+
+// 🔹 p = yA - m*xA
+const pFrac = fractionIrreductible(
+  yA.num * meFrac.den - meFrac.num * yA.den,
+  yA.den * meFrac.den
+);
+
+const dyBesoinMD =
+  yA.den !== yM.den && yA.den !== 1 && yM.den !== 1;
+
+const dxBesoinMD =
+  xA.den !== xM.den && xA.den !== 1 && xM.den !== 1;
+
+const afficherLigneMD = dyBesoinMD || dxBesoinMD;
+const denomBesoinDetail =
+  xA.den !== xM.den && xA.den !== 1 && xM.den !== 1;
+
+const dyMD = {
+  a: yA,
+  b: yM,
+  den: yA.den * yM.den
+};
+
+const dxMD = {
+  a: xA,
+  b: xM,
+  den: xA.den * xM.den
+};
+
+ const dyBrut = {
+  num: dyMD.a.num * dyMD.b.den - dyMD.b.num * dyMD.a.den,
+  den: dyMD.den
+};
+
+const dxBrut = {
+  num: dxMD.a.num * dxMD.b.den - dxMD.b.num * dxMD.a.den,
+  den: dxMD.den
+};
+
+const dy = fractionIrreductible(dyBrut.num, dyBrut.den);
+const dx = fractionIrreductible(dxBrut.num, dxBrut.den);
+ 
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\) qui passe par \\(A\\) et \\(M\\) </span><br>
+
+  \\[
+  \\begin{aligned}
+  m_{g} &= \\frac{\\Delta y}{\\Delta x} \\\\
+        &= \\frac{y_A-y_M}{x_A-x_M} \\\\
+         &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
+  `;
+
+  texte += `
+&= \\frac{
+    ${afficherFraction({
+      num: dyMD.a.num * dyMD.b.den,
+      den: dyMD.den
+    })}
+    ${dyMD.b.num < 0 ? "+" : "-"}
+    ${afficherFraction({
+      num: Math.abs(dyMD.b.num * dyMD.a.den),
+      den: dyMD.den
+    })}
+   }{
+    ${afficherFraction({
+      num: dxMD.a.num * dxMD.b.den,
+      den: dxMD.den
+    })}
+    ${dxMD.b.num < 0 ? "+" : "-"}
+    ${afficherFraction({
+      num: Math.abs(dxMD.b.num * dxMD.a.den),
+      den: dxMD.den
+    })}
+   } \\\\
+`;
+
+  
+if (afficherLigneMD) {
+  texte += `
+  &= \\frac{
+      ${dyBesoinMD
+        ? `${afficherFraction({
+            num: yA.num * yM.den,
+            den: yA.den * yM.den
+          })} ${yM.num < 0 ? "+" : "-"} ${afficherFraction({
+            num: Math.abs(yM.num * yA.den),
+            den: yA.den * yM.den
+          })}`
+        : afficherFraction(dy)
+      }
+     }{
+      ${dxBesoinMD
+        ? `${afficherFraction({
+            num: xA.num * xM.den,
+            den: xA.den * xM.den
+          })} ${xM.num < 0 ? "+" : "-"} ${afficherFraction({
+            num: Math.abs(xM.num * xA.den),
+            den: xA.den * xM.den
+          })}`
+        : afficherFraction(dx)
+      }
+     } \\\\
+  `;
+}
+
+if (denomBesoinDetail) {
+  texte += `
+  &= \\frac{
+      ${afficherFraction(dy)}
+     }{
+      ${afficherFraction({
+        num: xA.num * xM.den,
+        den: xA.den * xM.den
+      })} ${xM.num < 0 ? "+" : "-"} ${afficherFraction({
+        num: Math.abs(xM.num * xA.den),
+        den: xA.den * xM.den
+      })}
+     } \\\\
+  `;
+}
+
+// Affichage intermédiaire seulement si ce n'est PAS déjà un entier
+if (!fractionEntiers) {
+  texte += `
+         &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
+         &= ${afficherProduitFractions(dyN, { num: dxN.den, den: dxN.num })} \\\\
+  `;
+}
+
+// Affichage final UNIQUE
+texte += `
+         &= ${afficherPente(mFrac)} \\\\
+`;
+
+texte += `
+   \\[  
+   \\Rightarrow g \\equiv y = ${afficherCoefX(mFrac)}x + p   
+   \\]<br>
+  `;
+
+  const denCommun = yA.den * meFracAbs.den;
+
+const fMD = {
+  num: yA.num * meFracAbs.den,
+  den: denCommun
+};
+
+const meMD = {
+  num: meFracAbs.num * yA.den,
+  den: denCommun
+};
+
+
+
+
+  
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Étape 3 :</span> <span style='color: var(--peps)'> calculer le \\(p\\) de \\(g\\)</span><br>
+
+  \\[
+  \\begin{aligned}
+  A(${afficherFraction(xA)};${afficherFraction(yA)}) \\in g   
+  &\\Rightarrow ${afficherFraction(yA)} = ${afficherCoefX(mFrac)} \\cdot ${afficherAvecParentheses(xA)} + p \\\\
+  &\\Rightarrow ${afficherFraction(yA)} = ${meFrac.num < 0 ? "-" : ""} ${afficherPente(meFracAbs)} + p \\\\
+  `;
+
+  // ligne 3 : seulement si le produit n'est pas nul
+  if (meFrac.num !== 0) {
+    texte += `
+  &\\Rightarrow ${afficherFraction(yA)} ${meFrac.num < 0 ? "+" : "-"} ${afficherPente(meFracAbs)} = p \\\\
+  `;
+  }
+
+  // ligne "mise au même dénominateur"
+if (yA.den !== meFracAbs.den) {
+  texte += `
+&\\Rightarrow ${afficherFraction(fMD)} ${meFrac.num < 0 ? "+" : "-"} ${afficherFraction(meMD)} = p \\\\
+`;
+}
+
+  // ligne finale
+  texte += `
+  &\\Rightarrow p = ${afficherFraction(pFrac)}
+  \\end{aligned}
+  \\]
+  `;
+
+  texte += `
+  <span style='color: var(--peps); font-weight: bold;'>Étape 4 :</span> <span style='color: var(--peps)'> donner l'équation finale</span><br>
+
+\\[
+\\boxed{
+g \\equiv y = ${afficherCoefX(mFrac)}x ${afficherConstante(pFrac)}
+}
+\\]`
+
+
+}
+  
+  document.getElementById("correction").innerHTML = texte;
+  MathJax.typeset();
+}
+
+
+generer();
+</script>
+
+     
+  <!-- Protection clique droit (commun à tout le site) -->
+  <script src="../../../js/protection.js"></script>
+  
+</body>
+</html>
