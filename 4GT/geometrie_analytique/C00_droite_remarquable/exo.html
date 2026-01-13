@@ -78,6 +78,10 @@ let xC, yC;
   return x;
 }
 
+  function ppcm(a, b) {
+  return Math.abs(a * b) / pgcd(a, b);
+}
+
   function pgcd(a, b) {
   a = Math.abs(a);
   b = Math.abs(b);
@@ -89,7 +93,7 @@ let xC, yC;
   return a;
 }
 
-  function decomposerSommePourMilieu(f1, f2) {
+ function decomposerSommePourMilieu(f1, f2) {
   const lignes = [];
 
   // 1️⃣ Deux entiers
@@ -98,7 +102,7 @@ let xC, yC;
     return lignes;
   }
 
-  // 2️⃣ Zéro + quelque chose
+  // 2️⃣ Zéro
   if (f1.num === 0) {
     lignes.push(afficherFraction(f2));
     return lignes;
@@ -108,8 +112,15 @@ let xC, yC;
     return lignes;
   }
 
-  // 3️⃣ Même dénominateur
+  // 3️⃣ Même dénominateur → on le garde
   if (f1.den === f2.den) {
+    lignes.push(
+      `${afficherFraction(f1)} ${f2.num < 0 ? "-" : "+"} ${afficherFraction({
+        num: Math.abs(f2.num),
+        den: f2.den
+      })}`
+    );
+
     lignes.push(
       afficherFraction({
         num: f1.num + f2.num,
@@ -119,36 +130,38 @@ let xC, yC;
     return lignes;
   }
 
-  // 4️⃣ CAS DIDACTIQUE OBLIGATOIRE : mise au même dénominateur
+  // 4️⃣ Dénominateurs différents → PPCM
+  const den = ppcm(f1.den, f2.den);
+
   const f1MD = {
-    num: f1.num * f2.den,
-    den: f1.den * f2.den
+    num: f1.num * (den / f1.den),
+    den
   };
 
-const f2MD = {
-    num: f2.num * f1.den,
-    den: f1.den * f2.den
+  const f2MD = {
+    num: f2.num * (den / f2.den),
+    den
   };
 
-const signe = f2.num < 0 ? "-" : "+";
+  const signe = f2.num < 0 ? "-" : "+";
 
-lignes.push(
-  `${afficherFraction(f1MD)} ${signe} ${afficherFraction({
-    num: Math.abs(f2MD.num),
-    den: f2MD.den
-  })}`
-);
-
+  lignes.push(
+    `${afficherFraction(f1MD)} ${signe} ${afficherFraction({
+      num: Math.abs(f2MD.num),
+      den
+    })}`
+  );
 
   lignes.push(
     afficherFraction({
       num: f1MD.num + f2MD.num,
-      den: f1MD.den
+      den
     })
   );
 
   return lignes;
 }
+
 
 
   function sontDeuxEntiers(f1, f2) {
