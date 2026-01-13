@@ -833,7 +833,7 @@ const xMDExplicit =
     ? `${afficherFraction({
         num: xB.num * xC.den,
         den: xB.den * xC.den
-      })} ${xC.num < 0 ? "+" : "-"} ${afficherFraction({
+      })} ${xC.num < 0 ? "-" : "+"} ${afficherFraction({
         num: Math.abs(xC.num * xB.den),
         den: xB.den * xC.den
       })}`
