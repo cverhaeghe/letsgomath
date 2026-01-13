@@ -903,14 +903,7 @@ ${afficherFraction(yM)}
 \\]
 `;
 
-const dyN = normaliserSigne(dy);
-const dxN = normaliserSigne(dx);
 
-  // 🔹 pente de la médiane
-const mFrac = fractionIrreductible(
-  dy.num * dx.den,
-  dy.den * dx.num
-);
 
 // 🔹 m * xA
 const meFrac = produitFractions(mFrac, xA);
