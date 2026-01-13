@@ -693,7 +693,10 @@ const dx = fractionIrreductible(
   xM.den * xA.den
 );
 
-
+const mFrac = fractionIrreductible(
+  dy.num * dx.den,
+  dy.den * dx.num
+);
 
 const meFrac = produitFractions(mFrac, xA);
 const pFrac = fractionIrreductible(
@@ -817,22 +820,6 @@ const xMDExplicit =
       })}`
     : null;
 
-const dy = fractionIrreductible(dyBrut.num, dyBrut.den);
-const dx = fractionIrreductible(dxBrut.num, dxBrut.den);
-
-const dyN = normaliserSigne(dy);
-const dxN = normaliserSigne(dx);
-
-const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
-const fracNorm = normaliserFractionDouble(dyN, dxN);
-
-// pente finale
-const mFrac = fractionIrreductible(
-  dy.num * dx.den,
-  dy.den * dx.num
-);
-
-  
 // ─── AFFICHAGE MATHJAX
 texte += `
 <span style='color: var(--peps); font-weight: bold;'>Étape 1 :</span><span style='color: var(--peps)'> calculer le milieu \\( M \\)  de \\([BC]\\)</span><br>
@@ -974,6 +961,18 @@ const dxBrut = {
 
 const dy = fractionIrreductible(dyBrut.num, dyBrut.den);
 const dx = fractionIrreductible(dxBrut.num, dxBrut.den);
+
+const dyN = normaliserSigne(dy);
+const dxN = normaliserSigne(dx);
+
+const fractionEntiers = (dyN.den === 1 && dxN.den === 1);
+const fracNorm = normaliserFractionDouble(dyN, dxN);
+
+const mFrac = fractionIrreductible(
+  dy.num * dx.den,
+  dy.den * dx.num
+);
+
  
   texte += `
   <span style='color: var(--peps); font-weight: bold;'>Étape 2 :</span> <span style='color: var(--peps)'> calculer la pente de \\(g\\) qui passe par \\(A\\) et \\(M\\) </span><br>
