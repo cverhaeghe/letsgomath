@@ -943,9 +943,6 @@ const meFracAbs = {
   m_{g} &= \\frac{\\Delta y}{\\Delta x} \\\\
         &= \\frac{y_A-y_M}{x_A-x_M} \\\\
         &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
-  `;
-
-  texte += `
 &= \\frac{
     ${afficherFraction({
       num: dyMD.a.num * dyMD.b.den,
@@ -967,65 +964,7 @@ const meFracAbs = {
       den: dxMD.den
     })}
    } \\\\
-`;
-
-  
-if (afficherLigneMD) {
-  texte += `
-  &= \\frac{
-      ${dyBesoinMD
-        ? `${afficherFraction({
-            num: yA.num * yM.den,
-            den: yA.den * yM.den
-          })} ${yM.num < 0 ? "+" : "-"} ${afficherFraction({
-            num: Math.abs(yM.num * yA.den),
-            den: yA.den * yM.den
-          })}`
-        : afficherFraction(dy)
-      }
-     }{
-      ${dxBesoinMD
-        ? `${afficherFraction({
-            num: xA.num * xM.den,
-            den: xA.den * xM.den
-          })} ${xM.num < 0 ? "+" : "-"} ${afficherFraction({
-            num: Math.abs(xM.num * xA.den),
-            den: xA.den * xM.den
-          })}`
-        : afficherFraction(dx)
-      }
-     } \\\\
-  `;
-}
-
-if (denomBesoinDetail) {
-  texte += `
-  &= \\frac{
-      ${afficherFraction(dy)}
-     }{
-      ${afficherFraction({
-        num: xA.num * xM.den,
-        den: xA.den * xM.den
-      })} ${xM.num < 0 ? "+" : "-"} ${afficherFraction({
-        num: Math.abs(xM.num * xA.den),
-        den: xA.den * xM.den
-      })}
-     } \\\\
-  `;
-}
-
-// Affichage intermédiaire seulement si ce n'est PAS déjà un entier
-if (!fractionEntiers) {
-  texte += `
-         &= ${afficherFractionDoubleAvecSigne(fracNorm.num, fracNorm.den)} \\\\
-         &= ${afficherProduitFractions(dyN, { num: dxN.den, den: dxN.num })} \\\\
-  `;
-}
-
-// Affichage final UNIQUE
-texte += `
-         &= ${afficherPente(mFrac)} \\\\
-
+  &= ${afficherPente(mFrac)} \\\\
 \\end{aligned}
 \\]
 `;
