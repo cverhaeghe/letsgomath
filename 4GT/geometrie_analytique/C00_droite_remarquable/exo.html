@@ -125,17 +125,20 @@ let xC, yC;
     den: f1.den * f2.den
   };
 
-  const f2MD = {
+const f2MD = {
     num: f2.num * f1.den,
     den: f1.den * f2.den
   };
 
-  lignes.push(
-    `${afficherFraction(f1MD)} ${f2MD.num < 0 ? "-" : "+"} ${afficherFraction({
-      num: Math.abs(f2MD.num),
-      den: f2MD.den
-    })}`
-  );
+const signe = f2.num < 0 ? "-" : "+";
+
+lignes.push(
+  `${afficherFraction(f1MD)} ${signe} ${afficherFraction({
+    num: Math.abs(f2MD.num),
+    den: f2MD.den
+  })}`
+);
+
 
   lignes.push(
     afficherFraction({
