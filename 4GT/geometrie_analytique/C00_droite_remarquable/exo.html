@@ -131,7 +131,7 @@ let xC, yC;
   };
 
   lignes.push(
-    `${afficherFraction(f1MD)} ${f2MD.num < 0 ? "-" : "+"} ${afficherFraction({
+    `${afficherFraction(f1MD)} ${f2MD.num < 0 ? "+" : "-"} ${afficherFraction({
       num: Math.abs(f2MD.num),
       den: f2MD.den
     })}`
