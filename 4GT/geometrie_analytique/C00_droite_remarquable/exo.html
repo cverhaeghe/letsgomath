@@ -1099,6 +1099,14 @@ if (yA.den !== meFracAbs.den) {
 `;
 }
 
+ // calcul de p : p = yA - m xA
+const meFrac = produitFractions(mFrac, xA);
+
+const pFrac = fractionIrreductible(
+  yA.num * meFrac.den - meFrac.num * yA.den,
+  yA.den * meFrac.den
+);
+ 
   // ligne finale
   texte += `
   &\\Rightarrow p = ${afficherFraction(pFrac)}
