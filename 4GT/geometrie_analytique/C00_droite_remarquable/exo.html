@@ -92,7 +92,13 @@ let xC, yC;
   function decomposerSommePourMilieu(f1, f2) {
   const lignes = [];
 
-  // Cas 0 + f ou f + 0
+  // 1️⃣ Deux entiers
+  if (f1.den === 1 && f2.den === 1) {
+    lignes.push((f1.num + f2.num).toString());
+    return lignes;
+  }
+
+  // 2️⃣ Zéro + quelque chose
   if (f1.num === 0) {
     lignes.push(afficherFraction(f2));
     return lignes;
@@ -102,13 +108,7 @@ let xC, yC;
     return lignes;
   }
 
-  // Deux entiers
-  if (f1.den === 1 && f2.den === 1) {
-    lignes.push((f1.num + f2.num).toString());
-    return lignes;
-  }
-
-  // Même dénominateur
+  // 3️⃣ Même dénominateur
   if (f1.den === f2.den) {
     lignes.push(
       afficherFraction({
@@ -119,7 +119,7 @@ let xC, yC;
     return lignes;
   }
 
-  // 🔥 Mise au même dénominateur (seulement ici)
+  // 4️⃣ CAS DIDACTIQUE OBLIGATOIRE : mise au même dénominateur
   const f1MD = {
     num: f1.num * f2.den,
     den: f1.den * f2.den
@@ -146,6 +146,7 @@ let xC, yC;
 
   return lignes;
 }
+
 
   function sontDeuxEntiers(f1, f2) {
   return f1.den === 1 && f2.den === 1;
