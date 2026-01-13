@@ -861,7 +861,29 @@ M
 \\ ;\\
 \\frac{${afficherSommeCoord(yB, yC)}}{2}
 \\right) \\\\
+\end{aligned}
+\]
+`;
 
+  
+if (lignesX.length === 2 || lignesY.length === 2) {
+  texte += String.raw`
+\[
+\begin{aligned}
+&=
+\left(
+${lignesX.length === 2 ? lignesX[0] : afficherFraction(xB.num + xC.num)}
+\ ;
+${lignesY.length === 2 ? lignesY[0] : afficherFraction(yB.num + yC.num)}
+\right)\\\\
+\end{aligned}
+\]
+`;
+}
+
+texte += `
+\\[
+\\begin{aligned}
 &=
 \\left(
 \\frac{${lignesX[lignesX.length - 1]}}{2}
