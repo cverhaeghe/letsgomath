@@ -848,6 +848,8 @@ M
 \\]
 `;
 
+
+
 if (xBesoinDetail || yBesoinDetail) {
   texte += `
 \\[
@@ -855,21 +857,6 @@ if (xBesoinDetail || yBesoinDetail) {
 &=
 \\left(
 \\frac{${xBesoinDetail ? xMDExplicit : afficherFraction(sumX)}}{2}
-\\ ;\\
-\\frac{${yBesoinDetail ? lignesY.at(-1) : afficherFraction(sumY)}}{2}
-\\right)
-\\end{aligned}
-\\]
-`;
-}
-
- if (xBesoinDetail || yBesoinDetail) {
-  texte += `
-\\[
-\\begin{aligned}
-&=
-\\left(
-\\frac{${xBesoinDetail ? lignesX.at(-1) : afficherFraction(sumX)}}{2}
 \\ ;\\
 \\frac{${yBesoinDetail ? lignesY.at(-1) : afficherFraction(sumY)}}{2}
 \\right)
