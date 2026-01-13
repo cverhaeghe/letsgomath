@@ -93,16 +93,16 @@ let xC, yC;
   return a;
 }
 
- function decomposerSommePourMilieu(f1, f2) {
+function decomposerSommePourMilieu(f1, f2) {
   const lignes = [];
 
-  // 1️⃣ Deux entiers
+  // 1️⃣ Deux entiers → addition directe
   if (f1.den === 1 && f2.den === 1) {
     lignes.push((f1.num + f2.num).toString());
     return lignes;
   }
 
-  // 2️⃣ Zéro
+  // 2️⃣ Présence de zéro → on garde l’autre
   if (f1.num === 0) {
     lignes.push(afficherFraction(f2));
     return lignes;
@@ -112,7 +112,7 @@ let xC, yC;
     return lignes;
   }
 
-  // 3️⃣ Même dénominateur → on le garde
+  // 3️⃣ Même dénominateur → addition directe
   if (f1.den === f2.den) {
     lignes.push(
       `${afficherFraction(f1)} ${f2.num < 0 ? "-" : "+"} ${afficherFraction({
@@ -143,10 +143,8 @@ let xC, yC;
     den
   };
 
-  const signe = f2.num < 0 ? "-" : "+";
-
   lignes.push(
-    `${afficherFraction(f1MD)} ${signe} ${afficherFraction({
+    `${afficherFraction(f1MD)} ${f2.num < 0 ? "-" : "+"} ${afficherFraction({
       num: Math.abs(f2MD.num),
       den
     })}`
@@ -868,7 +866,19 @@ M
 `;
 
 
+\\[
+\\begin{aligned}
+&=
+\\left(
+\\frac{${lignesX[lignesX.length - 1]}}{2}
+\\ ;\\
+\\frac{${lignesY[lignesY.length - 1]}}{2}
+\\right)
+\\end{aligned}
+\\]
 
+
+  
 
 
 texte += `  
