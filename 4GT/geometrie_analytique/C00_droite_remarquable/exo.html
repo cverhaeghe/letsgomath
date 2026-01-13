@@ -907,10 +907,10 @@ ${afficherFraction(yM)}
 `;
 
 const dyBesoinMD =
-  yA.den !== yM.den && yA.den !== 1 && yM.den !== 1;
-
+  !(yA.den === 1 && yM.den === 1);
 const dxBesoinMD =
-  xA.den !== xM.den && xA.den !== 1 && xM.den !== 1;
+  !(xA.den === 1 && xM.den === 1);
+
 
 const afficherLigneMD = dyBesoinMD || dxBesoinMD;
 const denomBesoinDetail =
