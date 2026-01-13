@@ -942,7 +942,7 @@ const meFracAbs = {
   \\begin{aligned}
   m_{g} &= \\frac{\\Delta y}{\\Delta x} \\\\
         &= \\frac{y_A-y_M}{x_A-x_M} \\\\
-         &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
+        &= \\frac{${afficherFraction(yA)}-${afficherAvecParentheses(yM)}} {${afficherFraction(xA)}-${afficherAvecParentheses(xM)}} \\\\
   `;
 
   texte += `
@@ -1025,15 +1025,18 @@ if (!fractionEntiers) {
 // Affichage final UNIQUE
 texte += `
          &= ${afficherPente(mFrac)} \\\\
-`;
 
+\\end{aligned}
+\\[
+`;
+  
 texte += `
    \\[  
    \\Rightarrow g \\equiv y = ${afficherCoefX(mFrac)}x + p   
    \\]<br>
   `;
 
-  const denCommun = yA.den * meFracAbs.den;
+const denCommun = yA.den * meFracAbs.den;
 
 const fMD = {
   num: yA.num * meFracAbs.den,
