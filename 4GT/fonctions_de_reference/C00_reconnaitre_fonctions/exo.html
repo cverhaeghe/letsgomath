@@ -276,7 +276,6 @@ function verifier(reponseEleve, element) {
   // Bonne réponse
   if (reponseEleve === typeEquation) {
     element.classList.add('correct');
-    feedback.innerHTML = "✔️ Bonne réponse !";
     cards.forEach(card => card.style.pointerEvents = "none");
     return;
   }
@@ -293,8 +292,6 @@ function verifier(reponseEleve, element) {
   }
 
   // 2e échec : on montre la bonne réponse
-  feedback.innerHTML = "❌ La bonne réponse est indiquée.";
-
   cards.forEach(card => card.style.pointerEvents = "none");
 
   const bonneCarte = Array.from(cards).find(c =>
