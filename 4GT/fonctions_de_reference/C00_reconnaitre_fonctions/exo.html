@@ -113,7 +113,7 @@ function tracerCourbe(fonction) {
   let path = "";
   let first = true;
 
-  for (let x = xmin; x <= xmax; x += 0.05) {
+  for (let x = xmin; x <= xmax; x += 0.01) {
     let y = fonction(x);
 
     if (!isFinite(y)) {
