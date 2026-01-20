@@ -154,9 +154,19 @@ function genererEquation() {
   typeEquation = types[Math.floor(Math.random() * types.length)];
 
   switch (typeEquation) {
-    case "carrée":
-      tracerCourbe(x => x * x);
-      break;
+case "carrée":
+
+  // Point exact (0,0) → continuité visible
+  svg.innerHTML += `
+    <circle cx="${xToPx(0)}"
+            cy="${yToPx(0)}"
+            r="0.1"
+            fill="var(--lgm-orange)"/>
+  `;
+
+  tracerCourbe(x => x * x);
+  break;
+
 
 case "cube":
 
