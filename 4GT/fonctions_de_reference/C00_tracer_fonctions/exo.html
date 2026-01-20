@@ -30,7 +30,7 @@
   <h1>Exercice</h1>
 
   <p>
-    Trace la fonction <strong>carrée </strong> en plaçant les 4 à 6 points de base nécessaire.
+    Trace la fonction <strong>carrée </strong> en plaçant les 4 à 6 points de base nécessaires.
     <br>
   </p>
 
@@ -132,6 +132,9 @@ function dessinerRepere(){
   svg.removeChild(elementSVG);
 }
 
+function pointEstCorrect(x, y) {
+  return pointsCles.some(p => p.x === x && p.y === y);
+}
 
 /* ====================== INTERACTION ====================== */
 svg.addEventListener("click", function(e) {
@@ -154,26 +157,34 @@ svg.addEventListener("click", function(e) {
 });
 
 
-/* ====================== VALIDATION ====================== */
+/* ====================== VERIFICATION ====================== */
 function verifierExercice() {
   const feedback = document.getElementById("feedback");
+  let toutCorrect = true;
 
-  if (pointsEleve.length !== pointsCles.length) {
-    feedback.innerHTML = "❌ Le nombre de points n’est pas correct.";
+  const cercles = svg.querySelectorAll("circle");
+
+  cercles.forEach(c => {
+    const x = parseInt(c.dataset.x);
+    const y = parseInt(c.dataset.y);
+
+    if (pointEstCorrect(x, y)) {
+      c.setAttribute("fill", "blue");
+    } else {
+      c.setAttribute("fill", "red");
+      toutCorrect = false;
+    }
+  });
+
+  if (!toutCorrect || pointsEleve.length !== pointsCles.length) {
+    feedback.innerHTML = "❌ Certains points sont incorrects.";
     return;
   }
 
-  for (const p of pointsCles) {
-    const trouve = pointsEleve.some(e => e.x === p.x && e.y === p.y);
-    if (!trouve) {
-      feedback.innerHTML = "❌ Les points ne correspondent pas.";
-      return;
-    }
-  }
-
   feedback.innerHTML = "✔️ Tous les points sont corrects.";
-  tracerCourbe(x => x*x);
+  tracerCourbe(x => x * x);
 }
+
 
 /* ====================== COURBE ====================== */
 function tracerCourbe(fonction) {
