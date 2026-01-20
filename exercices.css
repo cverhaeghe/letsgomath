@@ -95,10 +95,10 @@
 }
 
 /* ===============================
-   QCM en cartes (2x2)
+   QCM en cartes
    =============================== */
 
-.qcm-grid {
+.qcm-grid { /* choix entre 4 réponses */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
@@ -111,6 +111,18 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 × 2 */
   gap: 12px;
+}
+
+
+.qcm-5 {  /* choix entre 5 réponses */  
+   display: grid;
+   grid-template-columns: repeat(3, 1fr);   
+   gap: 12px;
+       }
+.qcm-8 { /* choix entre 8 réponses */
+   display: grid;
+   grid-template-columns: repeat(4, 1fr);   
+   gap: 12px;
 }
 
 .qcm-card {
