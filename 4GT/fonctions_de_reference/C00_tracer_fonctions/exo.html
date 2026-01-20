@@ -70,6 +70,8 @@ const pointsCles = [
   { x:  2, y: 4 }
 ];
 
+let fonctionCourante = null;
+let pointsCles = [];
 let pointsEleve = [];
 
 /* ====================== OUTILS ====================== */
@@ -212,6 +214,26 @@ function pointEstCorrect(x, y) {
   return pointsCles.some(p => p.x === x && p.y === y);
 }
 
+/* ====================== GENERATION ====================== */
+
+  function genererExercice() {
+  dessinerRepere();
+  pointsEleve = [];
+  document.getElementById("feedback").innerHTML = "";
+
+  const cles = Object.keys(fonctionsReference);
+  const choix = cles[Math.floor(Math.random() * cles.length)];
+
+  fonctionCourante = fonctionsReference[choix];
+  pointsCles = fonctionCourante.points;
+
+  // Mise à jour de l’énoncé
+  document.querySelector(".exo-container p").innerHTML =
+    `Trace la fonction <strong>${fonctionCourante.label}</strong> 
+     en plaçant les points de base nécessaires.`;
+}
+
+  
 /* ====================== INTERACTION ====================== */
 svg.addEventListener("click", function(e) {
 
