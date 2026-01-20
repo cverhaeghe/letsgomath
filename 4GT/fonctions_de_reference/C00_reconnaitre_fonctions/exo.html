@@ -111,10 +111,14 @@ function tracerCourbe(fonction) {
   for (let x = xmin; x <= xmax; x += 0.005) {
     let y = fonction(x);
 
-    if (!isFinite(y)) {
-      first = true;
-      continue;
-    }
+if (
+  !isFinite(y) ||
+  y > ymax || y < ymin
+) {
+  first = true;
+  continue;
+}
+
 
     const px = xToPx(x);
     const py = yToPx(y);
