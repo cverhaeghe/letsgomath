@@ -74,16 +74,11 @@ const ymin = -5, ymax = 5;
 
 /* ====================== VARIABLES ====================== */
 let typeEquation = "";
-
+let dernieresFonctions = [];
 
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
 function yToPx(y){ return height/2 - y*unit; }
-
-
-
-
-
 
   
 /* ====================== REPERE ====================== */
@@ -142,6 +137,30 @@ function tracerCourbe(fonction) {
 }
 
 
+
+function tirerFonctionSansABA() {
+  const toutes = ["carrée", "cube", "valabs", "racine", "cubique", "inverse"];
+
+  // On exclut les deux dernières fonctions
+  let candidates = toutes.filter(f => !dernieresFonctions.includes(f));
+
+  // Sécurité (au cas très improbable où il n'y aurait plus de candidates)
+  if (candidates.length === 0) {
+    candidates = toutes;
+  }
+
+  const choix = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Mise à jour de l'historique
+  dernieresFonctions.push(choix);
+  if (dernieresFonctions.length > 2) {
+    dernieresFonctions.shift(); // on garde seulement les 2 dernières
+  }
+
+  return choix;
+}
+
+  
 /* ====================== GENERATION ====================== */
 function genererEquation() {
   document.getElementById("feedback").innerHTML = "";
@@ -153,9 +172,9 @@ function genererEquation() {
   });
 
   dessinerRepere();
+  
+typeEquation = tirerFonctionSansABA();
 
-  const types = ["carrée", "cube", "valabs", "racine", "cubique", "inverse"];
-  typeEquation = types[Math.floor(Math.random() * types.length)];
 
   switch (typeEquation) {
 case "carrée":
