@@ -139,8 +139,7 @@ function pointEstCorrect(x, y) {
 /* ====================== INTERACTION ====================== */
 svg.addEventListener("click", function(e) {
 
-  // 🔒 Limite du nombre de points
-  if (pointsEleve.length >= pointsCles.length) return;
+
 
   const rect = svg.getBoundingClientRect();
   const px = e.clientX - rect.left;
