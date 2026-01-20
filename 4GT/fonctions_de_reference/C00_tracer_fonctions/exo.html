@@ -101,6 +101,82 @@ function dessinerRepere(){
 
 /* ====================== POINTS ====================== */
 
+  const fonctionsReference = {
+  carrée: {
+    label: "carrée",
+    points: [
+      { x: -2, y: 4 },
+      { x: -1, y: 1 },
+      { x:  0, y: 0 },
+      { x:  1, y: 1 },
+      { x:  2, y: 4 }
+    ],
+    f: x => x * x
+  },
+
+  cube: {
+    label: "cube",
+    points: [
+      { x: -2, y: -8 },
+      { x: -1, y: -1 },
+      { x:  0, y:  0 },
+      { x:  1, y:  1 },
+      { x:  2, y:  8 }
+    ],
+    f: x => x * x * x
+  },
+
+  valabs: {
+    label: "valeur absolue",
+    points: [
+      { x: -2, y: 2 },
+      { x: -1, y: 1 },
+      { x:  0, y: 0 },
+      { x:  1, y: 1 },
+      { x:  2, y: 2 }
+    ],
+    f: x => Math.abs(x)
+  },
+
+  racine: {
+    label: "racine carrée",
+    points: [
+      { x: 0, y: 0 },
+      { x: 1, y: 1 },
+      { x: 4, y: 2 }
+      { x: 9, y: 3 }
+    ],
+    f: x => x >= 0 ? Math.sqrt(x) : NaN
+  },
+
+  cubique: {
+    label: "racine cubique",
+    points: [
+      { x: -8, y: -2 },
+      { x: -1, y: -1 },
+      { x:  0, y:  0 },
+      { x:  1, y:  1 },
+      { x:  8, y:  2 }
+    ],
+    f: x => Math.cbrt(x)
+  },
+
+  inverse: {
+    label: "inverse",
+    points: [
+      { x: -2, y: -0.5 },
+      { x: -1, y: -1 },
+      { x:  1, y:  1 },
+      { x:  2, y:  0.5 }
+      { x:  0.5, y:  2 }
+      { x:  -0.5, y:  -2 }
+    ],
+    f: x => x !== 0 ? 1 / x : NaN
+  }
+};
+
+
+  
   function dessinerPoint(x, y, couleur = "blue") {
   const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
