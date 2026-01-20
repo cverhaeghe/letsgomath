@@ -1,216 +1,52 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Let's go Math !</title>
+  <!-- Titre dynamique : à modifier sur chaque page -->
+  <title>Let's go Math !</title>
 
-<!-- CSS -->
-<link rel="stylesheet" href="../../../style.css">
-<link rel="stylesheet" href="../../../exercices.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-<!-- Bootstrap -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- CSS principal -->
+  <link rel="stylesheet" href="../style.css">
 
-<!-- MathJax v3 -->
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- Bootstrap (optionnel) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
 </head>
-
 <body>
 
+  <!-- Navbar réutilisable -->
 <nav class="lgm-navbar">
-  <ul class="nav-liste">
-    <li><a href="../../../index.html">Accueil</a></li>
-    <li><a href="../../../index.html#dia2">4GT</a></li>
-    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
-    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+    <ul class="nav-liste">
+      <li><a href="../index.html">Accueil</a></li>
+      <li><a href="../index.html#dia2">4GT</a></li>
+      <li><a href="../index.html#dia3">5GT 6h</a></li>
+      <li><a href="../index.html#dia4">6GT 6h</a></li>
+    </ul>
+  </nav>
+
+  <!-- Contenu spécifique à chaque page -->
+
+<main class="page-contenu">
+
+  <h1>Fonctions de référence</h1>
+
+  <h2>Compétences à acquérir</h2>
+
+  <ul class="liste-competences">
+    <li><a href="fonctions_de_reference/C00_reconnaitre_fonctions/exo.html">C01 – Reconnaitre le graphique des fonctions de référence</a></li>
+    <li><a href="fonctions_de_reference/C00_tracer_fonctions/exo.html">C02 – Tracer une fonction de référence (COMING SOON)</a></li>
+    <li><a href="fonctions_de_reference/C00_translations/exo.html">C03 – Reconnaitre les translations horizontales et verticales (COMING SOON)</a></li>
   </ul>
-</nav>
 
-<div class="exo-container">
-  <h1>Exercice</h1>
+</main>
 
-  <p>De quelle fonction de référence s'agit-il ? </p>
-
-  <!-- GRAPHIQUE -->
-<div id="graph-container"
-     style="position:relative; display:flex; justify-content:center; margin-bottom:20px;">
-  <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
-</div>
-
-
-  <!-- QCM -->
-<div id="qcm" class="qcm-grid">
-  <div class="qcm-card" onclick="verifier('carrée', this)">Fonction carrée</div>
-  <div class="qcm-card" onclick="verifier('cube', this)">Fonction cube</div>
-  <div class="qcm-card" onclick="verifier('valabs', this)">Fonction valeur absolue</div>
-  <div class="qcm-card" onclick="verifier('racine', this)">Fonction racine carrée</div>
-  <div class="qcm-card" onclick="verifier('cubique', this)">Fonction racine cubique</div>
-  <div class="qcm-card" onclick="verifier('inverse', this)">Fonction inverse</div>
-</div>
-
-
-<div class="center-button">
-  <button onclick="genererEquation()">Nouvel exercice</button>
-</div>
-
-
-
-  <p id="feedback" class="feedback"></p>
-
-  <div class="exo-links">
-    <a href="../../4GT_geo_analytique.html">Retour au menu</a>
-  </div>
-</div>
-
-<script>
-/* ====================== PARAMETRES REPERE ====================== */
-const svg = document.getElementById("graph");
-const width = 400, height = 400;
-const unit = 40;
-const xmin = -5, xmax = 5;
-const ymin = -5, ymax = 5;
-
-/* ====================== VARIABLES ====================== */
-let typeEquation = "";
-
-
-/* ====================== OUTILS ====================== */
-function xToPx(x){ return width/2 + x*unit; }
-function yToPx(y){ return height/2 - y*unit; }
-
-
-
-
-
-
-  
-/* ====================== REPERE ====================== */
-function dessinerRepere(){
-  svg.innerHTML="";
-
-  for(let x=xmin;x<=xmax;x++){
-    svg.innerHTML+=`<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
-  }
-  for(let y=ymin;y<=ymax;y++){
-    svg.innerHTML+=`<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
-  }
-
-  svg.innerHTML+=`
-    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
-    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black" stroke-width="2"/>
-  `;
-
-  for(let x=xmin;x<=xmax;x++) if(x!==0)
-    svg.innerHTML+=`<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
-
-  for(let y=ymin;y<=ymax;y++) if(y!==0)
-    svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
-}
-
-function tracerCourbe(fonction) {
-  let path = "";
-  let first = true;
-
-  for (let x = xmin; x <= xmax; x += 0.05) {
-    let y = fonction(x);
-
-    if (!isFinite(y)) {
-      first = true;
-      continue;
-    }
-
-    const px = xToPx(x);
-    const py = yToPx(y);
-
-    if (first) {
-      path += `M ${px} ${py}`;
-      first = false;
-    } else {
-      path += ` L ${px} ${py}`;
-    }
-  }
-
-  svg.innerHTML += `
-    <path d="${path}" fill="none" stroke="red" stroke-width="2"/>
-  `;
-}
-
-
-/* ====================== GENERATION ====================== */
-function genererEquation() {
-  document.getElementById("feedback").innerHTML = "";
-
-  const cards = document.querySelectorAll('.qcm-card');
-  cards.forEach(card => {
-    card.classList.remove('correct', 'incorrect');
-    card.style.pointerEvents = "auto";
-  });
-
-  dessinerRepere();
-
-  const types = ["carrée", "cube", "valabs", "racine", "cubique", "inverse"];
-  typeEquation = types[Math.floor(Math.random() * types.length)];
-
-  switch (typeEquation) {
-    case "carrée":
-      tracerCourbe(x => x * x);
-      break;
-
-    case "cube":
-      tracerCourbe(x => x * x * x);
-      break;
-
-    case "valabs":
-      tracerCourbe(x => Math.abs(x));
-      break;
-
-    case "racine":
-      tracerCourbe(x => x >= 0 ? Math.sqrt(x) : NaN);
-      break;
-
-    case "cubique":
-      tracerCourbe(x => Math.cbrt(x));
-      break;
-
-    case "inverse":
-      tracerCourbe(x => x !== 0 ? 1 / x : NaN);
-      break;
-  }
-}
-
-
-/* ====================== VERIFICATION ====================== */
-function verifier(reponseEleve, element) {
-  const cards = document.querySelectorAll('.qcm-card');
-  cards.forEach(card => card.style.pointerEvents = "none");
-
-  const feedback = document.getElementById("feedback");
-
-  if (reponseEleve === typeEquation) {
-    element.classList.add('correct');
-  } else {
-    element.classList.add('incorrect');
-
-const bonneCarte = Array.from(cards).find(c =>
-  (typeEquation === "carrée" && c.innerText.includes("carrée")) ||
-  (typeEquation === "cube" && c.innerText.includes("cube")) ||
-  (typeEquation === "valabs" && c.innerText.includes("valeur")) ||
-  (typeEquation === "racine" && c.innerText.includes("racine carrée")) ||
-  (typeEquation === "cubique" && c.innerText.includes("cubique")) ||
-  (typeEquation === "inverse" && c.innerText.includes("inverse"))
-);
-    if (bonneCarte) bonneCarte.classList.add('correct');
-  }
-
-}
-
-
-
-// Générer le premier exercice au chargement
-window.onload = genererEquation;
-</script>
    
   <!-- Protection clique droit (commun à tout le site) -->
   <script src="../../../js/protection.js"></script>
