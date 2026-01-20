@@ -168,15 +168,26 @@ function genererEquation() {
 
     case "racine":
       svg.innerHTML += `
-      <circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="red"/>
+      <circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
       `;
       tracerCourbe(x => x > 0 ? Math.sqrt(x) : NaN);
       break;
 
 
-    case "cubique":
-      tracerCourbe(x => Math.cbrt(x));
-      break;
+case "cubique":
+
+  // Point exact (0,0) → continuité visible
+  svg.innerHTML += `
+    <circle cx="${xToPx(0)}"
+            cy="${yToPx(0)}"
+            r="0.1"
+            fill="var(--lgm-orange)"/>
+  `;
+
+  // Courbe complète
+  tracerCourbe(x => Math.cbrt(x));
+  break;
+
       
 case "inverse":
 
