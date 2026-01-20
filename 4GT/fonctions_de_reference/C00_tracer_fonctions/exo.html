@@ -100,17 +100,45 @@ function dessinerRepere(){
 }
 
 /* ====================== POINTS ====================== */
-function dessinerPoint(x, y, couleur="blue") {
-  svg.innerHTML += `
-    <circle cx="${xToPx(x)}"
-            cy="${yToPx(y)}"
-            r="4"
-            fill="${couleur}"/>
-  `;
+
+  function dessinerPoint(x, y, couleur = "blue") {
+  const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+  circle.setAttribute("cx", xToPx(x));
+  circle.setAttribute("cy", yToPx(y));
+  circle.setAttribute("r", 4);
+  circle.setAttribute("fill", couleur);
+
+  // on stocke les coordonnées dans le SVG
+  circle.dataset.x = x;
+  circle.dataset.y = y;
+
+  // clic sur le point → suppression
+  circle.addEventListener("click", function (e) {
+    e.stopPropagation(); // empêche l’ajout d’un nouveau point
+    supprimerPoint(x, y, circle);
+  });
+
+  svg.appendChild(circle);
 }
+
+  function supprimerPoint(x, y, elementSVG) {
+  // retirer du tableau élève
+  pointsEleve = pointsEleve.filter(
+    p => !(p.x === x && p.y === y)
+  );
+
+  // retirer du SVG
+  svg.removeChild(elementSVG);
+}
+
 
 /* ====================== INTERACTION ====================== */
 svg.addEventListener("click", function(e) {
+
+  // 🔒 Limite du nombre de points
+  if (pointsEleve.length >= pointsCles.length) return;
+
   const rect = svg.getBoundingClientRect();
   const px = e.clientX - rect.left;
   const py = e.clientY - rect.top;
@@ -118,12 +146,13 @@ svg.addEventListener("click", function(e) {
   const x = Math.round((px - width/2) / unit);
   const y = Math.round((height/2 - py) / unit);
 
-  // éviter doublons
+  // éviter doublons exacts
   if (pointsEleve.some(p => p.x === x && p.y === y)) return;
 
-  pointsEleve.push({x,y});
+  pointsEleve.push({ x, y });
   dessinerPoint(x, y, "blue");
 });
+
 
 /* ====================== VALIDATION ====================== */
 function verifierExercice() {
