@@ -31,7 +31,7 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <p>Lis l’équation de la droite représentée.</p>
+  <p>De quelle fonction de référence s'agit-il ? </p>
 
   <!-- GRAPHIQUE -->
 <div id="graph-container"
@@ -40,17 +40,22 @@
 </div>
 
 
-  <!-- SAISIE ELEVE -->
-  <div class="equation-box">
-    <input id="reponse" type="text" class="form-control"
-           placeholder="...">
-  </div>
+  <!-- QCM -->
+<div id="qcm" class="qcm-grid">
+  <div class="qcm-card" onclick="verifier('carrée', this)">Fonction carrée</div>
+  <div class="qcm-card" onclick="verifier('cube', this)">Fonction cube</div>
+  <div class="qcm-card" onclick="verifier('valabs', this)">Fonction valeur absolue</div>
+  <div class="qcm-card" onclick="verifier('racine', this)">Fonction racine carrée</div>
+  <div class="qcm-card" onclick="verifier('cubique', this)">Fonction racine cubique</div>
+  <div class="qcm-card" onclick="verifier('inverse', this)">Fonction inverse</div>
+</div>
 
-  <div class="center-button">
-    <button onclick="verifier()">Vérifier</button>
-    <button onclick="afficherCorrection()">Correction</button>    
-    <button onclick="genererExercice()">Nouvel exercice</button>
-  </div>
+
+<div class="center-button">
+  <button onclick="genererEquation()">Nouvel exercice</button>
+</div>
+
+
 
   <p id="feedback" class="feedback"></p>
 
