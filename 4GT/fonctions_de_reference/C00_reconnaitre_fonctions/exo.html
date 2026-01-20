@@ -167,8 +167,12 @@ function genererEquation() {
       break;
 
     case "racine":
-      tracerCourbe(x => x >= 0 ? Math.sqrt(x) : NaN);
+      svg.innerHTML += `
+      <circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="red"/>
+      `;
+      tracerCourbe(x => x > 0 ? Math.sqrt(x) : NaN);
       break;
+
 
     case "cubique":
       tracerCourbe(x => Math.cbrt(x));
