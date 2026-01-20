@@ -29,7 +29,7 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-<span id="enonce">
+<p id="enonce"></p>
 
   <!-- GRAPHIQUE -->
   <div id="graph-container"
@@ -59,14 +59,6 @@ const xmin = -5, xmax = 5;
 const ymin = -5, ymax = 5;
 
 /* ====================== DONNÉES MATHS ====================== */
-const pointsCles = [
-  { x: -2, y: 4 },
-  { x: -1, y: 1 },
-  { x:  0, y: 0 },
-  { x:  1, y: 1 },
-  { x:  2, y: 4 }
-];
-
 let fonctionCourante = null;
 let pointsCles = [];
 let pointsEleve = [];
@@ -142,7 +134,7 @@ function dessinerRepere(){
     points: [
       { x: 0, y: 0 },
       { x: 1, y: 1 },
-      { x: 4, y: 2 }
+      { x: 4, y: 2 },
       { x: 9, y: 3 }
     ],
     f: x => x >= 0 ? Math.sqrt(x) : NaN
@@ -166,8 +158,8 @@ function dessinerRepere(){
       { x: -2, y: -0.5 },
       { x: -1, y: -1 },
       { x:  1, y:  1 },
-      { x:  2, y:  0.5 }
-      { x:  0.5, y:  2 }
+      { x:  2, y:  0.5 },
+      { x:  0.5, y:  2 },
       { x:  -0.5, y:  -2 }
     ],
     f: x => x !== 0 ? 1 / x : NaN
