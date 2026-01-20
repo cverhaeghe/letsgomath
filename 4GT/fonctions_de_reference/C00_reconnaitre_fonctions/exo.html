@@ -177,10 +177,27 @@ function genererEquation() {
     case "cubique":
       tracerCourbe(x => Math.cbrt(x));
       break;
+      
+case "inverse":
 
-    case "inverse":
-      tracerCourbe(x => x !== 0 ? 1 / x : NaN);
-      break;
+  // Asymptote verticale x = 0
+  svg.innerHTML += `
+    <line x1="${xToPx(0)}" y1="0"
+          x2="${xToPx(0)}" y2="${height}"
+          stroke="red" stroke-dasharray="4,4"/>
+  `;
+
+  // Asymptote horizontale y = 0
+  svg.innerHTML += `
+    <line x1="0" y1="${yToPx(0)}"
+          x2="${width}" y2="${yToPx(0)}"
+          stroke="red" stroke-dasharray="4,4"/>
+  `;
+
+  // Courbe (coupure autour de 0)
+  tracerCourbe(x => (Math.abs(x) < 0.1 ? NaN : 1 / x));
+  break;
+
   }
 }
 
