@@ -133,7 +133,7 @@ if (!isFinite(y) || Math.abs(x) < 0.1) {
   }
 
   svg.innerHTML += `
-    <path d="${path}" fill="none" stroke="red" stroke-width="2"/>
+    <path d="${path}" fill="none" stroke="var(--peps)" stroke-width="2"/>
   `;
 }
 
@@ -184,14 +184,14 @@ case "inverse":
   svg.innerHTML += `
     <line x1="${xToPx(0)}" y1="0"
           x2="${xToPx(0)}" y2="${height}"
-          stroke="red" stroke-dasharray="4,4"/>
+          stroke="var(--peps);" stroke-dasharray="4,4"/>
   `;
 
   // Asymptote horizontale y = 0
   svg.innerHTML += `
     <line x1="0" y1="${yToPx(0)}"
           x2="${width}" y2="${yToPx(0)}"
-          stroke="red" stroke-dasharray="4,4"/>
+          stroke="var(--peps);" stroke-dasharray="4,4"/>
   `;
 
   // Courbe (coupure autour de 0)
