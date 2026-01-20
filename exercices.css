@@ -107,6 +107,12 @@
   margin: 0 auto 20px;   /* centre la grille dans la page */
 }
 
+.qcm-6 {   /* choix entre 6 réponses */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 × 2 */
+  gap: 12px;
+}
+
 .qcm-card {
   background-color: #dce6f9; /* fond bleu très clair */
   color: #3a4a7a; /* texte bleu foncé clair */
@@ -163,6 +169,10 @@
 
   .qcm-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .qcm-6 { 
+    grid-template-columns: repeat(2, 1fr); /* 2 × 3 */
   }
 
   .qcm-card {
