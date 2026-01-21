@@ -62,6 +62,7 @@ const ymin = -9, ymax = 9;
 let fonctionCourante = null;
 let pointsCles = [];
 let pointsEleve = [];
+let dernieresFonctions = [];
 
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -203,6 +204,30 @@ function pointEstCorrect(x, y) {
   return pointsCles.some(p => p.x === x && p.y === y);
 }
 
+  function tirerFonctionSansRepetition() {
+  const toutes = Object.keys(fonctionsReference);
+
+  // On exclut les deux dernières
+  let candidates = toutes.filter(
+    f => !dernieresFonctions.includes(f)
+  );
+
+  // Sécurité (au cas très improbable)
+  if (candidates.length === 0) {
+    candidates = toutes;
+  }
+
+  const choix = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Mise à jour de l'historique
+  dernieresFonctions.push(choix);
+  if (dernieresFonctions.length > 2) {
+    dernieresFonctions.shift();
+  }
+
+  return choix;
+}
+
 /* ====================== GENERATION ====================== */
 
   function genererExercice() {
@@ -210,8 +235,8 @@ function pointEstCorrect(x, y) {
   pointsEleve = [];
   document.getElementById("feedback").innerHTML = "";
 
-  const cles = Object.keys(fonctionsReference);
-  const choix = cles[Math.floor(Math.random() * cles.length)];
+  const choix = tirerFonctionSansRepetition();
+
 
   fonctionCourante = fonctionsReference[choix];
   pointsCles = fonctionCourante.points;
