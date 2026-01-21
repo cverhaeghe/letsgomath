@@ -268,7 +268,7 @@ function verifierExercice() {
   }
 
   feedback.innerHTML = "✔️ Bonne réponse !";
-  tracerCourbe(x => x * x);
+  tracerCourbe(fonctionCourante.f);
 }
 
 
@@ -311,7 +311,7 @@ function afficherCorrection() {
   pointsEleve = [];
 
   pointsCles.forEach(p => dessinerPoint(p.x, p.y, "green"));
-  tracerCourbe(x => x*x);
+  tracerCourbe(fonctionCourante.f);
 }
 
 /* ====================== RESET ====================== */
