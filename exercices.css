@@ -160,6 +160,25 @@
    RESPONSIVE - GSM
    =============================== */
 @media(max-width:600px){
+/* ===============================
+   Ajustements GSM (petits écrans)
+   =============================== */
+@media (max-width: 600px) {
+
+  /* espace sous l’énoncé */
+  #enonce {
+    margin-bottom: 8px;
+  }
+
+  /* espace autour du repère */
+  #graph-container {
+    margin-bottom: 8px !important;
+  }
+
+  /* espace au-dessus des boutons */
+  .center-button {
+    margin-top: 6px;
+  }
 
 .exo-container {
          margin-top: 40px;
