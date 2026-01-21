@@ -216,10 +216,10 @@ function pointEstCorrect(x, y) {
   fonctionCourante = fonctionsReference[choix];
   pointsCles = fonctionCourante.points;
 
-  // Mise à jour de l’énoncé
-  document.querySelector(".exo-container p").innerHTML =
-    `Trace la fonction <strong>${fonctionCourante.label}</strong> 
-     en plaçant les points de base nécessaires.`;
+document.getElementById("enonce").innerHTML =
+  `Trace la fonction <strong>${fonctionCourante.label}</strong>
+   en plaçant les points de base nécessaires.`;
+
 }
 
   
@@ -322,7 +322,7 @@ function nouvelExercice() {
 }
 
 /* ====================== INIT ====================== */
-window.onload = dessinerRepere;
+window.onload = genererExercice;
 </script>
 
 <script src="../../../js/protection.js"></script>
