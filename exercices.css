@@ -165,24 +165,33 @@
    =============================== */
 @media (max-width: 600px) {
 
-  /* espace sous l’énoncé */
+  /* Énoncé plus compact */
   #enonce {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
-  /* espace autour du repère */
+  /* Repère plus proche du texte */
   #graph-container {
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
   }
 
-  /* espace au-dessus des boutons */
+  /* Boutons plus proches du repère */
   .center-button {
-    margin-top: 6px;
+    margin-top: 4px;
   }
 
-.exo-container {
-         margin-top: 40px;
+  /* Réduction du padding global */
+  .exo-container {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
+
+  /* Paragraphes plus compacts */
+  .exo-container p {
+    margin-bottom: 6px;
+  }
+
+
 
 .qcm-grid {
     max-width: 100%;       /* la grille peut respirer */
