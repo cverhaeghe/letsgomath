@@ -341,10 +341,9 @@ function afficherCorrection() {
 
 /* ====================== RESET ====================== */
 function nouvelExercice() {
-  pointsEleve = [];
-  document.getElementById("feedback").innerHTML = "";
-  dessinerRepere();
+  genererExercice();
 }
+
 
 /* ====================== INIT ====================== */
 window.onload = genererExercice;
