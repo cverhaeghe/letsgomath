@@ -120,7 +120,7 @@ function dessinerRepere(){
   const fonctionsReference = {
   carrée: {
     label: "carrée",
-    enonce: "(X)^2  V",
+    formule: "(X)^2  V",
     points: [
       { x: -2, y: 4 },
       { x: -1, y: 1 },
@@ -133,7 +133,7 @@ function dessinerRepere(){
 
   cube: {
     label: "cube",
-    enonce: "(X)^3  V",
+    formule: "(X)^3  V",
     points: [
       { x: -2, y: -8 },
       { x: -1, y: -1 },
@@ -146,7 +146,7 @@ function dessinerRepere(){
 
   valabs: {
     label: "valeur absolue",
-    enonce: "|X| V",
+    formule: "|X| V",
     points: [
       { x: -2, y: 2 },
       { x: -1, y: 1 },
@@ -159,7 +159,7 @@ function dessinerRepere(){
 
   racine: {
     label: "racine carrée",
-    enonce: "\\sqrt{X}  V",
+    formule: "\\sqrt{X}  V",
     points: [
       { x: 0, y: 0 },
       { x: 1, y: 1 },
@@ -171,7 +171,7 @@ function dessinerRepere(){
 
   cubique: {
     label: "racine cubique",
-    enonce: "\\sqrt[3]{X} V",
+    formule: "\\sqrt[3]{X} V",
     points: [
       { x: -8, y: -2 },
       { x: -1, y: -1 },
@@ -184,7 +184,7 @@ function dessinerRepere(){
 
 inverse: {
   label: "inverse",
-  enonce: "\\dfrac{1}{X} V",
+  formule: "\\dfrac{1}{X} V",
   snap: 0.5,   // ⭐ demi-unités autorisées
   points: [
     { x: -2, y: -0.5 },
@@ -286,13 +286,13 @@ function genererExercice() {
 const X = formatHV(h, "x");
 const V = formatV(v);
 
-const enonce = fonctionCourante.enonce
+const formule = fonctionCourante.formule
   .replace("X", X)
   .replace("V", V);
 
 document.getElementById("enonce").innerHTML =
   `Trace, étape par étape, la fonction suivante : \\[
-     ${enonce}
+     ${formule}
    \\]`;
 
 MathJax.typesetPromise();
