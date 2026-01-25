@@ -270,13 +270,15 @@ function genererExercice() {
   }));
 
   // Énoncé mathématique
-  document.getElementById("enonce").innerHTML =
-    `Trace, étape par étape, la fonction <strong>${fonctionCourante.label}</strong> suivante : 
-     \\(${fonctionCourante.enonce.replace("h", h).replace("v", v)}\\)`;
+document.getElementById("enonce").innerHTML =
+  `Trace, étape par étape, la fonction <strong>${fonctionCourante.label}</strong> suivante :
+   \\[${fonctionCourante.formule
+      .replace(/h/g, h)
+      .replace(/v/g, v)}\\]`;
 
-  if (window.MathJax) {
-    MathJax.typesetPromise();
-  }
+if (window.MathJax) {
+  MathJax.typesetPromise();
+}
 }
 
 
