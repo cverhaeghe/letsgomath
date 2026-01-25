@@ -79,6 +79,18 @@ function tirageHV() {
   h = valeurs[Math.floor(Math.random() * valeurs.length)];
   v = valeurs[Math.floor(Math.random() * valeurs.length)];
 }
+  
+function formatHV(valeur, lettre) {
+  if (valeur > 0) return `${lettre}-${valeur}`;
+  if (valeur < 0) return `${lettre}+${Math.abs(valeur)}`;
+  return lettre;
+}
+
+function formatV(valeur) {
+  if (valeur > 0) return `+${valeur}`;
+  if (valeur < 0) return `-${Math.abs(valeur)}`;
+  return "";
+}
 
 /* ====================== REPÈRE ====================== */
 function dessinerRepere(){
@@ -108,7 +120,7 @@ function dessinerRepere(){
   const fonctionsReference = {
   carrée: {
     label: "carrée",
-    enonce: "(x-h)^2 + v",
+    enonce: "(X)^2  V",
     points: [
       { x: -2, y: 4 },
       { x: -1, y: 1 },
@@ -121,7 +133,7 @@ function dessinerRepere(){
 
   cube: {
     label: "cube",
-    enonce: "(x-h)^3 + v",
+    enonce: "(X)^3  V",
     points: [
       { x: -2, y: -8 },
       { x: -1, y: -1 },
@@ -134,7 +146,7 @@ function dessinerRepere(){
 
   valabs: {
     label: "valeur absolue",
-    enonce: "|x-h| + v",
+    enonce: "|X| V",
     points: [
       { x: -2, y: 2 },
       { x: -1, y: 1 },
@@ -147,7 +159,7 @@ function dessinerRepere(){
 
   racine: {
     label: "racine carrée",
-    enonce: "\\sqrt{x-h} + v",
+    enonce: "\\sqrt{X}  V",
     points: [
       { x: 0, y: 0 },
       { x: 1, y: 1 },
@@ -159,7 +171,7 @@ function dessinerRepere(){
 
   cubique: {
     label: "racine cubique",
-    enonce: "\\sqrt[3]{x-h} + v",
+    enonce: "\\sqrt[3]{X} V",
     points: [
       { x: -8, y: -2 },
       { x: -1, y: -1 },
@@ -172,7 +184,7 @@ function dessinerRepere(){
 
 inverse: {
   label: "inverse",
-  enonce: "\\dfrac{1}{x-h} + v",
+  enonce: "\\dfrac{1}{X} V",
   snap: 0.5,   // ⭐ demi-unités autorisées
   points: [
     { x: -2, y: -0.5 },
@@ -271,9 +283,12 @@ function genererExercice() {
   }));
 
   // Énoncé mathématique
-const enonce = fonctionCourante.enonce
-  .replace(/h/g, h)
-  .replace(/v/g, v);
+const X = formatHV(h, "x");
+const V = formatV(v);
+
+const formule = fonctionCourante.formule
+  .replace("X", X)
+  .replace("V", V);
 
 document.getElementById("enonce").innerHTML =
   `Trace, étape par étape, la fonction suivante : \\[
