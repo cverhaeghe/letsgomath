@@ -59,6 +59,7 @@ const ymin = -8, ymax = 8;
 const unitX = width / (xmax - xmin);
 const unitY = height / (ymax - ymin);
 const unit = Math.min(unitX, unitY);
+const margeCourbe = 0.5;
 
 
 /* ====================== DONNÉES MATHS ====================== */
@@ -327,10 +328,11 @@ function tracerCourbe(fonction) {
   for (let x = xmin; x <= xmax; x += 0.01) {
     let y = fonction(x);
 
-    if (!isFinite(y) || y < ymin || y > ymax) {
-      first = true;
-      continue;
-    }
+if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
+  first = true;
+  continue;
+}
+
 
     const px = xToPx(x);
     const py = yToPx(y);
