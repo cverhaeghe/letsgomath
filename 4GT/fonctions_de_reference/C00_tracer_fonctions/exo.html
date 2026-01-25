@@ -258,21 +258,30 @@ document.getElementById("enonce").innerHTML =
 
   
 /* ====================== INTERACTION ====================== */
+function getSVGCoordinates(evt) {
+  const pt = svg.createSVGPoint();
+
+  if (evt.touches && evt.touches.length > 0) {
+    pt.x = evt.touches[0].clientX;
+    pt.y = evt.touches[0].clientY;
+  } else {
+    pt.x = evt.clientX;
+    pt.y = evt.clientY;
+  }
+
+  const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+  return { x: svgP.x, y: svgP.y };
+}
+
+  
 svg.addEventListener("click", function(e) {
 
+  const { x: px, y: py } = getSVGCoordinates(e);
 
+  const pas = fonctionCourante?.snap || 1;
+  const x = snap((px - width/2) / unit, pas);
+  const y = snap((height/2 - py) / unit, pas);
 
-  const rect = svg.getBoundingClientRect();
-  const px = e.clientX - rect.left;
-  const py = e.clientY - rect.top;
-  
-const pas = fonctionCourante?.snap || 1;
-const x = snap((px - width/2) / unit, pas);
-const y = snap((height/2 - py) / unit, pas);
-
-
-
-  // éviter doublons exacts
   if (pointsEleve.some(p => p.x === x && p.y === y)) return;
 
   pointsEleve.push({ x, y });
