@@ -153,6 +153,15 @@ if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
   });
 }
 
+  function pointVisible(p) {
+  return (
+    p.x >= xmin &&
+    p.x <= xmax &&
+    p.y >= ymin &&
+    p.y <= ymax
+  );
+}
+  
   function fonctionTranslatee(f) {
   return function(x) {
     return f(x - h) + v;
@@ -425,8 +434,10 @@ const y = parseFloat(c.dataset.y);
     }
   });
 
-  if (!toutCorrect || pointsEleve.length !== pointsCles.length) {
-    feedback.innerHTML = "❌ Certains points sont incorrects.";
+const pointsClesVisibles = pointsCles.filter(pointVisible);
+
+if (!toutCorrect || pointsEleve.length !== pointsClesVisibles.length) {
+  feedback.innerHTML = "❌ Certains points sont incorrects.";
     return;
   }
 
