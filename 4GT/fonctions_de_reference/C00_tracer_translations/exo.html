@@ -152,6 +152,12 @@ if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
     dessinerPoint(p.x, p.y, "black");
   });
 }
+
+  function fonctionTranslatee(f) {
+  return function(x) {
+    return f(x - h) + v;
+  };
+}
   
 /* ====================== POINTS ====================== */
 
@@ -446,8 +452,15 @@ function afficherCorrection() {
   dessinerRepere();
   pointsEleve = [];
 
-pointsCles.forEach(p => dessinerPoint(p.x, p.y, "blue"));
-  tracerCourbe(fonctionCourante.f);
+  // 🔹 fonction de référence (noire)
+  tracerFonctionReference(fonctionCourante.f);
+  afficherPointsReference(fonctionCourante.points);
+
+  // 🔹 points translatés (bleus)
+  pointsCles.forEach(p => dessinerPoint(p.x, p.y, "blue"));
+
+  // 🔸 courbe translatée (orange)
+  tracerCourbe(fonctionTranslatee(fonctionCourante.f));
 }
 
 /* ====================== RESET ====================== */
