@@ -108,7 +108,7 @@ function dessinerRepere(){
   const fonctionsReference = {
   carrée: {
     label: "carrée",
-    enonce: "Trace, étape par étape, la fonction suivante : (x-h)^2 + v",
+    enonce: "(x-h)^2 + v",
     points: [
       { x: -2, y: 4 },
       { x: -1, y: 1 },
@@ -121,7 +121,7 @@ function dessinerRepere(){
 
   cube: {
     label: "cube",
-    enonce: "Trace, étape par étape, la fonction suivante : (x-h)^3 + v",
+    enonce: "(x-h)^3 + v",
     points: [
       { x: -2, y: -8 },
       { x: -1, y: -1 },
@@ -134,7 +134,7 @@ function dessinerRepere(){
 
   valabs: {
     label: "valeur absolue",
-    enonce: "Trace, étape par étape, la fonction suivante : |x-h| + v",
+    enonce: "|x-h| + v",
     points: [
       { x: -2, y: 2 },
       { x: -1, y: 1 },
@@ -147,7 +147,7 @@ function dessinerRepere(){
 
   racine: {
     label: "racine carrée",
-    enonce: "Trace, étape par étape, la fonction suivante : \\sqrt{x-h} + v",
+    enonce: "\\sqrt{x-h} + v",
     points: [
       { x: 0, y: 0 },
       { x: 1, y: 1 },
@@ -159,7 +159,7 @@ function dessinerRepere(){
 
   cubique: {
     label: "racine cubique",
-    enonce: "Trace, étape par étape, la fonction suivante : \\sqrt[3]{x-h} + v",
+    enonce: "\\sqrt[3]{x-h} + v",
     points: [
       { x: -8, y: -2 },
       { x: -1, y: -1 },
@@ -172,7 +172,7 @@ function dessinerRepere(){
 
 inverse: {
   label: "inverse",
-  enonce: "Trace la fonction suivante : \\dfrac{1}{x-h} + v",
+  enonce: "\\dfrac{1}{x-h} + v",
   snap: 0.5,   // ⭐ demi-unités autorisées
   points: [
     { x: -2, y: -0.5 },
@@ -276,7 +276,7 @@ const enonce = fonctionCourante.enonce
   .replace(/v/g, v);
 
 document.getElementById("enonce").innerHTML =
-  `\\[
+  `Trace, étape par étape, la fonction suivante : \\[
      ${enonce}
    \\]`;
 
