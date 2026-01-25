@@ -308,42 +308,42 @@ function snap(val, pas) {
 function genererExercice() {
   dessinerRepere();
   pointsEleve = [];
-
-// 🔹 afficher la fonction de référence
-tracerFonctionReference(fonctionCourante.f);
-afficherPointsReference(fonctionCourante.points);
-
-  
   document.getElementById("feedback").innerHTML = "";
 
+  // 1️⃣ Choix de la fonction
   const choix = tirerFonctionSansRepetition();
   fonctionCourante = fonctionsReference[choix];
 
+  // 2️⃣ Tirage de h et v
   tirageHV();
 
-  // 🔁 Points clés translatés
+  // 3️⃣ Affichage de la fonction de référence (NON translatée)
+  tracerFonctionReference(fonctionCourante.f);
+  afficherPointsReference(fonctionCourante.points);
+
+  // 4️⃣ Points clés de la fonction translatée (pour la vérification)
   pointsCles = fonctionCourante.points.map(p => ({
     x: p.x + h,
     y: p.y + v
   }));
 
-  // Énoncé mathématique
-const X = formatHV(h, "x");
-const V = formatV(v);
+  // 5️⃣ Énoncé mathématique propre
+  const X = formatHV(h, "x");
+  const V = formatV(v);
 
-const formule = fonctionCourante.formule
-  .replace("X", X)
-  .replace("V", V);
+  const formule = fonctionCourante.formule
+    .replace("X", X)
+    .replace("V", V);
 
-document.getElementById("enonce").innerHTML =
-  `Trace, étape par étape, la fonction : \\[
-     ${formule}
-   \\]`;
+  document.getElementById("enonce").innerHTML = `
+    Trace, étape par étape, la fonction suivante :
+    \\[
+      ${formule}
+    \\]
+  `;
 
-MathJax.typesetPromise();
-
+  MathJax.typesetPromise();
 }
-
 
   
 /* ====================== INTERACTION ====================== */
