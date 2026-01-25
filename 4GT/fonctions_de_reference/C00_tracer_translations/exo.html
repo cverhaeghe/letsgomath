@@ -107,7 +107,7 @@ function dessinerRepere(){
   const fonctionsReference = {
   carrée: {
     label: "carrée",
-    enonce: "Trace la fonction carrée suivante : \\((x-h)^2 + v\\)",
+    enonce: "Trace la fonction suivante : \\((x-h)^2 + v\\)",
     points: [
       { x: -2, y: 4 },
       { x: -1, y: 1 },
@@ -120,7 +120,7 @@ function dessinerRepere(){
 
   cube: {
     label: "cube",
-    enonce: "Trace la fonction cube suivante : \\((x-h)^3 + v\\)",
+    enonce: "Trace la fonction suivante : \\((x-h)^3 + v\\)",
     points: [
       { x: -2, y: -8 },
       { x: -1, y: -1 },
@@ -133,7 +133,7 @@ function dessinerRepere(){
 
   valabs: {
     label: "valeur absolue",
-    enonce: "Trace la fonction valeur absolue suivante : \\(|x-h| + v\\)",
+    enonce: "Trace la fonction suivante : \\(|x-h| + v\\)",
     points: [
       { x: -2, y: 2 },
       { x: -1, y: 1 },
@@ -146,7 +146,7 @@ function dessinerRepere(){
 
   racine: {
     label: "racine carrée",
-    enonce: "Trace la fonction racine carrée suivante : \\(\\sqrt{x-h} + v\\)",
+    enonce: "Trace la fonction suivante : \\(\\sqrt{x-h} + v\\)",
     points: [
       { x: 0, y: 0 },
       { x: 1, y: 1 },
@@ -158,7 +158,7 @@ function dessinerRepere(){
 
   cubique: {
     label: "racine cubique",
-    enonce: "Trace la fonction racine cubique suivante : \\(\\sqrt[3]{x-h} + v\\)",
+    enonce: "Trace la fonction suivante : \\(\\sqrt[3]{x-h} + v\\)",
     points: [
       { x: -8, y: -2 },
       { x: -1, y: -1 },
@@ -171,7 +171,7 @@ function dessinerRepere(){
 
 inverse: {
   label: "inverse",
-  enonce: "Trace la fonction inverse suivante : \\(\\dfrac{1}{x-h} + v\\)",
+  enonce: "Trace la fonction suivante : \\(\\dfrac{1}{x-h} + v\\)",
   snap: 0.5,   // ⭐ demi-unités autorisées
   points: [
     { x: -2, y: -0.5 },
@@ -272,7 +272,7 @@ function genererExercice() {
   // Énoncé mathématique
 document.getElementById("enonce").innerHTML =
   `Trace, étape par étape, la fonction <strong>${fonctionCourante.label}</strong> suivante :
-   \\[${fonctionCourante.formule
+   \\[${fonctionCourante.enonce
       .replace(/h/g, h)
       .replace(/v/g, v)}\\]`;
 
