@@ -54,9 +54,12 @@
 /* ====================== PARAMÈTRES REPÈRE ====================== */
 const svg = document.getElementById("graph");
 const width = 400, height = 400;
-const unit = 22;
 const xmin = -9, xmax = 9;
 const ymin = -8, ymax = 8;
+const unitX = width / (xmax - xmin);
+const unitY = height / (ymax - ymin);
+const unit = Math.min(unitX, unitY);
+
 
 /* ====================== DONNÉES MATHS ====================== */
 let fonctionCourante = null;
