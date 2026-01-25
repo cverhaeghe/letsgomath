@@ -115,6 +115,45 @@ function dessinerRepere(){
     svg.innerHTML += `<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
 }
 
+  function tracerFonctionReference(fonction) {
+  let path = "";
+  let first = true;
+
+  for (let x = xmin; x <= xmax; x += 0.01) {
+    let y = fonction(x);
+
+    if (!isFinite(y) || y < ymin || y > ymax) {
+      first = true;
+      continue;
+    }
+
+    const px = xToPx(x);
+    const py = yToPx(y);
+
+    if (first) {
+      path += `M ${px} ${py}`;
+      first = false;
+    } else {
+      path += ` L ${px} ${py}`;
+    }
+  }
+
+  svg.innerHTML += `
+    <path d="${path}"
+          fill="none"
+          stroke="#bbb"
+          stroke-width="2"
+          stroke-dasharray="4,4"
+          pointer-events="none"/>
+  `;
+}
+
+  function afficherPointsReference(points) {
+  points.forEach(p => {
+    dessinerPoint(p.x, p.y, "#aaa");
+  });
+}
+  
 /* ====================== POINTS ====================== */
 
   const fonctionsReference = {
@@ -269,6 +308,12 @@ function snap(val, pas) {
 function genererExercice() {
   dessinerRepere();
   pointsEleve = [];
+
+// 🔹 afficher la fonction de référence
+tracerFonctionReference(fonctionCourante.f);
+afficherPointsReference(fonctionCourante.points);
+
+  
   document.getElementById("feedback").innerHTML = "";
 
   const choix = tirerFonctionSansRepetition();
