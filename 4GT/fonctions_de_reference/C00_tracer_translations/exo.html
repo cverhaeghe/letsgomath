@@ -271,14 +271,13 @@ function genererExercice() {
   }));
 
   // Énoncé mathématique
-const formule = fonctionCourante.formule
+const enonce = fonctionCourante.enonce
   .replace(/h/g, h)
   .replace(/v/g, v);
 
 document.getElementById("enonce").innerHTML =
-  `Trace, étape par étape, la fonction <strong>${fonctionCourante.label}</strong> suivante :
-   \\[
-     ${formule}
+  `\\[
+     ${enonce}
    \\]`;
 
 MathJax.typesetPromise();
