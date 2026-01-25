@@ -573,7 +573,7 @@ function verifier(){
   // ===== CAS 1 : droites confondues =====
   if (bonneReponse === "confondue") {
     if (rep === "d1" || rep === "d2") {
-      f.innerHTML = "✅ Bonne réponse !";
+      f.innerHTML = "✔️ Bonne réponse !";
     } else {
       f.innerHTML = "❌ Réponse incorrecte.";
     }
@@ -583,7 +583,7 @@ function verifier(){
   // ===== CAS 2 : parallèles distinctes =====
   if (bonneReponse === "paralleles") {
     if (rep === "vide") {
-      f.innerHTML = "✅ Bonne réponse !";
+      f.innerHTML = "✔️ Bonne réponse !";
     } else {
       f.innerHTML = "❌ Réponse incorrecte.";
     }
@@ -600,7 +600,7 @@ if (bonneReponse === "secantes") {
   const repAttendue = pointToString(xInter, yFinal);
 
   if (repUser === repAttendue) {
-    f.innerHTML = "✅ Bonne réponse !";
+    f.innerHTML = "✔️ Bonne réponse !";
   } else {
     f.innerHTML = `❌ Réponse incorrecte.<br>
     Réponse attendue : <strong>${repAttendue}</strong>`;
