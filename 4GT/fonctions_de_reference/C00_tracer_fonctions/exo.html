@@ -285,8 +285,9 @@ function verifierExercice() {
   const cercles = svg.querySelectorAll("circle");
 
   cercles.forEach(c => {
-    const x = parseInt(c.dataset.x);
-    const y = parseInt(c.dataset.y);
+const x = parseFloat(c.dataset.x);
+const y = parseFloat(c.dataset.y);
+
 
     if (pointEstCorrect(x, y)) {
       c.setAttribute("fill", "blue");
