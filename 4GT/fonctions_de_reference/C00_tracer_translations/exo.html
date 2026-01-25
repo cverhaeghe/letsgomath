@@ -122,7 +122,7 @@ function dessinerRepere(){
   for (let x = xmin; x <= xmax; x += 0.01) {
     let y = fonction(x);
 
-    if (!isFinite(y) || y < ymin || y > ymax) {
+if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
       first = true;
       continue;
     }
