@@ -31,8 +31,8 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <p>De quelle fonction de référence s'agit-il ? </p>
-
+<p>La courbe représente-t-elle une fonction ?</p>
+  
   <!-- GRAPHIQUE -->
 <div id="graph-container"
      style="position:relative; display:flex; justify-content:center; margin-bottom:20px;">
@@ -170,7 +170,10 @@ function tirerCourbe() {
     { nom: "cercle", type: "pasfonction" },
     { nom: "ellipse", type: "pasfonction" },
     { nom: "paraboleCouchee", type: "pasfonction" },
-    { nom: "segmentsCroises", type: "pasfonction" }
+    { nom: "segmentsCroises", type: "pasfonction" },
+    { nom: "presqueFonction_pointDouble", type: "pasfonction" },
+    { nom: "presqueFonction_segmentVertical", type: "pasfonction" },
+    { nom: "presqueFonction_morceaux", type: "pasfonction" }
   ];
 
   return courbes[Math.floor(Math.random() * courbes.length)];
@@ -230,7 +233,8 @@ function genererEquation() {
     card.style.pointerEvents = "auto";
   });
 
-
+xProbleme = null;
+  
   dessinerRepere();
   
 const courbe = tirerCourbe();
@@ -324,44 +328,23 @@ function verifier(reponseEleve, element) {
   const cards = document.querySelectorAll('.qcm-card');
   const feedback = document.getElementById("feedback");
 
+  // Désactiver tous les clics
+  cards.forEach(card => card.style.pointerEvents = "none");
+
   // Bonne réponse
   if (reponseEleve === typeEquation) {
     element.classList.add('correct');
-    cards.forEach(card => card.style.pointerEvents = "none");
-    return;
+  } else {
+    element.classList.add('incorrect');
   }
 
-  // Mauvaise réponse
-  element.classList.add('incorrect');
-  element.style.pointerEvents = "none";
-  nbEssaisFaux++;
-
-// Animation du test de la droite verticale
-if (typeEquation === "pasfonction") {
-  // On cible le point problématique si connu (ex : x = 1)
-animerDroiteVerticale(xProbleme);
-} else {
-  // Balayage complet si c'est une fonction
-  animerDroiteVerticale();
-}
+  // Animation du test de la droite verticale (TOUJOURS)
+  if (typeEquation === "pasfonction") {
+    animerDroiteVerticale(xProbleme);
+  } else {
+    animerDroiteVerticale();
   }
-
-  // 2e échec : on montre la bonne réponse
-  cards.forEach(card => card.style.pointerEvents = "none");
-
-  const bonneCarte = Array.from(cards).find(c =>
-    (typeEquation === "carrée" && c.innerText.includes("carrée")) ||
-    (typeEquation === "cube" && c.innerText.includes("cube")) ||
-    (typeEquation === "valabs" && c.innerText.includes("valeur")) ||
-    (typeEquation === "racine" && c.innerText.includes("racine carrée")) ||
-    (typeEquation === "cubique" && c.innerText.includes("cubique")) ||
-    (typeEquation === "inverse" && c.innerText.includes("inverse"))
-  );
-
-  if (bonneCarte) bonneCarte.classList.add('correct');
 }
-
-
 
 
 // Générer le premier exercice au chargement
