@@ -320,13 +320,20 @@ stroke-width="0"/>
 }
 
 
-  function dessinerSegmentVerticalBleu(x, yMin, yMax) {
-  svg.innerHTML += `
-    <line x1="${xToPx(x)}" y1="${yToPx(yMin)}"
-          x2="${xToPx(x)}" y2="${yToPx(yMax)}"
-          stroke="var(--peps)"
-          stroke-width="4"/>
-  `;
+function dessinerSegmentVerticalBleu(x, yMin, yMax) {
+  const segment = document.createElementNS("http://www.w3.org/2000/svg", "line");
+
+  segment.setAttribute("x1", xToPx(x));
+  segment.setAttribute("x2", xToPx(x));
+  segment.setAttribute("y1", yToPx(yMin));
+  segment.setAttribute("y2", yToPx(yMax));
+
+  segment.setAttribute("stroke", "var(--peps)");
+  segment.setAttribute("stroke-width", "4");
+  segment.setAttribute("stroke-linecap", "round");
+
+  // 🔝 AU PREMIER PLAN
+  svg.appendChild(segment);
 }
   
 /* ====================== GENERATION ====================== */
@@ -428,6 +435,7 @@ break;
 
 case "presqueFonction_segmentVertical":
   tracerCourbe(x => {
+    if (x < -1) return 2x + 4;
     if (x < 2) return -x + 1;
     return 0;
   });
