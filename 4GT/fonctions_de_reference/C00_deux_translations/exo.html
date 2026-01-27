@@ -250,116 +250,153 @@ function genererQCMCarree(h, v) {
 
 
   function genererQCMValAbs(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+const ah = Math.abs(h);
+const av = Math.abs(v);
 
-  const propositions = [
-    { label: `|x - ${a}|`, correct: false },
-    { label: `|x + ${a}|`, correct: false },
-    { label: `|x| + ${a}`, correct: false },
-    { label: `|x| - ${a}`, correct: false }
-  ];
 
-  if (h !== 0) {
-    const bonne = h > 0 ? `|x - ${a}|` : `|x + ${a}|`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `|x| + ${a}` : `|x| - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
+const propositions = [
+// Groupe A
+{ label: `|x - ${ah}| + ${av}`, correct: false },
+{ label: `|x - ${ah}| - ${av}`, correct: false },
+{ label: `|x + ${ah}| + ${av}`, correct: false },
+{ label: `|x + ${ah}| - ${av}`, correct: false },
 
-  return melanger(propositions);
+
+// Groupe B
+{ label: `|x - ${av}| + ${ah}`, correct: false },
+{ label: `|x - ${av}| - ${ah}`, correct: false },
+{ label: `|x + ${av}| + ${ah}`, correct: false },
+{ label: `|x + ${av}| - ${ah}`, correct: false }
+];
+
+
+const bonne =
+`|x ${h > 0 ? "- " + ah : "+ " + ah}| ` +
+`${v > 0 ? "+ " + av : "- " + av}`;
+
+
+propositions.find(p => p.label === bonne).correct = true;
+return melanger(propositions);
 }
 
-  function genererQCMRacine(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+function genererQCMRacine(h, v) {
+const ah = Math.abs(h);
+const av = Math.abs(v);
 
-  const propositions = [
-    { label: `\\sqrt{x - ${a}}`, correct: false },
-    { label: `\\sqrt{x + ${a}}`, correct: false },
-    { label: `\\sqrt{x} + ${a}`, correct: false },
-    { label: `\\sqrt{x} - ${a}`, correct: false }
-  ];
 
-  if (h !== 0) {
-    const bonne = h > 0 ? `\\sqrt{x - ${a}}` : `\\sqrt{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `\\sqrt{x} + ${a}` : `\\sqrt{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
+const propositions = [
+// Groupe A
+{ label: `\\sqrt{x - ${ah}} + ${av}`, correct: false },
+{ label: `\\sqrt{x - ${ah}} - ${av}`, correct: false },
+{ label: `\\sqrt{x + ${ah}} + ${av}`, correct: false },
+{ label: `\\sqrt{x + ${ah}} - ${av}`, correct: false },
 
-  return melanger(propositions);
+
+// Groupe B
+{ label: `\\sqrt{x - ${av}} + ${ah}`, correct: false },
+{ label: `\\sqrt{x - ${av}} - ${ah}`, correct: false },
+{ label: `\\sqrt{x + ${av}} + ${ah}`, correct: false },
+{ label: `\\sqrt{x + ${av}} - ${ah}`, correct: false }
+];
+
+
+const bonne =
+`\\sqrt{x ${h > 0 ? "- " + ah : "+ " + ah}} ` +
+`${v > 0 ? "+ " + av : "- " + av}`;
+
+
+propositions.find(p => p.label === bonne).correct = true;
+return melanger(propositions);
 }
 
   function genererQCMCube(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+const ah = Math.abs(h);
+const av = Math.abs(v);
 
-  const propositions = [
-    { label: `(x - ${a})^3`, correct: false },
-    { label: `(x + ${a})^3`, correct: false },
-    { label: `x^3 + ${a}`, correct: false },
-    { label: `x^3 - ${a}`, correct: false }
-  ];
 
-  if (h !== 0) {
-    const bonne = h > 0 ? `(x - ${a})^3` : `(x + ${a})^3`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `x^3 + ${a}` : `x^3 - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
+const propositions = [
+// Groupe A
+{ label: `(x - ${ah})^3 + ${av}`, correct: false },
+{ label: `(x - ${ah})^3 - ${av}`, correct: false },
+{ label: `(x + ${ah})^3 + ${av}`, correct: false },
+{ label: `(x + ${ah})^3 - ${av}`, correct: false },
 
-  return melanger(propositions);
+
+// Groupe B
+{ label: `(x - ${av})^3 + ${ah}`, correct: false },
+{ label: `(x - ${av})^3 - ${ah}`, correct: false },
+{ label: `(x + ${av})^3 + ${ah}`, correct: false },
+{ label: `(x + ${av})^3 - ${ah}`, correct: false }
+];
+
+
+const bonne =
+`(x ${h > 0 ? "- " + ah : "+ " + ah})^3 ` +
+`${v > 0 ? "+ " + av : "- " + av}`;
+
+
+propositions.find(p => p.label === bonne).correct = true;
+return melanger(propositions);
 }
 
-  function genererQCMCubique(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+ function genererQCMCubique(h, v) {
+const ah = Math.abs(h);
+const av = Math.abs(v);
 
-  const propositions = [
-    { label: `\\sqrt[3]{x - ${a}}`, correct: false },
-    { label: `\\sqrt[3]{x + ${a}}`, correct: false },
-    { label: `\\sqrt[3]{x} + ${a}`, correct: false },
-    { label: `\\sqrt[3]{x} - ${a}`, correct: false }
-  ];
 
-  if (h !== 0) {
-    const bonne = h > 0
-      ? `\\sqrt[3]{x - ${a}}`
-      : `\\sqrt[3]{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0
-      ? `\\sqrt[3]{x} + ${a}`
-      : `\\sqrt[3]{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
+const propositions = [
+// Groupe A
+{ label: `\\sqrt[3]{x - ${ah}} + ${av}`, correct: false },
+{ label: `\\sqrt[3]{x - ${ah}} - ${av}`, correct: false },
+{ label: `\\sqrt[3]{x + ${ah}} + ${av}`, correct: false },
+{ label: `\\sqrt[3]{x + ${ah}} - ${av}`, correct: false },
 
-  return melanger(propositions);
+
+// Groupe B
+{ label: `\\sqrt[3]{x - ${av}} + ${ah}`, correct: false },
+{ label: `\\sqrt[3]{x - ${av}} - ${ah}`, correct: false },
+{ label: `\\sqrt[3]{x + ${av}} + ${ah}`, correct: false },
+{ label: `\\sqrt[3]{x + ${av}} - ${ah}`, correct: false }
+];
+
+
+const bonne =
+`\\sqrt[3]{x ${h > 0 ? "- " + ah : "+ " + ah}} ` +
+`${v > 0 ? "+ " + av : "- " + av}`;
+
+
+propositions.find(p => p.label === bonne).correct = true;
+return melanger(propositions);
 }
 
-  function genererQCMInverse(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+function genererQCMInverse(h, v) {
+const ah = Math.abs(h);
+const av = Math.abs(v);
 
-  const propositions = [
-    { label: `\\frac{1}{x - ${a}}`, correct: false },
-    { label: `\\frac{1}{x + ${a}}`, correct: false },
-    { label: `\\frac{1}{x} + ${a}`, correct: false },
-    { label: `\\frac{1}{x} - ${a}`, correct: false }
-  ];
 
-  if (h !== 0) {
-    const bonne = h > 0
-      ? `\\frac{1}{x - ${a}}`
-      : `\\frac{1}{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0
-      ? `\\frac{1}{x} + ${a}`
-      : `\\frac{1}{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
+const propositions = [
+// Groupe A
+{ label: `\\frac{1}{x - ${ah}} + ${av}`, correct: false },
+{ label: `\\frac{1}{x - ${ah}} - ${av}`, correct: false },
+{ label: `\\frac{1}{x + ${ah}} + ${av}`, correct: false },
+{ label: `\\frac{1}{x + ${ah}} - ${av}`, correct: false },
 
-  return melanger(propositions);
+
+// Groupe B
+{ label: `\\frac{1}{x - ${av}} + ${ah}`, correct: false },
+{ label: `\\frac{1}{x - ${av}} - ${ah}`, correct: false },
+{ label: `\\frac{1}{x + ${av}} + ${ah}`, correct: false },
+{ label: `\\frac{1}{x + ${av}} - ${ah}`, correct: false }
+];
+
+
+const bonne =
+`\\frac{1}{x ${h > 0 ? "- " + ah : "+ " + ah}} ` +
+`${v > 0 ? "+ " + av : "- " + av}`;
+
+
+propositions.find(p => p.label === bonne).correct = true;
+return melanger(propositions);
 }
 
   
