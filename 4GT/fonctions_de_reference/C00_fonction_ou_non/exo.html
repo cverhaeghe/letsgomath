@@ -224,23 +224,25 @@ x += 0.05;
 
 function afficherPointsIntersection(x) {
 
-  /* 🔵 CERCLE : x² + y² = 4 */
-  if (Math.abs(x) <= 2 && typeEquation === "pasfonction") {
-    // On teste si le cercle est affiché
-    // (rayon 2, centre 0)
+  /* 🔵 CERCLE */
+  if (x === -1) {
     const y = Math.sqrt(4 - x * x);
-    if (isFinite(y)) {
-      dessinerPointBleu(x, y);
-      dessinerPointBleu(x, -y);
-      return;
-    }
+    dessinerPointBleu(x, y);
+    dessinerPointBleu(x, -y);
+    return;
   }
 
-  /* 🔵 SEGMENTS CROISÉS : y = x et y = -x */
-  // Intersections pour x = -3 → y = ±3
+  /* 🔵 SEGMENTS CROISÉS */
   if (x === -3) {
-    dessinerPointBleu(x, x);     // (-3, -3)
-    dessinerPointBleu(x, -x);    // (-3, 3)
+    dessinerPointBleu(x, x);
+    dessinerPointBleu(x, -x);
+    return;
+  }
+
+  /* 🔵 SAUT VERTICAL EN x = 2 → infinité de points */
+  if (x === 2) {
+    dessinerSegmentVerticalBleu(x, -1, 0); // plage visible
+    return;
   }
 }
   
@@ -302,6 +304,16 @@ fill="var(--peps)"
 stroke="var(--peps)"
 stroke-width="0"/>
 `;
+}
+
+
+  function dessinerSegmentVerticalBleu(x, yMin, yMax) {
+  svg.innerHTML += `
+    <line x1="${xToPx(x)}" y1="${yToPx(yMin)}"
+          x2="${xToPx(x)}" y2="${yToPx(yMax)}"
+          stroke="var(--peps)"
+          stroke-width="4"/>
+  `;
 }
   
 /* ====================== GENERATION ====================== */
@@ -378,8 +390,14 @@ dessinerPoint(1, 2);
 break;
 
 case "presqueFonction_segmentVertical":
-  tracerCourbe(x => Math.sin(x));
-  xProbleme = 2;   // ← la verticale animée fera le job
+  tracerCourbe(x => {
+    if (x < -2) return -1;
+    if (x < 0) return x + 1;
+    if (x < 2) return -x + 1;
+    return 0; // valeur à droite de x = 2
+  });
+
+  xProbleme = 2; // 👈 verticale de test ici
   break;
 
  case "presqueFonction_morceaux":
