@@ -187,6 +187,33 @@ function tirerTranslation() {
     return f(x - h) + v;
   };
 }
+
+  function tirerHV() {
+  const valeurs = [-3, -2, -1, 1, 2, 3];
+  h = valeurs[Math.floor(Math.random() * valeurs.length)];
+  v = valeurs[Math.floor(Math.random() * valeurs.length)];
+}
+
+  function tracerAsymptotesInverse(h, v) {
+  // asymptote verticale x = h
+  svg.innerHTML += `
+    <line x1="${xToPx(h)}" y1="0"
+          x2="${xToPx(h)}" y2="${height}"
+          stroke="var(--peps)"
+          stroke-width="2.5"
+          stroke-dasharray="4,4"/>
+  `;
+
+  // asymptote horizontale y = v
+  svg.innerHTML += `
+    <line x1="0" y1="${yToPx(v)}"
+          x2="${width}" y2="${yToPx(v)}"
+          stroke="var(--peps)"
+          stroke-width="2.5"
+          stroke-dasharray="4,4"/>
+  `;
+}
+
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
@@ -265,30 +292,17 @@ tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
 
       
 case "inverse":
+  tirerHV();
 
-// Asymptote verticale x = 0
-svg.innerHTML += `
-  <line x1="${xToPx(0)}" y1="0"
-        x2="${xToPx(0)}" y2="${height}"
-        stroke="var(--peps)"
-        stroke-width="2.5"
-        stroke-dasharray="4,4"/>
-`;
+  // asymptotes translatées
+  tracerAsymptotesInverse(h, v);
 
-// Asymptote horizontale y = 0
-svg.innerHTML += `
-  <line x1="0" y1="${yToPx(0)}"
-        x2="${width}" y2="${yToPx(0)}"
-        stroke="var(--peps)"
-        stroke-width="2.5"
-        stroke-dasharray="4,4"/>
-`;
+  // courbe translatée
+  tracerCourbe(x =>
+    Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
+  );
 
-
-  // Courbe (coupure autour de 0)
-tracerCourbe(x =>
-  Math.abs(x - h) < 0.1 ? NaN : fonctionTranslatee(x => 1 / x)(x)
-);  break;
+  break;
 
   }
 }
