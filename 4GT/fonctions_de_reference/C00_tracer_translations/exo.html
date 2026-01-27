@@ -149,7 +149,7 @@ if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
 
   function afficherPointsReference(points) {
   points.forEach(p => {
-    dessinerPoint(p.x, p.y, "black");
+dessinerPoint(p.x, p.y, "black", "reference");
   });
 }
 
@@ -276,7 +276,7 @@ inverse: {
 
 
   
-  function dessinerPoint(x, y, couleur = "blue") {
+  function dessinerPoint(x, y, couleur = "blue", type = "eleve") {
   const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
   circle.setAttribute("cx", xToPx(x));
@@ -284,18 +284,21 @@ inverse: {
   circle.setAttribute("r", 4);
   circle.setAttribute("fill", couleur);
 
-  // on stocke les coordonnées dans le SVG
   circle.dataset.x = x;
   circle.dataset.y = y;
+  circle.dataset.type = type;   // ⭐ clé
 
-  // clic sur le point → suppression
-  circle.addEventListener("click", function (e) {
-    e.stopPropagation(); // empêche l’ajout d’un nouveau point
-    supprimerPoint(x, y, circle);
-  });
+  if (type === "eleve") {
+    circle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      supprimerPoint(x, y, circle);
+    });
+  }
 
   svg.appendChild(circle);
 }
+
+
 
   function supprimerPoint(x, y, elementSVG) {
   // retirer du tableau élève
@@ -410,8 +413,7 @@ svg.addEventListener("click", function(e) {
   if (pointsEleve.some(p => p.x === x && p.y === y)) return;
 
   pointsEleve.push({ x, y });
-  dessinerPoint(x, y, "blue");
-});
+dessinerPoint(x, y, "blue", "eleve");});
 
 
 /* ====================== VERIFICATION ====================== */
@@ -419,8 +421,8 @@ function verifierExercice() {
   const feedback = document.getElementById("feedback");
   let toutCorrect = true;
 
-  const cercles = svg.querySelectorAll("circle");
-
+const cercles = svg.querySelectorAll('circle[data-type="eleve"]');
+  
   cercles.forEach(c => {
 const x = parseFloat(c.dataset.x);
 const y = parseFloat(c.dataset.y);
@@ -491,7 +493,7 @@ if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
   afficherPointsReference(fonctionCourante.points);
 
   // 🔹 points translatés
-  pointsCles.forEach(p => dessinerPoint(p.x, p.y, "blue"));
+  pointsCles.forEach(p => dessinerPoint(x, y, "blue", "eleve"););
 
   // 🔸 courbe translatée
   tracerCourbe(fonctionTranslatee(fonctionCourante.f));
