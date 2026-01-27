@@ -222,12 +222,25 @@ x += 0.05;
 }, 20);
 }
 
-  function afficherPointsIntersection(x) {
-  // Cas du cercle x² + y² = 4
-  if (Math.abs(x) <= 2) {
+function afficherPointsIntersection(x) {
+
+  /* 🔵 CERCLE : x² + y² = 4 */
+  if (Math.abs(x) <= 2 && typeEquation === "pasfonction") {
+    // On teste si le cercle est affiché
+    // (rayon 2, centre 0)
     const y = Math.sqrt(4 - x * x);
-    dessinerPointBleu(x, y);
-    dessinerPointBleu(x, -y);
+    if (isFinite(y)) {
+      dessinerPointBleu(x, y);
+      dessinerPointBleu(x, -y);
+      return;
+    }
+  }
+
+  /* 🔵 SEGMENTS CROISÉS : y = x et y = -x */
+  // Intersections pour x = -3 → y = ±3
+  if (x === -3) {
+    dessinerPointBleu(x, x);     // (-3, -3)
+    dessinerPointBleu(x, -x);    // (-3, 3)
   }
 }
   
