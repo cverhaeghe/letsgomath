@@ -446,96 +446,72 @@ function genererEquation() {
 
   nbEssaisFaux = 0;
 
-  dessinerRepere();
-  
+dessinerRepere();
+
+
 typeEquation = tirerFonctionSansABA();
 tirerTranslation();
 
-  switch (typeEquation) {
+
+let qcm; // ✅ UNE SEULE DÉCLARATION
+
+
+switch (typeEquation) {
+
+
 case "carrée":
-
-  // Point exact (0,0) → continuité visible
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}"
-            cy="${yToPx(0)}"
-            r="0.1"
-            fill="var(--lgm-orange)"/>
-  `;
-
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
+`;
 tracerCourbe(fonctionTranslatee(x => x * x));
-
-const qcm = genererQCM(typeEquation, h, v);
-afficherQCM(qcm);
 break;
 
 
 case "cube":
-
-  // Point exact (0,0) → continuité visible
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}"
-            cy="${yToPx(0)}"
-            r="0.1"
-            fill="var(--lgm-orange)"/>
-  `;
-
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
+`;
 tracerCourbe(fonctionTranslatee(x => x * x * x));
-const qcm = genererQCM(typeEquation, h, v);
-afficherQCM(qcm);
-      break;
+break;
 
 
-    case "valabs":
+case "valabs":
 tracerCourbe(fonctionTranslatee(x => Math.abs(x)));
-      const qcm = genererQCM(typeEquation, h, v);
-afficherQCM(qcm);
-      break;
+break;
 
-    case "racine":
-      svg.innerHTML += `
-      <circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
-      `;
+
+case "racine":
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
+`;
 tracerCourbe(x => {
-  const y = fonctionTranslatee(Math.sqrt)(x);
-  return x - h >= 0 ? y : NaN;
+const y = fonctionTranslatee(Math.sqrt)(x);
+return x - h >= 0 ? y : NaN;
 });
-      const qcm = genererQCM(typeEquation, h, v);
-afficherQCM(qcm);
-      break;
+break;
 
 
 case "cubique":
-
-  // Point exact (0,0) → continuité visible
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}"
-            cy="${yToPx(0)}"
-            r="0.1"
-            fill="var(--lgm-orange)"/>
-  `;
-
-  // Courbe complète
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
+`;
 tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
-      const qcm = genererQCM(typeEquation, h, v);
-afficherQCM(qcm);
-      break;
+break;
 
-      
+
 case "inverse":
-  tirerHV();
+tirerHV();
+tracerAsymptotesInverse(h, v);
+tracerCourbe(x =>
+Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
+);
+break;
+}
 
-  // asymptotes translatées
-  tracerAsymptotesInverse(h, v);
 
-  // courbe translatée
-  tracerCourbe(x =>
-    Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
-  );
-const qcm = genererQCM(typeEquation, h, v);
+// ✅ QCM généré UNE FOIS, APRÈS le switch
+qcm = genererQCM(typeEquation, h, v);
 afficherQCM(qcm);
-  break;
-
-  }
 }
 
 
