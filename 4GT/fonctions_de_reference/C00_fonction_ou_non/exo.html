@@ -208,9 +208,6 @@ const ligne = document.createElementNS("http://www.w3.org/2000/svg", "line");
 ligne.setAttribute("id", "droite-verticale");
 ligne.setAttribute("y1", 0);
 ligne.setAttribute("y2", height);
-
-
-// 🔵 STYLE UNIFIÉ
 ligne.setAttribute("stroke", "blue");
 ligne.setAttribute("stroke-width", "3");
 ligne.setAttribute("stroke-dasharray", "6,4");
@@ -220,6 +217,7 @@ svg.appendChild(ligne);
 
 
 let x = xmin;
+let messageAffiche = false;
 
 
 const animation = setInterval(() => {
@@ -227,49 +225,30 @@ ligne.setAttribute("x1", xToPx(x));
 ligne.setAttribute("x2", xToPx(x));
 
 
+/* 🔴 CAS PAS UNE FONCTION : arrêt sur xProbleme */
 if (xStop !== null && x + PAS / 2 >= xStop) {
-  // 🔒 snap EXACT à xProbleme
-  ligne.setAttribute("x1", xToPx(xStop));
-  ligne.setAttribute("x2", xToPx(xStop));
+ligne.setAttribute("x1", xToPx(xStop));
+ligne.setAttribute("x2", xToPx(xStop));
+
 
 clearInterval(animation);
 afficherPointsIntersection(xStop);
-afficherConclusion(); 
-
-if (x > xmax) {
-
-
-if (typeEquation === "fonction") {
-// 🔁 Retour à gauche : effet "infini"
-x = xmin;
-ligne.setAttribute("x1", xToPx(x));
-ligne.setAttribute("x2", xToPx(x));
-
-
-// Afficher le message UNE SEULE FOIS
-if (!ligne.dataset.messageAffiche) {
-afficherConclusion();
-ligne.dataset.messageAffiche = "true";
-}
-
-
-return; // on continue l'animation
-}
-
-
-// Cas pas une fonction (sécurité)
-clearInterval(animation);
 afficherConclusion();
 return;
 }
 
 
+/* 🔵 CAS FONCTION : boucle infinie */
 if (x > xmax) {
-clearInterval(animation);
+if (!messageAffiche) {
+afficherConclusion();
+messageAffiche = true;
+}
+x = xmin; // 🔁 retour à gauche
 }
 
 
-x += 0.05;
+x += PAS;
 }, 20);
 }
 
@@ -529,7 +508,11 @@ break;
 
   // Deux points pour x = 1
 dessinerPoint(1, -1);
-
+xProbleme = 1;
+intersectionMode = {
+  type: "deuxValeurs",
+  values: x => [1, -1]
+};
   break;
       
   }
