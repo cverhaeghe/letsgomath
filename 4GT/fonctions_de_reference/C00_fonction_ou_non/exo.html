@@ -497,6 +497,7 @@ case "parabole_point_en_plus":
 case "presqueFonction_segmentVertical":
   // Courbe principale (fonction par morceaux)
   tracerCourbe(x => {
+    if (x > 2) return x - 2;
     if (x < 0) return x + 1;
     if (x < 2) return -x + 1;
     return NaN; // ⛔ on coupe ici
