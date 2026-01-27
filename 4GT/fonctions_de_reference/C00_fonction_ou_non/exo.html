@@ -521,22 +521,28 @@ case "presqueFonction_segmentVertical":
 
       
 
- case "presqueFonction_morceaux":
-  tracerCourbe(x => {
-    if (x < 1) return x;
-    if (x > 1) return 2 - x;
-    return NaN; // on évite le point central
-  });
+case "presqueFonction_morceaux":
+// Courbe par morceaux
+tracerCourbe(x => {
+if (x < 1) return x;
+if (x > 1) return 2 - x;
+return NaN; // trou volontaire
+});
 
-  // Deux points pour x = 1
+
+// 🔴 Deux images pour x = 1
+dessinerPoint(1, 1);
 dessinerPoint(1, -1);
-xProbleme = 1;
+
+
+// 🔒 VERROUILLAGE LOGIQUE (comme segmentVertical)
 typeEquation = "pasfonction";
+xProbleme = 1;
 intersectionMode = {
-  type: "deuxValeurs",
-  values: x => [1, -1]
+type: "deuxValeurs",
+values: () => [1, -1]
 };
-  break;
+break;
       
   }
 }
