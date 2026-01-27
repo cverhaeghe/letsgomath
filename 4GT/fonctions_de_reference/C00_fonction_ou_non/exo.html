@@ -72,7 +72,8 @@ const ymin = -5, ymax = 5;
 let typeEquation = "";
 let dernieresFonctions = [];
 let xProbleme = null;
-  
+let intersectionMode = null;
+
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
 function yToPx(y){ return height/2 - y*unit; }
@@ -223,25 +224,32 @@ x += 0.05;
 }
 
 function afficherPointsIntersection(x) {
+  if (!intersectionMode) return;
 
-  /* 🔵 CERCLE */
-  if (x === -1) {
-    const y = Math.sqrt(4 - x * x);
-    dessinerPointBleu(x, y);
-    dessinerPointBleu(x, -y);
+  // 🔵 Cas : deux points (symétriques)
+  if (intersectionMode.type === "deuxPoints") {
+    const y = intersectionMode.f(x);
+    if (isFinite(y)) {
+      dessinerPointBleu(x, y);
+      dessinerPointBleu(x, -y);
+    }
     return;
   }
 
-  /* 🔵 SEGMENTS CROISÉS */
-  if (x === -3) {
-    dessinerPointBleu(x, x);
-    dessinerPointBleu(x, -x);
+  // 🔵 Cas : deux valeurs explicites
+  if (intersectionMode.type === "deuxValeurs") {
+    const ys = intersectionMode.values(x);
+    ys.forEach(y => dessinerPointBleu(x, y));
     return;
   }
 
-  /* 🔵 SAUT VERTICAL EN x = 2 → infinité de points */
-  if (x === 2) {
-    dessinerSegmentVerticalBleu(x, -1, 0); // plage visible
+  // 🔵 Cas : infinité de points
+  if (intersectionMode.type === "infini") {
+    dessinerSegmentVerticalBleu(
+      x,
+      intersectionMode.yMin,
+      intersectionMode.yMax
+    );
     return;
   }
 }
@@ -360,24 +368,48 @@ case "cercle":
     2 * Math.PI
   );
   xProbleme = -1;
-  break;    
+  intersectionMode = {
+    type: "deuxPoints",
+    f: x => Math.sqrt(4 - x * x)
+  };
+  break;   
 
 case "ellipse":
-  tracerCourbe(x => Math.sqrt(3 * (1 - x * x / 9)));
-  tracerCourbe(x => -Math.sqrt(3 * (1 - x * x / 9)));
-  xProbleme = -2;
-  break;
+tracerParametrique(
+t => 3 * Math.cos(t),
+t => Math.sqrt(3) * Math.sin(t),
+0,
+2 * Math.PI
+);
+xProbleme = -2;
+intersectionMode = {
+type: "deuxPoints",
+f: x => Math.sqrt(3 * (1 - x * x / 9))
+};
+break;
 
 case "paraboleCouchee":
-  tracerCourbe(x => Math.sqrt(x + 2));
-  tracerCourbe(x => -Math.sqrt(x + 2));
-  xProbleme = -2;
+  tracerParametrique(
+    t => t * t - 2,
+    t => t,
+    -3,
+    3
+  );
+  xProbleme = -1;
+  intersectionMode = {
+    type: "deuxPoints",
+    f: x => Math.sqrt(x + 2)
+  };
   break;
 
 case "segmentsCroises":
   tracerCourbe(x => x);
   tracerCourbe(x => -x);
   xProbleme = -3;
+  intersectionMode = {
+    type: "deuxValeurs",
+    values: x => [x, -x]
+  };
   break;
 
 case "presqueFonction_pointDouble":
@@ -391,13 +423,15 @@ break;
 
 case "presqueFonction_segmentVertical":
   tracerCourbe(x => {
-    if (x < -2) return -1;
-    if (x < 0) return x + 1;
     if (x < 2) return -x + 1;
-    return 0; // valeur à droite de x = 2
+    return 0;
   });
-
-  xProbleme = 2; // 👈 verticale de test ici
+  xProbleme = 2;
+  intersectionMode = {
+    type: "infini",
+    yMin: -1,
+    yMax: 0
+  };
   break;
 
  case "presqueFonction_morceaux":
