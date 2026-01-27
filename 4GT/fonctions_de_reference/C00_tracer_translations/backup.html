@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+<p id="enonce"></p>
+
+  <!-- GRAPHIQUE -->
+<div id="graph-container"
+     style="position:relative; display:flex; justify-content:center;">
+    <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
+  </div>
+
+  <div class="center-button">
+    <button onclick="verifierExercice()">Vérifier</button>
+    <button onclick="afficherCorrection()">Correction</button>
+    <button onclick="nouvelExercice()">Nouvel exercice</button>
+  </div>
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_fonctions.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+/* ====================== PARAMÈTRES REPÈRE ====================== */
+const svg = document.getElementById("graph");
+const width = 400, height = 400;
+const xmin = -9, xmax = 9;
+const ymin = -8, ymax = 8;
+const unitX = width / (xmax - xmin);
+const unitY = height / (ymax - ymin);
+const unit = Math.min(unitX, unitY);
+const margeCourbe = 0.5;
+
+
+/* ====================== DONNÉES MATHS ====================== */
+let fonctionCourante = null;
+let pointsCles = [];
+let pointsEleve = [];
+let dernieresFonctions = [];
+let h = 0;
+let v = 0;
+
+/* ====================== OUTILS ====================== */
+function xToPx(x){ return width/2 + x*unit; }
+function yToPx(y){ return height/2 - y*unit; }
+function tirageHV() {
+  const valeurs = [-3, -2, -1, 1, 2, 3];
+  h = valeurs[Math.floor(Math.random() * valeurs.length)];
+  v = valeurs[Math.floor(Math.random() * valeurs.length)];
+}
+  
+function formatHV(valeur, lettre) {
+  if (valeur > 0) return `${lettre}-${valeur}`;
+  if (valeur < 0) return `${lettre}+${Math.abs(valeur)}`;
+  return lettre;
+}
+
+function formatV(valeur) {
+  if (valeur > 0) return `+${valeur}`;
+  if (valeur < 0) return `-${Math.abs(valeur)}`;
+  return "";
+}
+
+/* ====================== REPÈRE ====================== */
+function dessinerRepere(){
+  svg.innerHTML = "";
+
+  for(let x=xmin;x<=xmax;x++){
+    svg.innerHTML += `<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
+  }
+  for(let y=ymin;y<=ymax;y++){
+    svg.innerHTML += `<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
+  }
+
+  svg.innerHTML += `
+    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
+    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black" stroke-width="2"/>
+  `;
+
+  for(let x=xmin;x<=xmax;x++) if(x!==0)
+    svg.innerHTML += `<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
+
+  for(let y=ymin;y<=ymax;y++) if(y!==0)
+    svg.innerHTML += `<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
+}
+
+  function tracerFonctionReference(fonction) {
+  let path = "";
+  let first = true;
+
+  for (let x = xmin; x <= xmax; x += 0.01) {
+    let y = fonction(x);
+
+if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
+      first = true;
+      continue;
+    }
+
+    const px = xToPx(x);
+    const py = yToPx(y);
+
+    if (first) {
+      path += `M ${px} ${py}`;
+      first = false;
+    } else {
+      path += ` L ${px} ${py}`;
+    }
+  }
+
+  svg.innerHTML += `
+    <path d="${path}"
+          fill="none"
+          stroke="black"
+          stroke-width="2"
+          pointer-events="none"/>
+  `;
+}
+
+  function afficherPointsReference(points) {
+  points.forEach(p => {
+dessinerPoint(p.x, p.y, "black", "reference");
+  });
+}
+
+  function pointVisible(p) {
+  return (
+    p.x >= xmin &&
+    p.x <= xmax &&
+    p.y >= ymin &&
+    p.y <= ymax
+  );
+}
+  
+  function fonctionTranslatee(f) {
+  return function(x) {
+    return f(x - h) + v;
+  };
+}
+
+  function tracerAsymptotesInverseTranslatees(h, v) {
+
+  // asymptote verticale x = h
+  svg.innerHTML += `
+    <line x1="${xToPx(h)}" y1="0"
+          x2="${xToPx(h)}" y2="${height}"
+          stroke="orange"
+          stroke-width="2"
+          stroke-dasharray="6,6"
+          pointer-events="none"/>
+  `;
+
+  // asymptote horizontale y = v
+  svg.innerHTML += `
+    <line x1="0" y1="${yToPx(v)}"
+          x2="${width}" y2="${yToPx(v)}"
+          stroke="orange"
+          stroke-width="2"
+          stroke-dasharray="6,6"
+          pointer-events="none"/>
+  `;
+}
+/* ====================== POINTS ====================== */
+
+  const fonctionsReference = {
+  carrée: {
+    label: "carrée",
+    formule: "(X)^2  V",
+    points: [
+      { x: -2, y: 4 },
+      { x: -1, y: 1 },
+      { x:  0, y: 0 },
+      { x:  1, y: 1 },
+      { x:  2, y: 4 }
+    ],
+    f: x => x * x
+  },
+
+  cube: {
+    label: "cube",
+    formule: "(X)^3  V",
+    points: [
+      { x: -2, y: -8 },
+      { x: -1, y: -1 },
+      { x:  0, y:  0 },
+      { x:  1, y:  1 },
+      { x:  2, y:  8 }
+    ],
+    f: x => x * x * x
+  },
+
+  valabs: {
+    label: "valeur absolue",
+    formule: "|X| V",
+    points: [
+      { x: -2, y: 2 },
+      { x: -1, y: 1 },
+      { x:  0, y: 0 },
+      { x:  1, y: 1 },
+      { x:  2, y: 2 }
+    ],
+    f: x => Math.abs(x)
+  },
+
+  racine: {
+    label: "racine carrée",
+    formule: "\\sqrt{X}  V",
+    points: [
+      { x: 0, y: 0 },
+      { x: 1, y: 1 },
+      { x: 4, y: 2 },
+      { x: 9, y: 3 }
+    ],
+    f: x => x >= 0 ? Math.sqrt(x) : NaN
+  },
+
+  cubique: {
+    label: "racine cubique",
+    formule: "\\sqrt[3]{X} V",
+    points: [
+      { x: -8, y: -2 },
+      { x: -1, y: -1 },
+      { x:  0, y:  0 },
+      { x:  1, y:  1 },
+      { x:  8, y:  2 }
+    ],
+    f: x => Math.cbrt(x)
+  },
+
+inverse: {
+  label: "inverse",
+  formule: "\\dfrac{1}{X} V",
+  snap: 0.5,   // ⭐ demi-unités autorisées
+  points: [
+    { x: -2, y: -0.5 },
+    { x: -1, y: -1 },
+    { x:  1, y:  1 },
+    { x:  2, y:  0.5 },
+    { x:  0.5, y:  2 },
+    { x: -0.5, y: -2 }
+  ],
+  f: x => x !== 0 ? 1 / x : NaN
+}
+
+};
+
+
+  
+  function dessinerPoint(x, y, couleur = "blue", type = "eleve") {
+  const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+  circle.setAttribute("cx", xToPx(x));
+  circle.setAttribute("cy", yToPx(y));
+  circle.setAttribute("r", 4);
+  circle.setAttribute("fill", couleur);
+
+  circle.dataset.x = x;
+  circle.dataset.y = y;
+  circle.dataset.type = type;   // ⭐ clé
+
+  if (type === "eleve") {
+    circle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      supprimerPoint(x, y, circle);
+    });
+  }
+
+  svg.appendChild(circle);
+}
+
+
+
+  function supprimerPoint(x, y, elementSVG) {
+  // retirer du tableau élève
+  pointsEleve = pointsEleve.filter(
+    p => !(p.x === x && p.y === y)
+  );
+
+  // retirer du SVG
+  svg.removeChild(elementSVG);
+}
+
+function pointEstCorrect(x, y) {
+  return pointsCles.some(p => p.x === x && p.y === y);
+}
+
+  function tirerFonctionSansRepetition() {
+  const toutes = Object.keys(fonctionsReference);
+
+  // On exclut les deux dernières
+  let candidates = toutes.filter(
+    f => !dernieresFonctions.includes(f)
+  );
+
+  // Sécurité (au cas très improbable)
+  if (candidates.length === 0) {
+    candidates = toutes;
+  }
+
+  const choix = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Mise à jour de l'historique
+  dernieresFonctions.push(choix);
+  if (dernieresFonctions.length > 2) {
+    dernieresFonctions.shift();
+  }
+
+  return choix;
+}
+function snap(val, pas) {
+  return Math.round(val / pas) * pas;
+}
+
+  
+/* ====================== GENERATION ====================== */
+
+function genererExercice() {
+  dessinerRepere();
+  pointsEleve = [];
+  document.getElementById("feedback").innerHTML = "";
+
+  // 1️⃣ Choix de la fonction
+  const choix = tirerFonctionSansRepetition();
+  fonctionCourante = fonctionsReference[choix];
+
+  // 2️⃣ Tirage de h et v
+  tirageHV();
+
+  // 3️⃣ Affichage de la fonction de référence (NON translatée)
+  tracerFonctionReference(fonctionCourante.f);
+  afficherPointsReference(fonctionCourante.points);
+
+  // 4️⃣ Points clés de la fonction translatée (pour la vérification)
+  pointsCles = fonctionCourante.points.map(p => ({
+    x: p.x + h,
+    y: p.y + v
+  }));
+
+  // 5️⃣ Énoncé mathématique propre
+  const X = formatHV(h, "x");
+  const V = formatV(v);
+
+  const formule = fonctionCourante.formule
+    .replace("X", X)
+    .replace("V", V);
+
+  document.getElementById("enonce").innerHTML = `
+    Trace la fonction
+    \\[
+      ${formule}
+    \\]
+  `;
+
+  MathJax.typesetPromise();
+}
+
+  
+/* ====================== INTERACTION ====================== */
+function getSVGCoordinates(evt) {
+  const pt = svg.createSVGPoint();
+
+  if (evt.touches && evt.touches.length > 0) {
+    pt.x = evt.touches[0].clientX;
+    pt.y = evt.touches[0].clientY;
+  } else {
+    pt.x = evt.clientX;
+    pt.y = evt.clientY;
+  }
+
+  const svgP = pt.matrixTransform(svg.getScreenCTM().inverse());
+  return { x: svgP.x, y: svgP.y };
+}
+
+  
+svg.addEventListener("click", function(e) {
+
+  const { x: px, y: py } = getSVGCoordinates(e);
+
+  const pas = fonctionCourante?.snap || 1;
+  const x = snap((px - width/2) / unit, pas);
+  const y = snap((height/2 - py) / unit, pas);
+
+  if (pointsEleve.some(p => p.x === x && p.y === y)) return;
+
+  pointsEleve.push({ x, y });
+dessinerPoint(x, y, "blue", "eleve");});
+
+
+/* ====================== VERIFICATION ====================== */
+function verifierExercice() {
+  const feedback = document.getElementById("feedback");
+  let toutCorrect = true;
+
+const cercles = svg.querySelectorAll('circle[data-type="eleve"]');
+  
+  cercles.forEach(c => {
+const x = parseFloat(c.dataset.x);
+const y = parseFloat(c.dataset.y);
+
+
+    if (pointEstCorrect(x, y)) {
+      c.setAttribute("fill", "blue");
+    } else {
+      c.setAttribute("fill", "red");
+      toutCorrect = false;
+    }
+  });
+
+const pointsClesVisibles = pointsCles.filter(pointVisible);
+
+if (!toutCorrect || pointsEleve.length !== pointsClesVisibles.length) {
+  feedback.innerHTML = "❌ Certains points sont incorrects.";
+    return;
+  }
+
+feedback.innerHTML = "✔️ Bonne réponse !";
+
+// tracer la courbe TRANSLATÉE
+tracerCourbe(fonctionTranslatee(fonctionCourante.f));
+
+// asymptotes translatées si inverse
+if (fonctionCourante.label === "inverse") {
+  tracerAsymptotesInverseTranslatees(h, v);
+}
+}
+
+
+/* ====================== COURBE ====================== */
+function tracerCourbe(fonction) {
+  let path = "";
+  let first = true;
+
+  for (let x = xmin; x <= xmax; x += 0.01) {
+    let y = fonction(x);
+
+if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
+  first = true;
+  continue;
+}
+
+
+    const px = xToPx(x);
+    const py = yToPx(y);
+
+    if (first) {
+      path += `M ${px} ${py}`;
+      first = false;
+    } else {
+      path += ` L ${px} ${py}`;
+    }
+  }
+
+  svg.innerHTML += `
+    <path d="${path}" fill="none"
+          stroke="var(--peps)"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  `;
+}
+
+/* ====================== CORRECTION ====================== */
+
+function afficherCorrection() {
+  dessinerRepere();
+  pointsEleve = [];
+
+  tracerFonctionReference(fonctionCourante.f);
+  afficherPointsReference(fonctionCourante.points);
+
+  pointsCles.forEach(p =>
+    dessinerPoint(p.x, p.y, "blue", "eleve")
+  );
+
+  tracerCourbe(fonctionTranslatee(fonctionCourante.f));
+
+  if (fonctionCourante.label === "inverse") {
+    tracerAsymptotesInverseTranslatees(h, v);
+  }
+}
+
+/* ====================== RESET ====================== */
+function nouvelExercice() {
+  genererExercice();
+}
+
+
+/* ====================== INIT ====================== */
+window.onload = genererExercice;
+</script>
+
+<script src="../../../js/protection.js"></script>
+
+</body>
+</html>
