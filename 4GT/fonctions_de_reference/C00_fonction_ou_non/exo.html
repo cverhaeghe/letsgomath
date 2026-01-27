@@ -68,13 +68,29 @@ const unit = 40;
 const xmin = -5, xmax = 5;
 const ymin = -5, ymax = 5;
 const PAS = 0.05;
+
+const TOUS_LES_EXERCICES = [
+{ nom: "parabole", type: "fonction" },
+{ nom: "fonctionBizarre", type: "fonction" },
+{ nom: "montagne", type: "fonction" },
+
+
+{ nom: "cercle", type: "pasfonction" },
+{ nom: "ellipse", type: "pasfonction" },
+{ nom: "paraboleCouchee", type: "pasfonction" },
+{ nom: "segmentsCroises", type: "pasfonction" },
+{ nom: "parabole_point_en_plus", type: "pasfonction" },
+{ nom: "presqueFonction_segmentVertical", type: "pasfonction" },
+{ nom: "presqueFonction_morceaux", type: "pasfonction" }
+];
   
 /* ====================== VARIABLES ====================== */
 let typeEquation = "";
 let dernieresFonctions = [];
 let xProbleme = null;
 let intersectionMode = null;
-
+let paquetExercices = [];
+  
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
 function yToPx(y){ return height/2 - y*unit; }
@@ -140,7 +156,14 @@ if (
 }
 
 
+function melanger(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
 
+  
 function tirerFonctionSansABA() {
   const toutes = ["carrée", "cube", "valabs", "racine", "cubique", "inverse"];
 
@@ -164,22 +187,17 @@ function tirerFonctionSansABA() {
 }
 
 function tirerCourbe() {
-  const courbes = [
-    { nom: "parabole", type: "fonction" },
-    { nom: "fonctionBizarre", type: "fonction" },
-    { nom: "montagne", type: "fonction" },
+  // Si le paquet est vide → on le recrée et on le mélange
+  if (paquetExercices.length === 0) {
+    paquetExercices = [...TOUS_LES_EXERCICES];
+    melanger(paquetExercices);
+  }
 
-    { nom: "cercle", type: "pasfonction" },
-    { nom: "ellipse", type: "pasfonction" },
-    { nom: "paraboleCouchee", type: "pasfonction" },
-    { nom: "segmentsCroises", type: "pasfonction" },
-    { nom: "parabole_point_en_plus", type: "pasfonction" },
-    { nom: "presqueFonction_segmentVertical", type: "pasfonction" },
-    { nom: "presqueFonction_morceaux", type: "pasfonction" }
-  ];
-
-  return courbes[Math.floor(Math.random() * courbes.length)];
+  // On prend le premier exercice du paquet
+  return paquetExercices.shift();
 }
+
+  
 
 function animerDroiteVerticale(xStop = null) {
 const old = document.getElementById("droite-verticale");
