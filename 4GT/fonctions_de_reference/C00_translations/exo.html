@@ -249,13 +249,20 @@ const qcm = document.getElementById("qcm");
 qcm.innerHTML = "";
 
 
-let nbErreurs = 0; // 👈 compteur local
+let nbErreurs = 0;
+let bonneCarte = null; // 👈 référence directe
 
 
 propositions.forEach(p => {
 const card = document.createElement("div");
 card.className = "qcm-card";
 card.innerHTML = `\\(${p.label}\\)`;
+
+
+// On mémorise la bonne carte
+if (p.correct) {
+bonneCarte = card;
+}
 
 
 card.onclick = () => {
@@ -277,16 +284,10 @@ nbErreurs++;
 
 
 // ---- 2e ERREUR : on révèle la bonne ----
-if (nbErreurs >= 2) {
-document.querySelectorAll(".qcm-card").forEach(c => {
-const estBonne = propositions.find(p =>
-c.innerHTML.includes(p.label) && p.correct
-);
-if (estBonne) {
-c.classList.add("correct");
-}
-c.style.pointerEvents = "none";
-});
+if (nbErreurs >= 2 && bonneCarte) {
+bonneCarte.classList.add("correct");
+document.querySelectorAll(".qcm-card")
+.forEach(c => c.style.pointerEvents = "none");
 }
 };
 
