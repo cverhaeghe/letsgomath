@@ -71,8 +71,8 @@ const ymin = -5, ymax = 5;
 /* ====================== VARIABLES ====================== */
 let typeEquation = "";
 let dernieresFonctions = [];
-let nbEssaisFaux = 0;
-
+let xProbleme = null;
+  
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
 function yToPx(y){ return height/2 - y*unit; }
@@ -161,6 +161,64 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
+function tirerCourbe() {
+  const courbes = [
+    { nom: "parabole", type: "fonction" },
+    { nom: "fonctionBizarre", type: "fonction" },
+    { nom: "montagne", type: "fonction" },
+
+    { nom: "cercle", type: "pasfonction" },
+    { nom: "ellipse", type: "pasfonction" },
+    { nom: "paraboleCouchee", type: "pasfonction" },
+    { nom: "segmentsCroises", type: "pasfonction" }
+  ];
+
+  return courbes[Math.floor(Math.random() * courbes.length)];
+}
+
+ function animerDroiteVerticale(xStop = null) {
+// Supprimer ancienne droite si elle existe
+const old = document.getElementById("droite-verticale");
+if (old) old.remove();
+
+
+// Créer la droite
+const ligne = document.createElementNS("http://www.w3.org/2000/svg", "line");
+ligne.setAttribute("id", "droite-verticale");
+ligne.setAttribute("y1", 0);
+ligne.setAttribute("y2", height);
+ligne.setAttribute("stroke", "var(--lgm-orange)");
+ligne.setAttribute("stroke-width", "3");
+ligne.setAttribute("stroke-dasharray", "6,4");
+
+
+svg.appendChild(ligne);
+
+
+let x = xmin;
+
+
+const animation = setInterval(() => {
+ligne.setAttribute("x1", xToPx(x));
+ligne.setAttribute("x2", xToPx(x));
+
+
+// Cas : on veut s'arrêter sur un x précis (piège)
+if (xStop !== null && x >= xStop) {
+clearInterval(animation);
+}
+
+
+// Fin du balayage
+if (x > xmax) {
+clearInterval(animation);
+}
+
+
+x += 0.05;
+}, 20);
+}
+
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
@@ -172,94 +230,91 @@ function genererEquation() {
     card.style.pointerEvents = "auto";
   });
 
-  nbEssaisFaux = 0;
 
   dessinerRepere();
   
-typeEquation = tirerFonctionSansABA();
+const courbe = tirerCourbe();
+typeEquation = courbe.type;
 
-
-  switch (typeEquation) {
-case "carrée":
-
-  // Point exact (0,0) → continuité visible
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}"
-            cy="${yToPx(0)}"
-            r="0.1"
-            fill="var(--lgm-orange)"/>
-  `;
-
-  tracerCourbe(x => x * x);
+  switch (courbe.nom) {
+            
+case "parabole":
+  tracerCourbe(x => 0.5 * x * x - 1);
   break;
 
-
-case "cube":
-
-  // Point exact (0,0) → continuité visible
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}"
-            cy="${yToPx(0)}"
-            r="0.1"
-            fill="var(--lgm-orange)"/>
-  `;
-
-  tracerCourbe(x => x * x * x);
+case "fonctionBizarre":
+  tracerCourbe(x => Math.sin(x) + x / 3);
   break;
 
-
-    case "valabs":
-      tracerCourbe(x => Math.abs(x));
-      break;
-
-    case "racine":
-      svg.innerHTML += `
-      <circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
-      `;
-      tracerCourbe(x => x > 0 ? Math.sqrt(x) : NaN);
-      break;
-
-
-case "cubique":
-
-  // Point exact (0,0) → continuité visible
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}"
-            cy="${yToPx(0)}"
-            r="0.1"
-            fill="var(--lgm-orange)"/>
-  `;
-
-  // Courbe complète
-  tracerCourbe(x => Math.cbrt(x));
+case "montagne":
+  tracerCourbe(x => {
+    if (x < -2) return -1;
+    if (x < 0) return x + 1;
+    if (x < 2) return -x + 1;
+    return 0.5;
+  });
   break;
 
+case "cercle":
+  tracerCourbe(x => Math.sqrt(4 - x * x));
+  tracerCourbe(x => -Math.sqrt(4 - x * x));
+  break;      
+
+case "ellipse":
+  tracerCourbe(x => Math.sqrt(3 * (1 - x * x / 9)));
+  tracerCourbe(x => -Math.sqrt(3 * (1 - x * x / 9)));
+  break;
+
+case "paraboleCouchee":
+  tracerCourbe(x => Math.sqrt(x + 2));
+  tracerCourbe(x => -Math.sqrt(x + 2));
+  break;
+
+case "segmentsCroises":
+  tracerCourbe(x => x);
+  tracerCourbe(x => -x);
+  break;
+
+case "presqueFonction_pointDouble":
+// Courbe principale (fonction)
+tracerCourbe(x => 0.5 * x * x - 1);
+xProbleme = 1;
+
+// Point supplémentaire qui casse la fonction
+svg.innerHTML += `
+<circle cx="${xToPx(1)}"
+cy="${yToPx(2)}"
+r="5"
+fill="var(--lgm-orange)"/>
+`;
+break;
+
+case "presqueFonction_segmentVertical":
+  tracerCourbe(x => Math.sin(x));
+
+  // Segment vertical interdit
+  svg.innerHTML += `
+    <line x1="${xToPx(2)}" y1="${yToPx(-2)}"
+          x2="${xToPx(2)}" y2="${yToPx(2)}"
+          stroke="var(--lgm-orange)"
+          stroke-width="4"/>
+  `;
+  break;
+
+ case "presqueFonction_morceaux":
+  tracerCourbe(x => {
+    if (x < 1) return x;
+    if (x > 1) return 2 - x;
+    return NaN; // on évite le point central
+  });
+
+  // Deux points pour x = 1
+  svg.innerHTML += `
+    <circle cx="${xToPx(1)}" cy="${yToPx(1)}" r="5" fill="var(--lgm-orange)"/>
+    <circle cx="${xToPx(1)}" cy="${yToPx(-1)}" r="5" fill="var(--lgm-orange)"/>
+  `;
+  break;
       
-case "inverse":
-
-// Asymptote verticale x = 0
-svg.innerHTML += `
-  <line x1="${xToPx(0)}" y1="0"
-        x2="${xToPx(0)}" y2="${height}"
-        stroke="var(--peps)"
-        stroke-width="2.5"
-        stroke-dasharray="4,4"/>
-`;
-
-// Asymptote horizontale y = 0
-svg.innerHTML += `
-  <line x1="0" y1="${yToPx(0)}"
-        x2="${width}" y2="${yToPx(0)}"
-        stroke="var(--peps)"
-        stroke-width="2.5"
-        stroke-dasharray="4,4"/>
-`;
-
-
-  // Courbe (coupure autour de 0)
-  tracerCourbe(x => (Math.abs(x) < 0.1 ? NaN : 1 / x));
-  break;
-
   }
 }
 
@@ -281,9 +336,14 @@ function verifier(reponseEleve, element) {
   element.style.pointerEvents = "none";
   nbEssaisFaux++;
 
-  if (nbEssaisFaux === 1) {
-    // 1er échec : on laisse encore une chance
-    return;
+// Animation du test de la droite verticale
+if (typeEquation === "pasfonction") {
+  // On cible le point problématique si connu (ex : x = 1)
+animerDroiteVerticale(xProbleme);
+} else {
+  // Balayage complet si c'est une fonction
+  animerDroiteVerticale();
+}
   }
 
   // 2e échec : on montre la bonne réponse
