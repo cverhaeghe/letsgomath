@@ -107,6 +107,12 @@
   margin: 0 auto 20px;   /* centre la grille dans la page */
 }
 
+.qcm-2 {   /* choix entre 6 réponses */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 × 1 */
+  gap: 12px;
+}
+
 .qcm-6 {   /* choix entre 6 réponses */
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 × 2 */
