@@ -211,8 +211,6 @@ ligne.setAttribute("y2", height);
 ligne.setAttribute("stroke", "blue");
 ligne.setAttribute("stroke-width", "3");
 ligne.setAttribute("stroke-dasharray", "6,4");
-
-
 svg.appendChild(ligne);
 
 
@@ -220,12 +218,19 @@ let x = xmin;
 let messageAffiche = false;
 
 
+// ✅ CAS FONCTION → message immédiat
+if (xStop === null) {
+afficherConclusion();
+messageAffiche = true;
+}
+
+
 const animation = setInterval(() => {
 ligne.setAttribute("x1", xToPx(x));
 ligne.setAttribute("x2", xToPx(x));
 
 
-/* 🔴 CAS PAS UNE FONCTION : arrêt sur xProbleme */
+// ❌ PAS UNE FONCTION → arrêt sur xProbleme
 if (xStop !== null && x + PAS / 2 >= xStop) {
 ligne.setAttribute("x1", xToPx(xStop));
 ligne.setAttribute("x2", xToPx(xStop));
@@ -238,19 +243,16 @@ return;
 }
 
 
-/* 🔵 CAS FONCTION : boucle infinie */
+// 🔁 CAS FONCTION → boucle infinie
 if (x > xmax) {
-if (!messageAffiche) {
-afficherConclusion();
-messageAffiche = true;
-}
-x = xmin; // 🔁 retour à gauche
+x = xmin;
 }
 
 
 x += PAS;
 }, 20);
 }
+  
 
 function afficherPointsIntersection(x) {
   if (!intersectionMode) return;
