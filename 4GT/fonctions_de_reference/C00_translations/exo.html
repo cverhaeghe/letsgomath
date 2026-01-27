@@ -76,7 +76,10 @@ const ymin = -5, ymax = 5;
 let typeEquation = "";
 let dernieresFonctions = [];
 let nbEssaisFaux = 0;
-
+let translationType = ""; // "horizontale" ou "verticale"
+let h = 0;
+let v = 0;
+  
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
 function yToPx(y){ return height/2 - y*unit; }
@@ -165,6 +168,25 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
+function tirerTranslation() {
+  const valeurs = [-3, -2, -1, 1, 2, 3];
+
+  translationType = Math.random() < 0.5 ? "horizontale" : "verticale";
+
+  if (translationType === "horizontale") {
+    h = valeurs[Math.floor(Math.random() * valeurs.length)];
+    v = 0;
+  } else {
+    v = valeurs[Math.floor(Math.random() * valeurs.length)];
+    h = 0;
+  }
+}
+
+  function fonctionTranslatee(f) {
+  return function (x) {
+    return f(x - h) + v;
+  };
+}
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
@@ -181,7 +203,7 @@ function genererEquation() {
   dessinerRepere();
   
 typeEquation = tirerFonctionSansABA();
-
+tirerTranslation();
 
   switch (typeEquation) {
 case "carrée":
@@ -194,8 +216,8 @@ case "carrée":
             fill="var(--lgm-orange)"/>
   `;
 
-  tracerCourbe(x => x * x);
-  break;
+tracerCourbe(fonctionTranslatee(x => x * x));
+      break;
 
 
 case "cube":
@@ -208,19 +230,22 @@ case "cube":
             fill="var(--lgm-orange)"/>
   `;
 
-  tracerCourbe(x => x * x * x);
-  break;
+tracerCourbe(fonctionTranslatee(x => x * x * x));
+      break;
 
 
     case "valabs":
-      tracerCourbe(x => Math.abs(x));
+tracerCourbe(fonctionTranslatee(x => Math.abs(x)));
       break;
 
     case "racine":
       svg.innerHTML += `
       <circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
       `;
-      tracerCourbe(x => x > 0 ? Math.sqrt(x) : NaN);
+tracerCourbe(x => {
+  const y = fonctionTranslatee(Math.sqrt)(x);
+  return x - h >= 0 ? y : NaN;
+});
       break;
 
 
@@ -235,8 +260,8 @@ case "cubique":
   `;
 
   // Courbe complète
-  tracerCourbe(x => Math.cbrt(x));
-  break;
+tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
+      break;
 
       
 case "inverse":
@@ -261,8 +286,9 @@ svg.innerHTML += `
 
 
   // Courbe (coupure autour de 0)
-  tracerCourbe(x => (Math.abs(x) < 0.1 ? NaN : 1 / x));
-  break;
+tracerCourbe(x =>
+  Math.abs(x - h) < 0.1 ? NaN : fonctionTranslatee(x => 1 / x)(x)
+);  break;
 
   }
 }
