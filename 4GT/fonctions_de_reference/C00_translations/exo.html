@@ -40,15 +40,7 @@
 </div>
 
 
-  <!-- QCM -->
-<div id="qcm" class="qcm-grid qcm-6">
-  <div class="qcm-card" onclick="verifier('carrée', this)">Fonction carrée</div>
-  <div class="qcm-card" onclick="verifier('racine', this)">Fonction racine carrée</div>
-  <div class="qcm-card" onclick="verifier('cube', this)">Fonction cube</div>
-  <div class="qcm-card" onclick="verifier('cubique', this)">Fonction racine cubique</div>
-  <div class="qcm-card" onclick="verifier('valabs', this)">Fonction valeur absolue</div>
-  <div class="qcm-card" onclick="verifier('inverse', this)">Fonction inverse</div>
-</div>
+<div id="qcm" class="qcm-grid qcm-4"></div>
 
 
 <div class="center-button">
@@ -216,6 +208,77 @@ function tirerTranslation() {
   `;
 }
 
+  function melanger(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+  function genererQCMCarree(h, v) {
+  const propositions = [];
+
+  // ----- BONNE REPONSE -----
+  let bonne;
+  if (h !== 0) {
+    bonne = `(x ${h > 0 ? "- " + h : "+ " + Math.abs(h)})^2`;
+  } else {
+    bonne = `x^2 ${v > 0 ? "+ " + v : v < 0 ? "- " + Math.abs(v) : ""}`;
+  }
+
+  propositions.push({ label: bonne, correct: true });
+
+  // ----- DISTRACTEURS -----
+
+  // 1. Mauvaise translation verticale
+  propositions.push({
+    label: `x^2 ${v >= 0 ? "- " + Math.abs(v || 2) : "+ " + Math.abs(v)}`,
+    correct: false
+  });
+
+  // 2. Mauvaise translation horizontale
+  propositions.push({
+    label: `(x ${h > 0 ? "+ " + h : "- " + Math.abs(h || 2)})^2`,
+    correct: false
+  });
+
+  // 3. Fonction non translatée
+  propositions.push({
+    label: `x^2`,
+    correct: false
+  });
+
+  return melanger(propositions);
+}
+
+  function afficherQCM(propositions) {
+  const qcm = document.getElementById("qcm");
+  qcm.innerHTML = "";
+
+  propositions.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "qcm-card";
+    card.innerHTML = `\\(${p.label}\\)`;
+
+    card.onclick = () => {
+      if (p.correct) {
+        card.classList.add("correct");
+        document.querySelectorAll(".qcm-card")
+          .forEach(c => c.style.pointerEvents = "none");
+      } else {
+        card.classList.add("incorrect");
+        card.style.pointerEvents = "none";
+      }
+    };
+
+    qcm.appendChild(card);
+  });
+
+  MathJax.typesetPromise();
+}
+
+  
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
@@ -246,7 +309,11 @@ case "carrée":
   `;
 
 tracerCourbe(fonctionTranslatee(x => x * x));
-      break;
+
+const qcm = genererQCMCarree(h, v);
+afficherQCM(qcm);
+
+break;
 
 
 case "cube":
@@ -311,41 +378,6 @@ case "inverse":
 
 
 /* ====================== VERIFICATION ====================== */
-function verifier(reponseEleve, element) {
-  const cards = document.querySelectorAll('.qcm-card');
-  const feedback = document.getElementById("feedback");
-
-  // Bonne réponse
-  if (reponseEleve === typeEquation) {
-    element.classList.add('correct');
-    cards.forEach(card => card.style.pointerEvents = "none");
-    return;
-  }
-
-  // Mauvaise réponse
-  element.classList.add('incorrect');
-  element.style.pointerEvents = "none";
-  nbEssaisFaux++;
-
-  if (nbEssaisFaux === 1) {
-    // 1er échec : on laisse encore une chance
-    return;
-  }
-
-  // 2e échec : on montre la bonne réponse
-  cards.forEach(card => card.style.pointerEvents = "none");
-
-  const bonneCarte = Array.from(cards).find(c =>
-    (typeEquation === "carrée" && c.innerText.includes("carrée")) ||
-    (typeEquation === "cube" && c.innerText.includes("cube")) ||
-    (typeEquation === "valabs" && c.innerText.includes("valeur")) ||
-    (typeEquation === "racine" && c.innerText.includes("racine carrée")) ||
-    (typeEquation === "cubique" && c.innerText.includes("cubique")) ||
-    (typeEquation === "inverse" && c.innerText.includes("inverse"))
-  );
-
-  if (bonneCarte) bonneCarte.classList.add('correct');
-}
 
 
 
