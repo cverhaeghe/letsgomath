@@ -149,12 +149,14 @@ if (
 function tirerFonctionSansABA() {
   const toutes = ["carrée", "cube", "valabs", "racine", "cubique", "inverse"];
 
-  // On exclut les deux dernières fonctions
-  let candidates = toutes.filter(f => !dernieresFonctions.includes(f));
+  // On exclut STRICTEMENT les deux dernières fonctions
+  const candidates = toutes.filter(f => !dernieresFonctions.includes(f));
 
-  // Sécurité (au cas très improbable où il n'y aurait plus de candidates)
+  // Sécurité : si jamais on arrive à moins de 1 (théoriquement impossible ici)
   if (candidates.length === 0) {
-    candidates = toutes;
+    console.warn("Reset historique fonctions");
+    dernieresFonctions = [];
+    return tirerFonctionSansABA();
   }
 
   const choix = candidates[Math.floor(Math.random() * candidates.length)];
