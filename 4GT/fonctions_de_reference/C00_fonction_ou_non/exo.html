@@ -326,19 +326,18 @@ case "presqueFonction_segmentVertical":
 /* ====================== VERIFICATION ====================== */
 function verifier(reponseEleve, element) {
   const cards = document.querySelectorAll('.qcm-card');
-  const feedback = document.getElementById("feedback");
 
-  // Désactiver tous les clics
+  // Désactiver les clics
   cards.forEach(card => card.style.pointerEvents = "none");
 
-  // Bonne réponse
+  // Coloration
   if (reponseEleve === typeEquation) {
     element.classList.add('correct');
   } else {
     element.classList.add('incorrect');
   }
 
-  // Animation du test de la droite verticale (TOUJOURS)
+  // Animation du test de la droite verticale
   if (typeEquation === "pasfonction") {
     animerDroiteVerticale(xProbleme);
   } else {
