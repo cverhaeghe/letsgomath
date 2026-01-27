@@ -443,8 +443,15 @@ if (!toutCorrect || pointsEleve.length !== pointsClesVisibles.length) {
     return;
   }
 
-  feedback.innerHTML = "✔️ Bonne réponse !";
-  tracerCourbe(fonctionCourante.f);
+feedback.innerHTML = "✔️ Bonne réponse !";
+
+// tracer la courbe TRANSLATÉE
+tracerCourbe(fonctionTranslatee(fonctionCourante.f));
+
+// asymptotes translatées si inverse
+if (fonctionCourante.label === "inverse") {
+  tracerAsymptotesInverseTranslatees(h, v);
+}
 }
 
 
