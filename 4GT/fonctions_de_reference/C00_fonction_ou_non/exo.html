@@ -341,14 +341,13 @@ function verifier(reponseEleve, element) {
     element.classList.add('incorrect');
   }
 
-  // Animation du test de la droite verticale
+  // ✅ TOUJOURS lancer le test de la droite verticale
   if (typeEquation === "pasfonction") {
     animerDroiteVerticale(xProbleme);
   } else {
     animerDroiteVerticale();
   }
 }
-
 
 // Générer le premier exercice au chargement
 window.onload = genererEquation;
