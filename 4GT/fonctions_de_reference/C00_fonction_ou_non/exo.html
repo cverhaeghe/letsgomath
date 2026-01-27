@@ -345,19 +345,22 @@ stroke-width="0"/>
 
 
 function dessinerSegmentVerticalBleu(x, yMin, yMax) {
-  const segment = document.createElementNS("http://www.w3.org/2000/svg", "line");
+const segment = document.createElementNS("http://www.w3.org/2000/svg", "line");
 
-  segment.setAttribute("x1", xToPx(x));
-  segment.setAttribute("x2", xToPx(x));
-  segment.setAttribute("y1", yToPx(yMin));
-  segment.setAttribute("y2", yToPx(yMax));
 
-  segment.setAttribute("stroke", "var(--peps)");
-  segment.setAttribute("stroke-width", "4");
-  segment.setAttribute("stroke-linecap", "round");
+segment.setAttribute("x1", xToPx(x));
+segment.setAttribute("x2", xToPx(x));
+segment.setAttribute("y1", yToPx(yMin));
+segment.setAttribute("y2", yToPx(yMax));
 
-  // 🔝 AU PREMIER PLAN
-  svg.appendChild(segment);
+
+segment.setAttribute("stroke", "blue"); // même bleu que la verticale
+segment.setAttribute("stroke-width", "6"); // PLUS ÉPAIS que l’orange
+segment.setAttribute("stroke-linecap", "round");
+
+
+// 🔝 GARANTI AU PREMIER PLAN
+svg.appendChild(segment);
 }
 
 
