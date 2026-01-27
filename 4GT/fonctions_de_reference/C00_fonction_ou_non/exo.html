@@ -232,9 +232,35 @@ if (xStop !== null && x + PAS / 2 >= xStop) {
   ligne.setAttribute("x1", xToPx(xStop));
   ligne.setAttribute("x2", xToPx(xStop));
 
-  clearInterval(animation);
-  afficherPointsIntersection(xStop);
-  return;
+clearInterval(animation);
+afficherPointsIntersection(xStop);
+afficherConclusion(); 
+
+if (x > xmax) {
+
+
+if (typeEquation === "fonction") {
+// 🔁 Retour à gauche : effet "infini"
+x = xmin;
+ligne.setAttribute("x1", xToPx(x));
+ligne.setAttribute("x2", xToPx(x));
+
+
+// Afficher le message UNE SEULE FOIS
+if (!ligne.dataset.messageAffiche) {
+afficherConclusion();
+ligne.dataset.messageAffiche = "true";
+}
+
+
+return; // on continue l'animation
+}
+
+
+// Cas pas une fonction (sécurité)
+clearInterval(animation);
+afficherConclusion();
+return;
 }
 
 
@@ -354,6 +380,21 @@ function dessinerSegmentVerticalBleu(x, yMin, yMax) {
   // 🔝 AU PREMIER PLAN
   svg.appendChild(segment);
 }
+
+
+  function afficherConclusion() {
+const feedback = document.getElementById("feedback");
+
+
+if (typeEquation === "pasfonction") {
+feedback.innerHTML =
+"Il ne s’agit pas d’une fonction car certains x ont plusieurs images (y).";
+} else {
+feedback.innerHTML =
+"Il s’agit d’une fonction car chaque x a au maximum une image (y).";
+}
+}
+
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
