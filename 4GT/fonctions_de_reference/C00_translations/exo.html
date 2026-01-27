@@ -217,39 +217,31 @@ function tirerTranslation() {
 }
 
   function genererQCMCarree(h, v) {
-  const propositions = [];
+// amplitude du déplacement (1, 2 ou 3)
+const a = Math.abs(h !== 0 ? h : v);
 
-  // ----- BONNE REPONSE -----
-  let bonne;
-  if (h !== 0) {
-    bonne = `(x ${h > 0 ? "- " + h : "+ " + Math.abs(h)})^2`;
-  } else {
-    bonne = `x^2 ${v > 0 ? "+ " + v : v < 0 ? "- " + Math.abs(v) : ""}`;
-  }
 
-  propositions.push({ label: bonne, correct: true });
+const propositions = [
+{ label: `(x - ${a})^2`, correct: false },
+{ label: `(x + ${a})^2`, correct: false },
+{ label: `x^2 + ${a}`, correct: false },
+{ label: `x^2 - ${a}`, correct: false }
+];
 
-  // ----- DISTRACTEURS -----
 
-  // 1. Mauvaise translation verticale
-  propositions.push({
-    label: `x^2 ${v >= 0 ? "- " + Math.abs(v || 2) : "+ " + Math.abs(v)}`,
-    correct: false
-  });
+// Détermination de la bonne réponse
+if (h !== 0) {
+// translation horizontale
+const bonne = h > 0 ? `(x - ${a})^2` : `(x + ${a})^2`;
+propositions.find(p => p.label === bonne).correct = true;
+} else {
+// translation verticale
+const bonne = v > 0 ? `x^2 + ${a}` : `x^2 - ${a}`;
+propositions.find(p => p.label === bonne).correct = true;
+}
 
-  // 2. Mauvaise translation horizontale
-  propositions.push({
-    label: `(x ${h > 0 ? "+ " + h : "- " + Math.abs(h || 2)})^2`,
-    correct: false
-  });
 
-  // 3. Fonction non translatée
-  propositions.push({
-    label: `x^2`,
-    correct: false
-  });
-
-  return melanger(propositions);
+return melanger(propositions);
 }
 
   function afficherQCM(propositions) {
