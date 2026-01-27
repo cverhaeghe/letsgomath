@@ -215,32 +215,37 @@ function tirerTranslation() {
   return array;
 }
 
-  function genererQCMCarree(h, v) {
-// amplitude du déplacement (1, 2 ou 3)
-const a = Math.abs(h !== 0 ? h : v);
+function genererQCMCarree(h, v) {
+  const ah = Math.abs(h);
+  const av = Math.abs(v);
 
+  const propositions = [];
 
-const propositions = [
-{ label: `(x - ${a})^2`, correct: false },
-{ label: `(x + ${a})^2`, correct: false },
-{ label: `x^2 + ${a}`, correct: false },
-{ label: `x^2 - ${a}`, correct: false }
-];
+  // -------- Groupe A : (x ± h)^2 ± v --------
+  propositions.push(
+    { label: `(x - ${ah})^2 + ${av}`, correct: false },
+    { label: `(x - ${ah})^2 - ${av}`, correct: false },
+    { label: `(x + ${ah})^2 + ${av}`, correct: false },
+    { label: `(x + ${ah})^2 - ${av}`, correct: false }
+  );
 
+  // -------- Groupe B : (x ± v)^2 ± h --------
+  propositions.push(
+    { label: `(x - ${av})^2 + ${ah}`, correct: false },
+    { label: `(x - ${av})^2 - ${ah}`, correct: false },
+    { label: `(x + ${av})^2 + ${ah}`, correct: false },
+    { label: `(x + ${av})^2 - ${ah}`, correct: false }
+  );
 
-// Détermination de la bonne réponse
-if (h !== 0) {
-// translation horizontale
-const bonne = h > 0 ? `(x - ${a})^2` : `(x + ${a})^2`;
-propositions.find(p => p.label === bonne).correct = true;
-} else {
-// translation verticale
-const bonne = v > 0 ? `x^2 + ${a}` : `x^2 - ${a}`;
-propositions.find(p => p.label === bonne).correct = true;
-}
+  // -------- Bonne réponse exacte --------
+  const bonne =
+    `(x ${h > 0 ? "- " + ah : "+ " + ah})^2 ` +
+    `${v > 0 ? "+ " + av : "- " + av}`;
 
+  const bonneProp = propositions.find(p => p.label === bonne);
+  if (bonneProp) bonneProp.correct = true;
 
-return melanger(propositions);
+  return melanger(propositions);
 }
 
 
