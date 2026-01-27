@@ -535,14 +535,25 @@ function verifier(reponseEleve, element) {
   // Désactiver les clics
   cards.forEach(card => card.style.pointerEvents = "none");
 
-  // Coloration
   if (reponseEleve === typeEquation) {
+    // ✅ Bonne réponse de l'élève
     element.classList.add('correct');
   } else {
+    // ❌ Mauvaise réponse de l'élève
     element.classList.add('incorrect');
+
+    // ✅ On met en vert la bonne réponse
+    cards.forEach(card => {
+      if (
+        (card.textContent.includes("Fonction") && typeEquation === "fonction") ||
+        (card.textContent.includes("Pas une fonction") && typeEquation === "pasfonction")
+      ) {
+        card.classList.add('correct');
+      }
+    });
   }
 
-  // ✅ TOUJOURS lancer le test de la droite verticale
+  // Lancer le test de la droite verticale
   if (typeEquation === "pasfonction") {
     animerDroiteVerticale(xProbleme);
   } else {
