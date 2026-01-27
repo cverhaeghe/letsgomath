@@ -222,6 +222,16 @@ x += 0.05;
 }, 20);
 }
 
+function dessinerPoint(x, y) {
+  svg.innerHTML += `
+    <circle cx="${xToPx(x)}"
+            cy="${yToPx(y)}"
+            r="5"
+            fill="var(--peps)"
+            stroke="var(--peps)"
+            stroke-width="0"/>
+  `;
+}
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
@@ -285,12 +295,7 @@ tracerCourbe(x => 0.5 * x * x - 1);
 xProbleme = 1;
 
 // Point supplémentaire qui casse la fonction
-svg.innerHTML += `
-<circle cx="${xToPx(1)}"
-cy="${yToPx(2)}"
-r="5"
-fill="var(--lgm-orange)"/>
-`;
+dessinerPoint(1, 2);
 break;
 
 case "presqueFonction_segmentVertical":
@@ -313,10 +318,9 @@ case "presqueFonction_segmentVertical":
   });
 
   // Deux points pour x = 1
-  svg.innerHTML += `
-    <circle cx="${xToPx(1)}" cy="${yToPx(1)}" r="5" fill="var(--lgm-orange)"/>
-    <circle cx="${xToPx(1)}" cy="${yToPx(-1)}" r="5" fill="var(--lgm-orange)"/>
-  `;
+dessinerPoint(1, 1);
+dessinerPoint(1, -1);
+
   break;
       
   }
