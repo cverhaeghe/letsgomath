@@ -172,7 +172,7 @@ function tirerCourbe() {
     { nom: "ellipse", type: "pasfonction" },
     { nom: "paraboleCouchee", type: "pasfonction" },
     { nom: "segmentsCroises", type: "pasfonction" },
-    { nom: "presqueFonction_pointDouble", type: "pasfonction" },
+    { nom: "parabole_point_en_plus", type: "pasfonction" },
     { nom: "presqueFonction_segmentVertical", type: "pasfonction" },
     { nom: "presqueFonction_morceaux", type: "pasfonction" }
   ];
@@ -338,6 +338,9 @@ function dessinerSegmentVerticalBleu(x, yMin, yMax) {
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
+  intersectionMode = null;
+  xProbleme = null;
+
   document.getElementById("feedback").innerHTML = "";
 
   const cards = document.querySelectorAll('.qcm-card');
@@ -346,7 +349,6 @@ function genererEquation() {
     card.style.pointerEvents = "auto";
   });
 
-xProbleme = null;
   
   dessinerRepere();
   
@@ -424,14 +426,25 @@ case "segmentsCroises":
   };
   break;
 
-case "presqueFonction_pointDouble":
-// Courbe principale (fonction)
-tracerCourbe(x => 0.5 * x * x - 1);
-xProbleme = 1;
+case "parabole_point_en_plus":
+  // Parabole y = x² - 1
+  tracerCourbe(x => x * x - 1);
 
-// Point supplémentaire qui casse la fonction
-dessinerPoint(1, 2);
-break;
+  // Point supplémentaire (qui casse la fonction)
+  dessinerPoint(1, 2); // par exemple
+
+  xProbleme = 1;
+
+  // 🔵 C'EST CETTE PARTIE QUI MANQUAIT
+  intersectionMode = {
+    type: "deuxValeurs",
+    values: x => [
+      x * x - 1, // valeur de la parabole
+      2          // valeur du point ajouté
+    ]
+  };
+  break;
+      
 
 case "presqueFonction_segmentVertical":
   tracerCourbe(x => {
