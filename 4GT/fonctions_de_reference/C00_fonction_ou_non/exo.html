@@ -209,8 +209,13 @@ ligne.setAttribute("x2", xToPx(x));
 
 
 if (xStop !== null && x >= xStop) {
-clearInterval(animation);
-afficherPointsIntersection(xStop);
+  // 🔒 On verrouille la position EXACTE
+  ligne.setAttribute("x1", xToPx(xStop));
+  ligne.setAttribute("x2", xToPx(xStop));
+
+  clearInterval(animation);
+  afficherPointsIntersection(xStop);
+  return;
 }
 
 
