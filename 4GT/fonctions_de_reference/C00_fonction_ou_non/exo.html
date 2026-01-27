@@ -232,6 +232,44 @@ function dessinerPoint(x, y) {
             stroke-width="0"/>
   `;
 }
+
+
+  function tracerParametrique(fx, fy, tMin, tMax, step = 0.01) {
+let path = "";
+let first = true;
+
+
+for (let t = tMin; t <= tMax; t += step) {
+const x = fx(t);
+const y = fy(t);
+
+
+if (!isFinite(x) || !isFinite(y)) continue;
+
+
+const px = xToPx(x);
+const py = yToPx(y);
+
+
+if (first) {
+path += `M ${px} ${py}`;
+first = false;
+} else {
+path += ` L ${px} ${py}`;
+}
+}
+
+
+svg.innerHTML += `
+<path d="${path}"
+fill="none"
+stroke="var(--peps)"
+stroke-width="3"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+`;
+}
+
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
@@ -270,10 +308,14 @@ case "montagne":
   break;
 
 case "cercle":
-  tracerCourbe(x => Math.sqrt(4 - x * x));
-  tracerCourbe(x => -Math.sqrt(4 - x * x));
-  xProbleme = -1;
-  break;      
+  tracerParametrique(
+    t => 2 * Math.cos(t),
+    t => 2 * Math.sin(t),
+    0,
+    2 * Math.PI
+  );
+  xProbleme = 0;
+  break;    
 
 case "ellipse":
   tracerCourbe(x => Math.sqrt(3 * (1 - x * x / 9)));
