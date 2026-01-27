@@ -244,32 +244,59 @@ propositions.find(p => p.label === bonne).correct = true;
 return melanger(propositions);
 }
 
-  function afficherQCM(propositions) {
-  const qcm = document.getElementById("qcm");
-  qcm.innerHTML = "";
+function afficherQCM(propositions) {
+const qcm = document.getElementById("qcm");
+qcm.innerHTML = "";
 
-  propositions.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "qcm-card";
-    card.innerHTML = `\\(${p.label}\\)`;
 
-    card.onclick = () => {
-      if (p.correct) {
-        card.classList.add("correct");
-        document.querySelectorAll(".qcm-card")
-          .forEach(c => c.style.pointerEvents = "none");
-      } else {
-        card.classList.add("incorrect");
-        card.style.pointerEvents = "none";
-      }
-    };
+let nbErreurs = 0; // 👈 compteur local
 
-    qcm.appendChild(card);
-  });
 
-  MathJax.typesetPromise();
+propositions.forEach(p => {
+const card = document.createElement("div");
+card.className = "qcm-card";
+card.innerHTML = `\\(${p.label}\\)`;
+
+
+card.onclick = () => {
+
+
+// ---- BONNE RÉPONSE ----
+if (p.correct) {
+card.classList.add("correct");
+document.querySelectorAll(".qcm-card")
+.forEach(c => c.style.pointerEvents = "none");
+return;
 }
 
+
+// ---- MAUVAISE RÉPONSE ----
+card.classList.add("incorrect");
+card.style.pointerEvents = "none";
+nbErreurs++;
+
+
+// ---- 2e ERREUR : on révèle la bonne ----
+if (nbErreurs >= 2) {
+document.querySelectorAll(".qcm-card").forEach(c => {
+const estBonne = propositions.find(p =>
+c.innerHTML.includes(p.label) && p.correct
+);
+if (estBonne) {
+c.classList.add("correct");
+}
+c.style.pointerEvents = "none";
+});
+}
+};
+
+
+qcm.appendChild(card);
+});
+
+
+MathJax.typesetPromise();
+}
   
   
 /* ====================== GENERATION ====================== */
