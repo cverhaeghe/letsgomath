@@ -484,21 +484,19 @@ if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
 
 /* ====================== CORRECTION ====================== */
 
-  function afficherCorrection() {
+function afficherCorrection() {
   dessinerRepere();
   pointsEleve = [];
 
-  // 🔹 fonction de référence (noire)
   tracerFonctionReference(fonctionCourante.f);
   afficherPointsReference(fonctionCourante.points);
 
-  // 🔹 points translatés
-  pointsCles.forEach(p => dessinerPoint(x, y, "blue", "eleve"););
+  pointsCles.forEach(p =>
+    dessinerPoint(p.x, p.y, "blue", "eleve")
+  );
 
-  // 🔸 courbe translatée
   tracerCourbe(fonctionTranslatee(fonctionCourante.f));
 
-  // 🔸 asymptotes translatées (SEULEMENT pour l'inverse)
   if (fonctionCourante.label === "inverse") {
     tracerAsymptotesInverseTranslatees(h, v);
   }
