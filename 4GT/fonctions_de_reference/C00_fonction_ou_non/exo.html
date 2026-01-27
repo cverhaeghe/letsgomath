@@ -285,8 +285,8 @@ svg.innerHTML += `
 <circle cx="${xToPx(x)}"
 cy="${yToPx(y)}"
 r="6"
-fill="dodgerblue"
-stroke="dodgerblue"
+fill="var(--peps)"
+stroke="var(--peps)"
 stroke-width="0"/>
 `;
 }
@@ -334,7 +334,7 @@ case "cercle":
     0,
     2 * Math.PI
   );
-  xProbleme = 0;
+  xProbleme = -1;
   break;    
 
 case "ellipse":
