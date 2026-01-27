@@ -179,49 +179,49 @@ function tirerCourbe() {
   return courbes[Math.floor(Math.random() * courbes.length)];
 }
 
- function animerDroiteVerticale(xStop = null) {
-// Supprimer ancienne droite si elle existe
-const old = document.getElementById("droite-verticale");
-if (old) old.remove();
+function animerDroiteVerticale(xStop = null) {
+  const old = document.getElementById("droite-verticale");
+  if (old) old.remove();
 
+  const ligne = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  ligne.setAttribute("id", "droite-verticale");
+  ligne.setAttribute("y1", 0);
+  ligne.setAttribute("y2", height);
+  ligne.setAttribute("stroke", "var(--peps)");
+  ligne.setAttribute("stroke-width", "3");
+  ligne.setAttribute("stroke-dasharray", "6,4");
 
-// Créer la droite
-const ligne = document.createElementNS("http://www.w3.org/2000/svg", "line");
-ligne.setAttribute("id", "droite-verticale");
-ligne.setAttribute("y1", 0);
-ligne.setAttribute("y2", height);
-ligne.setAttribute("stroke", "blue");
-ligne.setAttribute("stroke-width", "3");
-ligne.setAttribute("stroke-dasharray", "6,4");
+  svg.appendChild(ligne);
 
+  let x = xmin;
 
-svg.appendChild(ligne);
+  const animation = setInterval(() => {
+    ligne.setAttribute("x1", xToPx(x));
+    ligne.setAttribute("x2", xToPx(x));
 
+    // 🔵 ARRÊT SUR LE POINT PROBLÈME
+    if (xStop !== null && x >= xStop) {
+      clearInterval(animation);
+      afficherPointsIntersection(xStop); // 👈 NOUVEAU
+    }
 
-let x = xmin;
+    if (x > xmax) {
+      clearInterval(animation);
+    }
 
-
-const animation = setInterval(() => {
-ligne.setAttribute("x1", xToPx(x));
-ligne.setAttribute("x2", xToPx(x));
-
-
-// Cas : on veut s'arrêter sur un x précis (piège)
-if (xStop !== null && x >= xStop) {
-clearInterval(animation);
+    x += 0.05;
+  }, 20);
 }
 
-
-// Fin du balayage
-if (x > xmax) {
-clearInterval(animation);
+  function afficherPointsIntersection(x) {
+  // Cas du cercle x² + y² = 4
+  if (Math.abs(x) <= 2) {
+    const y = Math.sqrt(4 - x * x);
+    dessinerPointBleu(x, y);
+    dessinerPointBleu(x, -y);
+  }
 }
-
-
-x += 0.05;
-}, 20);
-}
-
+  
 function dessinerPoint(x, y) {
   svg.innerHTML += `
     <circle cx="${xToPx(x)}"
@@ -270,6 +270,17 @@ stroke-linejoin="round"/>
 `;
 }
 
+
+  function dessinerPointBleu(x, y) {
+svg.innerHTML += `
+<circle cx="${xToPx(x)}"
+cy="${yToPx(y)}"
+r="6"
+fill="dodgerblue"
+stroke="dodgerblue"
+stroke-width="0"/>
+`;
+}
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
