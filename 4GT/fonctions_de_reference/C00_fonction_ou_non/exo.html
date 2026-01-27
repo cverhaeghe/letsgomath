@@ -67,7 +67,8 @@ const width = 400, height = 400;
 const unit = 40;
 const xmin = -5, xmax = 5;
 const ymin = -5, ymax = 5;
-
+const PAS = 0.05;
+  
 /* ====================== VARIABLES ====================== */
 let typeEquation = "";
 let dernieresFonctions = [];
@@ -208,8 +209,8 @@ ligne.setAttribute("x1", xToPx(x));
 ligne.setAttribute("x2", xToPx(x));
 
 
-if (xStop !== null && x >= xStop) {
-  // 🔒 On verrouille la position EXACTE
+if (xStop !== null && x + PAS / 2 >= xStop) {
+  // 🔒 snap EXACT à xProbleme
   ligne.setAttribute("x1", xToPx(xStop));
   ligne.setAttribute("x2", xToPx(xStop));
 
@@ -468,7 +469,6 @@ case "presqueFonction_segmentVertical":
   });
 
   // Deux points pour x = 1
-dessinerPoint(1, 1);
 dessinerPoint(1, -1);
 
   break;
