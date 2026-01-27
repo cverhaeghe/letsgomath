@@ -401,10 +401,14 @@ dessinerRepere();
             
 case "parabole":
   tracerCourbe(x => 0.5 * x * x - 1);
+  xProbleme = null;
+  intersectionMode = null;
   break;
 
 case "fonctionBizarre":
   tracerCourbe(x => Math.sin(x) + x / 3);
+  xProbleme = null;
+  intersectionMode = null;
   break;
 
 case "montagne":
@@ -414,6 +418,8 @@ case "montagne":
     if (x < 2) return -x + 1;
     return 0.5;
   });
+  xProbleme = null;
+intersectionMode = null;    
   break;
 
 case "cercle":
@@ -476,8 +482,6 @@ case "parabole_point_en_plus":
   dessinerPoint(1, 2); // par exemple
 
   xProbleme = 1;
-
-  // 🔵 C'EST CETTE PARTIE QUI MANQUAIT
   intersectionMode = {
     type: "deuxValeurs",
     values: x => [
