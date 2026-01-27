@@ -40,8 +40,7 @@
 </div>
 
 
-<div id="qcm" class="qcm-grid qcm-4"></div>
-
+<div id="qcm" class="qcm-grid qcm-8"></div>
 
 <div class="center-button">
   <button onclick="genererEquation()">Nouvel exercice</button>
@@ -450,8 +449,7 @@ dessinerRepere();
 
 
 typeEquation = tirerFonctionSansABA();
-tirerTranslation();
-
+tirerHV();
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
@@ -500,7 +498,6 @@ break;
 
 
 case "inverse":
-tirerTranslation();
 tracerAsymptotesInverse(h, v);
 tracerCourbe(x =>
 Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
