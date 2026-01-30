@@ -62,9 +62,7 @@ const width = 400, height = 400;
 const unit = 40;
 const xmin = -5, xmax = 5;
 const ymin = -5, ymax = 5;
-const margeY = 5; // tolérance hors repère
 
-  
 /* ====================== VARIABLES ====================== */
 let typeEquation = "";
 let dernieresFonctions = [];
@@ -72,8 +70,6 @@ let nbEssaisFaux = 0;
 let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
-let typeTransformation = "";
-let k = 1;
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -112,10 +108,11 @@ function tracerCourbe(fonction) {
 
 if (
   !isFinite(y) ||
-  y > ymax + margeY ||
-  y < ymin - margeY
+  y > ymax || y < ymin
 ) {
-
+  first = true;
+  continue;
+}
 
 
     const px = xToPx(x);
@@ -138,25 +135,6 @@ if (
   `;
 }
 
-function tirerTypeTransformation() {
-  const r = Math.random();
-
-  if (r < 1) return "deformation";      // 50%
-  if (r < 1.2) return "translation_v";   // 25%
-  return "translation_h";                 // 25%
-}
-
-  function deformationVerticale(f, k) {
-  return x => k * f(x);
-}
-
-function translationVerticale(f, k) {
-  return x => f(x) + k;
-}
-
-function translationHorizontale(f, k) {
-  return x => f(x + k);
-}
 
 
 function tirerFonctionSansABA() {
@@ -197,22 +175,18 @@ function tirerTranslation() {
   }
 }
 
-
-function tirerHV() {
-const valeurs = [-3, -2, -1, 1, 2, 3];
-h = valeurs[Math.floor(Math.random() * valeurs.length)];
-do {
-v = valeurs[Math.floor(Math.random() * valeurs.length)];
-} while (v === h || v === -h);
-}
-
-  
-function fonctionTranslatee(f) {
+  function fonctionTranslatee(f) {
   return function (x) {
     return f(x - h) + v;
   };
 }
-  
+
+  function tirerHV() {
+  const valeurs = [-3, -2, -1, 1, 2, 3];
+  h = valeurs[Math.floor(Math.random() * valeurs.length)];
+  v = valeurs[Math.floor(Math.random() * valeurs.length)];
+}
+
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
   svg.innerHTML += `
@@ -233,107 +207,6 @@ function fonctionTranslatee(f) {
   `;
 }
 
-  function genererQCMTransformation(base, k) {
-  const ak = Math.abs(k);
-
-  const propositions = [
-    { label: `${k}${base}`, correct: false },      // k·f(x)
-    { label: `${base} + ${k}`, correct: false },   // f(x)+k
-    { label: `${base.replace("x", "x+" + k)}`, correct: false },
-  ];
-
-  return propositions;
-}
-
-  
-  function genererQCMDeformationCarree(k) {
-  const ak = Math.abs(k);
-
-  const propositions = [
-    { label: `${k}x^2`, correct: false },
-    { label: `x^2 + ${k}`, correct: false },
-    { label: `(x + ${k})^2`, correct: false },
-    { label: `(x - ${k})^2`, correct: false }
-  ];
-
-  if (k !== 1) {
-    propositions.find(p => p.label === `${k}x^2`).correct = true;
-  }
-
-  return melanger(propositions);
-}
-
-
-
-  function genererQCMDeformationValAbs(k) {
-  const propositions = [
-    { label: `${k}|x|`, correct: true },
-    { label: `|x| + ${k}`, correct: false },
-    { label: `|x + ${k}|`, correct: false },
-    { label: `|x - ${k}|`, correct: false }
-  ];
-
-  return melanger(propositions);
-}
-
-
-  function genererQCMDeformationCube(k) {
-  const propositions = [
-    { label: `${k}x^3`, correct: true },
-    { label: `x^3 + ${k}`, correct: false },
-    { label: `(x + ${k})^3`, correct: false },
-    { label: `(x - ${k})^3`, correct: false }
-  ];
-
-  return melanger(propositions);
-}
-
-function genererQCMDeformationRacine(k) {
-  const propositions = [
-    { label: `${k}\\sqrt{x}`, correct: true },
-    { label: `\\sqrt{x} + ${k}`, correct: false },
-    { label: `\\sqrt{x + ${k}}`, correct: false },
-    { label: `\\sqrt{x - ${k}}`, correct: false }
-  ];
-
-  return melanger(propositions);
-}
-
-
-  function genererQCMDeformationCubique(k) {
-  const propositions = [
-    { label: `${k}\\sqrt[3]{x}`, correct: true },
-    { label: `\\sqrt[3]{x} + ${k}`, correct: false },
-    { label: `\\sqrt[3]{x + ${k}}`, correct: false },
-    { label: `\\sqrt[3]{x - ${k}}`, correct: false }
-  ];
-
-  return melanger(propositions);
-}
-
-
-  function genererQCMDeformationInverse(k) {
-  const propositions = [
-    { label: `\\frac{${k}}{x}`, correct: true },
-    { label: `\\frac{1}{x} + ${k}`, correct: false },
-    { label: `\\frac{1}{x + ${k}}`, correct: false },
-    { label: `\\frac{1}{x - ${k}}`, correct: false }
-  ];
-
-  return melanger(propositions);
-}
-
-
-  function appliquerTransformation(f) {
-  if (typeTransformation === "deformation") {
-    return deformationVerticale(f, k);
-  }
-  if (typeTransformation === "translation_v") {
-    return translationVerticale(f, k);
-  }
-  return translationHorizontale(f, k);
-}
-  
   function melanger(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -342,10 +215,40 @@ function genererQCMDeformationRacine(k) {
   return array;
 }
 
+function genererQCMCarree(h, v) {
+  const ah = Math.abs(h);
+  const av = Math.abs(v);
+
+  const propositions = [];
+
+  // -------- Groupe A : (x ± h)^2 ± v --------
+  propositions.push(
+    { label: `(x - ${ah})^2 + ${av}`, correct: false },
+    { label: `(x - ${ah})^2 - ${av}`, correct: false },
+    { label: `(x + ${ah})^2 + ${av}`, correct: false },
+    { label: `(x + ${ah})^2 - ${av}`, correct: false }
+  );
+
+  // -------- Groupe B : (x ± v)^2 ± h --------
+  propositions.push(
+    { label: `(x - ${av})^2 + ${ah}`, correct: false },
+    { label: `(x - ${av})^2 - ${ah}`, correct: false },
+    { label: `(x + ${av})^2 + ${ah}`, correct: false },
+    { label: `(x + ${av})^2 - ${ah}`, correct: false }
+  );
+
+  // -------- Bonne réponse exacte --------
+  const bonne =
+    `(x ${h > 0 ? "- " + ah : "+ " + ah})^2 ` +
+    `${v > 0 ? "+ " + av : "- " + av}`;
+
+  const bonneProp = propositions.find(p => p.label === bonne);
+  if (bonneProp) bonneProp.correct = true;
+
+  return melanger(propositions);
+}
 
 
-
-  
   function genererQCMValAbs(h, v) {
 const ah = Math.abs(h);
 const av = Math.abs(v);
@@ -376,9 +279,6 @@ propositions.find(p => p.label === bonne).correct = true;
 return melanger(propositions);
 }
 
-
-
-  
 function genererQCMRacine(h, v) {
 const ah = Math.abs(h);
 const av = Math.abs(v);
@@ -556,17 +456,6 @@ MathJax.typesetPromise();
 }
   
 function genererQCM(type, h, v) {
-  if (typeTransformation === "deformation") {
-  switch (type) {
-    case "carrée": return genererQCMDeformationCarree(k);
-    case "valabs": return genererQCMDeformationValAbs(k);
-    case "cube": return genererQCMDeformationCube(k);
-    case "racine": return genererQCMDeformationRacine(k);
-    case "cubique": return genererQCMDeformationCubique(k);
-    case "inverse": return genererQCMDeformationInverse(k);
-  }
-}
-
   switch (type) {
     case "carrée":
       return genererQCMCarree(h, v);
@@ -604,81 +493,59 @@ dessinerRepere();
 typeEquation = tirerFonctionSansABA();
 tirerHV();
 
-typeTransformation = tirerTypeTransformation();
-k = [-3, -2, -1, -0.5, 0.5, 2, 3][Math.floor(Math.random() * 7)];
-
-
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
 
 switch (typeEquation) {
 
 
-case "carrée": {
-  const f = x => x * x;
-  tracerCourbe(appliquerTransformation(f));
-  break;
+case "carrée":
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
+`;
+tracerCourbe(fonctionTranslatee(x => x * x));
+break;
+
+
+case "cube":
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
+`;
+tracerCourbe(fonctionTranslatee(x => x * x * x));
+break;
+
+
+case "valabs":
+tracerCourbe(fonctionTranslatee(x => Math.abs(x)));
+break;
+
+
+case "racine":
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
+`;
+tracerCourbe(x => {
+const y = fonctionTranslatee(Math.sqrt)(x);
+return x - h >= 0 ? y : NaN;
+});
+break;
+
+
+case "cubique":
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
+`;
+tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
+break;
+
+
+case "inverse":
+tracerAsymptotesInverse(h, v);
+tracerCourbe(x =>
+Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
+);
+break;
 }
-
-case "cube": {
-  const f = x => x * x * x;
-  tracerCourbe(appliquerTransformation(f));
-  break;
-}
-
-case "valabs": {
-  const f = x => Math.abs(x);
-  tracerCourbe(appliquerTransformation(f));
-  break;
-}
-
-
-case "racine": {
-  const f = x => Math.sqrt(x);
-
-  const fTrans = appliquerTransformation(f);
-
-  tracerCourbe(x => {
-    if (
-      (typeTransformation === "translation_h" && x + k < 0) ||
-      (typeTransformation !== "translation_h" && x < 0)
-    ) return NaN;
-
-    return fTrans(x);
-  });
-
-  break;
-}
-
-
-case "cubique": {
-  const f = x => Math.cbrt(x);
-  tracerCourbe(appliquerTransformation(f));
-  break;
-}
-
-
-
-case "inverse": {
-  const f = x => 1 / x;
-
-  if (typeTransformation === "deformation") {
-    tracerCourbe(x => Math.abs(x) < 0.1 ? NaN : k / x);
-  }
-
-  else if (typeTransformation === "translation_v") {
-    tracerAsymptotesInverse(0, k);
-    tracerCourbe(x => Math.abs(x) < 0.1 ? NaN : 1 / x + k);
-  }
-
-  else {
-    tracerAsymptotesInverse(-k, 0);
-    tracerCourbe(x => Math.abs(x + k) < 0.1 ? NaN : 1 / (x + k));
-  }
-
-  break;
-}
-
 
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
