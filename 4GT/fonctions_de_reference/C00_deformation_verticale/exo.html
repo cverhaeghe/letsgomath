@@ -244,6 +244,17 @@ function tirerTransformationK() {
   }
 }
 
+function genererQCMK(type, k, transformationType) {
+  switch (type) {
+    case "carrée":   return genererQCMKCarree(k, transformationType);
+    case "valabs":   return genererQCMKValAbs(k, transformationType);
+    case "racine":   return genererQCMKRacine(k, transformationType);
+    case "cube":     return genererQCMKCube(k, transformationType);
+    case "cubique":  return genererQCMKCubique(k, transformationType);
+    case "inverse":  return genererQCMKInverse(k, transformationType);
+    default:         return [];
+  }
+}
 
   
 function genererQCMKCarree(k, transformationType) {
@@ -262,119 +273,79 @@ function genererQCMKCarree(k, transformationType) {
 
 
 
-
-  function genererQCMValAbs(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+function genererQCMKValAbs(k, transformationType) {
 
   const propositions = [
-    { label: `|x - ${a}|`, correct: false },
-    { label: `|x + ${a}|`, correct: false },
-    { label: `|x| + ${a}`, correct: false },
-    { label: `|x| - ${a}`, correct: false }
+    { label: `|x| + ${k}`, correct: transformationType === "plusk" },
+    { label: `|x| - ${k}`, correct: transformationType === "moinsk" },
+    { label: `|x + ${k}|`, correct: transformationType === "xplusk" },
+    { label: `|x - ${k}|`, correct: transformationType === "xmoinsk" },
+    { label: `\\dfrac{|x|}{${k}}`, correct: false },
+    { label: `${k}|x|`, correct: transformationType === "kf" }
   ];
-
-  if (h !== 0) {
-    const bonne = h > 0 ? `|x - ${a}|` : `|x + ${a}|`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `|x| + ${a}` : `|x| - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
 
   return melanger(propositions);
 }
 
-  function genererQCMRacine(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+
+ function genererQCMKRacine(k, transformationType) {
 
   const propositions = [
-    { label: `\\sqrt{x - ${a}}`, correct: false },
-    { label: `\\sqrt{x + ${a}}`, correct: false },
-    { label: `\\sqrt{x} + ${a}`, correct: false },
-    { label: `\\sqrt{x} - ${a}`, correct: false }
+    { label: `\\sqrt{x} + ${k}`, correct: transformationType === "plusk" },
+    { label: `\\sqrt{x} - ${k}`, correct: transformationType === "moinsk" },
+    { label: `\\sqrt{x + ${k}}`, correct: transformationType === "xplusk" },
+    { label: `\\sqrt{x - ${k}}`, correct: transformationType === "xmoinsk" },
+    { label: `\\dfrac{\\sqrt{x}}{${k}}`, correct: false },
+    { label: `${k}\\sqrt{x}`, correct: transformationType === "kf" }
   ];
-
-  if (h !== 0) {
-    const bonne = h > 0 ? `\\sqrt{x - ${a}}` : `\\sqrt{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `\\sqrt{x} + ${a}` : `\\sqrt{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
 
   return melanger(propositions);
 }
 
-  function genererQCMCube(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+function genererQCMKCube(k, transformationType) {
 
   const propositions = [
-    { label: `(x - ${a})^3`, correct: false },
-    { label: `(x + ${a})^3`, correct: false },
-    { label: `x^3 + ${a}`, correct: false },
-    { label: `x^3 - ${a}`, correct: false }
+    { label: `x^3 + ${k}`, correct: transformationType === "plusk" },
+    { label: `x^3 - ${k}`, correct: transformationType === "moinsk" },
+    { label: `(x + ${k})^3`, correct: transformationType === "xplusk" },
+    { label: `(x - ${k})^3`, correct: transformationType === "xmoinsk" },
+    { label: `\\dfrac{x^3}{${k}}`, correct: false },
+    { label: `${k}x^3`, correct: transformationType === "kf" }
   ];
-
-  if (h !== 0) {
-    const bonne = h > 0 ? `(x - ${a})^3` : `(x + ${a})^3`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `x^3 + ${a}` : `x^3 - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
 
   return melanger(propositions);
 }
 
-  function genererQCMCubique(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+
+  function genererQCMKCubique(k, transformationType) {
 
   const propositions = [
-    { label: `\\sqrt[3]{x - ${a}}`, correct: false },
-    { label: `\\sqrt[3]{x + ${a}}`, correct: false },
-    { label: `\\sqrt[3]{x} + ${a}`, correct: false },
-    { label: `\\sqrt[3]{x} - ${a}`, correct: false }
+    { label: `\\sqrt[3]{x} + ${k}`, correct: transformationType === "plusk" },
+    { label: `\\sqrt[3]{x} - ${k}`, correct: transformationType === "moinsk" },
+    { label: `\\sqrt[3]{x + ${k}}`, correct: transformationType === "xplusk" },
+    { label: `\\sqrt[3]{x - ${k}}`, correct: transformationType === "xmoinsk" },
+    { label: `\\dfrac{\\sqrt[3]{x}}{${k}}`, correct: false },
+    { label: `${k}\\sqrt[3]{x}`, correct: transformationType === "kf" }
   ];
-
-  if (h !== 0) {
-    const bonne = h > 0
-      ? `\\sqrt[3]{x - ${a}}`
-      : `\\sqrt[3]{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0
-      ? `\\sqrt[3]{x} + ${a}`
-      : `\\sqrt[3]{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
 
   return melanger(propositions);
 }
 
-  function genererQCMInverse(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+
+  function genererQCMKInverse(k, transformationType) {
 
   const propositions = [
-    { label: `\\frac{1}{x - ${a}}`, correct: false },
-    { label: `\\frac{1}{x + ${a}}`, correct: false },
-    { label: `\\frac{1}{x} + ${a}`, correct: false },
-    { label: `\\frac{1}{x} - ${a}`, correct: false }
+    { label: `\\dfrac{1}{x} + ${k}`, correct: transformationType === "plusk" },
+    { label: `\\dfrac{1}{x} - ${k}`, correct: transformationType === "moinsk" },
+    { label: `\\dfrac{1}{x + ${k}}`, correct: transformationType === "xplusk" },
+    { label: `\\dfrac{1}{x - ${k}}`, correct: transformationType === "xmoinsk" },
+    { label: `\\dfrac{1}{${k}x}`, correct: false },
+    { label: `\\dfrac{${k}}{x}`, correct: transformationType === "kf" }
   ];
-
-  if (h !== 0) {
-    const bonne = h > 0
-      ? `\\frac{1}{x - ${a}}`
-      : `\\frac{1}{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0
-      ? `\\frac{1}{x} + ${a}`
-      : `\\frac{1}{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
 
   return melanger(propositions);
 }
+
 
   
 function afficherQCM(propositions) {
