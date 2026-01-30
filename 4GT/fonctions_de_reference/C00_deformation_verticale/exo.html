@@ -246,18 +246,20 @@ function tirerTransformationK() {
 
 
   
-function genererQCMKCarree() {
+function genererQCMKCarree(k, transformationType) {
+
   const propositions = [
-    { label: `k x^2`, correct: transformationType === "kf" },
-    { label: `x^2 + k`, correct: transformationType === "plusk" },
-    { label: `x^2 - k`, correct: transformationType === "moinsk" },
-    { label: `(x + k)^2`, correct: transformationType === "xplusk" },
-    { label: `(x - k)^2`, correct: transformationType === "xmoinsk" },
-    { label: `x^2`, correct: false }
+    { label: `x^2 + ${k}`, correct: transformationType === "plusk" },
+    { label: `(x + ${k})^2`, correct: transformationType === "xplusk" },
+    { label: `x^2 - ${k}`, correct: transformationType === "moinsk" },
+    { label: `(x - ${k})^2`, correct: transformationType === "xmoinsk" },
+    { label: `\\dfrac{x^2}{${k}}`, correct: false },
+    { label: `${k}x^2`, correct: transformationType === "kf" }
   ];
 
   return melanger(propositions);
 }
+
 
 
 
