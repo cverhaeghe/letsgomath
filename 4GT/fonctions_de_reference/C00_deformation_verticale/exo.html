@@ -347,6 +347,33 @@ function genererQCMDeformationRacine(k) {
 }
 
 
+function genererQCMCarree(h, v) {
+  const ah = Math.abs(h);
+  const av = Math.abs(v);
+
+  const propositions = [
+    // Groupe A : bonne structure, mauvais signes
+    { label: `(x - ${ah})^2 + ${av}`, correct: false },
+    { label: `(x - ${ah})^2 - ${av}`, correct: false },
+    { label: `(x + ${ah})^2 + ${av}`, correct: false },
+    { label: `(x + ${ah})^2 - ${av}`, correct: false },
+
+    // Groupe B : confusion h / v
+    { label: `(x - ${av})^2 + ${ah}`, correct: false },
+    { label: `(x - ${av})^2 - ${ah}`, correct: false },
+    { label: `(x + ${av})^2 + ${ah}`, correct: false },
+    { label: `(x + ${av})^2 - ${ah}`, correct: false }
+  ];
+
+  const bonne =
+    `(x ${h > 0 ? "- " + ah : "+ " + ah})^2 ` +
+    `${v > 0 ? "+ " + av : "- " + av}`;
+
+  const prop = propositions.find(p => p.label === bonne);
+  if (prop) prop.correct = true;
+
+  return melanger(propositions);
+}
 
 
   
