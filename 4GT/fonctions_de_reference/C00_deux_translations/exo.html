@@ -228,6 +228,20 @@ v = valeurs[Math.floor(Math.random() * valeurs.length)];
   `;
 }
 
+  function genererQCMTransformation(base, k) {
+  const ak = Math.abs(k);
+
+  const propositions = [
+    { label: `${k}${base}`, correct: false },      // k·f(x)
+    { label: `${base} + ${k}`, correct: false },   // f(x)+k
+    { label: `${base.replace("x", "x+" + k)}`, correct: false },
+    { label: `${base.replace("x", "x-" + ak)}`, correct: false }
+  ];
+
+  return propositions;
+}
+
+  
   function genererQCMDeformationCarree(k) {
   const ak = Math.abs(k);
 
@@ -246,6 +260,67 @@ v = valeurs[Math.floor(Math.random() * valeurs.length)];
 }
 
 
+
+  function genererQCMDeformationValAbs(k) {
+  const propositions = [
+    { label: `${k}|x|`, correct: true },
+    { label: `|x| + ${k}`, correct: false },
+    { label: `|x + ${k}|`, correct: false },
+    { label: `|x - ${k}|`, correct: false }
+  ];
+
+  return melanger(propositions);
+}
+
+
+  function genererQCMDeformationCube(k) {
+  const propositions = [
+    { label: `${k}x^3`, correct: true },
+    { label: `x^3 + ${k}`, correct: false },
+    { label: `(x + ${k})^3`, correct: false },
+    { label: `(x - ${k})^3`, correct: false }
+  ];
+
+  return melanger(propositions);
+}
+
+function genererQCMDeformationRacine(k) {
+  const propositions = [
+    { label: `${k}\\sqrt{x}`, correct: true },
+    { label: `\\sqrt{x} + ${k}`, correct: false },
+    { label: `\\sqrt{x + ${k}}`, correct: false },
+    { label: `\\sqrt{x - ${k}}`, correct: false }
+  ];
+
+  return melanger(propositions);
+}
+
+
+  function genererQCMDeformationCubique(k) {
+  const propositions = [
+    { label: `${k}\\sqrt[3]{x}`, correct: true },
+    { label: `\\sqrt[3]{x} + ${k}`, correct: false },
+    { label: `\\sqrt[3]{x + ${k}}`, correct: false },
+    { label: `\\sqrt[3]{x - ${k}}`, correct: false }
+  ];
+
+  return melanger(propositions);
+}
+
+
+  function genererQCMDeformationInverse(k) {
+  const propositions = [
+    { label: `\\frac{${k}}{x}`, correct: true },
+    { label: `\\frac{1}{x} + ${k}`, correct: false },
+    { label: `\\frac{1}{x + ${k}}`, correct: false },
+    { label: `\\frac{1}{x - ${k}}`, correct: false }
+  ];
+
+  return melanger(propositions);
+}
+
+
+  
   
   function melanger(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -473,6 +548,17 @@ MathJax.typesetPromise();
 }
   
 function genererQCM(type, h, v) {
+  if (typeTransformation === "deformation") {
+  switch (type) {
+    case "carrée": return genererQCMDeformationCarree(k);
+    case "valabs": return genererQCMDeformationValAbs(k);
+    case "cube": return genererQCMDeformationCube(k);
+    case "racine": return genererQCMDeformationRacine(k);
+    case "cubique": return genererQCMDeformationCubique(k);
+    case "inverse": return genererQCMDeformationInverse(k);
+  }
+}
+
   switch (type) {
     case "carrée":
       return genererQCMCarree(h, v);
