@@ -40,7 +40,7 @@
 </div>
 
 
-<div id="qcm" class="qcm-grid qcm-8"></div>
+<div id="qcm" class="qcm-grid qcm-6"></div>
 
 <div class="center-button">
   <button onclick="genererEquation()">Nouvel exercice</button>
@@ -253,7 +253,9 @@ function fonctionTranslatee(f) {
 
   const propositions = [
     { label: `${k}x^2`, correct: false },
+    { label: `x^2/${k}`, correct: false },
     { label: `x^2 + ${k}`, correct: false },
+    { label: `x^2 - ${k}`, correct: false },
     { label: `(x + ${k})^2`, correct: false },
     { label: `(x - ${k})^2`, correct: false }
   ];
