@@ -99,7 +99,7 @@ function fonctionDeBase(type){
   switch(type){
     case "carrée": return x=>x*x;
     case "valabs": return x=>Math.abs(x);
-    case "racine": return x=>x>=0?Math.sqrt(x):NaN;
+    case "racine": return x => Math.sqrt(x);
     case "cube": return x=>x*x*x;
     case "cubique": return x=>Math.cbrt(x);
     case "inverse": return x=>Math.abs(x)<0.1?NaN:1/x;
@@ -119,16 +119,46 @@ function fonctionTransformee(f){
 
 /* ================= TRACÉ ================= */
 function tracerCourbe(f){
-  let path="", first=true;
-  for(let x=xmin;x<=xmax;x+=0.01){
-    const y=f(x);
-    if(!isFinite(y)||y<ymin||y>ymax){ first=true; continue; }
-    const px=xToPx(x), py=yToPx(y);
-    path += first?`M ${px} ${py}`:` L ${px} ${py}`;
-    first=false;
+  let path = "";
+  let first = true;
+
+  for(let x = xmin; x <= xmax; x += 0.01){
+
+    // Gestion spécifique du domaine de la racine
+    if (typeEquation === "racine") {
+      if (
+        (transformationType === "xplusk" && x + k < 0) ||
+        (transformationType === "xmoinsk" && x - k < 0) ||
+        (!["xplusk","xmoinsk"].includes(transformationType) && x < 0)
+      ) {
+        first = true;
+        continue;
+      }
+    }
+
+    const y = f(x);
+
+    if (!isFinite(y) || y < ymin || y > ymax) {
+      first = true;
+      continue;
+    }
+
+    const px = xToPx(x);
+    const py = yToPx(y);
+
+    path += first ? `M ${px} ${py}` : ` L ${px} ${py}`;
+    first = false;
   }
-  svg.innerHTML += `<path d="${path}" fill="none" stroke="var(--peps)" stroke-width="3"/>`;
+
+  svg.innerHTML += `
+    <path d="${path}" fill="none"
+          stroke="var(--peps)"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  `;
 }
+
 
 /* ================= QCM ================= */
 function melanger(a){
