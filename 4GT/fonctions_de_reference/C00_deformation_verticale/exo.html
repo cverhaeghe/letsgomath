@@ -588,33 +588,30 @@ MathJax.typesetPromise();
   
 function genererQCM(type, h, v) {
   if (typeTransformation === "deformation") {
-  switch (type) {
-    case "carrée": return genererQCMDeformationCarree(k);
-    case "valabs": return genererQCMDeformationValAbs(k);
-    case "cube": return genererQCMDeformationCube(k);
-    case "racine": return genererQCMDeformationRacine(k);
-    case "cubique": return genererQCMDeformationCubique(k);
-    case "inverse": return genererQCMDeformationInverse(k);
+    switch (type) {
+      case "carrée": return genererQCMDeformationCarree(k);
+      case "valabs": return genererQCMDeformationValAbs(k);
+      case "cube": return genererQCMDeformationCube(k);
+      case "racine": return genererQCMDeformationRacine(k);
+      case "cubique": return genererQCMDeformationCubique(k);
+      case "inverse": return genererQCMDeformationInverse(k);
+    }
   }
-}
 
   switch (type) {
-    case "carrée":
-      return genererQCMCarree(h, v);
-    case "valabs":
-      return genererQCMValAbs(h, v);
-    case "racine":
-      return genererQCMRacine(h, v);
-    case "cube":
-      return genererQCMCube(h, v);
-    case "cubique":
-      return genererQCMCubique(h, v);
-    case "inverse":
-      return genererQCMInverse(h, v);
-    default:
-      return [];
+    case "carrée": return genererQCMCarree(h, v);
+    case "valabs": return genererQCMValAbs(h, v);
+    case "racine": return genererQCMRacine(h, v);
+    case "cube": return genererQCMCube(h, v);
+    case "cubique": return genererQCMCubique(h, v);
+    case "inverse": return genererQCMInverse(h, v);
   }
+
+  // 🔒 GARDE DE SÉCURITÉ
+  console.warn("QCM non généré", type, typeTransformation);
+  return [];
 }
+
 
   
 /* ====================== GENERATION ====================== */
