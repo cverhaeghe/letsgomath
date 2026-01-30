@@ -196,11 +196,6 @@ function tirerTranslation() {
   }
 }
 
-  function fonctionTranslatee(f) {
-  return function (x) {
-    return f(x - h) + v;
-  };
-}
 
 function tirerHV() {
 const valeurs = [-3, -2, -1, 1, 2, 3];
@@ -210,6 +205,13 @@ v = valeurs[Math.floor(Math.random() * valeurs.length)];
 } while (v === h || v === -h);
 }
 
+  
+function fonctionTranslatee(f) {
+  return function (x) {
+    return f(x - h) + v;
+  };
+}
+  
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
   svg.innerHTML += `
@@ -237,7 +239,6 @@ v = valeurs[Math.floor(Math.random() * valeurs.length)];
     { label: `${k}${base}`, correct: false },      // k·f(x)
     { label: `${base} + ${k}`, correct: false },   // f(x)+k
     { label: `${base.replace("x", "x+" + k)}`, correct: false },
-    { label: `${base.replace("x", "x-" + ak)}`, correct: false }
   ];
 
   return propositions;
@@ -322,7 +323,15 @@ function genererQCMDeformationRacine(k) {
 }
 
 
-  
+  function appliquerTransformation(f) {
+  if (typeTransformation === "deformation") {
+    return deformationVerticale(f, k);
+  }
+  if (typeTransformation === "translation_v") {
+    return translationVerticale(f, k);
+  }
+  return translationHorizontale(f, k);
+}
   
   function melanger(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -332,22 +341,8 @@ function genererQCMDeformationRacine(k) {
   return array;
 }
 
-case "carrée":
-  if (typeTransformation === "deformation") {
-    return genererQCMDeformationCarree(k);
-  }
-  return genererQCMCarree(h, v);
 
 
-function appliquerTransformation(f) {
-  if (typeTransformation === "deformation") {
-    return deformationVerticale(f, k);
-  }
-  if (typeTransformation === "translation_v") {
-    return translationVerticale(f, k);
-  }
-  return translationHorizontale(f, k);
-}
 
   
   function genererQCMValAbs(h, v) {
