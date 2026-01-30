@@ -139,8 +139,12 @@ function melanger(a){
   return a;
 }
 
-function genererQCMKCarree(){
-  return melanger([
+
+
+function genererQCMK(type){
+  switch(type){
+    case "carrée":
+       return melanger([
     {label:`x^2+${k}`,correct:transformationType==="plusk"},
     {label:`x^2-${k}`,correct:transformationType==="moinsk"},
     {label:`(x+${k})^2`,correct:transformationType==="xplusk"},
@@ -148,19 +152,62 @@ function genererQCMKCarree(){
     {label:`\\dfrac{x^2}{${k}}`,correct:false},
     {label:`${k}x^2`,correct:transformationType==="kf"}
   ]);
-}
 
-function genererQCMK(type){
-  switch(type){
-    case "carrée":  return genererQCMKCarree();
-    case "valabs":  return genererQCMKValAbs(k, transformationType);
-    case "racine":  return genererQCMKRacine(k, transformationType);
-    case "cube":    return genererQCMKCube(k, transformationType);
-    case "cubique": return genererQCMKCubique(k, transformationType);
-    case "inverse": return genererQCMKInverse(k, transformationType);
-    default:        return [];
+    case "valabs":
+      return melanger([
+        {label:`|x|+${k}`,correct:transformationType==="plusk"},
+        {label:`|x|-${k}`,correct:transformationType==="moinsk"},
+        {label:`|x+${k}|`,correct:transformationType==="xplusk"},
+        {label:`|x-${k}|`,correct:transformationType==="xmoinsk"},
+        {label:`\\dfrac{|x|}{${k}}`,correct:false},
+        {label:`${k}|x|`,correct:transformationType==="kf"}
+      ]);
+
+    case "racine":
+      return melanger([
+        {label:`\\sqrt{x}+${k}`,correct:transformationType==="plusk"},
+        {label:`\\sqrt{x}-${k}`,correct:transformationType==="moinsk"},
+        {label:`\\sqrt{x+${k}}`,correct:transformationType==="xplusk"},
+        {label:`\\sqrt{x-${k}}`,correct:transformationType==="xmoinsk"},
+        {label:`\\dfrac{\\sqrt{x}}{${k}}`,correct:false},
+        {label:`${k}\\sqrt{x}`,correct:transformationType==="kf"}
+      ]);
+
+    case "cube":
+      return melanger([
+        {label:`x^3+${k}`,correct:transformationType==="plusk"},
+        {label:`x^3-${k}`,correct:transformationType==="moinsk"},
+        {label:`(x+${k})^3`,correct:transformationType==="xplusk"},
+        {label:`(x-${k})^3`,correct:transformationType==="xmoinsk"},
+        {label:`\\dfrac{x^3}{${k}}`,correct:false},
+        {label:`${k}x^3`,correct:transformationType==="kf"}
+      ]);
+
+    case "cubique":
+      return melanger([
+        {label:`\\sqrt[3]{x}+${k}`,correct:transformationType==="plusk"},
+        {label:`\\sqrt[3]{x}-${k}`,correct:transformationType==="moinsk"},
+        {label:`\\sqrt[3]{x+${k}}`,correct:transformationType==="xplusk"},
+        {label:`\\sqrt[3]{x-${k}}`,correct:transformationType==="xmoinsk"},
+        {label:`\\dfrac{\\sqrt[3]{x}}{${k}}`,correct:false},
+        {label:`${k}\\sqrt[3]{x}`,correct:transformationType==="kf"}
+      ]);
+
+    case "inverse":
+      return melanger([
+        {label:`\\dfrac{1}{x}+${k}`,correct:transformationType==="plusk"},
+        {label:`\\dfrac{1}{x}-${k}`,correct:transformationType==="moinsk"},
+        {label:`\\dfrac{1}{x+${k}}`,correct:transformationType==="xplusk"},
+        {label:`\\dfrac{1}{x-${k}}`,correct:transformationType==="xmoinsk"},
+        {label:`\\dfrac{1}{${k}x}`,correct:false},
+        {label:`\\dfrac{${k}}{x}`,correct:transformationType==="kf"}
+      ]);
+
+    default:
+      return [];
   }
 }
+
 
 
 function afficherQCM(props){
