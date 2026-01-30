@@ -110,13 +110,14 @@ function tracerCourbe(fonction) {
   for (let x = xmin; x <= xmax; x += 0.005) {
     let y = fonction(x);
 
-if (
-  !isFinite(y) ||
-  y > ymax + margeY ||
-  y < ymin - margeY
-) {
-
-
+    if (
+      !isFinite(y) ||
+      y > ymax + margeY ||
+      y < ymin - margeY
+    ) {
+      first = true;
+      continue;
+    }
 
     const px = xToPx(x);
     const py = yToPx(y);
@@ -137,6 +138,7 @@ if (
           stroke-linejoin="round"/>
   `;
 }
+
 
 function tirerTypeTransformation() {
   const r = Math.random();
