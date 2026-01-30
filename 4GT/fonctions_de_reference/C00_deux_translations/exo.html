@@ -70,6 +70,8 @@ let nbEssaisFaux = 0;
 let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
+let typeTransformation = "";
+let k = 1;
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -337,7 +339,17 @@ case "carrée":
   return genererQCMCarree(h, v);
 
 
+function appliquerTransformation(f) {
+  if (typeTransformation === "deformation") {
+    return deformationVerticale(f, k);
+  }
+  if (typeTransformation === "translation_v") {
+    return translationVerticale(f, k);
+  }
+  return translationHorizontale(f, k);
+}
 
+  
   function genererQCMValAbs(h, v) {
 const ah = Math.abs(h);
 const av = Math.abs(v);
@@ -596,8 +608,9 @@ dessinerRepere();
 typeEquation = tirerFonctionSansABA();
 tirerHV();
 
-const typeTransformation = tirerTypeTransformation();
-const k = [-3, -2, -1, -1/2, 1/2, 2, 3][Math.floor(Math.random() * 7)];
+typeTransformation = tirerTypeTransformation();
+k = [-3, -2, -1, -0.5, 0.5, 2, 3][Math.floor(Math.random() * 7)];
+
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
@@ -606,64 +619,70 @@ switch (typeEquation) {
 
 
 case "carrée": {
-  let f = x => x * x;
-  let fTransformee;
+  const f = x => x * x;
+  tracerCourbe(appliquerTransformation(f));
+  break;
+}
 
-  if (typeTransformation === "deformation") {
-    fTransformee = deformationVerticale(f, k);
-  } 
-  else if (typeTransformation === "translation_v") {
-    fTransformee = translationVerticale(f, k);
-  } 
-  else {
-    fTransformee = translationHorizontale(f, k);
-  }
+case "cube": {
+  const f = x => x * x * x;
+  tracerCourbe(appliquerTransformation(f));
+  break;
+}
 
-  tracerCourbe(fTransformee);
+case "valabs": {
+  const f = x => Math.abs(x);
+  tracerCourbe(appliquerTransformation(f));
+  break;
+}
+
+
+case "racine": {
+  const f = x => Math.sqrt(x);
+
+  const fTrans = appliquerTransformation(f);
+
+  tracerCourbe(x => {
+    if (
+      (typeTransformation === "translation_h" && x + k < 0) ||
+      (typeTransformation !== "translation_h" && x < 0)
+    ) return NaN;
+
+    return fTrans(x);
+  });
+
+  break;
+}
+
+
+case "cubique": {
+  const f = x => Math.cbrt(x);
+  tracerCourbe(appliquerTransformation(f));
   break;
 }
 
 
 
-case "cube":
-svg.innerHTML += `
-<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
-`;
-tracerCourbe(fonctionTranslatee(x => x * x * x));
-break;
+case "inverse": {
+  const f = x => 1 / x;
 
+  if (typeTransformation === "deformation") {
+    tracerCourbe(x => Math.abs(x) < 0.1 ? NaN : k / x);
+  }
 
-case "valabs":
-tracerCourbe(fonctionTranslatee(x => Math.abs(x)));
-break;
+  else if (typeTransformation === "translation_v") {
+    tracerAsymptotesInverse(0, k);
+    tracerCourbe(x => Math.abs(x) < 0.1 ? NaN : 1 / x + k);
+  }
 
+  else {
+    tracerAsymptotesInverse(-k, 0);
+    tracerCourbe(x => Math.abs(x + k) < 0.1 ? NaN : 1 / (x + k));
+  }
 
-case "racine":
-svg.innerHTML += `
-<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
-`;
-tracerCourbe(x => {
-const y = fonctionTranslatee(Math.sqrt)(x);
-return x - h >= 0 ? y : NaN;
-});
-break;
-
-
-case "cubique":
-svg.innerHTML += `
-<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
-`;
-tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
-break;
-
-
-case "inverse":
-tracerAsymptotesInverse(h, v);
-tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
-);
-break;
+  break;
 }
+
 
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
