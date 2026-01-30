@@ -211,29 +211,48 @@ function genererQCMK(type){
 
 
 function afficherQCM(props){
-  const qcm=document.getElementById("qcm");
-  qcm.innerHTML="";
-  let bonne=null, erreurs=0;
+  const qcm = document.getElementById("qcm");
+  qcm.innerHTML = "";
 
-  props.forEach(p=>{
-    const c=document.createElement("div");
-    c.className="qcm-card";
-    c.innerHTML=`\\(${p.label}\\)`;
-    if(p.correct) bonne=c;
-    c.onclick=()=>{
-      if(p.correct){
+  let bonneCarte = null;
+  let erreurs = 0;
+
+  props.forEach(p => {
+    const c = document.createElement("div");
+    c.className = "qcm-card";
+    c.innerHTML = `\\(${p.label}\\)`;
+
+    if (p.correct) bonneCarte = c;
+
+    c.onclick = () => {
+
+      // ✅ BONNE RÉPONSE
+      if (p.correct) {
         c.classList.add("correct");
-      }else{
-        c.classList.add("incorrect");
-        erreurs++;
-        if(erreurs>=2&&bonne) bonne.classList.add("correct");
+        document.querySelectorAll(".qcm-card")
+          .forEach(x => x.style.pointerEvents = "none");
+        return;
       }
-      document.querySelectorAll(".qcm-card").forEach(x=>x.style.pointerEvents="none");
+
+      // ❌ MAUVAISE RÉPONSE
+      c.classList.add("incorrect");
+      c.style.pointerEvents = "none";
+      erreurs++;
+
+      // ❌❌ 2e erreur → on révèle la bonne
+      if (erreurs >= 2 && bonneCarte) {
+        bonneCarte.classList.add("correct");
+        document.querySelectorAll(".qcm-card")
+          .forEach(x => x.style.pointerEvents = "none");
+      }
     };
+
     qcm.appendChild(c);
   });
+
   MathJax.typesetPromise();
 }
+
 
 /* ================= GÉNÉRATION ================= */
 function genererEquation(){
