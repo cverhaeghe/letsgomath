@@ -182,11 +182,16 @@ function tirerTranslation() {
   };
 }
 
-  function tirerHV() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
-  h = valeurs[Math.floor(Math.random() * valeurs.length)];
-  v = valeurs[Math.floor(Math.random() * valeurs.length)];
+function tirerK() {
+  const valeurs = [0.5, 1, 2, 3];
+  k = valeurs[Math.floor(Math.random() * valeurs.length)];
 }
+
+function tirerTransformationK() {
+  const types = ["kf", "plusk", "moinsk", "xplusk", "xmoinsk"];
+  transformationType = types[Math.floor(Math.random() * types.length)];
+}
+
 
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
@@ -216,33 +221,44 @@ function tirerTranslation() {
   return array;
 }
 
-  function genererQCMCarree(h, v) {
-// amplitude du déplacement (1, 2 ou 3)
-const a = Math.abs(h !== 0 ? h : v);
+  function fonctionTransformee(f) {
+  switch (transformationType) {
 
+    case "kf":
+      return x => k * f(x);
 
-const propositions = [
-{ label: `(x - ${a})^2`, correct: false },
-{ label: `(x + ${a})^2`, correct: false },
-{ label: `x^2 + ${a}`, correct: false },
-{ label: `x^2 - ${a}`, correct: false }
-];
+    case "plusk":
+      return x => f(x) + k;
 
+    case "moinsk":
+      return x => f(x) - k;
 
-// Détermination de la bonne réponse
-if (h !== 0) {
-// translation horizontale
-const bonne = h > 0 ? `(x - ${a})^2` : `(x + ${a})^2`;
-propositions.find(p => p.label === bonne).correct = true;
-} else {
-// translation verticale
-const bonne = v > 0 ? `x^2 + ${a}` : `x^2 - ${a}`;
-propositions.find(p => p.label === bonne).correct = true;
+    case "xplusk":
+      return x => f(x + k);
+
+    case "xmoinsk":
+      return x => f(x - k);
+
+    default:
+      return f;
+  }
 }
 
 
-return melanger(propositions);
+  
+function genererQCMKCarree() {
+  const propositions = [
+    { label: `k x^2`, correct: transformationType === "kf" },
+    { label: `x^2 + k`, correct: transformationType === "plusk" },
+    { label: `x^2 - k`, correct: transformationType === "moinsk" },
+    { label: `(x + k)^2`, correct: transformationType === "xplusk" },
+    { label: `(x - k)^2`, correct: transformationType === "xmoinsk" },
+    { label: `x^2`, correct: false }
+  ];
+
+  return melanger(propositions);
 }
+
 
 
   function genererQCMValAbs(h, v) {
@@ -446,14 +462,17 @@ function genererEquation() {
 
   nbEssaisFaux = 0;
 
+tirerK();
+tirerTransformationK();
+
 dessinerRepere();
 
+const fBase = x => x * x; // ou abs, racine, inverse…
+const fTrans = fonctionTransformee(fBase);
+tracerCourbe(fTrans);
 
-typeEquation = tirerFonctionSansABA();
-tirerTranslation();
-
-
-let qcm; // ✅ UNE SEULE DÉCLARATION
+const qcm = genererQCMKCarree();
+afficherQCM(qcm);
 
 
 switch (typeEquation) {
