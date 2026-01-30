@@ -141,8 +141,8 @@ if (
 function tirerTypeTransformation() {
   const r = Math.random();
 
-  if (r < 1) return "deformation";      // 50%
-  if (r < 1.2) return "translation_v";   // 25%
+  if (r < 0.9) return "deformation";      // 50%
+  if (r < 0.95) return "translation_v";   // 25%
   return "translation_h";                 // 25%
 }
 
