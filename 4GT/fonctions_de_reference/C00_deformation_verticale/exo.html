@@ -151,9 +151,17 @@ function genererQCMKCarree(){
 }
 
 function genererQCMK(type){
-  if(type==="carrée") return genererQCMKCarree();
-  return [];
+  switch(type){
+    case "carrée":  return genererQCMKCarree();
+    case "valabs":  return genererQCMKValAbs(k, transformationType);
+    case "racine":  return genererQCMKRacine(k, transformationType);
+    case "cube":    return genererQCMKCube(k, transformationType);
+    case "cubique": return genererQCMKCubique(k, transformationType);
+    case "inverse": return genererQCMKInverse(k, transformationType);
+    default:        return [];
+  }
 }
+
 
 function afficherQCM(props){
   const qcm=document.getElementById("qcm");
