@@ -532,6 +532,10 @@ return melanger(propositions);
 
   
 function afficherQCM(propositions) {
+if (!Array.isArray(propositions) || propositions.length === 0) {
+    console.warn("QCM vide ou invalide", propositions);
+    return;
+  }
 const qcm = document.getElementById("qcm");
 qcm.innerHTML = "";
 
