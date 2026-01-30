@@ -69,8 +69,7 @@ let typeEquation = "";
 let dernieresFonctions = [];
 let nbEssaisFaux = 0;
 let translationType = ""; // "horizontale" ou "verticale"
-let h = 0;
-let v = 0;
+let k = 1;
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -193,20 +192,20 @@ function tirerTransformationK() {
 }
 
 
-  function tracerAsymptotesInverse(h, v) {
-  // asymptote verticale x = h
+  function tracerAsymptotesInverse(k) {
+  // asymptote verticale x = k
   svg.innerHTML += `
-    <line x1="${xToPx(h)}" y1="0"
-          x2="${xToPx(h)}" y2="${height}"
+    <line x1="${xToPx(k)}" y1="0"
+          x2="${xToPx(k)}" y2="${height}"
           stroke="var(--peps)"
           stroke-width="2.5"
           stroke-dasharray="4,4"/>
   `;
 
-  // asymptote horizontale y = v
+  // asymptote horizontale y = k
   svg.innerHTML += `
-    <line x1="0" y1="${yToPx(v)}"
-          x2="${width}" y2="${yToPx(v)}"
+    <line x1="0" y1="${yToPx(k)}"
+          x2="${width}" y2="${yToPx(k)}"
           stroke="var(--peps)"
           stroke-width="2.5"
           stroke-dasharray="4,4"/>
@@ -403,24 +402,8 @@ qcm.appendChild(card);
 MathJax.typesetPromise();
 }
   
-function genererQCM(type, h, v) {
-  switch (type) {
-    case "carrée":
-      return genererQCMCarree(h, v);
-    case "valabs":
-      return genererQCMValAbs(h, v);
-    case "racine":
-      return genererQCMRacine(h, v);
-    case "cube":
-      return genererQCMCube(h, v);
-    case "cubique":
-      return genererQCMCubique(h, v);
-    case "inverse":
-      return genererQCMInverse(h, v);
-    default:
-      return [];
-  }
-}
+
+
 
   
 /* ====================== GENERATION ====================== */
@@ -444,8 +427,9 @@ const fBase = x => x * x; // ou abs, racine, inverse…
 const fTrans = fonctionTransformee(fBase);
 tracerCourbe(fTrans);
 
-const qcm = genererQCMKCarree();
+const qcm = genererQCMK(typeEquation, k, transformationType);
 afficherQCM(qcm);
+
 
 
 switch (typeEquation) {
@@ -493,17 +477,13 @@ break;
 
 case "inverse":
 tirerTranslation();
-tracerAsymptotesInverse(h, v);
+tracerAsymptotesInverse(k);
 tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
+Math.abs(x - k) < 0.1 ? NaN : 1 / (x - k) + k
 );
 break;
 }
 
-
-// ✅ QCM généré UNE FOIS, APRÈS le switch
-qcm = genererQCM(typeEquation, h, v);
-afficherQCM(qcm);
 }
 
 
