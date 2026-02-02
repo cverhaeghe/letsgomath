@@ -181,11 +181,15 @@ function tirerTranslation() {
   };
 }
 
-  function tirerHV() {
+function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
-  h = valeurs[Math.floor(Math.random() * valeurs.length)];
-  v = valeurs[Math.floor(Math.random() * valeurs.length)];
+
+  do {
+    h = valeurs[Math.floor(Math.random() * valeurs.length)];
+    v = valeurs[Math.floor(Math.random() * valeurs.length)];
+  } while (h === v || h === -v);
 }
+
 
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
