@@ -138,7 +138,7 @@ if (
     <path d="${path}" fill="none"
           stroke="var(--peps)"
           stroke-width="3"
-          stroke-linecap="round"
+          stroke-linecap="butt"
           stroke-linejoin="round"/>
   `;
 }
@@ -431,14 +431,17 @@ function genererEquation() {
 dessinerRepere();
 
 tirerQuestion();
-  
+
 const questionEl = document.getElementById("question");
 
 if (typeQuestion === "domaine") {
-  questionEl.innerHTML = "Quel est le <strong>domaine </strong> de la fonction ?";
+  questionEl.innerHTML = "Quel est le <strong>domaine</strong> de la fonction ?";
 } else {
   questionEl.innerHTML = "Quel est l’<strong>ensemble image</strong> de la fonction ?";
 }
+
+MathJax.typesetPromise([questionEl]);
+
   
 
 
