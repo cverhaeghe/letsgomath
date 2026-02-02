@@ -161,34 +161,26 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
-function tirerTranslation() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
 
-  translationType = Math.random() < 0.5 ? "horizontale" : "verticale";
-
-  if (translationType === "horizontale") {
-    h = valeurs[Math.floor(Math.random() * valeurs.length)];
-    v = 0;
-  } else {
-    v = valeurs[Math.floor(Math.random() * valeurs.length)];
-    h = 0;
-  }
-}
 
   function fonctionTranslatee(f) {
   return function (x) {
     return f(x - h) + v;
   };
 }
-
+  
 function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
 
+  let hh, vv;
   do {
-    h = valeurs[Math.floor(Math.random() * valeurs.length)];
-    v = valeurs[Math.floor(Math.random() * valeurs.length)];
-  } while (Math.abs(h) === Math.abs(v));
+    hh = valeurs[Math.floor(Math.random() * valeurs.length)];
+    vv = valeurs[Math.floor(Math.random() * valeurs.length)];
+  } while (Math.abs(hh) === Math.abs(vv));
+
+  return { h: hh, v: vv };
 }
+
 
 
 
@@ -488,10 +480,10 @@ function genererQCM(type, h, v) {
 
   // 🔒 SÉCURITÉ ANTI-DOUBLONS
   const labels = propositions.map(p => p.label);
-  if (new Set(labels).size !== labels.length) {
-console.warn("Doublon QCM détecté — équation rejetée");
-return genererQCM(type, h, v);
-  }
+if (new Set(labels).size !== labels.length) {
+  console.error("QCM invalide — génération refusée");
+}
+
 
   return propositions;
 }
@@ -502,10 +494,13 @@ return genererQCM(type, h, v);
 function genererEquation() {
   document.getElementById("feedback").innerHTML = "";
 
-if (Math.abs(h) === Math.abs(v)) {
-  console.warn("Équation invalide détectée — régénération");
-  return genererEquation();
-}
+ dessinerRepere();
+
+  typeEquation = tirerFonctionSansABA();
+
+  const tirage = tirerHV();
+  h = tirage.h;
+  v = tirage.v;
   
   const cards = document.querySelectorAll('.qcm-card');
   cards.forEach(card => {
@@ -515,13 +510,8 @@ if (Math.abs(h) === Math.abs(v)) {
 
   nbEssaisFaux = 0;
 
-dessinerRepere();
 
 
-typeEquation = tirerFonctionSansABA();
-do {
-  tirerHV();
-} while (Math.abs(h) === Math.abs(v));
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
@@ -577,6 +567,9 @@ Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
 break;
 }
 
+if (Math.abs(h) === Math.abs(v)) {
+  throw new Error("BUG CRITIQUE : h et v invalides");
+}
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
 qcm = genererQCM(typeEquation, h, v);
