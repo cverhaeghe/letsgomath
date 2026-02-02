@@ -31,7 +31,7 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <p>De quelle fonction s'agit-il ? </p>
+<p id="question"></p>
 
   <!-- GRAPHIQUE -->
 <div id="graph-container"
@@ -72,7 +72,8 @@ let h = 0;
 let v = 0;
 let sx = 1; // symétrie axe y
 let sy = 1; // symétrie axe x
-  
+let typeQuestion = ""; // "domaine" ou "image"
+ 
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
 function yToPx(y){ return height/2 - y*unit; }
@@ -101,6 +102,11 @@ function dessinerRepere(){
     svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
 }
 
+  function tirerQuestion() {
+  typeQuestion = Math.random() < 0.5 ? "domaine" : "image";
+}
+
+  
 function tracerCourbe(fonction) {
   let path = "";
   let first = true;
@@ -183,7 +189,27 @@ function fonctionTransformee(f) {
   };
 }
 
+function domaineFonction(type) {
+  if (type === "carrée") return "ℝ";
+  if (type === "inverse") return `ℝ \\setminus \\{${h}\\}`;
+  if (type === "racine") {
+    return sx === 1
+      ? `x \\ge ${h}`
+      : `x \\le ${h}`;
+  }
+}
 
+  function imageFonction(type) {
+  if (type === "inverse") return `ℝ \\setminus \\{${v}\\}`;
+
+  // carrée ou racine
+  return sy === 1
+    ? `y \\ge ${v}`
+    : `y \\le ${v}`;
+}
+
+  
+  
   function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
   h = valeurs[Math.floor(Math.random() * valeurs.length)];
@@ -404,6 +430,15 @@ function genererEquation() {
 
 dessinerRepere();
 
+const questionEl = document.getElementById("question");
+
+if (typeQuestion === "domaine") {
+  questionEl.innerHTML = "Quel est le <strong>domaine </strong> de la fonction ?";
+} else {
+  questionEl.innerHTML = "Quel est l’<strong>ensemble image</strong> de la fonction ?";
+}
+  
+tirerQuestion();
 
 typeEquation = tirerFonctionSansABA();
 tirerHV();
