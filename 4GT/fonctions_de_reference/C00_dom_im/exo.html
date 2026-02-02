@@ -430,6 +430,8 @@ function genererEquation() {
 
 dessinerRepere();
 
+tirerQuestion();
+  
 const questionEl = document.getElementById("question");
 
 if (typeQuestion === "domaine") {
@@ -438,7 +440,7 @@ if (typeQuestion === "domaine") {
   questionEl.innerHTML = "Quel est l’<strong>ensemble image</strong> de la fonction ?";
 }
   
-tirerQuestion();
+
 
 typeEquation = tirerFonctionSansABA();
 tirerHV();
