@@ -741,21 +741,35 @@ const byDen = eObj.den;
    VERIFICATION
 ===================================================== */
 function verifier(){
-  const r=document.getElementById("reponse").value.replace(" ","");
-  const f=document.getElementById("feedback");
+  let r = document.getElementById("reponse").value
+    .toLowerCase()
+    .replace(/\s+/g, ""); // enlève espaces
 
-  const bonnes=[
-    solution.den===1 ? `${solution.num}` : `${solution.num}/${solution.den}`
-  ];
+  const f = document.getElementById("feedback");
 
-  if(bonnes.includes(r)){
-    f.style.color="black";
-    f.innerHTML="✔️ Bonne réponse !";
-  }else{
-    f.style.color="black";
-    f.innerHTML="❌ Réponse incorrecte";
+  // réponses correctes possibles
+  let bonnes = [];
+
+  const valeur =
+    solution.den === 1
+      ? `${solution.num}`
+      : `${solution.num}/${solution.den}`;
+
+  bonnes.push(valeur);
+
+  // accepter x=... ou y=...
+  bonnes.push(`x=${valeur}`);
+  bonnes.push(`y=${valeur}`);
+
+  if (bonnes.includes(r)) {
+    f.style.color = "black";
+    f.innerHTML = "✔️ Bonne réponse !";
+  } else {
+    f.style.color = "black";
+    f.innerHTML = "❌ Réponse incorrecte";
   }
 }
+
 
 /* =====================================================
    CORRECTION
