@@ -461,23 +461,42 @@ MathJax.typesetPromise();
 }
   
 function genererQCM(type, h, v) {
+  let propositions;
+
   switch (type) {
     case "carrée":
-      return genererQCMCarree(h, v);
+      propositions = genererQCMCarree(h, v);
+      break;
     case "valabs":
-      return genererQCMValAbs(h, v);
+      propositions = genererQCMValAbs(h, v);
+      break;
     case "racine":
-      return genererQCMRacine(h, v);
+      propositions = genererQCMRacine(h, v);
+      break;
     case "cube":
-      return genererQCMCube(h, v);
+      propositions = genererQCMCube(h, v);
+      break;
     case "cubique":
-      return genererQCMCubique(h, v);
+      propositions = genererQCMCubique(h, v);
+      break;
     case "inverse":
-      return genererQCMInverse(h, v);
+      propositions = genererQCMInverse(h, v);
+      break;
     default:
-      return [];
+      propositions = [];
   }
+
+  // 🔒 SÉCURITÉ ANTI-DOUBLONS
+  const labels = propositions.map(p => p.label);
+  if (new Set(labels).size !== labels.length) {
+    console.warn("Doublon QCM détecté → régénération");
+    tirerHV(); // on change h et v
+    return genererQCM(type, h, v);
+  }
+
+  return propositions;
 }
+
 
   
 /* ====================== GENERATION ====================== */
