@@ -489,9 +489,8 @@ function genererQCM(type, h, v) {
   // 🔒 SÉCURITÉ ANTI-DOUBLONS
   const labels = propositions.map(p => p.label);
   if (new Set(labels).size !== labels.length) {
-    console.warn("Doublon QCM détecté → régénération");
-    tirerHV(); // on change h et v
-    return genererQCM(type, h, v);
+console.warn("Doublon QCM détecté — équation rejetée");
+return genererQCM(type, h, v);
   }
 
   return propositions;
@@ -503,6 +502,11 @@ function genererQCM(type, h, v) {
 function genererEquation() {
   document.getElementById("feedback").innerHTML = "";
 
+if (Math.abs(h) === Math.abs(v)) {
+  console.warn("Équation invalide détectée — régénération");
+  return genererEquation();
+}
+  
   const cards = document.querySelectorAll('.qcm-card');
   cards.forEach(card => {
     card.classList.remove('correct', 'incorrect');
@@ -515,7 +519,9 @@ dessinerRepere();
 
 
 typeEquation = tirerFonctionSansABA();
-tirerHV();
+do {
+  tirerHV();
+} while (Math.abs(h) === Math.abs(v));
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
