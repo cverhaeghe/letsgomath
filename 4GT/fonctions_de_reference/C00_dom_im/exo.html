@@ -208,7 +208,44 @@ function domaineFonction(type) {
     : `y \\le ${v}`;
 }
 
-  
+  function genererQCMDomaine(type) {
+  const bonne = domaineFonction(type);
+
+  const propositions = [
+    bonne,
+    "ℝ",
+    "x \\ge 0",
+    "x \\le 0",
+    "ℝ \\setminus \\{0\\}"
+  ];
+
+  return melanger(
+    propositions.map(p => ({
+      label: p,
+      correct: p === bonne
+    }))
+  );
+}
+
+function genererQCMImage(type) {
+  const bonne = imageFonction(type);
+
+  const propositions = [
+    bonne,
+    "y \\ge 0",
+    "y \\le 0",
+    "ℝ",
+    "ℝ \\setminus \\{0\\}"
+  ];
+
+  return melanger(
+    propositions.map(p => ({
+      label: p,
+      correct: p === bonne
+    }))
+  );
+}
+
   
   function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
@@ -402,18 +439,18 @@ qcm.appendChild(card);
 MathJax.typesetPromise();
 }
   
-function genererQCM(type, h, v) {
-  switch (type) {
-    case "carrée":
-      return genererQCMCarree(h, v);
-    case "racine":
-      return genererQCMRacine(h, v);
-    case "inverse":
-      return genererQCMInverse(h, v);
-    default:
-      return [];
+function genererQCM(type) {
+  if (typeQuestion === "domaine") {
+    return genererQCMDomaine(type);
   }
+
+  if (typeQuestion === "image") {
+    return genererQCMImage(type);
+  }
+
+  return [];
 }
+
 
   
 /* ====================== GENERATION ====================== */
@@ -500,7 +537,7 @@ break;
 
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
-qcm = genererQCM(typeEquation, h, v);
+qcm = genererQCM(typeEquation);
 afficherQCM(qcm);
 }
 
