@@ -70,7 +70,8 @@ let nbEssaisFaux = 0;
 let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
-let k = 1;
+let sx = 1; // symétrie axe y
+let sy = 1; // symétrie axe x
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -176,11 +177,12 @@ function tirerTranslation() {
   }
 }
 
-  function fonctionTranslatee(f) {
+function fonctionTransformee(f) {
   return function (x) {
-    return f(x - h) + v;
+    return sy * f(sx * (x - h)) + v;
   };
 }
+
 
   function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
@@ -249,6 +251,10 @@ function genererQCMCarree(h, v) {
   return melanger(propositions);
 }
 
+function tirerSymetries() {
+  sx = Math.random() < 0.5 ? 1 : -1;
+  sy = Math.random() < 0.5 ? 1 : -1;
+}
 
 
 
@@ -401,6 +407,7 @@ dessinerRepere();
 
 typeEquation = tirerFonctionSansABA();
 tirerHV();
+tirerSymetries();
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
@@ -412,7 +419,7 @@ case "carrée":
 svg.innerHTML += `
 <circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
 `;
-tracerCourbe(fonctionTranslatee(x => x * x));
+tracerCourbe(fonctionTransformee(x => x * x));
 break;
 
 
@@ -427,8 +434,9 @@ svg.innerHTML += `
 `;
 
 tracerCourbe(x => {
-  const y = fonctionTranslatee(Math.sqrt)(x);
-  return x - h >= 0 ? y : NaN;
+  const arg = sx * (x - h);
+  if (arg < 0) return NaN;
+  return sy * Math.sqrt(arg) + v;
 });
 break;
 
@@ -436,9 +444,13 @@ break;
 
 case "inverse":
 tracerAsymptotesInverse(h, v);
-tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
-);
+
+tracerCourbe(x => {
+  const arg = sx * (x - h);
+  if (Math.abs(arg) < 0.05) return NaN;
+  return sy * (1 / arg) + v;
+});
+
 break;
 }
 
