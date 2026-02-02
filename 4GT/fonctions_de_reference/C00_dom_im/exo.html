@@ -425,20 +425,24 @@ break;
 
 
 case "racine":
-// 🔶 sommet de la racine : (h ; v)
-svg.innerHTML += `
-<circle cx="${xToPx(h)}"
-        cy="${yToPx(v)}"
-        r="5"
-        fill="var(--lgm-orange)"/>
-`;
 
 tracerCourbe(x => {
   const arg = sx * (x - h);
   if (arg < 0) return NaN;
   return sy * Math.sqrt(arg) + v;
 });
+
+// 🔶 sommet au-dessus de la courbe
+svg.innerHTML += `
+<circle cx="${xToPx(h)}"
+        cy="${yToPx(v)}"
+        r="5"
+        fill="var(--lgm-orange)"
+        stroke="black"
+        stroke-width="1.5"/>
+`;
 break;
+
 
 
 
