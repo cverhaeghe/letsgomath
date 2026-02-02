@@ -498,9 +498,16 @@ function genererEquation() {
 
   typeEquation = tirerFonctionSansABA();
 
-  const tirage = tirerHV();
-  h = tirage.h;
-  v = tirage.v;
+const tirage = tirerHV();
+h = tirage.h;
+v = tirage.v;
+
+// 🔒 CONTRAINTE GRAPHIQUE SUPPLÉMENTAIRE
+if ((typeEquation === "valabs" || typeEquation === "carrée") &&
+    Math.abs(h) === Math.abs(v)) {
+  return genererEquation();
+}
+
   
   const cards = document.querySelectorAll('.qcm-card');
   cards.forEach(card => {
