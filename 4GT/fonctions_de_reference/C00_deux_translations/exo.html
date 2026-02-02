@@ -187,8 +187,9 @@ function tirerHV() {
   do {
     h = valeurs[Math.floor(Math.random() * valeurs.length)];
     v = valeurs[Math.floor(Math.random() * valeurs.length)];
-  } while (h === v || h === -v);
+  } while (Math.abs(h) === Math.abs(v));
 }
+
 
 
   function tracerAsymptotesInverse(h, v) {
