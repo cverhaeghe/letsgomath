@@ -161,28 +161,31 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
+function tirerTranslation() {
+  const valeurs = [-3, -2, -1, 1, 2, 3];
 
+  translationType = Math.random() < 0.5 ? "horizontale" : "verticale";
+
+  if (translationType === "horizontale") {
+    h = valeurs[Math.floor(Math.random() * valeurs.length)];
+    v = 0;
+  } else {
+    v = valeurs[Math.floor(Math.random() * valeurs.length)];
+    h = 0;
+  }
+}
 
   function fonctionTranslatee(f) {
   return function (x) {
     return f(x - h) + v;
   };
 }
-  
-function tirerHV() {
+
+  function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
-
-  let hh, vv;
-  do {
-    hh = valeurs[Math.floor(Math.random() * valeurs.length)];
-    vv = valeurs[Math.floor(Math.random() * valeurs.length)];
-  } while (Math.abs(hh) === Math.abs(vv));
-
-  return { h: hh, v: vv };
+  h = valeurs[Math.floor(Math.random() * valeurs.length)];
+  v = valeurs[Math.floor(Math.random() * valeurs.length)];
 }
-
-
-
 
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
@@ -453,62 +456,29 @@ MathJax.typesetPromise();
 }
   
 function genererQCM(type, h, v) {
-  let propositions;
-
   switch (type) {
     case "carrée":
-      propositions = genererQCMCarree(h, v);
-      break;
+      return genererQCMCarree(h, v);
     case "valabs":
-      propositions = genererQCMValAbs(h, v);
-      break;
+      return genererQCMValAbs(h, v);
     case "racine":
-      propositions = genererQCMRacine(h, v);
-      break;
+      return genererQCMRacine(h, v);
     case "cube":
-      propositions = genererQCMCube(h, v);
-      break;
+      return genererQCMCube(h, v);
     case "cubique":
-      propositions = genererQCMCubique(h, v);
-      break;
+      return genererQCMCubique(h, v);
     case "inverse":
-      propositions = genererQCMInverse(h, v);
-      break;
+      return genererQCMInverse(h, v);
     default:
-      propositions = [];
+      return [];
   }
-
-  // 🔒 SÉCURITÉ ANTI-DOUBLONS
-  const labels = propositions.map(p => p.label);
-if (new Set(labels).size !== labels.length) {
-  console.error("QCM invalide — génération refusée");
 }
-
-
-  return propositions;
-}
-
 
   
 /* ====================== GENERATION ====================== */
 function genererEquation() {
   document.getElementById("feedback").innerHTML = "";
 
- dessinerRepere();
-
-  typeEquation = tirerFonctionSansABA();
-
-const tirage = tirerHV();
-h = tirage.h;
-v = tirage.v;
-
-// 🔒 CONTRAINTE GRAPHIQUE SUPPLÉMENTAIRE
-if ((typeEquation === "valabs" || typeEquation === "carrée") &&
-    Math.abs(h) === Math.abs(v)) {
-  return genererEquation();
-}
-
-  
   const cards = document.querySelectorAll('.qcm-card');
   cards.forEach(card => {
     card.classList.remove('correct', 'incorrect');
@@ -517,8 +487,11 @@ if ((typeEquation === "valabs" || typeEquation === "carrée") &&
 
   nbEssaisFaux = 0;
 
+dessinerRepere();
 
 
+typeEquation = tirerFonctionSansABA();
+tirerHV();
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
@@ -574,9 +547,6 @@ Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
 break;
 }
 
-if (Math.abs(h) === Math.abs(v)) {
-  throw new Error("BUG CRITIQUE : h et v invalides");
-}
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
 qcm = genererQCM(typeEquation, h, v);
