@@ -72,6 +72,8 @@ let h = 0;
 let v = 0;
 let kx = 1;
 let ky = 1;
+let typeQuestion = "domaine"; // ou "image"
+
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -192,6 +194,10 @@ function fonctionTranslatee(f) {
   };
 }
 
+function tirerTypeQuestion() {
+  const types = ["domaine", "image"];
+  typeQuestion = types[Math.floor(Math.random() * types.length)];
+}
 
 
   function tracerAsymptotesInverse(h, v) {
@@ -232,11 +238,20 @@ function genererQCMCarree(h, v) {
     { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
   ];
 
-// -------- Bonne réponse : domaine --------
-const bonne = `\\mathbb{R}`;
+// -------- Bonne réponse --------
+const bonne;
+
+if (typeQuestion === "domaine") {
+  bonne = `\\mathbb{R}`;
+} else {
+  bonne = ky === 1
+    ? `\\left[ ${v}, +\\infty \\right[`
+    : `\\left] -\\infty, ${v} \\right]`;
+}
 
 const bonneProp = propositions.find(p => p.label === bonne);
 if (bonneProp) bonneProp.correct = true;
+
 
 
   return melanger(propositions);
@@ -257,11 +272,20 @@ function genererQCMRacine(h, v) {
     { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
   ];
 
-  // -------- Bonne réponse : domaine --------
-  const bonne = `\\left[ ${h}, +\\infty \\right[`;
+  // -------- Bonne réponse --------
+const bonne;
 
-  const bonneProp = propositions.find(p => p.label === bonne);
-  if (bonneProp) bonneProp.correct = true;
+if (typeQuestion === "domaine") {
+  bonne = `\\left[ ${h}, +\\infty \\right[`;
+} else {
+  bonne = ky === 1
+    ? `\\left[ ${v}, +\\infty \\right[`
+    : `\\left] -\\infty, ${v} \\right]`;
+}
+
+const bonneProp = propositions.find(p => p.label === bonne);
+if (bonneProp) bonneProp.correct = true;
+
 
   return melanger(propositions);
 }
@@ -282,12 +306,17 @@ function genererQCMInverse(h, v) {
   ];
 
   // -------- Bonne réponse : domaine --------
-  const bonne = `\\mathbb{R} \\setminus \\{ ${h} \\}`;
+const bonne;
 
-  const bonneProp = propositions.find(p => p.label === bonne);
-  if (bonneProp) bonneProp.correct = true;
+if (typeQuestion === "domaine") {
+  bonne = `\\mathbb{R} \\setminus \\{ ${h} \\}`;
+} else {
+  bonne = `\\mathbb{R} \\setminus \\{ ${v} \\}`;
+}
 
-  return melanger(propositions);
+const bonneProp = propositions.find(p => p.label === bonne);
+if (bonneProp) bonneProp.correct = true;
+
 }
 
 
@@ -373,6 +402,12 @@ function genererEquation() {
 
   nbEssaisFaux = 0;
 
+tirerTypeQuestion();
+document.querySelector("p").innerHTML =
+  typeQuestion === "domaine"
+    ? "Quel est le domaine de la fonction ?"
+    : "Quel est l’ensemble image de la fonction ?";
+  
 dessinerRepere();
 
 
