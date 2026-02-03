@@ -239,7 +239,7 @@ function genererQCMCarree(h, v) {
   ];
 
 // -------- Bonne réponse --------
-const bonne;
+let bonne;
 
 if (typeQuestion === "domaine") {
   bonne = `\\mathbb{R}`;
@@ -273,7 +273,7 @@ function genererQCMRacine(h, v) {
   ];
 
   // -------- Bonne réponse --------
-const bonne;
+let bonne;
 
 if (typeQuestion === "domaine") {
   bonne = `\\left[ ${h}, +\\infty \\right[`;
@@ -306,7 +306,7 @@ function genererQCMInverse(h, v) {
   ];
 
   // -------- Bonne réponse : domaine --------
-const bonne;
+let bonne;
 
 if (typeQuestion === "domaine") {
   bonne = `\\mathbb{R} \\setminus \\{ ${h} \\}`;
@@ -316,6 +316,8 @@ if (typeQuestion === "domaine") {
 
 const bonneProp = propositions.find(p => p.label === bonne);
 if (bonneProp) bonneProp.correct = true;
+
+return melanger(propositions);
 
 }
 
@@ -413,6 +415,7 @@ dessinerRepere();
 
 typeEquation = tirerFonctionSansABA();
 tirerHV();
+tirerKxKy();  
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
