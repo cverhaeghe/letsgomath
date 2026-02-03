@@ -99,6 +99,15 @@ function dessinerRepere(){
     svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
 }
 
+  
+function tracerPoint(a, b) {
+  svg.innerHTML += `
+    <circle cx="${xToPx(a)}" cy="${yToPx(b)}" r="4" fill="orange"/>
+  `;
+}
+
+
+  
 function tracerCourbe(fonction) {
   let path = "";
   let first = true;
@@ -161,31 +170,23 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
-function tirerTranslation() {
+
+function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
-
-  translationType = Math.random() < 0.5 ? "horizontale" : "verticale";
-
-  if (translationType === "horizontale") {
+  do {
     h = valeurs[Math.floor(Math.random() * valeurs.length)];
-    v = 0;
-  } else {
     v = valeurs[Math.floor(Math.random() * valeurs.length)];
-    h = 0;
-  }
+  } while (Math.abs(h) === Math.abs(v));
 }
 
+  
   function fonctionTranslatee(f) {
   return function (x) {
     return f(x - h) + v;
   };
 }
 
-  function tirerHV() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
-  h = valeurs[Math.floor(Math.random() * valeurs.length)];
-  v = valeurs[Math.floor(Math.random() * valeurs.length)];
-}
+
 
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
@@ -521,14 +522,14 @@ break;
 
 
 case "racine":
-svg.innerHTML += `
-<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--peps)"/>
-`;
+
 tracerCourbe(x => {
-const y = fonctionTranslatee(Math.sqrt)(x);
-return x - h >= 0 ? y : NaN;
+  const y = fonctionTranslatee(Math.sqrt)(x);
+  return x - h >= 0 ? y : NaN;
 });
+tracerPoint(h,v);    
 break;
+
 
 
 case "cubique":
