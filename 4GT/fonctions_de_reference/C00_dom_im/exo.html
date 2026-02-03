@@ -296,8 +296,11 @@ function genererQCMRacine(h, v) {
 let bonne;
 
 if (typeQuestion === "domaine") {
-  bonne = `\\left[ ${h}, +\\infty \\right[`;
-} else {
+  bonne = ky === 1
+    ? `\\left[ ${h}, +\\infty \\right[`
+    : `\\left] -\\infty, ${h} \\right]`;
+}
+ else {
   bonne = ky === 1
     ? `\\left[ ${v}, +\\infty \\right[`
     : `\\left] -\\infty, ${v} \\right]`;
