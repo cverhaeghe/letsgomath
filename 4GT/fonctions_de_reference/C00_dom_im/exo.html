@@ -223,24 +223,21 @@ function fonctionTranslatee(f) {
 }
 
 function genererQCMCarree(h, v) {
-  const ah = Math.abs(h);
-  const av = Math.abs(v);
 
   const propositions = [
-    { label: `R`, correct: false },
-    { label: `\\left[ ${h},\\longrightarrow`, correct: false },
-    { label: `\\left[ ${v},\\longrightarrow`, correct: false },
-    { label: `\\longleftarrow,${h},\\right]`, correct: false },
-    { label: `\\longleftarrow,${v},\\right]`, correct: false }
-];
+    { label: `\\mathbb{R}`, correct: true },
+    { label: `\\left[ ${h}, +\\infty \\right[`, correct: false },
+    { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
+    { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
+    { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
+  ];
 
-  // -------- Bonne réponse exacte --------
-  const bonne =
-    `(x ${h > 0 ? "- " + ah : "+ " + ah})^2 ` +
-    `${v > 0 ? "+ " + av : "- " + av}`;
+// -------- Bonne réponse : domaine --------
+const bonne = `\\mathbb{R}`;
 
-  const bonneProp = propositions.find(p => p.label === bonne);
-  if (bonneProp) bonneProp.correct = true;
+const bonneProp = propositions.find(p => p.label === bonne);
+if (bonneProp) bonneProp.correct = true;
+
 
   return melanger(propositions);
 }
