@@ -234,8 +234,6 @@ function genererQCMCarree(h, v) {
     { label: `\\longleftarrow,${v},\\right]`, correct: false }
 ];
 
-
-
   // -------- Bonne réponse exacte --------
   const bonne =
     `(x ${h > 0 ? "- " + ah : "+ " + ah})^2 ` +
@@ -248,35 +246,9 @@ function genererQCMCarree(h, v) {
 }
 
 
-  function genererQCMValAbs(h, v) {
-const ah = Math.abs(h);
-const av = Math.abs(v);
 
 
-const propositions = [
-// Groupe A
-{ label: `|x - ${ah}| + ${av}`, correct: false },
-{ label: `|x - ${ah}| - ${av}`, correct: false },
-{ label: `|x + ${ah}| + ${av}`, correct: false },
-{ label: `|x + ${ah}| - ${av}`, correct: false },
-
-
-// Groupe B
-{ label: `|x - ${av}| + ${ah}`, correct: false },
-{ label: `|x - ${av}| - ${ah}`, correct: false },
-{ label: `|x + ${av}| + ${ah}`, correct: false },
-{ label: `|x + ${av}| - ${ah}`, correct: false }
-];
-
-
-const bonne =
-`|x ${h > 0 ? "- " + ah : "+ " + ah}| ` +
-`${v > 0 ? "+ " + av : "- " + av}`;
-
-
-propositions.find(p => p.label === bonne).correct = true;
-return melanger(propositions);
-}
+  
 
 function genererQCMRacine(h, v) {
 const ah = Math.abs(h);
@@ -298,75 +270,17 @@ const propositions = [
 { label: `\\sqrt{x + ${av}} - ${ah}`, correct: false }
 ];
 
-
 const bonne =
 `\\sqrt{x ${h > 0 ? "- " + ah : "+ " + ah}} ` +
 `${v > 0 ? "+ " + av : "- " + av}`;
 
-
 propositions.find(p => p.label === bonne).correct = true;
 return melanger(propositions);
 }
 
-  function genererQCMCube(h, v) {
-const ah = Math.abs(h);
-const av = Math.abs(v);
 
 
-const propositions = [
-// Groupe A
-{ label: `(x - ${ah})^3 + ${av}`, correct: false },
-{ label: `(x - ${ah})^3 - ${av}`, correct: false },
-{ label: `(x + ${ah})^3 + ${av}`, correct: false },
-{ label: `(x + ${ah})^3 - ${av}`, correct: false },
 
-
-// Groupe B
-{ label: `(x - ${av})^3 + ${ah}`, correct: false },
-{ label: `(x - ${av})^3 - ${ah}`, correct: false },
-{ label: `(x + ${av})^3 + ${ah}`, correct: false },
-{ label: `(x + ${av})^3 - ${ah}`, correct: false }
-];
-
-
-const bonne =
-`(x ${h > 0 ? "- " + ah : "+ " + ah})^3 ` +
-`${v > 0 ? "+ " + av : "- " + av}`;
-
-
-propositions.find(p => p.label === bonne).correct = true;
-return melanger(propositions);
-}
-
- function genererQCMCubique(h, v) {
-const ah = Math.abs(h);
-const av = Math.abs(v);
-
-
-const propositions = [
-// Groupe A
-{ label: `\\sqrt[3]{x - ${ah}} + ${av}`, correct: false },
-{ label: `\\sqrt[3]{x - ${ah}} - ${av}`, correct: false },
-{ label: `\\sqrt[3]{x + ${ah}} + ${av}`, correct: false },
-{ label: `\\sqrt[3]{x + ${ah}} - ${av}`, correct: false },
-
-
-// Groupe B
-{ label: `\\sqrt[3]{x - ${av}} + ${ah}`, correct: false },
-{ label: `\\sqrt[3]{x - ${av}} - ${ah}`, correct: false },
-{ label: `\\sqrt[3]{x + ${av}} + ${ah}`, correct: false },
-{ label: `\\sqrt[3]{x + ${av}} - ${ah}`, correct: false }
-];
-
-
-const bonne =
-`\\sqrt[3]{x ${h > 0 ? "- " + ah : "+ " + ah}} ` +
-`${v > 0 ? "+ " + av : "- " + av}`;
-
-
-propositions.find(p => p.label === bonne).correct = true;
-return melanger(propositions);
-}
 
 function genererQCMInverse(h, v) {
 const ah = Math.abs(h);
@@ -458,14 +372,8 @@ function genererQCM(type, h, v) {
   switch (type) {
     case "carrée":
       return genererQCMCarree(h, v);
-    case "valabs":
-      return genererQCMValAbs(h, v);
     case "racine":
       return genererQCMRacine(h, v);
-    case "cube":
-      return genererQCMCube(h, v);
-    case "cubique":
-      return genererQCMCubique(h, v);
     case "inverse":
       return genererQCMInverse(h, v);
     default:
@@ -506,19 +414,6 @@ tracerCourbe(fonctionTranslatee(x => x * x));
 break;
 
 
-case "cube":
-svg.innerHTML += `
-<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
-`;
-tracerCourbe(fonctionTranslatee(x => x * x * x));
-break;
-
-
-case "valabs":
-tracerCourbe(fonctionTranslatee(x => Math.abs(x)));
-break;
-
-
 case "racine":
 
 tracerCourbe(x => {
@@ -526,15 +421,6 @@ tracerCourbe(x => {
   return x - h >= 0 ? y : NaN;
 });
 tracerPoint(h,v);    
-break;
-
-
-
-case "cubique":
-svg.innerHTML += `
-<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
-`;
-tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
 break;
 
 
