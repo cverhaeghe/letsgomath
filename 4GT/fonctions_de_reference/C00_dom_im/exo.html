@@ -455,10 +455,9 @@ break;
 
 
 case "racine":
-
+const fRacine = fonctionTranslatee(Math.sqrt);
 tracerCourbe(x => {
-  const y = fonctionTranslatee(Math.sqrt)(x);
-  return x - h >= 0 ? y : NaN;
+  return x >= h ? fRacine(x) : NaN;
 });
 tracerPoint(h,v);    
 break;
@@ -466,9 +465,11 @@ break;
 
 case "inverse":
 tracerAsymptotesInverse(h, v);
+const fInverse = fonctionTranslatee(x => 1 / x);
 tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
+  Math.abs(x - h) < 0.1 ? NaN : fInverse(x)
 );
+
 break;
 }
 
