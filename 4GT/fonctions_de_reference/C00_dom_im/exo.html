@@ -31,7 +31,7 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <p>De quelle fonction s'agit-il ? </p>
+  <p>Quel est le domaine de la fonction ? </p>
 
   <!-- GRAPHIQUE -->
 <div id="graph-container"
@@ -70,6 +70,8 @@ let nbEssaisFaux = 0;
 let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
+let kx = 1;
+let ky = 1;
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -107,7 +109,6 @@ function tracerPoint(a, b) {
 }
 
 
-  
 function tracerCourbe(fonction) {
   let path = "";
   let first = true;
@@ -147,7 +148,7 @@ if (
 
 
 function tirerFonctionSansABA() {
-  const toutes = ["carrée", "cube", "valabs", "racine", "cubique", "inverse"];
+  const toutes = ["carrée", "racine", "inverse"];
 
   // On exclut STRICTEMENT les deux dernières fonctions
   const candidates = toutes.filter(f => !dernieresFonctions.includes(f));
@@ -179,10 +180,15 @@ function tirerHV() {
   } while (Math.abs(h) === Math.abs(v));
 }
 
+function tirerKxKy() {
+  const valeurs = [-1,1];
+    kx = valeurs[Math.floor(Math.random() * valeurs.length)];
+    ky = valeurs[Math.floor(Math.random() * valeurs.length)];
+}  
   
-  function fonctionTranslatee(f) {
+function fonctionTranslatee(f) {
   return function (x) {
-    return f(x - h) + v;
+    return ky*f(ky(x - h)) + v;
   };
 }
 
@@ -222,21 +228,15 @@ function genererQCMCarree(h, v) {
 
   const propositions = [];
 
-  // -------- Groupe A : (x ± h)^2 ± v --------
   propositions.push(
-    { label: `(x - ${ah})^2 + ${av}`, correct: false },
-    { label: `(x - ${ah})^2 - ${av}`, correct: false },
-    { label: `(x + ${ah})^2 + ${av}`, correct: false },
-    { label: `(x + ${ah})^2 - ${av}`, correct: false }
+    { label: `R`, correct: false },
+    { label: `\\left[ ${h},\\longrightarrow`, correct: false }
+    { label: `\\left[ ${v},\\longrightarrow`, correct: false }
+    { label: `\\longleftarrow,${h},\\right]`, correct: false }
+    { label: `\\longleftarrow,${v},\\right]`, correct: false }
   );
 
-  // -------- Groupe B : (x ± v)^2 ± h --------
-  propositions.push(
-    { label: `(x - ${av})^2 + ${ah}`, correct: false },
-    { label: `(x - ${av})^2 - ${ah}`, correct: false },
-    { label: `(x + ${av})^2 + ${ah}`, correct: false },
-    { label: `(x + ${av})^2 - ${ah}`, correct: false }
-  );
+
 
   // -------- Bonne réponse exacte --------
   const bonne =
