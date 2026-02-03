@@ -105,6 +105,11 @@ function dessinerRepere(){
     svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
 }
 
+  function tracerPoint(a, b) {
+  svg.innerHTML += `
+    <circle cx="${xToPx(a)}" cy="${yToPx(b)}" r="4" fill="orange"/>
+  `;
+}
 function tracerCourbe(fonction) {
   let path = "";
   let first = true;
