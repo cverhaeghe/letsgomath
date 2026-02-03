@@ -73,6 +73,7 @@ let v = 0;
 let kx = 1;
 let ky = 1;
 let typeQuestion = "domaine"; // ou "image"
+let dernieresQuestions = [];
 
   
 /* ====================== OUTILS ====================== */
@@ -195,9 +196,29 @@ function fonctionTranslatee(f) {
 }
 
 function tirerTypeQuestion() {
-  const types = ["domaine", "image"];
-  typeQuestion = types[Math.floor(Math.random() * types.length)];
+  const toutes = ["domaine", "image"];
+
+  // On exclut la question si elle est déjà sortie 2 fois de suite
+  let candidates = toutes;
+
+  if (
+    dernieresQuestions.length >= 2 &&
+    dernieresQuestions[0] === dernieresQuestions[1]
+  ) {
+    candidates = toutes.filter(q => q !== dernieresQuestions[0]);
+  }
+
+  const choix = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Mise à jour de l'historique
+  dernieresQuestions.push(choix);
+  if (dernieresQuestions.length > 2) {
+    dernieresQuestions.shift();
+  }
+
+  typeQuestion = choix;
 }
+
 
 
   function tracerAsymptotesInverse(h, v) {
