@@ -161,31 +161,23 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
-function tirerTranslation() {
+
+function tirerHV() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
-
-  translationType = Math.random() < 0.5 ? "horizontale" : "verticale";
-
-  if (translationType === "horizontale") {
+  do {
     h = valeurs[Math.floor(Math.random() * valeurs.length)];
-    v = 0;
-  } else {
     v = valeurs[Math.floor(Math.random() * valeurs.length)];
-    h = 0;
-  }
+  } while (Math.abs(h) === Math.abs(v));
 }
 
+  
   function fonctionTranslatee(f) {
   return function (x) {
     return f(x - h) + v;
   };
 }
 
-  function tirerHV() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
-  h = valeurs[Math.floor(Math.random() * valeurs.length)];
-  v = valeurs[Math.floor(Math.random() * valeurs.length)];
-}
+
 
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
