@@ -248,66 +248,48 @@ if (bonneProp) bonneProp.correct = true;
   
 
 function genererQCMRacine(h, v) {
-const ah = Math.abs(h);
-const av = Math.abs(v);
 
+  const propositions = [
+    { label: `\\mathbb{R}`, correct: false },
+    { label: `\\left[ ${h}, +\\infty \\right[`, correct: true },
+    { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
+    { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
+    { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
+  ];
 
-const propositions = [
-// Groupe A
-{ label: `\\sqrt{x - ${ah}} + ${av}`, correct: false },
-{ label: `\\sqrt{x - ${ah}} - ${av}`, correct: false },
-{ label: `\\sqrt{x + ${ah}} + ${av}`, correct: false },
-{ label: `\\sqrt{x + ${ah}} - ${av}`, correct: false },
+  // -------- Bonne réponse : domaine --------
+  const bonne = `\\left[ ${h}, +\\infty \\right[`;
 
+  const bonneProp = propositions.find(p => p.label === bonne);
+  if (bonneProp) bonneProp.correct = true;
 
-// Groupe B
-{ label: `\\sqrt{x - ${av}} + ${ah}`, correct: false },
-{ label: `\\sqrt{x - ${av}} - ${ah}`, correct: false },
-{ label: `\\sqrt{x + ${av}} + ${ah}`, correct: false },
-{ label: `\\sqrt{x + ${av}} - ${ah}`, correct: false }
-];
-
-const bonne =
-`\\sqrt{x ${h > 0 ? "- " + ah : "+ " + ah}} ` +
-`${v > 0 ? "+ " + av : "- " + av}`;
-
-propositions.find(p => p.label === bonne).correct = true;
-return melanger(propositions);
+  return melanger(propositions);
 }
+
 
 
 
 
 
 function genererQCMInverse(h, v) {
-const ah = Math.abs(h);
-const av = Math.abs(v);
 
+  const propositions = [
+    { label: `\\mathbb{R}`, correct: false },
+    { label: `\\mathbb{R} \\setminus \\{ ${h} \\}`, correct: true },
+    { label: `\\left] -\\infty, ${v} \\right[`, correct: false },
+    { label: `\\left] ${h}, +\\infty \\right[`, correct: false },
+    { label: `\\mathbb{R} \\setminus \\{ ${v} \\}`, correct: false }
+  ];
 
-const propositions = [
-// Groupe A
-{ label: `\\frac{1}{x - ${ah}} + ${av}`, correct: false },
-{ label: `\\frac{1}{x - ${ah}} - ${av}`, correct: false },
-{ label: `\\frac{1}{x + ${ah}} + ${av}`, correct: false },
-{ label: `\\frac{1}{x + ${ah}} - ${av}`, correct: false },
+  // -------- Bonne réponse : domaine --------
+  const bonne = `\\mathbb{R} \\setminus \\{ ${h} \\}`;
 
+  const bonneProp = propositions.find(p => p.label === bonne);
+  if (bonneProp) bonneProp.correct = true;
 
-// Groupe B
-{ label: `\\frac{1}{x - ${av}} + ${ah}`, correct: false },
-{ label: `\\frac{1}{x - ${av}} - ${ah}`, correct: false },
-{ label: `\\frac{1}{x + ${av}} + ${ah}`, correct: false },
-{ label: `\\frac{1}{x + ${av}} - ${ah}`, correct: false }
-];
-
-
-const bonne =
-`\\frac{1}{x ${h > 0 ? "- " + ah : "+ " + ah}} ` +
-`${v > 0 ? "+ " + av : "- " + av}`;
-
-
-propositions.find(p => p.label === bonne).correct = true;
-return melanger(propositions);
+  return melanger(propositions);
 }
+
 
   
 function afficherQCM(propositions) {
