@@ -251,7 +251,7 @@ function tirerTypeQuestion() {
 function genererQCMCarree(h, v) {
 
   const propositions = [
-    { label: `\\mathbb{R}`, correct: true },
+    { label: `\\mathbb{R}`, correct: false },
     { label: `\\left[ ${h}, +\\infty \\right[`, correct: false },
     { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
     { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
@@ -286,7 +286,7 @@ function genererQCMRacine(h, v) {
 
   const propositions = [
     { label: `\\mathbb{R}`, correct: false },
-    { label: `\\left[ ${h}, +\\infty \\right[`, correct: true },
+    { label: `\\left[ ${h}, +\\infty \\right[`, correct: false },
     { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
     { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
     { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
@@ -319,13 +319,13 @@ function genererQCMInverse(h, v) {
 
   const propositions = [
     { label: `\\mathbb{R}`, correct: false },
-    { label: `\\mathbb{R} \\setminus \\{ ${h} \\}`, correct: true },
+    { label: `\\mathbb{R} \\setminus \\{ ${h} \\}`, correct: false },
     { label: `\\left] -\\infty, ${v} \\right[`, correct: false },
     { label: `\\left] ${h}, +\\infty \\right[`, correct: false },
     { label: `\\mathbb{R} \\setminus \\{ ${v} \\}`, correct: false }
   ];
 
-  // -------- Bonne réponse : domaine --------
+  // -------- Bonne réponse --------
 let bonne;
 
 if (typeQuestion === "domaine") {
