@@ -457,7 +457,7 @@ break;
 case "racine":
 const fRacine = fonctionTranslatee(Math.sqrt);
 tracerCourbe(x => {
-  return x >= h ? fRacine(x) : NaN;
+  return ky * (x - h) >= 0 ? fRacine(x) : NaN;
 });
 tracerPoint(h,v);    
 break;
