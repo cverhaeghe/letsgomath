@@ -424,18 +424,15 @@ function genererEquation() {
 
   nbEssaisFaux = 0;
 
-
-  
-dessinerRepere();
-
 tirerTypeQuestion();
 const enonce = document.getElementById("enonce");
 enonce.innerHTML =
   typeQuestion === "domaine"
     ? "Quel est le <strong>domaine</strong> de la fonction ?"
     : "Quel est l’<strong>ensemble image</strong> de la fonction ?";
-
   
+dessinerRepere();
+
 typeEquation = tirerFonctionSansABA();
 tirerHV();
 tirerKxKy();  
