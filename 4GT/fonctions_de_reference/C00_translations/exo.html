@@ -100,11 +100,13 @@ function dessinerRepere(){
     svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
 }
 
-  function tracerPoint(a, b) {
+  
+function tracerPoint(a, b) {
   svg.innerHTML += `
     <circle cx="${xToPx(a)}" cy="${yToPx(b)}" r="4" fill="orange"/>
   `;
 }
+
   
 function tracerCourbe(fonction) {
   let path = "";
@@ -188,11 +190,6 @@ function tirerTranslation() {
   };
 }
 
-  function tirerHV() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
-  h = valeurs[Math.floor(Math.random() * valeurs.length)];
-  v = valeurs[Math.floor(Math.random() * valeurs.length)];
-}
 
   function tracerAsymptotesInverse(h, v) {
   // asymptote verticale x = h
