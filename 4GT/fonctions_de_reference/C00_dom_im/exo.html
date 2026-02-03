@@ -31,7 +31,7 @@
 <div class="exo-container">
   <h1>Exercice</h1>
 
-  <p>Quel est le domaine de la fonction ? </p>
+<p id="enonce"></p>
 
   <!-- GRAPHIQUE -->
 <div id="graph-container"
@@ -405,10 +405,12 @@ function genererEquation() {
   nbEssaisFaux = 0;
 
 tirerTypeQuestion();
-document.querySelector("p").innerHTML =
+const enonce = document.getElementById("enonce");
+enonce.innerHTML =
   typeQuestion === "domaine"
-    ? "Quel est le domaine de la fonction ?"
-    : "Quel est l’ensemble image de la fonction ?";
+    ? "Quel est le <strong>domaine</strong> de la fonction ?"
+    : "Quel est l’<strong>ensemble image</strong> de la fonction ?";
+
   
 dessinerRepere();
 
