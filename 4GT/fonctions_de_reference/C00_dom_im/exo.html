@@ -372,7 +372,17 @@ card.onclick = () => {
 
 // ---- BONNE RÉPONSE ----
 if (p.correct) {
-card.classList.add("correct");
+
+  // ---- SURLIGNAGE VISUEL ----
+  if (typeQuestion === "domaine") {
+    const borne = ky === 1 ? h : h;
+    surlignerAxe(borne, "x", typeEquation);
+  } else {
+    const borne = ky === 1 ? v : v;
+    surlignerAxe(borne, "y", typeEquation);
+  }
+
+  card.classList.add("correct");
 document.querySelectorAll(".qcm-card")
 .forEach(c => c.style.pointerEvents = "none");
 return;
@@ -413,6 +423,39 @@ function genererQCM(type, h, v) {
       return [];
   }
 }
+
+
+function surlignerAxe(valeur, axe, typeFonction) {
+  const isX = axe === "x";
+
+  // Segment bleu
+  if (isX) {
+    svg.innerHTML += `
+      <line x1="${xToPx(valeur)}" y1="${yToPx(0)}"
+            x2="${xToPx(valeur)}" y2="${yToPx(-5)}"
+            stroke="#2b6cff" stroke-width="4"/>
+    `;
+  } else {
+    svg.innerHTML += `
+      <line x1="${xToPx(0)}" y1="${yToPx(valeur)}"
+            x2="${xToPx(5)}" y2="${yToPx(valeur)}"
+            stroke="#2b6cff" stroke-width="4"/>
+    `;
+  }
+
+  // Type de point
+  const plein = typeFonction !== "inverse";
+
+  svg.innerHTML += `
+    <circle cx="${isX ? xToPx(valeur) : xToPx(0)}"
+            cy="${isX ? yToPx(0) : yToPx(valeur)}"
+            r="6"
+            fill="${plein ? "#2b6cff" : "white"}"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+}
+
 
   
 /* ====================== GENERATION ====================== */
