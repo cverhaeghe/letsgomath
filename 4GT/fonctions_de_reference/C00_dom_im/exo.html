@@ -428,7 +428,19 @@ function genererQCM(type, h, v) {
 
 function surlignerAxe(borne, axe, typeFonction, sens = 1) {
 
+  // ---- CAS PARTICULIER : domaine de x^2 = R ----
+  if (axe === "x" && typeFonction === "carrée") {
+
+    svg.innerHTML += `
+      <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
+            x2="${xToPx(xmax)}" y2="${yToPx(0)}"
+            stroke="#2b6cff" stroke-width="5"/>
+    `;
+    return;
+  }
+
   const plein = typeFonction !== "inverse";
+
 
   if (axe === "x") {
     // ---- DOMAINE : axe des x ----
