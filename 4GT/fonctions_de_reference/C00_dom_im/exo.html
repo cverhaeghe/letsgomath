@@ -469,7 +469,7 @@ if (axe === "y" && typeFonction === "inverse") {
   return;
 }
 
-  // ---- CAS CARREE : domaine = R ----
+  // ---- CAS CARREE  ----
   if (axe === "x" && typeFonction === "carrée") {
     svg.innerHTML += `
       <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
@@ -501,7 +501,55 @@ if (axe === "y" && typeFonction === "inverse") {
   `;
   return;
 }
+
   
+  // ---- CAS RACINE  ----
+
+if (axe === "x" && typeFonction === "racine") {
+
+  const x1 = ky === 1 ? xToPx(borne) : xToPx(xmin);
+  const x2 = ky === 1 ? xToPx(xmax)  : xToPx(borne);
+
+  // segment bleu sur l’axe des x
+  svg.innerHTML += `
+    <line x1="${x1}" y1="${yToPx(0)}"
+          x2="${x2}" y2="${yToPx(0)}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  // boule pleine en x = h
+  svg.innerHTML += `
+    <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+            r="6"
+            fill="#2b6cff"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
+
+if (axe === "y" && typeFonction === "racine") {
+
+  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymin);
+  const y2 = ky === 1 ? yToPx(ymax)  : yToPx(borne);
+
+  // segment bleu correct sur l’axe y
+  svg.innerHTML += `
+    <line x1="${xToPx(0)}" y1="${y1}"
+          x2="${xToPx(0)}" y2="${y2}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  // boule pleine en y = v
+  svg.innerHTML += `
+    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
+            r="6"
+            fill="#2b6cff"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
 
 
 }
