@@ -476,6 +476,75 @@ function surlignerAxe(borne, axe, typeFonction) {
     return;
   }
 
+  // 🔧 PROBLÈME 1 — le cas "racine" n’est JAMAIS exécuté
+// CAUSE : il est placé APRÈS le bloc générique `if (axe === "x")`
+// ➜ il faut le déplacer AVANT ce bloc.
+
+// 🔧 PROBLÈME 2 — variable `sens` inexistante
+// ➜ pour la racine, le sens dépend UNIQUEMENT de ky
+
+// ================== CORRECTION COMPLÈTE ==================
+// 👉 Remplacer TOUTE la fonction surlignerAxe par celle-ci
+
+function surlignerAxe(borne, axe, typeFonction) {
+
+  // ---- CAS INVERSE : domaine = R \ {h} ----
+  if (axe === "x" && typeFonction === "inverse") {
+    svg.innerHTML += `
+      <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
+            x2="${xToPx(xmax)}" y2="${yToPx(0)}"
+            stroke="#2b6cff" stroke-width="5"/>
+      <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+              r="6" fill="white"
+              stroke="#2b6cff" stroke-width="3"/>
+    `;
+    return;
+  }
+
+  // ---- CAS CARREE : domaine = R ----
+  if (axe === "x" && typeFonction === "carrée") {
+    svg.innerHTML += `
+      <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
+            x2="${xToPx(xmax)}" y2="${yToPx(0)}"
+            stroke="#2b6cff" stroke-width="5"/>
+    `;
+    return;
+  }
+
+  // ---- CAS RACINE : domaine dépend de h ----
+  if (axe === "x" && typeFonction === "racine") {
+
+    const x1 = ky === 1 ? xToPx(borne) : xToPx(xmin);
+    const x2 = ky === 1 ? xToPx(xmax)  : xToPx(borne);
+
+    svg.innerHTML += `
+      <line x1="${x1}" y1="${yToPx(0)}"
+            x2="${x2}" y2="${yToPx(0)}"
+            stroke="#2b6cff" stroke-width="5"/>
+      <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+              r="6" fill="#2b6cff"
+              stroke="#2b6cff" stroke-width="3"/>
+    `;
+    return;
+  }
+
+  // ---- IMAGE (axe y) ----
+  const plein = typeFonction !== "inverse";
+
+  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymax);
+  const y2 = ky === 1 ? yToPx(ymin)  : yToPx(borne);
+
+  svg.innerHTML += `
+    <line x1="${xToPx(0)}" y1="${y1}"
+          x2="${xToPx(0)}" y2="${y2}"
+          stroke="#2b6cff" stroke-width="5"/>
+    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
+            r="6"
+            fill="${plein ? "#2b6cff" : "white"}"
+            stroke="#2b6cff" stroke-width="3"/>
+  `;
+}
+
   // ---- IMAGE (axe y) ----
   const plein = typeFonction !== "inverse";
 
