@@ -375,12 +375,15 @@ if (p.correct) {
 
   // ---- SURLIGNAGE VISUEL ----
   if (typeQuestion === "domaine") {
-    const borne = ky === 1 ? h : h;
-    surlignerAxe(borne, "x", typeEquation);
+    surlignerAxe(h, "x", typeEquation, ky);
   } else {
-    const borne = ky === 1 ? v : v;
-    surlignerAxe(borne, "y", typeEquation);
+    surlignerAxe(v, "y", typeEquation, ky);
   }
+
+  card.classList.add("correct");
+  ...
+}
+
 
   card.classList.add("correct");
 document.querySelectorAll(".qcm-card")
@@ -425,35 +428,47 @@ function genererQCM(type, h, v) {
 }
 
 
-function surlignerAxe(valeur, axe, typeFonction) {
-  const isX = axe === "x";
+function surlignerAxe(borne, axe, typeFonction, sens = 1) {
 
-  // Segment bleu
-  if (isX) {
-    svg.innerHTML += `
-      <line x1="${xToPx(valeur)}" y1="${yToPx(0)}"
-            x2="${xToPx(valeur)}" y2="${yToPx(-5)}"
-            stroke="#2b6cff" stroke-width="4"/>
-    `;
-  } else {
-    svg.innerHTML += `
-      <line x1="${xToPx(0)}" y1="${yToPx(valeur)}"
-            x2="${xToPx(5)}" y2="${yToPx(valeur)}"
-            stroke="#2b6cff" stroke-width="4"/>
-    `;
-  }
-
-  // Type de point
   const plein = typeFonction !== "inverse";
 
-  svg.innerHTML += `
-    <circle cx="${isX ? xToPx(valeur) : xToPx(0)}"
-            cy="${isX ? yToPx(0) : yToPx(valeur)}"
-            r="6"
-            fill="${plein ? "#2b6cff" : "white"}"
-            stroke="#2b6cff"
-            stroke-width="3"/>
-  `;
+  if (axe === "x") {
+    // ---- DOMAINE : axe des x ----
+    const x1 = sens === 1 ? xToPx(borne) : xToPx(-5);
+    const x2 = sens === 1 ? xToPx(5)     : xToPx(borne);
+
+    svg.innerHTML += `
+      <line x1="${x1}" y1="${yToPx(0)}"
+            x2="${x2}" y2="${yToPx(0)}"
+            stroke="#2b6cff" stroke-width="5"/>
+    `;
+
+    // point sur l’axe x
+    svg.innerHTML += `
+      <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+              r="6"
+              fill="${plein ? "#2b6cff" : "white"}"
+              stroke="#2b6cff" stroke-width="3"/>
+    `;
+  } else {
+    // ---- IMAGE : axe des y ----
+    const y1 = sens === 1 ? yToPx(borne) : yToPx(5);
+    const y2 = sens === 1 ? yToPx(-5)    : yToPx(borne);
+
+    svg.innerHTML += `
+      <line x1="${xToPx(0)}" y1="${y1}"
+            x2="${xToPx(0)}" y2="${y2}"
+            stroke="#2b6cff" stroke-width="5"/>
+    `;
+
+    // point sur l’axe y
+    svg.innerHTML += `
+      <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
+              r="6"
+              fill="${plein ? "#2b6cff" : "white"}"
+              stroke="#2b6cff" stroke-width="3"/>
+    `;
+  }
 }
 
 
