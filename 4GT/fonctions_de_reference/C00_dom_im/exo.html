@@ -432,30 +432,24 @@ function genererQCM(type, h, v) {
 }
 
 
+
+
 function surlignerAxe(borne, axe, typeFonction) {
 
   // ---- CAS INVERSE : domaine = R \ {h} ----
   if (axe === "x" && typeFonction === "inverse") {
-
-    // axe x entier
     svg.innerHTML += `
       <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
             x2="${xToPx(xmax)}" y2="${yToPx(0)}"
             stroke="#2b6cff" stroke-width="5"/>
-    `;
-
-    // boule creuse en h
-    svg.innerHTML += `
       <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
-              r="6"
-              fill="white"
-              stroke="#2b6cff"
-              stroke-width="3"/>
+              r="6" fill="white"
+              stroke="#2b6cff" stroke-width="3"/>
     `;
     return;
   }
 
-  // ---- CAS PARTICULIER : x² domaine = R ----
+  // ---- CAS CARREE : domaine = R ----
   if (axe === "x" && typeFonction === "carrée") {
     svg.innerHTML += `
       <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
@@ -465,49 +459,38 @@ function surlignerAxe(borne, axe, typeFonction) {
     return;
   }
 
-  const plein = typeFonction !== "inverse";
+  // ---- CAS RACINE : domaine dépend de h ----
+  if (axe === "x" && typeFonction === "racine") {
 
-  if (axe === "x") {
-    const x1 = xToPx(borne);
-    const x2 = sens === 1 ? xToPx(xmax) : xToPx(xmin);
+    const x1 = ky === 1 ? xToPx(borne) : xToPx(xmin);
+    const x2 = ky === 1 ? xToPx(xmax)  : xToPx(borne);
 
     svg.innerHTML += `
       <line x1="${x1}" y1="${yToPx(0)}"
             x2="${x2}" y2="${yToPx(0)}"
             stroke="#2b6cff" stroke-width="5"/>
-    `;
-
-    svg.innerHTML += `
       <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
-              r="6"
-              fill="${plein ? "#2b6cff" : "white"}"
+              r="6" fill="#2b6cff"
               stroke="#2b6cff" stroke-width="3"/>
     `;
-  } 
+    return;
+  }
 
-  // ---- CAS PARTICULIER : racine carree ----
+  // ---- IMAGE (axe y) ----
+  const plein = typeFonction !== "inverse";
 
-if (axe === "x" && typeFonction === "racine") {
-
-  const x1 = ky === 1 ? xToPx(borne) : xToPx(xmin);
-  const x2 = ky === 1 ? xToPx(xmax)  : xToPx(borne);
+  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymax);
+  const y2 = ky === 1 ? yToPx(ymin)  : yToPx(borne);
 
   svg.innerHTML += `
-    <line x1="${x1}" y1="${yToPx(0)}"
-          x2="${x2}" y2="${yToPx(0)}"
+    <line x1="${xToPx(0)}" y1="${y1}"
+          x2="${xToPx(0)}" y2="${y2}"
           stroke="#2b6cff" stroke-width="5"/>
-  `;
-
-  svg.innerHTML += `
-    <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
             r="6"
-            fill="#2b6cff"
-            stroke="#2b6cff"
-            stroke-width="3"/>
+            fill="${plein ? "#2b6cff" : "white"}"
+            stroke="#2b6cff" stroke-width="3"/>
   `;
-  return;
-}
-
 }
 
 
