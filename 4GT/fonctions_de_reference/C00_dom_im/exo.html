@@ -367,6 +367,9 @@ bonneCarte = card;
 }
 
 
+// 🔧 CORRECTION 1 — clic sur la BONNE réponse doit TOUJOURS déclencher l’effet
+// Remplacer ENTIEREMENT le card.onclick par ceci :
+
 card.onclick = () => {
 
   // ---- BONNE RÉPONSE ----
@@ -391,8 +394,8 @@ card.onclick = () => {
   card.style.pointerEvents = "none";
   nbErreurs++;
 
-  // ---- SEULEMENT À LA 2e ERREUR ----
-  if (nbErreurs === 2 && bonneCarte) {
+  // ---- 2e ERREUR : révélation automatique ----
+  if (nbErreurs >= 2 && bonneCarte) {
 
     bonneCarte.classList.add("correct");
 
@@ -406,6 +409,7 @@ card.onclick = () => {
       .forEach(c => c.style.pointerEvents = "none");
   }
 };
+
 
 qcm.appendChild(card);
 });
@@ -479,23 +483,31 @@ function surlignerAxe(borne, axe, typeFonction) {
               fill="${plein ? "#2b6cff" : "white"}"
               stroke="#2b6cff" stroke-width="3"/>
     `;
-  } else {
-    const y1 = yToPx(borne);
-    const y2 = sens === 1 ? yToPx(ymin) : yToPx(ymax);
+  } 
 
-    svg.innerHTML += `
-      <line x1="${xToPx(0)}" y1="${y1}"
-            x2="${xToPx(0)}" y2="${y2}"
-            stroke="#2b6cff" stroke-width="5"/>
-    `;
+  // ---- CAS PARTICULIER : racine carree ----
 
-    svg.innerHTML += `
-      <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
-              r="6"
-              fill="${plein ? "#2b6cff" : "white"}"
-              stroke="#2b6cff" stroke-width="3"/>
-    `;
-  }
+if (axe === "x" && typeFonction === "racine") {
+
+  const x1 = ky === 1 ? xToPx(borne) : xToPx(xmin);
+  const x2 = ky === 1 ? xToPx(xmax)  : xToPx(borne);
+
+  svg.innerHTML += `
+    <line x1="${x1}" y1="${yToPx(0)}"
+          x2="${x2}" y2="${yToPx(0)}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  svg.innerHTML += `
+    <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+            r="6"
+            fill="#2b6cff"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
+
 }
 
 
