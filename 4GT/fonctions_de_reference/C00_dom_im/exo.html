@@ -469,29 +469,31 @@ if (axe === "y" && typeFonction === "inverse") {
   return;
 }
 
-  // ---- CAS CARREE  ----
-  if (axe === "x" && typeFonction === "carrée") {
-    svg.innerHTML += `
-      <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
-            x2="${xToPx(xmax)}" y2="${yToPx(0)}"
-            stroke="#2b6cff" stroke-width="5"/>
-    `;
-    return;
-  }
+ // 🔧 REMPLACER ENTIÈREMENT LE CAS "carrée" DANS surlignerAxe PAR CE QUI SUIT
 
-  if (axe === "y" && typeFonction === "carrée") {
+// ---- CARRÉE : DOMAINE = ℝ ----
+if (axe === "x" && typeFonction === "carrée") {
 
-  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymax);
+  svg.innerHTML += `
+    <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
+          x2="${xToPx(xmax)}" y2="${yToPx(0)}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+  return;
+}
+
+// ---- CARRÉE : IMAGE ----
+if (axe === "y" && typeFonction === "carrée") {
+
+  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymin);
   const y2 = ky === 1 ? yToPx(ymax)  : yToPx(borne);
 
-  // segment bleu correct
   svg.innerHTML += `
     <line x1="${xToPx(0)}" y1="${y1}"
           x2="${xToPx(0)}" y2="${y2}"
           stroke="#2b6cff" stroke-width="5"/>
   `;
 
-  // boule pleine en y = v
   svg.innerHTML += `
     <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
             r="6"
