@@ -369,41 +369,43 @@ bonneCarte = card;
 
 card.onclick = () => {
 
+  // ---- BONNE RÉPONSE ----
+  if (p.correct) {
 
-// ---- BONNE RÉPONSE ----
-if (p.correct) {
+    if (typeQuestion === "domaine") {
+      surlignerAxe(h, "x", typeEquation, ky);
+    } else {
+      surlignerAxe(v, "y", typeEquation, ky);
+    }
 
-  // ---- SURLIGNAGE VISUEL ----
-  if (typeQuestion === "domaine") {
-    surlignerAxe(h, "x", typeEquation, ky);
-  } else {
-    surlignerAxe(v, "y", typeEquation, ky);
+    card.classList.add("correct");
+
+    document.querySelectorAll(".qcm-card")
+      .forEach(c => c.style.pointerEvents = "none");
+
+    return;
   }
 
+  // ---- MAUVAISE RÉPONSE ----
+  card.classList.add("incorrect");
+  card.style.pointerEvents = "none";
+  nbErreurs++;
 
+  // ---- SEULEMENT À LA 2e ERREUR ----
+  if (nbErreurs === 2 && bonneCarte) {
 
+    bonneCarte.classList.add("correct");
 
-  card.classList.add("correct");
-document.querySelectorAll(".qcm-card")
-.forEach(c => c.style.pointerEvents = "none");
-return;
-}
+    if (typeQuestion === "domaine") {
+      surlignerAxe(h, "x", typeEquation, ky);
+    } else {
+      surlignerAxe(v, "y", typeEquation, ky);
+    }
 
-
-// ---- MAUVAISE RÉPONSE ----
-card.classList.add("incorrect");
-card.style.pointerEvents = "none";
-nbErreurs++;
-
-
-// ---- 2e ERREUR : on révèle la bonne ----
-if (nbErreurs >= 2 && bonneCarte) {
-bonneCarte.classList.add("correct");
-document.querySelectorAll(".qcm-card")
-.forEach(c => c.style.pointerEvents = "none");
-}
+    document.querySelectorAll(".qcm-card")
+      .forEach(c => c.style.pointerEvents = "none");
+  }
 };
-
 
 qcm.appendChild(card);
 });
