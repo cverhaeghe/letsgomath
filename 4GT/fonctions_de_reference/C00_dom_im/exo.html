@@ -426,11 +426,31 @@ function genererQCM(type, h, v) {
 }
 
 
-function surlignerAxe(borne, axe, typeFonction, sens = 1) {
+function surlignerAxe(borne, axe, typeFonction) {
 
-  // ---- CAS PARTICULIER : domaine de x^2 = R ----
+  // ---- CAS INVERSE : domaine = R \ {h} ----
+  if (axe === "x" && typeFonction === "inverse") {
+
+    // axe x entier
+    svg.innerHTML += `
+      <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
+            x2="${xToPx(xmax)}" y2="${yToPx(0)}"
+            stroke="#2b6cff" stroke-width="5"/>
+    `;
+
+    // boule creuse en h
+    svg.innerHTML += `
+      <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+              r="6"
+              fill="white"
+              stroke="#2b6cff"
+              stroke-width="3"/>
+    `;
+    return;
+  }
+
+  // ---- CAS PARTICULIER : x² domaine = R ----
   if (axe === "x" && typeFonction === "carrée") {
-
     svg.innerHTML += `
       <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
             x2="${xToPx(xmax)}" y2="${yToPx(0)}"
@@ -441,11 +461,9 @@ function surlignerAxe(borne, axe, typeFonction, sens = 1) {
 
   const plein = typeFonction !== "inverse";
 
-
   if (axe === "x") {
-    // ---- DOMAINE : axe des x ----
-    const x1 = sens === 1 ? xToPx(borne) : xToPx(-5);
-    const x2 = sens === 1 ? xToPx(5)     : xToPx(borne);
+    const x1 = xToPx(borne);
+    const x2 = sens === 1 ? xToPx(xmax) : xToPx(xmin);
 
     svg.innerHTML += `
       <line x1="${x1}" y1="${yToPx(0)}"
@@ -453,7 +471,6 @@ function surlignerAxe(borne, axe, typeFonction, sens = 1) {
             stroke="#2b6cff" stroke-width="5"/>
     `;
 
-    // point sur l’axe x
     svg.innerHTML += `
       <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
               r="6"
@@ -461,9 +478,8 @@ function surlignerAxe(borne, axe, typeFonction, sens = 1) {
               stroke="#2b6cff" stroke-width="3"/>
     `;
   } else {
-    // ---- IMAGE : axe des y ----
-    const y1 = sens === 1 ? yToPx(borne) : yToPx(5);
-    const y2 = sens === 1 ? yToPx(-5)    : yToPx(borne);
+    const y1 = yToPx(borne);
+    const y2 = sens === 1 ? yToPx(ymin) : yToPx(ymax);
 
     svg.innerHTML += `
       <line x1="${xToPx(0)}" y1="${y1}"
@@ -471,7 +487,6 @@ function surlignerAxe(borne, axe, typeFonction, sens = 1) {
             stroke="#2b6cff" stroke-width="5"/>
     `;
 
-    // point sur l’axe y
     svg.innerHTML += `
       <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
               r="6"
