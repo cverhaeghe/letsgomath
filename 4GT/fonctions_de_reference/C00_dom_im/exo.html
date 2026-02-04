@@ -449,6 +449,26 @@ function surlignerAxe(borne, axe, typeFonction) {
     return;
   }
 
+if (axe === "y" && typeFonction === "inverse") {
+
+  // axe y entier
+  svg.innerHTML += `
+    <line x1="${xToPx(0)}" y1="${yToPx(ymin)}"
+          x2="${xToPx(0)}" y2="${yToPx(ymax)}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  // point creux en y = v
+  svg.innerHTML += `
+    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
+            r="6"
+            fill="white"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
+
   // ---- CAS CARREE : domaine = R ----
   if (axe === "x" && typeFonction === "carrée") {
     svg.innerHTML += `
