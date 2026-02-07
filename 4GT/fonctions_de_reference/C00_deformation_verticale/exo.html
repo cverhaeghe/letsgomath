@@ -202,9 +202,9 @@ function genererQCMCarree() {
 
   const propositions = [
     { label: `${a}x^2`, correct: false },
-    { label: `x^2/${a}`, correct: false },
+    { label: `\\frac{x^2}{${a}}`, correct: false },
     { label: `(${a}x)^2`, correct: false },
-    { label: `(x/${a})^2`, correct: false }
+    { label: `\\left(\\frac{x}{${a}}\\right)^2`, correct: false }
   ];
 
   if (deformationType === "etirement") {
@@ -221,9 +221,9 @@ function genererQCMCube() {
 
   const propositions = [
     { label: `${a}x^3`, correct: false },
-    { label: `x^3/${a}`, correct: false },
+    { label: `\\frac{x^3}{${a}}`, correct: false },
     { label: `(${a}x)^3`, correct: false },
-    { label: `(x/${a})^3`, correct: false }
+    { label: `\\left(\\frac{x}{${a}}\\right)^3`, correct: false }
   ];
 
   if (deformationType === "etirement") {
@@ -241,9 +241,9 @@ function genererQCMValAbs() {
 
   const propositions = [
     { label: `${a}|x|`, correct: false },
-    { label: `|x|/${a}`, correct: false },
+    { label: `\\frac{|x|}{${a}}`, correct: false },
     { label: `|${a}x|`, correct: false },
-    { label: `|x/${a}|`, correct: false }
+    { label: `\\left|\\frac{x}{${a}}\\right|`, correct: false }
   ];
 
   if (deformationType === "etirement") {
@@ -261,9 +261,9 @@ function genererQCMRacine() {
 
   const propositions = [
     { label: `${a}\\sqrt{x}`, correct: false },
-    { label: `\\sqrt{x}/${a}`, correct: false },
+    { label: `\\frac{\\sqrt{x}}{${a}}`, correct: false },
     { label: `\\sqrt{${a}x}`, correct: false },
-    { label: `\\sqrt{x/${a}}`, correct: false }
+    { label: `\\sqrt{\\frac{x}{${a}}}`, correct: false }
   ];
 
   if (deformationType === "etirement") {
@@ -281,9 +281,9 @@ function genererQCMCubique() {
 
   const propositions = [
     { label: `${a}\\sqrt[3]{x}`, correct: false },
-    { label: `\\sqrt[3]{x}/${a}`, correct: false },
+    { label: `\\frac{\\sqrt[3]{x}}{${a}}`, correct: false },
     { label: `\\sqrt[3]{${a}x}`, correct: false },
-    { label: `\\sqrt[3]{x/${a}}`, correct: false }
+    { label: `\\sqrt[3]{\\frac{x}{${a}}}`, correct: false }
   ];
 
   if (deformationType === "etirement") {
@@ -302,8 +302,8 @@ function genererQCMInverse() {
   const propositions = [
     { label: `\\frac{${a}}{x}`, correct: false },
     { label: `\\frac{1}{${a}x}`, correct: false },
-    { label: `\\frac{1}{x}/${a}`, correct: false },
-    { label: `\\frac{1}{x/${a}}`, correct: false }
+    { label: `\\frac{1}{${a}}\\cdot\\frac{1}{x}`, correct: false },
+    { label: `\\frac{1}{\\frac{x}{${a}}}`, correct: false }
   ];
 
   if (deformationType === "etirement") {
