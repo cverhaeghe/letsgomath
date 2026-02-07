@@ -71,6 +71,7 @@ let nbEssaisFaux = 0;
 let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
+let k = 1;
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -170,46 +171,22 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
-function tirerTranslation() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
+function fonctionDeformee() {
+  const valeurs = [2, 3];
 
-  translationType = Math.random() < 0.5 ? "horizontale" : "verticale";
+  deformationType = Math.random() < 0.5 ? "etirement" : "contraction";
 
-  if (translationType === "horizontale") {
-    h = valeurs[Math.floor(Math.random() * valeurs.length)];
-    v = 0;
+  if (deformationType === "etirement") {
+    k = valeurs[Math.floor(Math.random() * valeurs.length)];
+    return k*f(x);
+
   } else {
-    v = valeurs[Math.floor(Math.random() * valeurs.length)];
-    h = 0;
+    k = valeurs[Math.floor(Math.random() * valeurs.length)];
+    return f(x)/k;
   }
 }
 
-  function fonctionTranslatee(f) {
-  return function (x) {
-    return f(x - h) + v;
-  };
-}
 
-
-  function tracerAsymptotesInverse(h, v) {
-  // asymptote verticale x = h
-  svg.innerHTML += `
-    <line x1="${xToPx(h)}" y1="0"
-          x2="${xToPx(h)}" y2="${height}"
-          stroke="var(--peps)"
-          stroke-width="2.5"
-          stroke-dasharray="4,4"/>
-  `;
-
-  // asymptote horizontale y = v
-  svg.innerHTML += `
-    <line x1="0" y1="${yToPx(v)}"
-          x2="${width}" y2="${yToPx(v)}"
-          stroke="var(--peps)"
-          stroke-width="2.5"
-          stroke-dasharray="4,4"/>
-  `;
-}
 
   function melanger(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -219,16 +196,15 @@ function tirerTranslation() {
   return array;
 }
 
-  function genererQCMCarree(h, v) {
-// amplitude du déplacement (1, 2 ou 3)
-const a = Math.abs(h !== 0 ? h : v);
+function genererQCMCarree(h, v) {
+const a = Math.abs(k);
 
 
 const propositions = [
-{ label: `(x - ${a})^2`, correct: false },
-{ label: `(x + ${a})^2`, correct: false },
-{ label: `x^2 + ${a}`, correct: false },
-{ label: `x^2 - ${a}`, correct: false }
+{ label: `(${a}x)^2`, correct: false },
+{ label: `(x/ ${a})^2`, correct: false },
+{ label: `${a} x^2`, correct: false },
+{ label: `x^2 /${a}`, correct: false }
 ];
 
 
@@ -463,23 +439,23 @@ switch (typeEquation) {
 
 
 case "carrée":
-tracerCourbe(fonctionTranslatee(x => x * x));
+tracerCourbe(fonctionDeformee(x => x * x));
 break;
 
 
 case "cube":
-tracerCourbe(fonctionTranslatee(x => x * x * x));
+tracerCourbe(fonctionDeformee(x => x * x * x));
 break;
 
 
 case "valabs":
-tracerCourbe(fonctionTranslatee(x => Math.abs(x)));
+tracerCourbe(fonctionDeformee(x => Math.abs(x)));
 break;
 
     
 case "racine":
 tracerCourbe(x => {
-const y = fonctionTranslatee(Math.sqrt)(x);
+const y = fonctionDeformee(Math.sqrt)(x);
 return x - h >= 0 ? y : NaN;
 });
 tracerPoint(h,v);    
@@ -487,12 +463,11 @@ break;
 
 
 case "cubique":
-tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
+tracerCourbe(fonctionDeformee(x => Math.cbrt(x)));
 break;
 
 
 case "inverse":
-tirerTranslation();
 tracerAsymptotesInverse(h, v);
 tracerCourbe(x =>
 Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
