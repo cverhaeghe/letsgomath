@@ -224,7 +224,7 @@ return melanger(propositions);
 
 
   function genererQCMValAbs(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+const a = Math.abs(k);
 
   const propositions = [
     { label: `|x - ${a}|`, correct: false },
@@ -245,7 +245,7 @@ return melanger(propositions);
 }
 
   function genererQCMRacine(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+const a = Math.abs(k);
 
   const propositions = [
     { label: `\\sqrt{x - ${a}}`, correct: false },
@@ -266,7 +266,7 @@ return melanger(propositions);
 }
 
   function genererQCMCube(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+const a = Math.abs(k);
 
   const propositions = [
     { label: `(x - ${a})^3`, correct: false },
@@ -287,7 +287,7 @@ return melanger(propositions);
 }
 
   function genererQCMCubique(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+const a = Math.abs(k);
 
   const propositions = [
     { label: `\\sqrt[3]{x - ${a}}`, correct: false },
@@ -312,7 +312,7 @@ return melanger(propositions);
 }
 
   function genererQCMInverse(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+const a = Math.abs(k);
 
   const propositions = [
     { label: `\\frac{1}{x - ${a}}`, correct: false },
