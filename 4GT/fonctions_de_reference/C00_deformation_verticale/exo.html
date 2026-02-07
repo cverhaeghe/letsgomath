@@ -176,15 +176,16 @@ function tirerFonctionSansABA() {
 function fonctionDeformee(f) {
   const valeurs = [2, 3];
 
-  const deformationType = Math.random() < 0.5 ? "etirement" : "contraction";
+  deformationType = Math.random() < 0.5 ? "etirement" : "contraction";
   k = valeurs[Math.floor(Math.random() * valeurs.length)];
 
   if (deformationType === "etirement") {
-    return x => k * f(x);
+    return x => k * f(x);   
   } else {
-    return x => f(x) / k;
+    return x => f(x) / k;  
   }
 }
+
 
 
 
