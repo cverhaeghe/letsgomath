@@ -171,20 +171,19 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
-function fonctionDeformee() {
+function fonctionDeformee(f) {
   const valeurs = [2, 3];
 
-  deformationType = Math.random() < 0.5 ? "etirement" : "contraction";
+  const type = Math.random() < 0.5 ? "etirement" : "contraction";
+  k = valeurs[Math.floor(Math.random() * valeurs.length)];
 
-  if (deformationType === "etirement") {
-    k = valeurs[Math.floor(Math.random() * valeurs.length)];
-    return k*f(x);
-
+  if (type === "etirement") {
+    return x => k * f(x);
   } else {
-    k = valeurs[Math.floor(Math.random() * valeurs.length)];
-    return f(x)/k;
+    return x => f(x) / k;
   }
 }
+
 
 
 
