@@ -72,6 +72,8 @@ let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
 let k = 1;
+let deformationType = "";
+
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -177,7 +179,7 @@ function fonctionDeformee(f) {
   const type = Math.random() < 0.5 ? "etirement" : "contraction";
   k = valeurs[Math.floor(Math.random() * valeurs.length)];
 
-  if (type === "etirement") {
+  if (deformationType === "etirement") {
     return x => k * f(x);
   } else {
     return x => f(x) / k;
