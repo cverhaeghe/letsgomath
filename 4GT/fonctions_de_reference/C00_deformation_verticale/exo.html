@@ -370,20 +370,20 @@ qcm.appendChild(card);
 MathJax.typesetPromise();
 }
   
-function genererQCM(type, h, v) {
+function genererQCM(type) {
   switch (type) {
     case "carrée":
-      return genererQCMCarree(h, v);
+      return genererQCMCarree();
     case "valabs":
-      return genererQCMValAbs(h, v);
+      return genererQCMValAbs();
     case "racine":
-      return genererQCMRacine(h, v);
+      return genererQCMRacine();
     case "cube":
-      return genererQCMCube(h, v);
+      return genererQCMCube();
     case "cubique":
-      return genererQCMCubique(h, v);
+      return genererQCMCubique();
     case "inverse":
-      return genererQCMInverse(h, v);
+      return genererQCMInverse();
     default:
       return [];
   }
@@ -453,7 +453,7 @@ break;
 
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
-qcm = genererQCM(typeEquation, h, v);
+qcm = genererQCM(typeEquation);
 afficherQCM(qcm);
 }
 
