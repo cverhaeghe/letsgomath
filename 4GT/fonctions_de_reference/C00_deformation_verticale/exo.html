@@ -428,7 +428,6 @@ dessinerRepere();
 
 
 typeEquation = tirerFonctionSansABA();
-tirerTranslation();
 
 
 let qcm; // ✅ UNE SEULE DÉCLARATION
@@ -451,13 +450,14 @@ case "valabs":
 tracerCourbe(fonctionDeformee(x => Math.abs(x)));
 break;
 
-    
+
 case "racine":
+const fRacine = fonctionDeformee(Math.sqrt);
 tracerCourbe(x => {
-const y = fonctionDeformee(Math.sqrt)(x);
-return x - h >= 0 ? y : NaN;
+  if (x < 0) return NaN;
+  return fRacine(x);
 });
-tracerPoint(h,v);    
+tracerPoint(0,0);       
 break;
 
 
@@ -467,7 +467,6 @@ break;
 
 
 case "inverse":
-tracerAsymptotesInverse(h, v);
 tracerCourbe(x =>
 Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
 );
