@@ -350,48 +350,54 @@ return melanger(propositions);
 
 function genererQCMInverse(h, v) {
 
-const a = Math.abs(h);
-const b = Math.abs(v);
+  const a = Math.abs(h);
+  const b = Math.abs(v);
 
-let prefixePos, prefixeNeg;
+  let prefixePos, prefixeNeg;
 
-if (deformationType === "etirement") {
-  // k / (x-h)
-  prefixePos = `\\dfrac{${k}}{`;
-  prefixeNeg = `-\\dfrac{${k}}{`;
-} else {
-  // 1 / (k(x-h))
-  prefixePos = `\\dfrac{1}{${k}(`;
-  prefixeNeg = `-\\dfrac{1}{${k}(`;
-}
+  if (deformationType === "etirement") {
+    // k / (x-h)
+    prefixePos = `\\dfrac{${k}}{`;
+    prefixeNeg = `-\\dfrac{${k}}{`;
+  } else {
+    // 1 / (k(x-h))
+    prefixePos = `\\dfrac{1}{${k}(`;
+    prefixeNeg = `-\\dfrac{1}{${k}(`;
+  }
 
+  const propositions = [
+    {label: `${prefixePos}x + ${a})} + ${b}`, correct:false},
+    {label: `${prefixePos}x - ${a})} + ${b}`, correct:false},
+    {label: `${prefixePos}x - ${a})} - ${b}`, correct:false},
+    {label: `${prefixePos}x + ${a})} - ${b}`, correct:false},
+    {label: `${prefixeNeg}x + ${a})} + ${b}`, correct:false},
+    {label: `${prefixeNeg}x - ${a})} + ${b}`, correct:false},
+    {label: `${prefixeNeg}x - ${a})} - ${b}`, correct:false},
+    {label: `${prefixeNeg}x + ${a})} - ${b}`, correct:false}
+  ];
 
-const propositions = [
-  {label: `${prefixePos}x + ${a}} + ${b}`, correct:false},
-  {label: `${prefixePos}x - ${a}} + ${b}`, correct:false},
-  {label: `${prefixePos}x - ${a}} - ${b}`, correct:false},
-  {label: `${prefixePos}x + ${a}} - ${b}`, correct:false},
-  {label: `${prefixeNeg}x + ${a}} + ${b}`, correct:false},
-  {label: `${prefixeNeg}x - ${a}} + ${b}`, correct:false},
-  {label: `${prefixeNeg}x - ${a}} - ${b}`, correct:false},
-  {label: `${prefixeNeg}x + ${a}} - ${b}`, correct:false}
-];
+  // -------- Bonne réponse --------
 
+  const signeH = h >= 0 ? "-" : "+";
+  const signeV = v >= 0 ? "+" : "-";
+  const signeS = s === -1 ? "-" : "";
 
+  let bonne;
 
-  // ---- Déterminer la bonne réponse ----
-  const bonH = h >= 0 ? `x - ${a}` : `x + ${a}`;
-  const bonV = v >= 0 ? `+ ${b}` : `- ${b}`;
-  const bonS = s === -1 ? "-" : "";
-  const bonK = facteur;
-
-  const bonne = `${bonS}${bonK}\\,\\dfrac{1}{${bonH}} ${bonV}`;
+  if (deformationType === "etirement") {
+    // k/(x-h) + v
+    bonne = `${signeS}\\dfrac{${k}}{x ${signeH} ${a}} ${signeV} ${b}`;
+  } else {
+    // 1/(k(x-h)) + v
+    bonne = `${signeS}\\dfrac{1}{${k}(x ${signeH} ${a})} ${signeV} ${b}`;
+  }
 
   const bonneProp = propositions.find(p => p.label === bonne);
   if (bonneProp) bonneProp.correct = true;
 
   return melanger(propositions);
 }
+
 
 
   
