@@ -4,7 +4,7 @@
 
 .exo-container {
   text-align: center; /* centre les boutons */
-  max-width: 700px;
+  max-width: 1100px;
   margin: 120px auto 80px;
   padding: 30px;
   background-color: #ffffff;
@@ -103,7 +103,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   justify-items: center; /* centre horizontalement chaque carte */
-  max-width: 500px;      /* largeur totale de la grille légèrement augmentée */
+  max-width: 100%;      /* largeur totale de la grille  */
   margin: 0 auto 20px;   /* centre la grille dans la page */
 }
 
