@@ -353,47 +353,49 @@ function genererQCMInverse(h, v) {
   const a = Math.abs(h);
   const b = Math.abs(v);
 
-  let prefixePos, prefixeNeg;
+  const denomPlus  = `x + ${a}`;
+  const denomMoins = `x - ${a}`;
 
-  if (deformationType === "etirement") {
-    // k / (x-h)
-    prefixePos = `\\dfrac{${k}}{`;
-    prefixeNeg = `-\\dfrac{${k}}{`;
-  } else {
-    // 1 / (k(x-h))
-    prefixePos = `\\dfrac{1}{${k}(`;
-    prefixeNeg = `-\\dfrac{1}{${k}(`;
-  }
+  const vPlus  = `+ ${b}`;
+  const vMoins = `- ${b}`;
 
   const propositions = [
-    {label: `${prefixePos}x + ${a})} + ${b}`, correct:false},
-    {label: `${prefixePos}x - ${a})} + ${b}`, correct:false},
-    {label: `${prefixePos}x - ${a})} - ${b}`, correct:false},
-    {label: `${prefixePos}x + ${a})} - ${b}`, correct:false},
-    {label: `${prefixeNeg}x + ${a})} + ${b}`, correct:false},
-    {label: `${prefixeNeg}x - ${a})} + ${b}`, correct:false},
-    {label: `${prefixeNeg}x - ${a})} - ${b}`, correct:false},
-    {label: `${prefixeNeg}x + ${a})} - ${b}`, correct:false}
+
+    // ----- forme k/(x-h) -----
+    { label: `\\dfrac{${k}}{${denomPlus}} ${vPlus}`, correct:false },
+    { label: `\\dfrac{${k}}{${denomMoins}} ${vPlus}`, correct:false },
+    { label: `\\dfrac{${k}}{${denomMoins}} ${vMoins}`, correct:false },
+    { label: `\\dfrac{${k}}{${denomPlus}} ${vMoins}`, correct:false },
+
+    // ----- forme 1/(k(x-h)) -----
+    { label: `\\dfrac{1}{${k}(${denomPlus})} ${vPlus}`, correct:false },
+    { label: `\\dfrac{1}{${k}(${denomMoins})} ${vPlus}`, correct:false },
+    { label: `\\dfrac{1}{${k}(${denomMoins})} ${vMoins}`, correct:false },
+    { label: `\\dfrac{1}{${k}(${denomPlus})} ${vMoins}`, correct:false }
   ];
 
-  // -------- Bonne réponse --------
+  // -------- bonne réponse réelle --------
 
-  const signeH = h >= 0 ? "-" : "+";
-  const signeV = v >= 0 ? "+" : "-";
-  const signeS = s === -1 ? "-" : "";
+  const bonDenom = h >= 0
+    ? `x - ${a}`
+    : `x + ${a}`;
+
+  const bonV = v >= 0
+    ? `+ ${b}`
+    : `- ${b}`;
 
   let bonne;
 
   if (deformationType === "etirement") {
-    // k/(x-h) + v
-    bonne = `${signeS}\\dfrac{${k}}{x ${signeH} ${a}} ${signeV} ${b}`;
+    // vraie fonction : s*k/(x-h)+v
+    bonne = `${s === -1 ? "-" : ""}\\dfrac{${k}}{${bonDenom}} ${bonV}`;
   } else {
-    // 1/(k(x-h)) + v
-    bonne = `${signeS}\\dfrac{1}{${k}(x ${signeH} ${a})} ${signeV} ${b}`;
+    // vraie fonction : s*1/(k(x-h))+v
+    bonne = `${s === -1 ? "-" : ""}\\dfrac{1}{${k}(${bonDenom})} ${bonV}`;
   }
 
-  const bonneProp = propositions.find(p => p.label === bonne);
-  if (bonneProp) bonneProp.correct = true;
+  const rep = propositions.find(p => p.label === bonne);
+  if (rep) rep.correct = true;
 
   return melanger(propositions);
 }
