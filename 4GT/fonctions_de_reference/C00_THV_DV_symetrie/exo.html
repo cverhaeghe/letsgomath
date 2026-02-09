@@ -40,7 +40,7 @@
 </div>
 
 
-<div id="qcm" class="qcm-grid qcm-4"></div>
+<div id="qcm" class="qcm-grid qcm-8"></div>
 
 
 <div class="center-button">
@@ -71,6 +71,8 @@ let nbEssaisFaux = 0;
 let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
+let k = 1;
+let s = 1;
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -170,30 +172,24 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
-function tirerTranslation() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
 
-  translationType = Math.random() < 0.5 ? "horizontale" : "verticale";
-
-  if (translationType === "horizontale") {
-    h = valeurs[Math.floor(Math.random() * valeurs.length)];
-    v = 0;
-  } else {
-    v = valeurs[Math.floor(Math.random() * valeurs.length)];
-    h = 0;
-  }
-}
 
 function fonctionDeformee(f) {
-  const valeurs = [2, 3];
-
+  const valeurs = [-3, -2, -1, 1, 2, 3];
+  const kvaleurs = [2, 3];
+  const svaleurs = [-1, 1];
   const type = Math.random() < 0.5 ? "etirement" : "contraction";
-  k = valeurs[Math.floor(Math.random() * valeurs.length)];
+
+  h = valeurs[Math.floor(Math.random() * valeurs.length)];
+  v = valeurs[Math.floor(Math.random() * valeurs.length)];
+  k = valeurs[Math.floor(Math.random() * kvaleurs.length)];
+  s = valeurs[Math.floor(Math.random() * svaleurs.length)];
+  
 
   if (type === "etirement") {
-    return x => k * f(x - h) + v;
+    return x => s * k * f(x - h) + v;
   } else {
-    return x => f(x - h) / k + v;
+    return x => s * f(x - h) / k + v;
   }
 }
 
