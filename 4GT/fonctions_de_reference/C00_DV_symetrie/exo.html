@@ -72,6 +72,7 @@ let translationType = ""; // "horizontale" ou "verticale"
 let h = 0;
 let v = 0;
 let k = 1;
+let s = 1;  
 let deformationType = "";
 
   
@@ -175,14 +176,17 @@ function tirerFonctionSansABA() {
 
 function fonctionDeformee(f) {
   const valeurs = [2, 3];
+  const svaleurs = [-1, 1];
 
   deformationType = Math.random() < 0.5 ? "etirement" : "contraction";
+  symetrieType = Math.random() < 0.5 ? "sanssymetrie" : "avecsymetrie";
   k = valeurs[Math.floor(Math.random() * valeurs.length)];
+  s = svaleurs[Math.floor(Math.random() * valeurs.length)];
 
   if (deformationType === "etirement") {
-    return x => k * f(x);   
+    return x => s * k * f(x);   
   } else {
-    return x => f(x) / k;  
+    return x => s * f(x) / k;  
   }
 }
 
@@ -203,11 +207,9 @@ function genererQCMCarree() {
 
   const propositions = [
     { label: `${a}x^2`, correct: false },
+    { label: `-${a}x^2`, correct: false },
     { label: `\\dfrac{x^2}{${a}}`, correct: false },
-    { label: `x^2+${a}`, correct: false },
-    { label: `x^2-${a}`, correct: false },
-    { label: `\\left(x+${a}\\right)^2`, correct: false },
-    { label: `\\left(x-${a}\\right)^2`, correct: false }
+    { label: `-\\dfrac{x^2}{${a}}`, correct: false }
   ];
 
   if (deformationType === "etirement") {
@@ -224,11 +226,9 @@ function genererQCMCube() {
 
 const propositions = [
   { label: `${a}x^3`, correct: false },
+  { label: `-${a}x^3`, correct: false },
   { label: `\\dfrac{x^3}{${a}}`, correct: false },
-  { label: `x^3+${a}`, correct: false },
-  { label: `x^3-${a}`, correct: false },
-  { label: `\\left(x+${a}\\right)^3`, correct: false },
-  { label: `\\left(x-${a}\\right)^3`, correct: false }
+  { label: `-\\dfrac{x^3}{${a}}`, correct: false }
 ];
 
 
@@ -247,11 +247,9 @@ function genererQCMValAbs() {
 
 const propositions = [
   { label: `${a}|x|`, correct: false },
+  { label: `-${a}|x|`, correct: false },
   { label: `\\dfrac{|x|}{${a}}`, correct: false },
-  { label: `|x|+${a}`, correct: false },
-  { label: `|x|-${a}`, correct: false },
-  { label: `|x+${a}|`, correct: false },
-  { label: `|x-${a}|`, correct: false }
+  { label: `-\\dfrac{|x|}{${a}}`, correct: false }
 ];
 
 
@@ -270,11 +268,9 @@ function genererQCMRacine() {
 
 const propositions = [
   { label: `${a}\\sqrt{x}`, correct: false },
+  { label: `-${a}\\sqrt{x}`, correct: false },
   { label: `\\dfrac{\\sqrt{x}}{${a}}`, correct: false },
-  { label: `\\sqrt{x}+${a}`, correct: false },
-  { label: `\\sqrt{x}-${a}`, correct: false },
-  { label: `\\sqrt{x+${a}}`, correct: false },
-  { label: `\\sqrt{x-${a}}`, correct: false }
+  { label: `-\\dfrac{\\sqrt{x}}{${a}}`, correct: false }
 ];
 
 
@@ -293,11 +289,9 @@ function genererQCMCubique() {
 
 const propositions = [
   { label: `${a}\\sqrt[3]{x}`, correct: false },
+  { label: `-${a}\\sqrt[3]{x}`, correct: false },
   { label: `\\dfrac{\\sqrt[3]{x}}{${a}}`, correct: false },
-  { label: `\\sqrt[3]{x}+${a}`, correct: false },
-  { label: `\\sqrt[3]{x}-${a}`, correct: false },
-  { label: `\\sqrt[3]{x+${a}}`, correct: false },
-  { label: `\\sqrt[3]{x-${a}}`, correct: false }
+  { label: `-\\dfrac{\\sqrt[3]{x}}{${a}}`, correct: false }
 ];
 
 
@@ -316,11 +310,9 @@ function genererQCMInverse() {
 
 const propositions = [
   { label: `\\dfrac{${a}}{x}`, correct: false },
+  { label: `-\\dfrac{${a}}{x}`, correct: false },
   { label: `\\dfrac{1}{${a}x}`, correct: false },
-  { label: `\\dfrac{1}{x}+${a}`, correct: false },
-  { label: `\\dfrac{1}{x}-${a}`, correct: false },
-  { label: `\\dfrac{1}{x+${a}}`, correct: false },
-  { label: `\\dfrac{1}{x-${a}}`, correct: false }
+  { label: `-\\dfrac{1}{${a}x}`, correct: false }
 ];
 
 
