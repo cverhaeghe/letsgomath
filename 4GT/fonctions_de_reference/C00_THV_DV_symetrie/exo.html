@@ -346,34 +346,41 @@ return melanger(propositions);
   return melanger(propositions);
 }
 
-  function genererQCMInverse(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
+function genererQCMInverse(h, v) {
 
-const propositions = [
-    {label: `${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
-    {label: `${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
-    {label: `${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false},
-    {label: `${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false},
-    {label: `-${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
-    {label: `-${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
-    {label: `-${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false},
-    {label: `-${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false}
+  const a = Math.abs(h);
+  const b = Math.abs(v);
+
+  // facteur vertical réel
+  const facteur = deformationType === "etirement"
+    ? `${k}`
+    : `\\dfrac{1}{${k}}`;
+
+  const propositions = [
+    {label: `${facteur}\\,\\dfrac{1}{x + ${a}} + ${b}`, correct:false},
+    {label: `${facteur}\\,\\dfrac{1}{x - ${a}} + ${b}`, correct:false},
+    {label: `${facteur}\\,\\dfrac{1}{x - ${a}} - ${b}`, correct:false},
+    {label: `${facteur}\\,\\dfrac{1}{x + ${a}} - ${b}`, correct:false},
+    {label: `-${facteur}\\,\\dfrac{1}{x + ${a}} + ${b}`, correct:false},
+    {label: `-${facteur}\\,\\dfrac{1}{x - ${a}} + ${b}`, correct:false},
+    {label: `-${facteur}\\,\\dfrac{1}{x - ${a}} - ${b}`, correct:false},
+    {label: `-${facteur}\\,\\dfrac{1}{x + ${a}} - ${b}`, correct:false}
   ];
 
-  if (h !== 0) {
-    const bonne = h > 0
-      ? `\\frac{1}{x - ${a}}`
-      : `\\frac{1}{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0
-      ? `\\frac{1}{x} + ${a}`
-      : `\\frac{1}{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
+  // ---- Déterminer la bonne réponse ----
+  const bonH = h >= 0 ? `x - ${a}` : `x + ${a}`;
+  const bonV = v >= 0 ? `+ ${b}` : `- ${b}`;
+  const bonS = s === -1 ? "-" : "";
+  const bonK = facteur;
+
+  const bonne = `${bonS}${bonK}\\,\\dfrac{1}{${bonH}} ${bonV}`;
+
+  const bonneProp = propositions.find(p => p.label === bonne);
+  if (bonneProp) bonneProp.correct = true;
 
   return melanger(propositions);
 }
+
 
   
 function afficherQCM(propositions) {
