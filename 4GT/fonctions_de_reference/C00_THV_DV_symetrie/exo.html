@@ -73,6 +73,7 @@ let h = 0;
 let v = 0;
 let k = 1;
 let s = 1;
+let deformationType = "etirement"; // ou "contraction"
   
 /* ====================== OUTILS ====================== */
 function xToPx(x){ return width/2 + x*unit; }
@@ -173,25 +174,30 @@ function tirerFonctionSansABA() {
 }
 
 
-
-function tirerParametres(f) {
-  const valeurs = [-3, -2, -1, 0, 1, 2, 3];
-  const kvaleurs = [1, 2, 3];
+function tirerParametres() {
+  const valeurs = [-3, -2, -1, 1, 2, 3];
+  const kvaleurs = [2, 3];
   const svaleurs = [-1, 1];
-  const type = Math.random() < 0.5 ? "etirement" : "contraction";
 
   h = valeurs[Math.floor(Math.random() * valeurs.length)];
   v = valeurs[Math.floor(Math.random() * valeurs.length)];
-  k = valeurs[Math.floor(Math.random() * kvaleurs.length)];
-  s = valeurs[Math.floor(Math.random() * svaleurs.length)];
-  
+  k = kvaleurs[Math.floor(Math.random() * kvaleurs.length)];
+  s = svaleurs[Math.floor(Math.random() * svaleurs.length)];
 
-  if (type === "etirement") {
-    return x => s * k * f(x - h) + v;
+  deformationType = Math.random() < 0.5 ? "etirement" : "contraction";
+}
+
+
+  
+function transformer(f) {
+  if (deformationType === "etirement") {
+    return x => s * k * f(x - h) + v;  
   } else {
-    return x => s * f(x - h) / k + v;
+    return x => s * f(x - h) / k + v;  
   }
 }
+
+
 
 
 
