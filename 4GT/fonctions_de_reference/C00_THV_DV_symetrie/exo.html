@@ -173,7 +173,55 @@ function tirerFonctionSansABA() {
   return choix;
 }
 
+function construire8Propositions(baseLatex) {
 
+  const a = Math.abs(h);
+  const b = Math.abs(v);
+
+  const shiftPlus  = `x + ${a}`;
+  const shiftMoins = `x - ${a}`;
+
+  const vPlus  = `+ ${b}`;
+  const vMoins = `- ${b}`;
+
+  const sPlus  = ``;
+  const sMoins = `-`;
+
+  const props = [
+
+    // ----- forme k·f(x-h) -----
+    { label: `${sPlus}${k}${baseLatex(shiftPlus)} ${vPlus}`, correct:false },
+    { label: `${sPlus}${k}${baseLatex(shiftMoins)} ${vPlus}`, correct:false },
+    { label: `${sPlus}${k}${baseLatex(shiftMoins)} ${vMoins}`, correct:false },
+    { label: `${sPlus}${k}${baseLatex(shiftPlus)} ${vMoins}`, correct:false },
+
+    // ----- forme (1/k)·f(x-h) -----
+    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftPlus)} ${vPlus}`, correct:false },
+    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftMoins)} ${vPlus}`, correct:false },
+    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftMoins)} ${vMoins}`, correct:false },
+    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftPlus)} ${vMoins}`, correct:false }
+  ];
+
+  // -------- bonne réponse réelle --------
+  const bonShift = h >= 0 ? `x - ${a}` : `x + ${a}`;
+  const bonV = v >= 0 ? `+ ${b}` : `- ${b}`;
+  const bonS = s === -1 ? "-" : "";
+
+  let bonne;
+
+  if (deformationType === "etirement") {
+    bonne = `${bonS}${k}${baseLatex(bonShift)} ${bonV}`;
+  } else {
+    bonne = `${bonS}\\dfrac{1}{${k}}${baseLatex(bonShift)} ${bonV}`;
+  }
+
+  const rep = props.find(p => p.label === bonne);
+  if (rep) rep.correct = true;
+
+  return melanger(props);
+}
+
+  
 function tirerParametres() {
   const valeurs = [-3, -2, -1, 1, 2, 3];
   const kvaleurs = [2, 3];
@@ -231,122 +279,26 @@ function transformer(f) {
   return array;
 }
 
-  function genererQCMCarree(h, v) {
-// amplitude du déplacement (1, 2 ou 3)
-const a = Math.abs(h !== 0 ? h : v);
-
-
-const propositions = [
-{ label: `(x - ${a})^2`, correct: false },
-{ label: `(x + ${a})^2`, correct: false },
-{ label: `x^2 + ${a}`, correct: false },
-{ label: `x^2 - ${a}`, correct: false }
-];
-
-
-// Détermination de la bonne réponse
-if (h !== 0) {
-// translation horizontale
-const bonne = h > 0 ? `(x - ${a})^2` : `(x + ${a})^2`;
-propositions.find(p => p.label === bonne).correct = true;
-} else {
-// translation verticale
-const bonne = v > 0 ? `x^2 + ${a}` : `x^2 - ${a}`;
-propositions.find(p => p.label === bonne).correct = true;
+function genererQCMCarree() {
+  return construire8Propositions(x => `(${x})^2`);
 }
 
-
-return melanger(propositions);
+function genererQCMCube() {
+  return construire8Propositions(x => `(${x})^3`);
 }
 
-
-  function genererQCMValAbs(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
-
-  const propositions = [
-    { label: `|x - ${a}|`, correct: false },
-    { label: `|x + ${a}|`, correct: false },
-    { label: `|x| + ${a}`, correct: false },
-    { label: `|x| - ${a}`, correct: false }
-  ];
-
-  if (h !== 0) {
-    const bonne = h > 0 ? `|x - ${a}|` : `|x + ${a}|`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `|x| + ${a}` : `|x| - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
-
-  return melanger(propositions);
+  function genererQCMValAbs() {
+  return construire8Propositions(x => `|${x}|`);
 }
 
-  function genererQCMRacine(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
-
-  const propositions = [
-    { label: `\\sqrt{x - ${a}}`, correct: false },
-    { label: `\\sqrt{x + ${a}}`, correct: false },
-    { label: `\\sqrt{x} + ${a}`, correct: false },
-    { label: `\\sqrt{x} - ${a}`, correct: false }
-  ];
-
-  if (h !== 0) {
-    const bonne = h > 0 ? `\\sqrt{x - ${a}}` : `\\sqrt{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `\\sqrt{x} + ${a}` : `\\sqrt{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
-
-  return melanger(propositions);
+  function genererQCMRacine() {
+  return construire8Propositions(x => `\\sqrt{${x}}`);
 }
 
-  function genererQCMCube(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
-
-  const propositions = [
-    { label: `(x - ${a})^3`, correct: false },
-    { label: `(x + ${a})^3`, correct: false },
-    { label: `x^3 + ${a}`, correct: false },
-    { label: `x^3 - ${a}`, correct: false }
-  ];
-
-  if (h !== 0) {
-    const bonne = h > 0 ? `(x - ${a})^3` : `(x + ${a})^3`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0 ? `x^3 + ${a}` : `x^3 - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
-
-  return melanger(propositions);
+  function genererQCMCubique() {
+  return construire8Propositions(x => `\\sqrt[3]{${x}}`);
 }
 
-  function genererQCMCubique(h, v) {
-  const a = Math.abs(h !== 0 ? h : v);
-
-  const propositions = [
-    { label: `\\sqrt[3]{x - ${a}}`, correct: false },
-    { label: `\\sqrt[3]{x + ${a}}`, correct: false },
-    { label: `\\sqrt[3]{x} + ${a}`, correct: false },
-    { label: `\\sqrt[3]{x} - ${a}`, correct: false }
-  ];
-
-  if (h !== 0) {
-    const bonne = h > 0
-      ? `\\sqrt[3]{x - ${a}}`
-      : `\\sqrt[3]{x + ${a}}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  } else {
-    const bonne = v > 0
-      ? `\\sqrt[3]{x} + ${a}`
-      : `\\sqrt[3]{x} - ${a}`;
-    propositions.find(p => p.label === bonne).correct = true;
-  }
-
-  return melanger(propositions);
-}
 
 function genererQCMInverse(h, v) {
 
@@ -458,24 +410,17 @@ qcm.appendChild(card);
 MathJax.typesetPromise();
 }
   
-function genererQCM(type, h, v) {
+function genererQCM(type) {
   switch (type) {
-    case "carrée":
-      return genererQCMCarree(h, v);
-    case "valabs":
-      return genererQCMValAbs(h, v);
-    case "racine":
-      return genererQCMRacine(h, v);
-    case "cube":
-      return genererQCMCube(h, v);
-    case "cubique":
-      return genererQCMCubique(h, v);
-    case "inverse":
-      return genererQCMInverse(h, v);
-    default:
-      return [];
+    case "carrée": return genererQCMCarree();
+    case "valabs": return genererQCMValAbs();
+    case "racine": return genererQCMRacine();
+    case "cube": return genererQCMCube();
+    case "cubique": return genererQCMCubique();
+    case "inverse": return genererQCMInverse(h, v);
   }
 }
+
 
   
 /* ====================== GENERATION ====================== */
