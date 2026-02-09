@@ -465,10 +465,14 @@ break;
 
 
 case "inverse":
-tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
-);
+const fInv = fonctionDeformee(x => 1 / x);
+
+tracerCourbe(x => {
+  if (Math.abs(x) < 0.05) return NaN;   // asymptote verticale x = 0
+  return fInv(x);
+});
 break;
+
 }
 
 
