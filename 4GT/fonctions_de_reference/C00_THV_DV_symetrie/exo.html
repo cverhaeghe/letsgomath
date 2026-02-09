@@ -513,9 +513,13 @@ break;
 
 case "inverse":
 tracerAsymptotesInverse(h, v);
-tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
-);
+
+const fInverse = transformer(x => 1/x);
+
+tracerCourbe(x => {
+  if (Math.abs(x - h) < 0.05) return NaN;
+  return fInverse(x);
+});
 break;
 }
 
