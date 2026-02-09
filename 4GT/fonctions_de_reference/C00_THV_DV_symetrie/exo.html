@@ -349,11 +349,13 @@ return melanger(propositions);
   function genererQCMInverse(h, v) {
   const a = Math.abs(h !== 0 ? h : v);
 
-  const propositions = [
-    { label: `\\frac{1}{x - ${a}}`, correct: false },
-    { label: `\\frac{1}{x + ${a}}`, correct: false },
-    { label: `\\frac{1}{x} + ${a}`, correct: false },
-    { label: `\\frac{1}{x} - ${a}`, correct: false }
+const propositions = [
+    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x ${h >= 0 ? "-" : "+"} ${a}} ${v >= 0 ? "+" : "-"} ${b}`, correct: true},
+    {label: `\\dfrac{1}{x ${h >= 0 ? "-" : "+"} ${a}}`,correct: false},
+    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x} ${v >= 0 ? "+" : "-"} ${b}`,correct: false},
+    {label: `\\dfrac{1}{x} ${v >= 0 ? "+" : "-"} ${b}`,correct: false},
+    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x ${h >= 0 ? "+" : "-"} ${a}}`,correct: false},
+    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x ${h >= 0 ? "-" : "+"} ${a}}`,correct: false}
   ];
 
   if (h !== 0) {
