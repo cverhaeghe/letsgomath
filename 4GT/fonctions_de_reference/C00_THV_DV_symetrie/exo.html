@@ -350,12 +350,14 @@ return melanger(propositions);
   const a = Math.abs(h !== 0 ? h : v);
 
 const propositions = [
-    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x ${h >= 0 ? "-" : "+"} ${a}} ${v >= 0 ? "+" : "-"} ${b}`, correct: true},
-    {label: `\\dfrac{1}{x ${h >= 0 ? "-" : "+"} ${a}}`,correct: false},
-    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x} ${v >= 0 ? "+" : "-"} ${b}`,correct: false},
-    {label: `\\dfrac{1}{x} ${v >= 0 ? "+" : "-"} ${b}`,correct: false},
-    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x ${h >= 0 ? "+" : "-"} ${a}}`,correct: false},
-    {label: `${signeS}${facteurK}\\,\\dfrac{1}{x ${h >= 0 ? "-" : "+"} ${a}}`,correct: false}
+    {label: `${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
+    {label: `${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
+    {label: `${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false},
+    {label: `${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false},
+    {label: `-${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
+    {label: `-${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} + ${Math.abs(v)}`,correct: false},
+    {label: `-${k}\\,\\dfrac{1}{x - ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false},
+    {label: `-${k}\\,\\dfrac{1}{x + ${Math.abs(h)}} - ${Math.abs(v)}`,correct: false}
   ];
 
   if (h !== 0) {
