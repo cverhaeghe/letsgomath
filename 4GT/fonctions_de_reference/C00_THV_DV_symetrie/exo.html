@@ -181,45 +181,35 @@ function construire8Propositions(baseLatex) {
   const shiftPlus  = `x + ${a}`;
   const shiftMoins = `x - ${a}`;
 
+  const bonShift = h >= 0 ? shiftMoins : shiftPlus;
+  const fauxShift = h >= 0 ? shiftPlus : shiftMoins;
+
   const vPlus  = `+ ${b}`;
   const vMoins = `- ${b}`;
+  const bonV   = v >= 0 ? vPlus : vMoins;
+  const fauxV  = v >= 0 ? vMoins : vPlus;
 
-  const sPlus  = ``;
-  const sMoins = `-`;
+  const sBon  = s === -1 ? "-" : "";
+  const sFaux = s === -1 ? "" : "-";
 
-  const props = [
+  const propositions = [
 
-    // ----- forme k·f(x-h) -----
-    { label: `${sPlus}${k}${baseLatex(shiftPlus)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
-    { label: `${sPlus}${k}${baseLatex(shiftMoins)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
-    { label: `${sMoins}${k}${baseLatex(shiftMoins)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
-    { label: `${sMoins}${k}${baseLatex(shiftPlus)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
+    // ===== forme s·k·f(x-h) =====
+    { label: `${sBon}${k}${baseLatex(bonShift)} ${bonV}`, correct: true },
+    { label: `${sBon}${k}${baseLatex(bonShift)} ${fauxV}`, correct: false },
+    { label: `${sBon}${k}${baseLatex(fauxShift)} ${bonV}`, correct: false },
+    { label: `${sFaux}${k}${baseLatex(bonShift)} ${bonV}`, correct: false },
 
-    // ----- forme (1/k)·f(x-h) -----
-    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
-    { label: `${sPlus}\\dfrac{${baseLatex(shiftMoins)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
-    { label: `${sMoins}\\dfrac{${baseLatex(shiftMoins)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
-    { label: `${sMoins}\\dfrac{${baseLatex(shiftPlus)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false }
+    // ===== forme s·(1/k)·f(x-h) =====
+    { label: `${sBon}\\dfrac{${baseLatex(bonShift)}}{${k}} ${bonV}`, correct: deformationType==="contraction" },
+    { label: `${sBon}\\dfrac{${baseLatex(bonShift)}}{${k}} ${fauxV}`, correct: false },
+    { label: `${sBon}\\dfrac{${baseLatex(fauxShift)}}{${k}} ${bonV}`, correct: false },
+    { label: `${sFaux}\\dfrac{${baseLatex(bonShift)}}{${k}} ${bonV}`, correct: false }
   ];
 
-  // -------- bonne réponse réelle --------
-  const bonShift = h >= 0 ? `x - ${a}` : `x + ${a}`;
-  const bonV = v >= 0 ? `+ ${b}` : `- ${b}`;
-  const bonS = s === -1 ? "-" : "";
-
-  let bonne;
-
-  if (deformationType === "etirement") {
-    bonne = `${bonS}${k}${baseLatex(bonShift)} ${bonV}`;
-  } else {
-    bonne = `${bonS}\\dfrac{1}{${k}}${baseLatex(bonShift)} ${bonV}`;
-  }
-
-  const rep = props.find(p => p.label === bonne);
-  if (rep) rep.correct = true;
-
-  return melanger(props);
+  return melanger(propositions);
 }
+
 
   
 function tirerParametres() {
