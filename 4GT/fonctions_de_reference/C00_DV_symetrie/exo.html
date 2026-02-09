@@ -181,7 +181,7 @@ function fonctionDeformee(f) {
   deformationType = Math.random() < 0.5 ? "etirement" : "contraction";
   symetrieType = Math.random() < 0.5 ? "sanssymetrie" : "avecsymetrie";
   k = valeurs[Math.floor(Math.random() * valeurs.length)];
-  s = svaleurs[Math.floor(Math.random() * valeurs.length)];
+  s = svaleurs[Math.floor(Math.random() * svaleurs.length)];
 
   if (deformationType === "etirement") {
     return x => s * k * f(x);   
@@ -212,11 +212,11 @@ function genererQCMCarree() {
     { label: `-\\dfrac{x^2}{${a}}`, correct: false }
   ];
 
-  if (deformationType === "etirement") {
-    propositions[0].correct = true; // kx²
-  } else {
-    propositions[1].correct = true; // x²/k
-  }
+if (deformationType === "etirement" && s === 1) propositions[0].correct = true;
+if (deformationType === "etirement" && s === -1) propositions[1].correct = true;
+if (deformationType === "contraction" && s === 1) propositions[2].correct = true;
+if (deformationType === "contraction" && s === -1) propositions[3].correct = true;
+
 
   return melanger(propositions);
 }
@@ -231,12 +231,11 @@ const propositions = [
   { label: `-\\dfrac{x^3}{${a}}`, correct: false }
 ];
 
+if (deformationType === "etirement" && s === 1) propositions[0].correct = true;
+if (deformationType === "etirement" && s === -1) propositions[1].correct = true;
+if (deformationType === "contraction" && s === 1) propositions[2].correct = true;
+if (deformationType === "contraction" && s === -1) propositions[3].correct = true;
 
-  if (deformationType === "etirement") {
-    propositions[0].correct = true;
-  } else {
-    propositions[1].correct = true;
-  }
 
   return melanger(propositions);
 }
@@ -252,12 +251,11 @@ const propositions = [
   { label: `-\\dfrac{|x|}{${a}}`, correct: false }
 ];
 
+if (deformationType === "etirement" && s === 1) propositions[0].correct = true;
+if (deformationType === "etirement" && s === -1) propositions[1].correct = true;
+if (deformationType === "contraction" && s === 1) propositions[2].correct = true;
+if (deformationType === "contraction" && s === -1) propositions[3].correct = true;
 
-  if (deformationType === "etirement") {
-    propositions[0].correct = true;
-  } else {
-    propositions[1].correct = true;
-  }
 
   return melanger(propositions);
 }
@@ -274,11 +272,11 @@ const propositions = [
 ];
 
 
-  if (deformationType === "etirement") {
-    propositions[0].correct = true;
-  } else {
-    propositions[1].correct = true;
-  }
+if (deformationType === "etirement" && s === 1) propositions[0].correct = true;
+if (deformationType === "etirement" && s === -1) propositions[1].correct = true;
+if (deformationType === "contraction" && s === 1) propositions[2].correct = true;
+if (deformationType === "contraction" && s === -1) propositions[3].correct = true;
+
 
   return melanger(propositions);
 }
@@ -295,11 +293,11 @@ const propositions = [
 ];
 
 
-  if (deformationType === "etirement") {
-    propositions[0].correct = true;
-  } else {
-    propositions[1].correct = true;
-  }
+if (deformationType === "etirement" && s === 1) propositions[0].correct = true;
+if (deformationType === "etirement" && s === -1) propositions[1].correct = true;
+if (deformationType === "contraction" && s === 1) propositions[2].correct = true;
+if (deformationType === "contraction" && s === -1) propositions[3].correct = true;
+
 
   return melanger(propositions);
 }
@@ -316,11 +314,11 @@ const propositions = [
 ];
 
 
-  if (deformationType === "etirement") {
-    propositions[0].correct = true; // k/x
-  } else {
-    propositions[2].correct = true; // (1/x)/k
-  }
+if (deformationType === "etirement" && s === 1) propositions[0].correct = true;
+if (deformationType === "etirement" && s === -1) propositions[1].correct = true;
+if (deformationType === "contraction" && s === 1) propositions[2].correct = true;
+if (deformationType === "contraction" && s === -1) propositions[3].correct = true;
+
 
   return melanger(propositions);
 }
@@ -457,11 +455,13 @@ break;
 
 
 case "inverse":
-tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
-);
+const fInv = fonctionDeformee(x => 1 / x);
+tracerCourbe(x => {
+  if (Math.abs(x) < 0.05) return NaN; // évite asymptote verticale
+  return fInv(x);
+});
 break;
-}
+
 
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
