@@ -314,47 +314,47 @@ function genererQCMInverse(h, v) {
   const a = Math.abs(h);
   const b = Math.abs(v);
 
-  const denomPlus  = `x + ${a}`;
-  const denomMoins = `x - ${a}`;
+  const shiftPlus  = `x + ${a}`;
+  const shiftMoins = `x - ${a}`;
+
+  const bonShift = h >= 0 ? shiftMoins : shiftPlus;
+  const fauxShift = h >= 0 ? shiftPlus : shiftMoins;
 
   const vPlus  = `+ ${b}`;
   const vMoins = `- ${b}`;
+  const bonV   = v >= 0 ? vPlus : vMoins;
+  const fauxV  = v >= 0 ? vMoins : vPlus;
 
-  const propositions = [
+  const kForm   = `\\dfrac{${k}}{`;
+  const invForm = `\\dfrac{1}{${k}(`;
 
-    // ----- forme k/(x-h) -----
-    { label: `\\dfrac{${k}}{${denomPlus}} ${vPlus}`, correct:false },
-    { label: `\\dfrac{${k}}{${denomMoins}} ${vPlus}`, correct:false },
-    { label: `\\dfrac{${k}}{${denomMoins}} ${vMoins}`, correct:false },
-    { label: `\\dfrac{${k}}{${denomPlus}} ${vMoins}`, correct:false },
-
-    // ----- forme 1/(k(x-h)) -----
-    { label: `\\dfrac{1}{${k}(${denomPlus})} ${vPlus}`, correct:false },
-    { label: `\\dfrac{1}{${k}(${denomMoins})} ${vPlus}`, correct:false },
-    { label: `\\dfrac{1}{${k}(${denomMoins})} ${vMoins}`, correct:false },
-    { label: `\\dfrac{1}{${k}(${denomPlus})} ${vMoins}`, correct:false }
-  ];
-
-  // -------- bonne réponse réelle --------
-
-  const bonDenom = h >= 0
-    ? `x - ${a}`
-    : `x + ${a}`;
-
-  const bonV = v >= 0
-    ? `+ ${b}`
-    : `- ${b}`;
-
+  // ===== vraie fonction =====
   let bonne;
 
   if (deformationType === "etirement") {
-    // vraie fonction : s*k/(x-h)+v
-    bonne = `${s === -1 ? "-" : ""}\\dfrac{${k}}{${bonDenom}} ${bonV}`;
+    // s*k/(x-h)+v
+    bonne = `${s === -1 ? "-" : ""}\\dfrac{${k}}{${bonShift}} ${bonV}`;
   } else {
-    // vraie fonction : s*1/(k(x-h))+v
-    bonne = `${s === -1 ? "-" : ""}\\dfrac{1}{${k}(${bonDenom})} ${bonV}`;
+    // s*1/(k(x-h))+v
+    bonne = `${s === -1 ? "-" : ""}\\dfrac{1}{${k}(${bonShift})} ${bonV}`;
   }
 
+  const propositions = [
+
+    // ===== s = +1 =====
+    { label: `\\dfrac{${k}}{${bonShift}} ${bonV}`, correct:false },
+    { label: `\\dfrac{${k}}{${bonShift}} ${fauxV}`, correct:false },
+    { label: `\\dfrac{${k}}{${fauxShift}} ${bonV}`, correct:false },
+    { label: `\\dfrac{1}{${k}(${bonShift})} ${bonV}`, correct:false },
+
+    // ===== s = -1 =====
+    { label: `-\\dfrac{${k}}{${bonShift}} ${bonV}`, correct:false },
+    { label: `-\\dfrac{${k}}{${bonShift}} ${fauxV}`, correct:false },
+    { label: `-\\dfrac{1}{${k}(${fauxShift})} ${bonV}`, correct:false }
+    { label: `-\\dfrac{1}{${k}(${bonShift})} ${bonV}`, correct:false }
+  ];
+
+  // ===== marquer la bonne =====
   const rep = propositions.find(p => p.label === bonne);
   if (rep) rep.correct = true;
 
