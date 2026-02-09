@@ -472,23 +472,23 @@ switch (typeEquation) {
 
 
 case "carrée":
-tracerCourbe(fonctionTranslatee(x => x * x));
+tracerCourbe(transformer(x => x * x));
 break;
 
 
 case "cube":
-tracerCourbe(fonctionTranslatee(x => x * x * x));
+tracerCourbe(transformer(x => x * x * x));
 break;
 
 
 case "valabs":
-tracerCourbe(fonctionTranslatee(x => Math.abs(x)));
+tracerCourbe(transformer(x => Math.abs(x)));
 break;
 
     
 case "racine":
 tracerCourbe(x => {
-const y = fonctionTranslatee(Math.sqrt)(x);
+const y = transformer(Math.sqrt)(x);
 return x - h >= 0 ? y : NaN;
 });
 tracerPoint(h,v);    
@@ -496,7 +496,7 @@ break;
 
 
 case "cubique":
-tracerCourbe(fonctionTranslatee(x => Math.cbrt(x)));
+tracerCourbe(transformer(x => Math.cbrt(x)));
 break;
 
 
