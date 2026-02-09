@@ -196,10 +196,10 @@ function construire8Propositions(baseLatex) {
     { label: `${sPlus}${k}${baseLatex(shiftPlus)} ${vMoins}`, correct:false },
 
     // ----- forme (1/k)·f(x-h) -----
-    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftPlus)} ${vPlus}`, correct:false },
-    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftMoins)} ${vPlus}`, correct:false },
-    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftMoins)} ${vMoins}`, correct:false },
-    { label: `${sPlus}\\dfrac{1}{${k}}${baseLatex(shiftPlus)} ${vMoins}`, correct:false }
+    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vPlus}`, correct:false },
+    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vPlus}`, correct:false },
+    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vMoins}`, correct:false },
+    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vMoins}`, correct:false }
   ];
 
   // -------- bonne réponse réelle --------
