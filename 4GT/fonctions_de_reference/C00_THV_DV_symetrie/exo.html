@@ -190,16 +190,16 @@ function construire8Propositions(baseLatex) {
   const props = [
 
     // ----- forme k·f(x-h) -----
-    { label: `${sPlus}${k}${baseLatex(shiftPlus)} ${vPlus}`, correct:false },
-    { label: `${sPlus}${k}${baseLatex(shiftMoins)} ${vPlus}`, correct:false },
-    { label: `${sPlus}${k}${baseLatex(shiftMoins)} ${vMoins}`, correct:false },
-    { label: `${sPlus}${k}${baseLatex(shiftPlus)} ${vMoins}`, correct:false },
+    { label: `${sPlus}${k}${baseLatex(shiftPlus)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
+    { label: `${sPlus}${k}${baseLatex(shiftMoins)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
+    { label: `${sMoins}${k}${baseLatex(shiftMoins)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
+    { label: `${sMoins}${k}${baseLatex(shiftPlus)} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
 
     // ----- forme (1/k)·f(x-h) -----
-    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vPlus}`, correct:false },
-    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vPlus}`, correct:false },
-    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vMoins}`, correct:false },
-    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} ${vMoins}`, correct:false }
+    { label: `${sPlus}\\dfrac{${baseLatex(shiftPlus)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
+    { label: `${sPlus}\\dfrac{${baseLatex(shiftMoins)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
+    { label: `${sMoins}\\dfrac{${baseLatex(shiftMoins)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false },
+    { label: `${sMoins}\\dfrac{${baseLatex(shiftPlus)}}{${k}} v >= 0 ? `+ ${b}` : `- ${b}``, correct:false }
   ];
 
   // -------- bonne réponse réelle --------
