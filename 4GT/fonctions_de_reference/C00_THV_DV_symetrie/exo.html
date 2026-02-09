@@ -192,20 +192,39 @@ function construire8Propositions(baseLatex) {
   const sBon  = s === -1 ? "-" : "";
   const sFaux = s === -1 ? "" : "-";
 
+  // ========= VRAIE FONCTION =========
+  let bonne;
+
+  if (deformationType === "etirement") {
+    bonne = `${sBon}${k}${baseLatex(bonShift)} ${bonV}`;
+  } else {
+    bonne = `${sBon}\\dfrac{${baseLatex(bonShift)}}{${k}} ${bonV}`;
+  }
+
   const propositions = [
 
-    // ===== forme s·k·f(x-h) =====
-    { label: `${sBon}${k}${baseLatex(bonShift)} ${bonV}`, correct: true },
-    { label: `${sBon}${k}${baseLatex(bonShift)} ${fauxV}`, correct: false },
-    { label: `${sBon}${k}${baseLatex(fauxShift)} ${bonV}`, correct: false },
-    { label: `${sFaux}${k}${baseLatex(bonShift)} ${bonV}`, correct: false },
+    // --- 4 formes k·f(x-h) ---
+    { label: `${sBon}${k}${baseLatex(bonShift)} ${bonV}`, correct:false },
+    { label: `${sFaux}${k}${baseLatex(bonShift)} ${fauxV}`, correct:false },
+    { label: `${sBon}${k}${baseLatex(fauxShift)} ${bonV}`, correct:false },
+    { label: `${sFaux}${k}${baseLatex(bonShift)} ${bonV}`, correct:false },
 
-    // ===== forme s·(1/k)·f(x-h) =====
-    { label: `${sBon}\\dfrac{${baseLatex(bonShift)}}{${k}} ${bonV}`, correct: deformationType==="contraction" },
-    { label: `${sBon}\\dfrac{${baseLatex(bonShift)}}{${k}} ${fauxV}`, correct: false },
-    { label: `${sBon}\\dfrac{${baseLatex(fauxShift)}}{${k}} ${bonV}`, correct: false },
-    { label: `${sFaux}\\dfrac{${baseLatex(bonShift)}}{${k}} ${bonV}`, correct: false }
+    // --- 4 formes (1/k)·f(x-h) ---
+    { label: `${sBon}\\dfrac{${baseLatex(bonShift)}}{${k}} ${bonV}`, correct:false },
+    { label: `${sBon}\\dfrac{${baseLatex(fauxShift)}}{${k}} ${fauxV}`, correct:false },
+    { label: `${sBon}\\dfrac{${baseLatex(fauxShift)}}{${k}} ${bonV}`, correct:false },
+    { label: `${sFaux}\\dfrac{${baseLatex(bonShift)}}{${k}} ${bonV}`, correct:false }
   ];
+
+  // 🔒 GARANTIE : on force UNE bonne réponse
+  const indexBonne = propositions.findIndex(p => p.label === bonne);
+
+  if (indexBonne !== -1) {
+    propositions[indexBonne].correct = true;
+  } else {
+    // Sécurité absolue (impossible normalement)
+    propositions[0] = { label: bonne, correct: true };
+  }
 
   return melanger(propositions);
 }
