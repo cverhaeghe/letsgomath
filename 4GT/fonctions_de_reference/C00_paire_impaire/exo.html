@@ -442,9 +442,9 @@ MathJax.typesetPromise();
 
 function verifierExercice(){
 
-  if(elevePts.length !== basePoints.length){
+  if(elevePts.length !== solutionPts.length){
     document.getElementById("feedback").innerHTML =
-      `Place les ${basePoints.length} points avant de valider.`;
+      `Place les ${solutionPts.length} points avant de valider.`;
     return;
   }
 
@@ -465,7 +465,7 @@ function verifierExercice(){
 
   });
 
-  if(bons === basePoints.length){
+  if(bons === solutionPts.length){
 
     document.getElementById("feedback").innerHTML = "Bonne réponse !";
 
@@ -482,7 +482,7 @@ function verifierExercice(){
 
   }else{
     document.getElementById("feedback").innerHTML =
-      "Certains points sont incorrects.";
+      `${bons} / ${solutionPts.length} points corrects.`;
   }
 }
 
