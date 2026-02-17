@@ -350,7 +350,7 @@ function genererQCMInverse(h, v) {
     // ===== s = -1 =====
     { label: `-\\dfrac{${k}}{${bonShift}} ${bonV}`, correct:false },
     { label: `-\\dfrac{${k}}{${bonShift}} ${fauxV}`, correct:false },
-    { label: `-\\dfrac{1}{${k}(${fauxShift})} ${bonV}`, correct:false }
+    { label: `-\\dfrac{1}{${k}(${fauxShift})} ${bonV}`, correct:false },
     { label: `-\\dfrac{1}{${k}(${bonShift})} ${bonV}`, correct:false }
   ];
 
@@ -472,12 +472,44 @@ break;
 
     
 case "racine":
-tracerCourbe(x => {
-const y = transformer(Math.sqrt)(x);
-return x - h >= 0 ? y : NaN;
-});
-tracerPoint(h,v);    
+
+const fR = transformer(Math.sqrt);
+
+// tracé EXACT depuis x = h (sans trou)
+let path = "";
+let first = true;
+
+for (let x = h; x <= xmax; x += 0.002) {
+  let y = fR(x);
+
+  if (!isFinite(y) || y > ymax || y < ymin) {
+    first = true;
+    continue;
+  }
+
+  const px = xToPx(x);
+  const py = yToPx(y);
+
+  if (first) {
+    path += `M ${px} ${py}`;
+    first = false;
+  } else {
+    path += ` L ${px} ${py}`;
+  }
+}
+
+svg.innerHTML += `
+  <path d="${path}" fill="none"
+        stroke="var(--peps)"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+`;
+
+tracerPoint(h, v);
 break;
+
+
 
 
 case "cubique":
