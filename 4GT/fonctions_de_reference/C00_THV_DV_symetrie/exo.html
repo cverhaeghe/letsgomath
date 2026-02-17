@@ -475,14 +475,40 @@ case "racine":
 
 const fR = transformer(Math.sqrt);
 
-// tracé complet depuis x = h jusqu'à xmax
-tracerCourbe(x => {
-  if (x < h) return NaN;
-  return fR(x);
-});
+// tracé EXACT depuis x = h (sans trou)
+let path = "";
+let first = true;
+
+for (let x = h; x <= xmax; x += 0.002) {
+  let y = fR(x);
+
+  if (!isFinite(y) || y > ymax || y < ymin) {
+    first = true;
+    continue;
+  }
+
+  const px = xToPx(x);
+  const py = yToPx(y);
+
+  if (first) {
+    path += `M ${px} ${py}`;
+    first = false;
+  } else {
+    path += ` L ${px} ${py}`;
+  }
+}
+
+svg.innerHTML += `
+  <path d="${path}" fill="none"
+        stroke="var(--peps)"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+`;
 
 tracerPoint(h, v);
 break;
+
 
 
 
