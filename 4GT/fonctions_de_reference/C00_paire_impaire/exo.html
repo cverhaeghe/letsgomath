@@ -102,7 +102,7 @@ let dernierType = "";
 let solutionPts = [];
 let elevePts = [];
 let basePoints = [];
-let derniereFonctionIndex = -1;
+let derniersIndex = [];
 
 const fonctionsBase = [
 
@@ -340,14 +340,22 @@ elevePts=[];
 /* ================= GENERATION ================= */
 
 function genererExercice(){
+
 let index;
 
+/* Tire un index différent des 3 derniers */
 do{
   index = Math.floor(Math.random()*fonctionsBase.length);
-}while(index === derniereFonctionIndex);
+}while(derniersIndex.includes(index));
 
-derniereFonctionIndex = index;
+/* Ajoute l’index à l’historique */
+derniersIndex.push(index);
+
+/* Garde seulement les 3 derniers */
+if(derniersIndex.length > 3) derniersIndex.shift();
+
 basePoints = fonctionsBase[index];
+
   
 dessinerRepere();
 tracerFonctionBase();
