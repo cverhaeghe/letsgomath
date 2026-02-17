@@ -142,17 +142,37 @@ svg.innerHTML+=`<circle cx="${xToPx(x)}" cy="${yToPx(y)}" r="4" fill="red"/>`;
 
 let elevePts=[];
 
-svg.addEventListener("click",e=>{
-const rect=svg.getBoundingClientRect();
-const px=e.clientX-rect.left;
-const py=e.clientY-rect.top;
+svg.addEventListener("click", e => {
 
-svg.innerHTML+=`<circle cx="${px}" cy="${py}" r="3" fill="orange"/>`;
+  const rect = svg.getBoundingClientRect();
+  const px = e.clientX - rect.left;
+  const py = e.clientY - rect.top;
 
-const x=(px-width/2)/unit;
-const y=(height/2-py)/unit;
-elevePts.push([x,y]);
+  /* Conversion en coordonnées math */
+  let x = (px - width/2) / unit;
+  let y = (height/2 - py) / unit;
+
+  /* 🔒 Aimantation aux entiers */
+  x = Math.round(x);
+  y = Math.round(y);
+
+  /* Limite au repère */
+  if (x < xmin || x > xmax || y < ymin || y > ymax) return;
+
+  /* Conversion pixel après aimantation */
+  const snapPx = xToPx(x);
+  const snapPy = yToPx(y);
+
+  /* Évite doublons */
+  if (elevePts.some(p => p[0] === x && p[1] === y)) return;
+
+  elevePts.push([x, y]);
+
+  svg.innerHTML += `
+    <circle cx="${snapPx}" cy="${snapPy}" r="4" fill="orange"/>
+  `;
 });
+
 
 function effacerTrace(){
 dessinerRepere();
