@@ -311,7 +311,10 @@ let y = arrondi05((height/2 - py)/unit);
   }
 
   /* ================= AJOUT ================= */
-if (elevePts.length >= solutionPts.length) return;
+if (elevePts.length >= solutionPts.length) {
+  console.log("Limite atteinte :", elevePts.length, "/", solutionPts.length);
+  return;
+}
 
   elevePts.push([x,y]);
 
@@ -343,6 +346,13 @@ elevePts=[];
    
 function genererExercice(){
 
+/* RESET COMPLET */
+elevePts = [];
+solutionPts = [];
+document.getElementById("feedback").innerHTML = "";
+svg.querySelectorAll(".eleve-point").forEach(e=>e.remove());
+
+  
 let index;
 
 /* Tire un index différent des 3 derniers */
