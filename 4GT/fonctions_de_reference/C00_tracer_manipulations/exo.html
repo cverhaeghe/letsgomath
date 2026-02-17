@@ -63,31 +63,26 @@ function xToPx(x){return width/2+x*unit;}
 function yToPx(y){return height/2-y*unit;}
 
 function dessinerRepere(){
-  svg.innerHTML="";
+  svg.innerHTML = "";
 
-  /* Grille */
   for(let x=xmin;x<=xmax;x++){
-    svg.innerHTML+=`<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#eee"/>`;
+    svg.innerHTML += `<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
   }
   for(let y=ymin;y<=ymax;y++){
-    svg.innerHTML+=`<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#eee"/>`;
+    svg.innerHTML += `<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
   }
 
-  /* Axes */
-  svg.innerHTML+=`
+  svg.innerHTML += `
     <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
     <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black" stroke-width="2"/>
   `;
 
-  /* ================= GRADUATION X (SANS TIRETS) ================= */
-  for(let x=xmin; x<=xmax; x++){
-    if(x===0) continue;
+  for(let x=xmin;x<=xmax;x++) if(x!==0)
+    svg.innerHTML += `<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
 
-    svg.innerHTML += `
-      <text x="${xToPx(x)+2}" y="${height/2+14}"
-            font-size="10">${x}</text>
-    `;
-  }
+  for(let y=ymin;y<=ymax;y++) if(y!==0)
+    svg.innerHTML += `<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
+}
 
   /* ================= GRADUATION Y (SANS TIRETS) ================= */
   for(let y=ymin; y<=ymax; y++){
