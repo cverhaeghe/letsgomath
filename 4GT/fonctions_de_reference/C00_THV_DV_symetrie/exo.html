@@ -472,12 +472,18 @@ break;
 
     
 case "racine":
+
+const fR = transformer(Math.sqrt);
+
+// tracé complet depuis x = h jusqu'à xmax
 tracerCourbe(x => {
-const y = transformer(Math.sqrt)(x);
-return x - h >= 0 ? y : NaN;
+  if (x < h) return NaN;
+  return fR(x);
 });
-tracerPoint(h,v);    
+
+tracerPoint(h, v);
 break;
+
 
 
 case "cubique":
