@@ -287,7 +287,7 @@ let y = arrondi05((height/2 - py)/unit);
   }
 
   /* ================= AJOUT ================= */
-  if (elevePts.length >= 4) return;
+if (elevePts.length >= basePoints.length) return;
 
   elevePts.push([x,y]);
 
@@ -349,9 +349,9 @@ MathJax.typesetPromise();
 
   function verifierExercice(){
 
-  if(elevePts.length !== 4){
+if(elevePts.length !== basePoints.length){
     document.getElementById("feedback").innerHTML =
-      "Place les 4 points avant de valider.";
+`Place les ${basePoints.length} points avant de valider.`;
     return;
   }
 
