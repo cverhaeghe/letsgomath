@@ -94,28 +94,6 @@ for(let y=ymin;y<=ymax;y++){
     `;
 }
 
-
-
-
-
-
-  /* ================= GRADUATION Y ================= */
-  for(let y=ymin; y<=ymax; y++){
-    if(y===0) continue;
-
-    /* petit trait */
-    svg.innerHTML += `
-      <line x1="${width/2-4}" y1="${yToPx(y)}"
-            x2="${width/2+4}" y2="${yToPx(y)}"
-            stroke="black"/>
-    `;
-
-    /* nombre */
-    svg.innerHTML += `
-      <text x="${width/2+6}" y="${yToPx(y)+3}"
-            font-size="10">${y}</text>
-    `;
-  }
 }
 
 
