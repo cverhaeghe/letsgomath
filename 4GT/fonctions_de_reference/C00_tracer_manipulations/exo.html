@@ -187,25 +187,31 @@ function tirerTransformation(){
 
   dernierType = type;
 
-  const vals = [-3,-2,-1,1,2,3];
+  const valsHV = [-3,-2,-1,1,2,3];
 
+  /* ================= TRANSLATION ================= */
   if(type === "translation"){
-    h = vals[Math.floor(Math.random()*vals.length)];
-    k = vals[Math.floor(Math.random()*vals.length)];
+    h = valsHV[Math.floor(Math.random()*valsHV.length)];
+    k = valsHV[Math.floor(Math.random()*valsHV.length)];
   }
 
+  /* ================= k f(x) ================= */
   if(type === "vertical"){
-    do{
-      k = vals[Math.floor(Math.random()*vals.length)];
-    }while(k === 1);
+
+    const valsK = [-3,-2,-1,-0.5,0.5,2,3];
+
+    k = valsK[Math.floor(Math.random()*valsK.length)];
   }
 
-  if(type === "horizontal"){
-    do{
-      s = vals[Math.floor(Math.random()*vals.length)];
-    }while(s === 1);
-  }
+/* ================= f(sx) ================= */
+if(type === "horizontal"){
+
+  const valsS = [-2,-1,-0.5,0.5,-1/3,1/3,2];
+
+  s = valsS[Math.floor(Math.random()*valsS.length)];
 }
+}
+
 
 
 
