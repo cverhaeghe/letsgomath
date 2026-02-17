@@ -85,15 +85,15 @@ function dessinerRepere(){
       svg.innerHTML += `<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
   }
 
-/* Chiffres axe Y (identiques à X) */
+/* Chiffres axe Y (sans tirets, une seule fois) */
 for(let y=ymin;y<=ymax;y++){
   if(y!==0)
     svg.innerHTML += `
       <text x="${width/2+2}" y="${yToPx(y)+4}"
-            font-size="12"
-            text-anchor="start">${y}</text>
+            font-size="12">${y}</text>
     `;
 }
+
 
 
 
