@@ -85,39 +85,29 @@ const basePoints=[
 [2,-2]
 ];
 
-function tirerTransformation(){
+  function tracerFonctionBase(){
 
-  const types = ["translation","vertical","horizontal"];
+  let path = "";
 
-  /* 🔒 Empêche deux fois le même type d'affilée */
-  do{
-    type = types[Math.floor(Math.random()*types.length)];
-  }while(type === dernierType);
+  basePoints.forEach((p,i)=>{
+    path += (i ? "L" : "M") + ` ${xToPx(p[0])} ${yToPx(p[1])}`;
+  });
 
-  dernierType = type;
+  svg.innerHTML += `
+    <path d="${path}" fill="none"
+          stroke="black" stroke-width="3"/>
+  `;
 
-  const vals = [-2,-1,1,2];
-
-  /* Translation */
-  if(type === "translation"){
-    h = vals[Math.floor(Math.random()*vals.length)];
-    k = vals[Math.floor(Math.random()*vals.length)];
-  }
-
-  /* Étirement vertical : k ≠ 1 */
-  if(type === "vertical"){
-    do{
-      k = vals[Math.floor(Math.random()*vals.length)];
-    }while(k === 1);
-  }
-
-  /* Étirement horizontal : s ≠ 1 */
-  if(type === "horizontal"){
-    do{
-      s = vals[Math.floor(Math.random()*vals.length)];
-    }while(s === 1);
-  }
+  /* Boules noires */
+  basePoints.forEach(p=>{
+    svg.innerHTML += `
+      <circle cx="${xToPx(p[0])}"
+              cy="${yToPx(p[1])}"
+              r="4" fill="black"/>
+    `;
+  });
 }
+
 
 
   function coefAffichage(a, variable="") {
@@ -138,30 +128,33 @@ let type="",h=0,k=0,s=1;
 function tirerTransformation(){
 
   const types = ["translation","vertical","horizontal"];
-  type = types[Math.floor(Math.random()*types.length)];
+
+  do{
+    type = types[Math.floor(Math.random()*types.length)];
+  }while(type === dernierType);
+
+  dernierType = type;
 
   const vals = [-2,-1,1,2];
 
-  /* Translation : h et k peuvent valoir ±1 */
   if(type === "translation"){
     h = vals[Math.floor(Math.random()*vals.length)];
     k = vals[Math.floor(Math.random()*vals.length)];
   }
 
-  /* Étirement vertical : k ≠ 1 */
   if(type === "vertical"){
     do{
       k = vals[Math.floor(Math.random()*vals.length)];
     }while(k === 1);
   }
 
-  /* Étirement horizontal : s ≠ 1 */
   if(type === "horizontal"){
     do{
       s = vals[Math.floor(Math.random()*vals.length)];
     }while(s === 1);
   }
 }
+
 
 
 function transformer([x,y]){
