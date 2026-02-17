@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Transformation de fonction</title>
+
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<style>
+#graph{
+  background:white;
+  border:1px solid #ccc;
+  cursor:crosshair;
+}
+.center-button{margin-top:15px}
+</style>
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+<ul class="nav-liste">
+<li><a href="../../../index.html">Accueil</a></li>
+<li><a href="../../4GT_fonctions.html">Retour</a></li>
+</ul>
+</nav>
+
+<div class="exo-container">
+
+<h1>Tracer une transformation</h1>
+
+<p id="consigne"></p>
+
+<div style="display:flex; justify-content:center;">
+<svg id="graph" width="400" height="400"></svg>
+</div>
+
+<div class="center-button">
+<button onclick="genererExercice()">Nouvel exercice</button>
+<button onclick="afficherCorrection()">Afficher le corrigé</button>
+<button onclick="effacerTrace()">Effacer mon tracé</button>
+</div>
+
+</div>
+
+<script>
+/* ================= REPERE ================= */
+const svg = document.getElementById("graph");
+const width=400, height=400, unit=40;
+const xmin=-5,xmax=5,ymin=-5,ymax=5;
+
+function xToPx(x){return width/2+x*unit;}
+function yToPx(y){return height/2-y*unit;}
+
+function dessinerRepere(){
+svg.innerHTML="";
+for(let x=xmin;x<=xmax;x++){
+svg.innerHTML+=`<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#eee"/>`;
+}
+for(let y=ymin;y<=ymax;y++){
+svg.innerHTML+=`<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#eee"/>`;
+}
+svg.innerHTML+=`
+<line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black"/>
+<line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black"/>`;
+}
+
+/* ================= FONCTION DE BASE ================= */
+
+const basePoints=[
+[-4,-1],
+[-2,2],
+[0,0],
+[2,3],
+[4,1]
+];
+
+function tracerFonctionBase(){
+let path="";
+basePoints.forEach((p,i)=>{
+path+=(i?"L":"M")+` ${xToPx(p[0])} ${yToPx(p[1])}`;
+});
+svg.innerHTML+=`<path d="${path}" fill="none" stroke="black" stroke-width="3"/>`;
+
+basePoints.forEach(p=>{
+svg.innerHTML+=`<circle cx="${xToPx(p[0])}" cy="${yToPx(p[1])}" r="4" fill="black"/>`;
+});
+}
+
+/* ================= TRANSFORMATIONS ================= */
+
+let type="",h=0,k=0,s=1;
+
+function tirerTransformation(){
+const types=["translation","vertical","horizontal"];
+type=types[Math.floor(Math.random()*types.length)];
+
+const vals=[-2,-1,1,2];
+h=vals[Math.floor(Math.random()*vals.length)];
+k=vals[Math.floor(Math.random()*vals.length)];
+s=vals[Math.floor(Math.random()*vals.length)];
+}
+
+function transformer([x,y]){
+if(type==="translation") return [x+h,y+k];
+if(type==="vertical") return [x,k*y];
+if(type==="horizontal") return [x/s,y];
+}
+
+/* ================= TRACE CORRIGE ================= */
+
+function tracerCorrection(){
+let path="";
+basePoints.forEach((p,i)=>{
+const [x,y]=transformer(p);
+path+=(i?"L":"M")+` ${xToPx(x)} ${yToPx(y)}`;
+});
+svg.innerHTML+=`<path d="${path}" fill="none" stroke="red" stroke-width="3"/>`;
+
+basePoints.forEach(p=>{
+const [x,y]=transformer(p);
+svg.innerHTML+=`<circle cx="${xToPx(x)}" cy="${yToPx(y)}" r="4" fill="red"/>`;
+});
+}
+
+/* ================= TRACE ELEVE ================= */
+
+let elevePts=[];
+
+svg.addEventListener("click",e=>{
+const rect=svg.getBoundingClientRect();
+const px=e.clientX-rect.left;
+const py=e.clientY-rect.top;
+
+svg.innerHTML+=`<circle cx="${px}" cy="${py}" r="3" fill="orange"/>`;
+
+const x=(px-width/2)/unit;
+const y=(height/2-py)/unit;
+elevePts.push([x,y]);
+});
+
+function effacerTrace(){
+dessinerRepere();
+tracerFonctionBase();
+elevePts=[];
+}
+
+/* ================= GENERATION ================= */
+
+function genererExercice(){
+dessinerRepere();
+tracerFonctionBase();
+tirerTransformation();
+
+let txt="";
+if(type==="translation")
+txt=`Tracer la courbe de f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)}`;
+if(type==="vertical")
+txt=`Tracer la courbe de ${k} f(x)`;
+if(type==="horizontal")
+txt=`Tracer la courbe de f(${s}x)`;
+
+document.getElementById("consigne").innerHTML=txt;
+}
+
+function afficherCorrection(){
+tracerCorrection();
+}
+
+window.onload=genererExercice;
+</script>
+
+</body>
+</html>
