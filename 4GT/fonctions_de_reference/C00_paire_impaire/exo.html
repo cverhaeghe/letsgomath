@@ -153,14 +153,22 @@ const fonctionsBase = [
           stroke="black" stroke-width="3"/>
   `;
 
-  /* Boules noires */
-  basePoints.forEach(p=>{
-    svg.innerHTML += `
-      <circle cx="${xToPx(p[0])}"
-              cy="${yToPx(p[1])}"
-              r="4" fill="black"/>
-    `;
-  });
+  /* Boules noires et creuses */
+basePoints.forEach(p=>{
+  const creux = (p[0] === 0 && p[1] !== 0);
+
+  svg.innerHTML += `
+    <circle cx="${xToPx(p[0])}"
+            cy="${yToPx(p[1])}"
+            r="4"
+            fill="${creux ? 'white' : 'black'}"
+            stroke="black"
+            stroke-width="2"/>
+  `;
+});
+
+
+
 }
 
 
