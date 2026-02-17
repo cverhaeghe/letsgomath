@@ -160,15 +160,19 @@ tracerFonctionBase();
 tirerTransformation();
 
 let txt="";
-if(type==="translation")
-txt=`Tracer la courbe de f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)}`;
-if(type==="vertical")
-txt=`Tracer la courbe de ${k} f(x)`;
-if(type==="horizontal")
-txt=`Tracer la courbe de f(${s}x)`;
 
-document.getElementById("enonce").innerHTML = "\\(" + txt + "\\)";
+if(type==="translation")
+txt=`Tracer la courbe de \\( f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)} \\)`;
+
+if(type==="vertical")
+txt=`Tracer la courbe de \\( ${k}f(x) \\)`;
+
+if(type==="horizontal")
+txt=`Tracer la courbe de \\( f(${s}x) \\)`;
+
+document.getElementById("enonce").innerHTML = txt;
 MathJax.typesetPromise();
+
 }
 
 function afficherCorrection(){
