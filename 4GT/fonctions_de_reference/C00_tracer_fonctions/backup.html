@@ -37,11 +37,12 @@
     <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
   </div>
 
-  <div class="center-button">
-    <button onclick="verifierExercice()">Vérifier</button>
-    <button onclick="afficherCorrection()">Correction</button>
-    <button onclick="nouvelExercice()">Nouvel exercice</button>
-  </div>
+<div class="center-button">
+  <button onclick="verifierExercice()">Valider</button>
+  <button onclick="afficherCorrection()">Solution</button>
+  <button onclick="nouvelExercice()">Nouvel exercice</button>
+</div>
+
 
   <p id="feedback" class="feedback"></p>
 
@@ -253,7 +254,7 @@ function snap(val, pas) {
 
 document.getElementById("enonce").innerHTML =
   `Trace la fonction <strong>${fonctionCourante.label}</strong>
-   en plaçant les points de base nécessaires.`;
+   en plaçant les 4, 5 ou 6 points de base nécessaires.`;
 
 }
 
@@ -356,12 +357,17 @@ if (!isFinite(y) || y < ymin - margeCourbe || y > ymax + margeCourbe) {
 
 /* ====================== CORRECTION ====================== */
 function afficherCorrection() {
+
+  // 🔴 Efface le message éventuel
+  document.getElementById("feedback").innerHTML = "";
+
   dessinerRepere();
   pointsEleve = [];
 
-pointsCles.forEach(p => dessinerPoint(p.x, p.y, "blue"));
+  pointsCles.forEach(p => dessinerPoint(p.x, p.y, "blue"));
   tracerCourbe(fonctionCourante.f);
 }
+
 
 /* ====================== RESET ====================== */
 function nouvelExercice() {
