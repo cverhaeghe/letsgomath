@@ -440,13 +440,43 @@ break;
 
 
 case "racine":
+
 const fRacine = fonctionDeformee(Math.sqrt);
-tracerCourbe(x => {
-  if (x < 0) return NaN;
-  return fRacine(x);
-});
-tracerPoint(0,0);       
+
+// on force le tracé à partir de x = 0 EXACT (pas 0.005)
+let path = "";
+let first = true;
+
+for (let x = 0; x <= xmax; x += 0.002) {
+  let y = fRacine(x);
+
+  if (!isFinite(y) || y > ymax || y < ymin) {
+    first = true;
+    continue;
+  }
+
+  const px = xToPx(x);
+  const py = yToPx(y);
+
+  if (first) {
+    path += `M ${px} ${py}`;
+    first = false;
+  } else {
+    path += ` L ${px} ${py}`;
+  }
+}
+
+svg.innerHTML += `
+  <path d="${path}" fill="none"
+        stroke="var(--peps)"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+`;
+
+tracerPoint(0, 0);
 break;
+
 
 
 case "cubique":
