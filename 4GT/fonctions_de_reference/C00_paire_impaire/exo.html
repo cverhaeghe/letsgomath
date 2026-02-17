@@ -349,6 +349,12 @@ function genererExercice(){
 /* RESET COMPLET */
 elevePts = [];
 solutionPts = [];
+  if(solutionPts.length === 0){
+  console.log("Cas dégénéré — regen");
+  genererExercice();
+  return;
+}
+
 document.getElementById("feedback").innerHTML = "";
 svg.querySelectorAll(".eleve-point").forEach(e=>e.remove());
 
