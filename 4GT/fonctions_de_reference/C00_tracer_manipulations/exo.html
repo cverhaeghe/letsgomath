@@ -94,6 +94,13 @@ svg.innerHTML+=`<circle cx="${xToPx(p[0])}" cy="${yToPx(p[1])}" r="4" fill="blac
 });
 }
 
+  function coefAffichage(a, variable="") {
+  if (a === 1) return variable;      // 1x → x
+  if (a === -1) return "-" + variable; // -1x → -x
+  return a + variable;
+}
+
+  
 /* ================= TRANSFORMATIONS ================= */
 
 let type="",h=0,k=0,s=1;
@@ -114,6 +121,7 @@ if(type==="vertical") return [x,k*y];
 if(type==="horizontal") return [x/s,y];
 }
 
+  
 /* ================= TRACE CORRIGE ================= */
 
 function tracerCorrection(){
@@ -161,17 +169,21 @@ tirerTransformation();
 
 let txt="";
 
-if(type==="translation")
-txt=`Tracer la courbe de \\( f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)} \\)`;
+if(type==="translation"){
+  txt=`Tracer la courbe de \\( f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)} \\)`;
+}
 
-if(type==="vertical")
-txt=`Tracer la courbe de \\( ${k}f(x) \\)`;
+if(type==="vertical"){
+  txt=`Tracer la courbe de \\( ${coefAffichage(k,"")}f(x) \\)`;
+}
 
-if(type==="horizontal")
-txt=`Tracer la courbe de \\( f(${s}x) \\)`;
+if(type==="horizontal"){
+  txt=`Tracer la courbe de \\( f(${coefAffichage(s,"x")}) \\)`;
+}
 
 document.getElementById("enonce").innerHTML = txt;
 MathJax.typesetPromise();
+
 
 }
 
