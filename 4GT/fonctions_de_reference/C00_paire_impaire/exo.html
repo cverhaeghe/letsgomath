@@ -270,18 +270,58 @@ function transformer([x,y]){
 /* ================= TRACE CORRIGE ================= */
 
 function tracerCorrection(){
-let path="";
-basePoints.forEach((p,i)=>{
-const [x,y]=transformer(p);
-path+=(i?"L":"M")+` ${xToPx(x)} ${yToPx(y)}`;
-});
-svg.innerHTML+=`<path d="${path}" fill="none" stroke="red" stroke-width="3"/>`;
 
-basePoints.forEach(p=>{
-const [x,y]=transformer(p);
-svg.innerHTML+=`<circle cx="${xToPx(x)}" cy="${yToPx(y)}" r="4" fill="red"/>`;
-});
+  let path = "";
+
+  basePoints.forEach(([x,y],i)=>{
+
+    let X,Y;
+
+    if(type==="paire"){
+      X = -x;
+      Y = y;
+    }
+
+    if(type==="impaire"){
+      X = -x;
+      Y = -y;
+    }
+
+    path += (i?"L":"M")+` ${xToPx(X)} ${yToPx(Y)}`;
+  });
+
+  svg.innerHTML += `
+    <path d="${path}" fill="none" stroke="red" stroke-width="3"/>
+  `;
+
+  /* Points (avec creux si x=0 et y≠0) */
+  basePoints.forEach(([x,y])=>{
+
+    let X,Y;
+
+    if(type==="paire"){
+      X = -x;
+      Y = y;
+    }
+
+    if(type==="impaire"){
+      X = -x;
+      Y = -y;
+    }
+
+    const creux = (X === 0 && Y !== 0);
+
+    svg.innerHTML += `
+      <circle cx="${xToPx(X)}"
+              cy="${yToPx(Y)}"
+              r="4"
+              fill="${creux ? 'white' : 'red'}"
+              stroke="red"
+              stroke-width="2"/>
+    `;
+  });
 }
+
 
 /* ================= TRACE ELEVE ================= */
 
@@ -361,11 +401,22 @@ dessinerRepere();
 tracerFonctionBase();
 tirerTransformation();
 
-solutionPts = basePoints.map(p=>{
-  const [x,y] = transformer(p);
-  return [arrondi05(x), arrondi05(y)];
+/* ================= SOLUTION PAIRE / IMPAIRE ================= */
+
+solutionPts = [];
+
+basePoints.forEach(([x,y]) => {
+
+  if(type === "paire"){
+    solutionPts.push([arrondi05(-x), arrondi05(y)]);
+  }
+
+  if(type === "impaire"){
+    solutionPts.push([arrondi05(-x), arrondi05(-y)]);
+  }
+
 });
-elevePts = [];
+
 
 
   
@@ -389,11 +440,11 @@ MathJax.typesetPromise();
 }
 /* ================= VERIFICATION ================= */
 
-  function verifierExercice(){
+function verifierExercice(){
 
-if(elevePts.length !== basePoints.length){
+  if(elevePts.length !== basePoints.length){
     document.getElementById("feedback").innerHTML =
-`Place les ${basePoints.length} points avant de valider.`;
+      `Place les ${basePoints.length} points avant de valider.`;
     return;
   }
 
@@ -401,6 +452,7 @@ if(elevePts.length !== basePoints.length){
   const cercles = document.querySelectorAll(".eleve-point");
 
   elevePts.forEach((p,i)=>{
+
     const correct = solutionPts.some(
       s => s[0]===p[0] && s[1]===p[1]
     );
@@ -410,15 +462,17 @@ if(elevePts.length !== basePoints.length){
     }else{
       cercles[i].setAttribute("fill","red");
     }
+
   });
 
-  if(bons===basePoints.length){
+  if(bons === basePoints.length){
+
     document.getElementById("feedback").innerHTML = "Bonne réponse !";
 
-    /* Trace la courbe en orange */
-    let path="";
+    /* Trace la courbe solution */
+    let path = "";
     solutionPts.forEach((p,i)=>{
-      path+=(i?"L":"M")+` ${xToPx(p[0])} ${yToPx(p[1])}`;
+      path += (i?"L":"M")+` ${xToPx(p[0])} ${yToPx(p[1])}`;
     });
 
     svg.innerHTML += `
@@ -431,6 +485,7 @@ if(elevePts.length !== basePoints.length){
       "Certains points sont incorrects.";
   }
 }
+
 
 
   
