@@ -55,7 +55,7 @@
 /* ================= REPERE ================= */
 const svg = document.getElementById("graph");
 const width=400, height=400, unit=40;
-const xmin=-5,xmax=5,ymin=-5,ymax=5;
+const xmin=-6,xmax=6,ymin=-6,ymax=6;
 
 function xToPx(x){return width/2+x*unit;}
 function yToPx(y){return height/2-y*unit;}
@@ -162,7 +162,7 @@ function tirerTransformation(){
 
   dernierType = type;
 
-  const vals = [-2,-1,1,2];
+  const vals = [-3,-2,-1,1,2,3];
 
   if(type === "translation"){
     h = vals[Math.floor(Math.random()*vals.length)];
