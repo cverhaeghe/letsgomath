@@ -114,26 +114,19 @@ function tracerPoint(a, b) {
   
 function tracerCourbe(fonction) {
   let path = "";
-  let first = true;
+  let started = false;
 
-  for (let x = xmin; x <= xmax; x += 0.005) {
+  for (let x = xmin; x <= xmax; x += 0.002) {   // pas un peu plus fin
     let y = fonction(x);
 
-if (
-  !isFinite(y) ||
-  y > ymax || y < ymin
-) {
-  first = true;
-  continue;
-}
-
+    if (!isFinite(y) || y > ymax || y < ymin) continue;
 
     const px = xToPx(x);
     const py = yToPx(y);
 
-    if (first) {
+    if (!started) {
       path += `M ${px} ${py}`;
-      first = false;
+      started = true;
     } else {
       path += ` L ${px} ${py}`;
     }
