@@ -121,6 +121,10 @@ const basePoints=[
   genererExercice();
 }
 
+  function arrondi05(x){
+  return Math.round(x*2)/2;
+}
+
 /* ================= TRANSFORMATIONS ================= */
 
 let type="",h=0,k=0,s=1;
@@ -189,8 +193,9 @@ svg.addEventListener("click", e => {
   let px = e.clientX - rect.left;
   let py = e.clientY - rect.top;
 
-  let x = Math.round((px - width/2)/unit);
-  let y = Math.round((height/2 - py)/unit);
+let x = arrondi05((px - width/2)/unit);
+let y = arrondi05((height/2 - py)/unit);
+
 
   if (x<xmin||x>xmax||y<ymin||y>ymax) return;
 
@@ -241,7 +246,10 @@ dessinerRepere();
 tracerFonctionBase();
 tirerTransformation();
 
-solutionPts = basePoints.map(p => transformer(p));
+solutionPts = basePoints.map(p=>{
+  const [x,y] = transformer(p);
+  return [arrondi05(x), arrondi05(y)];
+});
 elevePts = [];
 
 let txt="";
