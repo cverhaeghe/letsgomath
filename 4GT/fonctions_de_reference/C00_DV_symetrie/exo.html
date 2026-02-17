@@ -114,30 +114,29 @@ function tracerPoint(a, b) {
   
 function tracerCourbe(fonction) {
   let path = "";
-  let started = false;
-  let prevValid = false;
+  let first = true;
 
-  for (let x = xmin; x <= xmax; x += 0.002) {
+  for (let x = xmin; x <= xmax; x += 0.005) {
     let y = fonction(x);
 
-    const valid = isFinite(y) && y <= ymax && y >= ymin;
+if (
+  !isFinite(y) ||
+  y > ymax || y < ymin
+) {
+  first = true;
+  continue;
+}
 
-    if (!valid) {
-      prevValid = false;
-      continue;
-    }
 
     const px = xToPx(x);
     const py = yToPx(y);
 
-    if (!started || !prevValid) {
-      path += `M ${px} ${py}`;   // 🔴 on redémarre un nouveau segment
-      started = true;
+    if (first) {
+      path += `M ${px} ${py}`;
+      first = false;
     } else {
       path += ` L ${px} ${py}`;
     }
-
-    prevValid = true;
   }
 
   svg.innerHTML += `
@@ -456,28 +455,12 @@ break;
 
 
 case "inverse":
-
-tracerAsymptotesInverse(h, v);
-
-const fInv = transformer(x => 1 / x);
-
-// branche gauche
+const fInv = fonctionDeformee(x => 1 / x);
 tracerCourbe(x => {
-  if (x >= h - 0.001) return NaN;
-  const y = fInv(x);
-  return isFinite(y) ? y : NaN;
+  if (Math.abs(x) < 0.05) return NaN; // évite asymptote verticale
+  return fInv(x);
 });
-
-// branche droite
-tracerCourbe(x => {
-  if (x <= h + 0.001) return NaN;
-  const y = fInv(x);
-  return isFinite(y) ? y : NaN;
-});
-
 break;
-
-
 
 }
 
