@@ -77,12 +77,34 @@ svg.innerHTML+=`
 let dernierType = "";
 let solutionPts = [];
 let elevePts = [];
+let basePoints = [];
 
-const basePoints=[
-[-2,2],
-[0,-1],
-[1,1],
-[2,-2]
+const fonctionsBase = [
+
+  /* Fonction 1 */
+  [
+    [-2,2],
+    [0,-1],
+    [1,1],
+    [2,-2]
+  ],
+
+  /* Fonction 2 */
+  [
+    [-3,1],
+    [-1,-2],
+    [1,2],
+    [3,-1]
+  ],
+
+  /* Fonction 3 */
+  [
+    [-2,-1],
+    [-1,2],
+    [1,-2],
+    [2,1]
+  ]
+
 ];
 
   function tracerFonctionBase(){
@@ -242,6 +264,8 @@ elevePts=[];
 /* ================= GENERATION ================= */
 
 function genererExercice(){
+basePoints = fonctionsBase[Math.floor(Math.random()*fonctionsBase.length)];
+  
 dessinerRepere();
 tracerFonctionBase();
 tirerTransformation();
