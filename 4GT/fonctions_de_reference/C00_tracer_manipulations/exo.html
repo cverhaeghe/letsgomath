@@ -75,6 +75,9 @@ svg.innerHTML+=`
 
 /* ================= FONCTION DE BASE ================= */
 
+let solutionPts = [];
+let elevePts = [];
+
 const basePoints=[
 [-2,2],
 [0,-1],
@@ -116,10 +119,11 @@ s=vals[Math.floor(Math.random()*vals.length)];
 }
 
 function transformer([x,y]){
-if(type==="translation") return [x+h,y+k];
-if(type==="vertical") return [x,k*y];
-if(type==="horizontal") return [x/s,y];
+  if(type==="translation") return [x+h,y+k];
+  if(type==="vertical") return [x,k*y];
+  if(type==="horizontal") return [x/s,y];
 }
+
 
   
 /* ================= TRACE CORRIGE ================= */
@@ -144,32 +148,23 @@ let elevePts=[];
 
 svg.addEventListener("click", e => {
 
+  if (elevePts.length >= 4) return;
+
   const rect = svg.getBoundingClientRect();
-  const px = e.clientX - rect.left;
-  const py = e.clientY - rect.top;
+  let px = e.clientX - rect.left;
+  let py = e.clientY - rect.top;
 
-  /* Conversion en coordonnées math */
-  let x = (px - width/2) / unit;
-  let y = (height/2 - py) / unit;
+  let x = Math.round((px - width/2)/unit);
+  let y = Math.round((height/2 - py)/unit);
 
-  /* 🔒 Aimantation aux entiers */
-  x = Math.round(x);
-  y = Math.round(y);
+  if (x<xmin||x>xmax||y<ymin||y>ymax) return;
+  if (elevePts.some(p=>p[0]===x&&p[1]===y)) return;
 
-  /* Limite au repère */
-  if (x < xmin || x > xmax || y < ymin || y > ymax) return;
-
-  /* Conversion pixel après aimantation */
-  const snapPx = xToPx(x);
-  const snapPy = yToPx(y);
-
-  /* Évite doublons */
-  if (elevePts.some(p => p[0] === x && p[1] === y)) return;
-
-  elevePts.push([x, y]);
+  elevePts.push([x,y]);
 
   svg.innerHTML += `
-    <circle cx="${snapPx}" cy="${snapPy}" r="4" fill="orange"/>
+    <circle cx="${xToPx(x)}" cy="${yToPx(y)}"
+            r="4" fill="orange" class="eleve-point"/>
   `;
 });
 
@@ -186,6 +181,9 @@ function genererExercice(){
 dessinerRepere();
 tracerFonctionBase();
 tirerTransformation();
+
+solutionPts = basePoints.map(p => transformer(p));
+elevePts = [];
 
 let txt="";
 
@@ -206,7 +204,53 @@ MathJax.typesetPromise();
 
 
 }
+/* ================= VERIFICATION ================= */
 
+  function verifierExercice(){
+
+  if(elevePts.length !== 4){
+    document.getElementById("feedback").innerHTML =
+      "Place les 4 points avant de valider.";
+    return;
+  }
+
+  let bons = 0;
+  const cercles = document.querySelectorAll(".eleve-point");
+
+  elevePts.forEach((p,i)=>{
+    const correct = solutionPts.some(
+      s => s[0]===p[0] && s[1]===p[1]
+    );
+
+    if(correct){
+      bons++;
+    }else{
+      cercles[i].setAttribute("fill","red");
+    }
+  });
+
+  if(bons===4){
+    document.getElementById("feedback").innerHTML = "Bravo !";
+
+    /* Trace la courbe en orange */
+    let path="";
+    solutionPts.forEach((p,i)=>{
+      path+=(i?"L":"M")+` ${xToPx(p[0])} ${yToPx(p[1])}`;
+    });
+
+    svg.innerHTML += `
+      <path d="${path}" fill="none"
+            stroke="orange" stroke-width="3"/>
+    `;
+
+  }else{
+    document.getElementById("feedback").innerHTML =
+      "Certains points sont incorrects.";
+  }
+}
+
+
+  
 function afficherCorrection(){
 tracerCorrection();
 }
