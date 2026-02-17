@@ -186,15 +186,15 @@ elevePts = [];
 let txt="";
 
 if(type==="translation"){
-  txt=`Tracer la courbe de \\( f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)} \\)`;
+  txt=`Trace la courbe de \\( f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)} \\)`;
 }
 
 if(type==="vertical"){
-  txt=`Tracer la courbe de \\( ${coefAffichage(k,"")}f(x) \\)`;
+  txt=`Trace la courbe de \\( ${coefAffichage(k,"")}f(x) \\)`;
 }
 
 if(type==="horizontal"){
-  txt=`Tracer la courbe de \\( f(${coefAffichage(s,"x")}) \\)`;
+  txt=`Trace la courbe de \\( f(${coefAffichage(s,"x")}) \\)`;
 }
 
 document.getElementById("enonce").innerHTML = txt;
@@ -228,7 +228,7 @@ MathJax.typesetPromise();
   });
 
   if(bons===4){
-    document.getElementById("feedback").innerHTML = "Bravo !";
+    document.getElementById("feedback").innerHTML = "Bonne réponse !";
 
     /* Trace la courbe en orange */
     let path="";
