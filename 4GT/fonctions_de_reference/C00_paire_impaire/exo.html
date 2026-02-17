@@ -217,55 +217,6 @@ basePoints.forEach(p=>{
   return `f(${s}x)`;
 }
 
-/* ================= TRANSFORMATIONS ================= */
-
-let type="",h=0,k=0,s=1;
-
-function tirerTransformation(){
-
-  const types = ["translation","vertical","horizontal"];
-
-  do{
-    type = types[Math.floor(Math.random()*types.length)];
-  }while(type === dernierType);
-
-  dernierType = type;
-
-  const valsHV = [-3,-2,-1,1,2,3];
-
-  /* ================= TRANSLATION ================= */
-  if(type === "translation"){
-    h = valsHV[Math.floor(Math.random()*valsHV.length)];
-    k = valsHV[Math.floor(Math.random()*valsHV.length)];
-  }
-
-  /* ================= k f(x) ================= */
-  if(type === "vertical"){
-
-    const valsK = [-3,-2,-1,-0.5,0.5,2,3];
-
-    k = valsK[Math.floor(Math.random()*valsK.length)];
-  }
-
-/* ================= f(sx) ================= */
-if(type === "horizontal"){
-
-  const valsS = [-2,-1,-0.5,0.5,-1/3,1/3,2];
-
-  s = valsS[Math.floor(Math.random()*valsS.length)];
-}
-}
-
-
-
-
-function transformer([x,y]){
-  if(type==="translation") return [x+h,y+k];
-  if(type==="vertical") return [x,k*y];
-  if(type==="horizontal") return [x/s,y];
-}
-
-
   
 /* ================= TRACE CORRIGE ================= */
 
@@ -399,9 +350,21 @@ basePoints = fonctionsBase[index];
   
 dessinerRepere();
 tracerFonctionBase();
-tirerTransformation();
 
-/* ================= SOLUTION PAIRE / IMPAIRE ================= */
+/* ================= TYPE PAIRE / IMPAIRE ================= */
+
+let txt = "";
+let tirage = Math.random();
+
+if (tirage < 0.35) {
+  type = "paire";
+  txt = `Complète le graphique afin que la fonction représentée soit <strong> paire </strong>.`;
+} else {
+  type = "impaire";
+  txt = `Complète le graphique afin que la fonction représentée soit <strong> impaire </strong>.`;
+}
+
+/* ================= SOLUTION ================= */
 
 solutionPts = [];
 
@@ -417,19 +380,6 @@ basePoints.forEach(([x,y]) => {
 
 });
 
-
-
-  
-let txt = "";
-let tirage = Math.random();   // nombre entre 0 et 1
-
-if (tirage < 0.35) {
-  type = "paire";
-  txt = `Complète le graphique afin que la fonction représentée soit <strong> paire </strong>.`;
-} else {
-  type = "impaire";
-  txt = `Complète le graphique afin que la fonction représentée soit <strong> impaire </strong>.`;
-}
 
 
 
