@@ -354,17 +354,14 @@ elevePts = [];
 
 let txt="";
 
-if(type==="translation"){
-  txt=`Trace la courbe de \\( f(x ${h>0?"-"+h:"+"+(-h)}) ${k>0?"+":"-"} ${Math.abs(k)} \\)`;
+if(type==="paire"){
+  txt=`Complète le graphique afin que la fonction représentée soit <strong> paire </strong>. \\)`;
 }
 
-if(type==="vertical"){
-txt=`Trace la courbe de \\( ${texKfx(k)} \\)`;
+if(type==="impaire"){
+  txt=`Complète le graphique afin que la fonction représentée soit <strong> impaire </strong>. \\)`;
 }
 
-if(type==="horizontal"){
-txt=`Trace la courbe de \\( ${texFsx(s)} \\)`;
-}
 
 document.getElementById("enonce").innerHTML = txt;
 MathJax.typesetPromise();
