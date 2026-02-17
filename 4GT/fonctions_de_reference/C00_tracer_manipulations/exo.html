@@ -103,7 +103,11 @@ svg.innerHTML+=`<circle cx="${xToPx(p[0])}" cy="${yToPx(p[1])}" r="4" fill="blac
   return a + variable;
 }
 
-  
+  function nouvelExercice(){
+  document.getElementById("feedback").innerHTML = "";
+  genererExercice();
+}
+
 /* ================= TRANSFORMATIONS ================= */
 
 let type="",h=0,k=0,s=1;
