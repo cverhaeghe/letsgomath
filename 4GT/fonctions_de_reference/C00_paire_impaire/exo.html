@@ -329,19 +329,36 @@ if (elevePts.length >= solutionPts.length) {
 
 function effacerTrace(){
 
-  /* Vide les points élève */
-  elevePts = [];
+  /* Garde uniquement les bons points */
+  elevePts = elevePts.filter(p =>
+    solutionPts.some(s => s[0] === p[0] && s[1] === p[1])
+  );
 
-  /* Efface uniquement les cercles élève */
-  svg.querySelectorAll(".eleve-point").forEach(e=>e.remove());
-
-  /* Redessine base propre */
+  /* Redessine tout propre */
   dessinerRepere();
   tracerFonctionBase();
 
-  /* Efface message */
-  document.getElementById("feedback").innerHTML = "";
+  /* Redessine les bons points élève */
+  elevePts.forEach(([x,y])=>{
+    svg.innerHTML += `
+      <circle cx="${xToPx(x)}"
+              cy="${yToPx(y)}"
+              r="4"
+              fill="orange"
+              class="eleve-point"/>
+    `;
+  });
+
+  /* Message */
+  if(elevePts.length === 0){
+    document.getElementById("feedback").innerHTML =
+      "Tous les points faux ont été effacés.";
+  }else{
+    document.getElementById("feedback").innerHTML =
+      "Les points incorrects ont été effacés.";
+  }
 }
+
 
 
 /* ================= GENERATION ================= */
