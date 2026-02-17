@@ -115,21 +115,29 @@ function tracerPoint(a, b) {
 function tracerCourbe(fonction) {
   let path = "";
   let started = false;
+  let prevValid = false;
 
-  for (let x = xmin; x <= xmax; x += 0.002) {   // pas un peu plus fin
+  for (let x = xmin; x <= xmax; x += 0.002) {
     let y = fonction(x);
 
-    if (!isFinite(y) || y > ymax || y < ymin) continue;
+    const valid = isFinite(y) && y <= ymax && y >= ymin;
+
+    if (!valid) {
+      prevValid = false;
+      continue;
+    }
 
     const px = xToPx(x);
     const py = yToPx(y);
 
-    if (!started) {
-      path += `M ${px} ${py}`;
+    if (!started || !prevValid) {
+      path += `M ${px} ${py}`;   // 🔴 on redémarre un nouveau segment
       started = true;
     } else {
       path += ` L ${px} ${py}`;
     }
+
+    prevValid = true;
   }
 
   svg.innerHTML += `
