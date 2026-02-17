@@ -327,7 +327,7 @@ const propositions = [
   if (deformationType === "etirement") {
     propositions[0].correct = true; // k/x
   } else {
-    propositions[2].correct = true; // (1/x)/k
+    propositions[1].correct = true; // (1/x)/k
   }
 
   return melanger(propositions);
@@ -336,59 +336,50 @@ const propositions = [
 
   
 function afficherQCM(propositions) {
-const qcm = document.getElementById("qcm");
-qcm.innerHTML = "";
+  const qcm = document.getElementById("qcm");
+  qcm.innerHTML = "";
 
+  let nbErreurs = 0;
 
-let nbErreurs = 0;
-let bonneCarte = null; // 👈 référence directe
+  propositions.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "qcm-card";
+    card.innerHTML = `\\(${p.label}\\)`;
 
+    card.onclick = () => {
 
-propositions.forEach(p => {
-const card = document.createElement("div");
-card.className = "qcm-card";
-card.innerHTML = `\\(${p.label}\\)`;
+      // BONNE REPONSE
+      if (p.correct) {
+        card.classList.add("correct");
+        document.querySelectorAll(".qcm-card")
+          .forEach(c => c.style.pointerEvents = "none");
+        return;
+      }
 
+      // MAUVAISE REPONSE
+      card.classList.add("incorrect");
+      card.style.pointerEvents = "none";
+      nbErreurs++;
 
-// On mémorise la bonne carte
-if (p.correct) {
-bonneCarte = card;
+      // après 2 erreurs → révéler la bonne
+      if (nbErreurs >= 2) {
+        document.querySelectorAll(".qcm-card").forEach((c, i) => {
+          if (propositions[i].correct) {
+            c.classList.add("correct");
+          }
+          c.style.pointerEvents = "none";
+        });
+      }
+    };
+
+    qcm.appendChild(card);
+  });
+
+  MathJax.typesetPromise();
 }
 
 
-card.onclick = () => {
-
-
-// ---- BONNE RÉPONSE ----
-if (p.correct) {
-card.classList.add("correct");
-document.querySelectorAll(".qcm-card")
-.forEach(c => c.style.pointerEvents = "none");
-return;
-}
-
-
-// ---- MAUVAISE RÉPONSE ----
-card.classList.add("incorrect");
-card.style.pointerEvents = "none";
-nbErreurs++;
-
-
-// ---- 2e ERREUR : on révèle la bonne ----
-if (nbErreurs >= 2 && bonneCarte) {
-bonneCarte.classList.add("correct");
-document.querySelectorAll(".qcm-card")
-.forEach(c => c.style.pointerEvents = "none");
-}
-};
-
-
-qcm.appendChild(card);
-});
-
-
-MathJax.typesetPromise();
-}
+  
   
 function genererQCM(type) {
   switch (type) {
@@ -465,10 +456,14 @@ break;
 
 
 case "inverse":
-tracerCourbe(x =>
-Math.abs(x - h) < 0.1 ? NaN : 1 / (x - h) + v
-);
+const fInv = fonctionDeformee(x => 1 / x);
+
+tracerCourbe(x => {
+  if (Math.abs(x) < 0.05) return NaN;   // asymptote verticale x = 0
+  return fInv(x);
+});
 break;
+
 }
 
 
