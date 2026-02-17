@@ -457,21 +457,26 @@ break;
 
 case "inverse":
 
-const fInv = fonctionDeformee(x => 1 / x);
+tracerAsymptotesInverse(h, v);
 
-// Branche gauche
+const fInv = transformer(x => 1 / x);
+
+// branche gauche
 tracerCourbe(x => {
-  if (x >= -0.05) return NaN;
-  return fInv(x);
+  if (x >= h - 0.001) return NaN;
+  const y = fInv(x);
+  return isFinite(y) ? y : NaN;
 });
 
-// Branche droite
+// branche droite
 tracerCourbe(x => {
-  if (x <= 0.05) return NaN;
-  return fInv(x);
+  if (x <= h + 0.001) return NaN;
+  const y = fInv(x);
+  return isFinite(y) ? y : NaN;
 });
 
 break;
+
 
 
 }
