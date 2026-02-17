@@ -78,6 +78,7 @@ let dernierType = "";
 let solutionPts = [];
 let elevePts = [];
 let basePoints = [];
+let derniereFonctionIndex = -1;
 
 const fonctionsBase = [
 
@@ -264,7 +265,14 @@ elevePts=[];
 /* ================= GENERATION ================= */
 
 function genererExercice(){
-basePoints = fonctionsBase[Math.floor(Math.random()*fonctionsBase.length)];
+let index;
+
+do{
+  index = Math.floor(Math.random()*fonctionsBase.length);
+}while(index === derniereFonctionIndex);
+
+derniereFonctionIndex = index;
+basePoints = fonctionsBase[index];
   
 dessinerRepere();
 tracerFonctionBase();
