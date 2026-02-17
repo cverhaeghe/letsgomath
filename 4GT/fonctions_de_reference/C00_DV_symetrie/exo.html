@@ -456,12 +456,23 @@ break;
 
 
 case "inverse":
+
 const fInv = fonctionDeformee(x => 1 / x);
+
+// Branche gauche
 tracerCourbe(x => {
-  if (Math.abs(x) < 0.05) return NaN; // évite asymptote verticale
+  if (x >= -0.05) return NaN;
   return fInv(x);
 });
+
+// Branche droite
+tracerCourbe(x => {
+  if (x <= 0.05) return NaN;
+  return fInv(x);
+});
+
 break;
+
 
 }
 
