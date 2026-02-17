@@ -54,8 +54,10 @@
 <script>
 /* ================= REPERE ================= */
 const svg = document.getElementById("graph");
-const width=400, height=400, unit=40;
+const width=400, height=400;
 const xmin=-6,xmax=6,ymin=-6,ymax=6;
+const unit = width / (xmax - xmin);
+
 
 function xToPx(x){return width/2+x*unit;}
 function yToPx(y){return height/2-y*unit;}
@@ -94,7 +96,7 @@ const fonctionsBase = [
   [
     [-3,0],
     [-2,2],
-    [-1,-1],
+    [-1,-2],
     [1,1],
     [2,-1]
   ],
