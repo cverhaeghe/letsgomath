@@ -167,7 +167,8 @@ txt=`Tracer la courbe de ${k} f(x)`;
 if(type==="horizontal")
 txt=`Tracer la courbe de f(${s}x)`;
 
-document.getElementById("consigne").innerHTML=txt;
+document.getElementById("enonce").innerHTML = "\\(" + txt + "\\)";
+MathJax.typesetPromise();
 }
 
 function afficherCorrection(){
