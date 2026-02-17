@@ -38,11 +38,13 @@
     <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
   </div>
 
-  <div class="center-button">
-    <button onclick="verifierExercice()">Valider</button>
-    <button onclick="afficherCorrection()">Solution</button>
-    <button onclick="nouvelExercice()">Nouvel exercice</button>
-  </div>
+<div class="center-button">
+  <button onclick="verifierExercice()">Valider</button>
+  <button onclick="afficherCorrection()">Solution</button>
+  <button onclick="effacerTrace()">Effacer</button>
+  <button onclick="nouvelExercice()">Nouvel exercice</button>
+</div>
+
 
   <p id="feedback" class="feedback"></p>
 
@@ -326,10 +328,21 @@ if (elevePts.length >= solutionPts.length) {
 
 
 function effacerTrace(){
-dessinerRepere();
-tracerFonctionBase();
-elevePts=[];
+
+  /* Vide les points élève */
+  elevePts = [];
+
+  /* Efface uniquement les cercles élève */
+  svg.querySelectorAll(".eleve-point").forEach(e=>e.remove());
+
+  /* Redessine base propre */
+  dessinerRepere();
+  tracerFonctionBase();
+
+  /* Efface message */
+  document.getElementById("feedback").innerHTML = "";
 }
+
 
 /* ================= GENERATION ================= */
 
