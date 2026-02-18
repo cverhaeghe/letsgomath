@@ -177,7 +177,7 @@ function genererEquation(){
   else if (r < 2/3) typeEnonce = "intervalle";
   else typeEnonce = "phrase";
 
-  const a = Math.floor(Math.random()*9) - 2;
+  const a = Math.floor(Math.random()*11) - 5;   // a entre -5 et +5
   const sensPossibles = [">=", "<=", ">", "<"];
   const sens = sensPossibles[Math.floor(Math.random()*4)];
 
