@@ -88,7 +88,7 @@ function ecrireIntervalle(a, sens) {
 function dessinerMiniDroite(svg, rep) {
 
   /* ===== PARAMÈTRES VISUELS ===== */
-const y = 35;
+const y = 22;
 const largeurSVG = 260;
 const x0 = 20;                     // marge gauche
 const x1 = largeurSVG - 20;        // marge droite
@@ -482,8 +482,8 @@ propositions.push({
   else {
     const mini = document.createElementNS(svgNS, "svg");
 mini.setAttribute("width", 260);
-mini.setAttribute("height", 70);
-mini.setAttribute("viewBox", "0 0 260 70");
+mini.setAttribute("height", 44);
+mini.setAttribute("viewBox", "0 0 260 44");
     dessinerMiniDroite(mini, p.val);
     div.appendChild(mini);
   }
