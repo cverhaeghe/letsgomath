@@ -221,8 +221,11 @@ function afficherPhrase(a, sens) {
     texte = `Tous les nombres strictement inférieurs à ${a}.`;
   }
 
-  document.getElementById("graph-container").innerHTML =
-    `<p style="font-size:20px">${texte}</p>`;
+document.getElementById("graph-container").innerHTML =
+  `<div style="text-align:center; font-size:20px">
+     ${texte}<br>signifie :
+   </div>`;
+
 
   reponseCorrecte = `${sens}${a}`;
 }
@@ -237,8 +240,11 @@ if (sens === ">")  intervalle = `]${a} ; +∞[`;
 if (sens === "<=") intervalle = `]-∞ ; ${a}]`;
 if (sens === "<")  intervalle = `]-∞ ; ${a}[`;
 
-  document.getElementById("graph-container").innerHTML =
-    `<p style="font-size:22px">\\(${intervalle}\\)</p>`;
+document.getElementById("graph-container").innerHTML =
+  `<div style="text-align:center; font-size:22px">
+     \\(${intervalle}\\)<br>signifie :
+   </div>`;
+
 
   MathJax.typeset();
   reponseCorrecte = `${sens}${a}`;
@@ -321,6 +327,15 @@ function afficherDroite(a, sens) {
   svg.appendChild(point);
   reponseCorrecte = `${sens}${a}`;
 
+  // Ajouter "signifie :" sous la droite
+const container = document.getElementById("graph-container");
+container.innerHTML += `
+  <div style="text-align:center; font-size:20px; margin-top:6px">
+    signifie :
+  </div>
+`;
+
+  
 }
 
 
