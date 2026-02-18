@@ -358,6 +358,12 @@ function genererQCM(a, sens, typeEnonce, typeQCM){
   const qcm = document.getElementById("qcm");
   qcm.innerHTML = "";
 
+  // Active / désactive le mode mini-droites (pour le CSS responsive)
+qcm.classList.remove("qcm-mini");
+if (typeQCM === "droite") {
+  qcm.classList.add("qcm-mini");
+}
+
   const propositions = [];
 
   // ===== CAS 1 : ENONCE = INTERVALLE → PAS D’INTERVALLE DANS LE QCM =====
