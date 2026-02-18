@@ -76,10 +76,10 @@ function ecrireIntervalle(a, sens) {
   function ecrirePhraseDepuisRep(rep) {
   const a = parseInt(rep.replace(/[<>=]/g, ""));
 
-  if (rep.startsWith(">=")) return `Tous les nombres supérieurs ou égaux à ${a}`;
-  if (rep.startsWith(">"))  return `Tous les nombres strictement supérieurs à ${a}`;
-  if (rep.startsWith("<=")) return `Tous les nombres inférieurs ou égaux à ${a}`;
-  return `Tous les nombres strictement inférieures à ${a}`;
+  if (rep.startsWith(">=")) return `Tous les nombres supérieurs ou égaux à ${a}.`;
+  if (rep.startsWith(">"))  return `Tous les nombres strictement supérieurs à ${a}.`;
+  if (rep.startsWith("<=")) return `Tous les nombres inférieurs ou égaux à ${a}.`;
+  return `Tous les nombres strictement inférieures à ${a}.`;
 }
 
   
@@ -198,16 +198,16 @@ function afficherPhrase(a, sens) {
   let texte;
 
   if (sens === ">=") {
-    texte = `Tous les nombres supérieurs ou égaux à ${a}`;
+    texte = `Tous les nombres supérieurs ou égaux à ${a}.`;
   }
   else if (sens === ">") {
-    texte = `Tous les nombres strictement supérieurs à ${a}`;
+    texte = `Tous les nombres strictement supérieurs à ${a}.`;
   }
   else if (sens === "<=") {
-    texte = `Tous les nombres inférieurs ou égaux à ${a}`;
+    texte = `Tous les nombres inférieurs ou égaux à ${a}.`;
   }
   else {
-    texte = `Tous les nombres strictement inférieurs à ${a}`;
+    texte = `Tous les nombres strictement inférieurs à ${a}.`;
   }
 
   document.getElementById("graph-container").innerHTML =
