@@ -264,30 +264,37 @@ propositions.push({
   txt: ecrireIntervalle(a, sens)
 });
 
-// ❌ Piège 1 : mauvais côté
+// ❌ Piège 1 : même borne mais crochet inversé
+let sensCrochetInverse;
+if (sens === ">=") sensCrochetInverse = ">";
+else if (sens === ">") sensCrochetInverse = ">=";
+else if (sens === "<=") sensCrochetInverse = "<";
+else sensCrochetInverse = "<=";
+
+propositions.push({
+  val: `${sensCrochetInverse}${a}`,
+  txt: ecrireIntervalle(a, sensCrochetInverse)
+});
+
+// ❌ Piège 2 : mauvais côté mais même borne
 const sensInverse = {">=":"<=", "<=":">=", ">":"<", "<":">"}[sens];
 propositions.push({
   val: `${sensInverse}${a}`,
   txt: ecrireIntervalle(a, sensInverse)
 });
 
-// ❌ Piège 2 : mauvais ouvert / fermé
-let sensOuverture;
-if (sens === ">=") sensOuverture = ">";
-else if (sens === ">") sensOuverture = ">=";
-else if (sens === "<=") sensOuverture = "<";
-else sensOuverture = "<=";
+// ❌ Piège 3 : mauvais côté + crochet inversé (toujours même borne)
+let sensDouble;
+if (sens === ">=") sensDouble = "<";
+else if (sens === ">") sensDouble = "<=";
+else if (sens === "<=") sensDouble = ">";
+else sensDouble = ">=";
 
 propositions.push({
-  val: `${sensOuverture}${a}`,
-  txt: ecrireIntervalle(a, sensOuverture)
+  val: `${sensDouble}${a}`,
+  txt: ecrireIntervalle(a, sensDouble)
 });
 
-// ❌ Piège 3 : mauvaise borne
-propositions.push({
-  val: `${sens}${a+1}`,
-  txt: ecrireIntervalle(a+1, sens)
-});
 
 
   }
