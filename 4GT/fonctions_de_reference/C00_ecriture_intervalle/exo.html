@@ -469,35 +469,25 @@ function melanger(tab) {
   
 function verifier(rep, element) {
 
-  // Si exercice verrouillé → plus aucun clic
   if (exerciceVerrouille) return;
 
-  // Normalisation (sécurité)
   const r1 = String(rep).trim();
   const r2 = String(reponseCorrecte).trim();
 
   if (r1 === r2) {
-
-    element.classList.remove("faux");
+    element.classList.remove("incorrect");
     element.classList.add("correct");
-    // 🔒 verrouillage
+
     exerciceVerrouille = true;
 
-    // Désactiver tous les boutons
     document.querySelectorAll(".qcm-card").forEach(c => {
-      c.style.cursor = "default";
       c.style.pointerEvents = "none";
     });
 
   } else {
-
-    element.classList.add("faux");
+    element.classList.add("incorrect");   // ← EXACTEMENT comme ton autre exo
   }
 }
-
-
-
-
 
 
 // Générer le premier exercice au chargement
