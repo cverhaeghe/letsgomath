@@ -65,6 +65,171 @@
 </div>
 
 <script>
+const svgNS = "http://www.w3.org/2000/svg";
+
+let reponseCorrecte = "";
+
+// ========================= Génération exercice =========================
+  
+function genererEquation() {
+  const types = ["phrase", "intervalle", "droite"];
+  const typeEnonce = types[Math.floor(Math.random()*3)];
+
+  const a = Math.floor(Math.random()*9) - 2;   // -2 à 6
+  const sens = Math.random() < 0.5 ? ">=" : "<=";
+
+  if (typeEnonce === "phrase") {
+    afficherPhrase(a, sens);
+  } else if (typeEnonce === "intervalle") {
+    afficherIntervalle(a, sens);
+  } else {
+    afficherDroite(a, sens);
+  }
+
+  genererQCM(a, sens);
+  document.getElementById("feedback").textContent = "";
+}
+
+// ========================= ENONCÉS =========================
+  
+function afficherPhrase(a, sens) {
+  effacerGraphique();
+  const texte = sens === ">=" ?
+    `Tous les nombres supérieurs ou égaux à ${a}` :
+    `Tous les nombres inférieurs ou égaux à ${a}`;
+
+  document.getElementById("graph-container").innerHTML =
+    `<p style="font-size:20px">${texte}</p>`;
+
+  reponseCorrecte = `${sens}${a}`;
+}
+
+function afficherIntervalle(a, sens) {
+  effacerGraphique();
+  const intervalle = sens === ">=" ? `[${a} ; +∞[` : `]-∞ ; ${a}]`;
+
+  document.getElementById("graph-container").innerHTML =
+    `<p style="font-size:22px">\\(${intervalle}\\)</p>`;
+
+  MathJax.typeset();
+  reponseCorrecte = `${sens}${a}`;
+}
+
+function afficherDroite(a, sens) {
+  const svg = document.getElementById("graph");
+  svg.innerHTML = "";
+
+  // Axe
+  const axe = document.createElementNS(svgNS, "line");
+  axe.setAttribute("x1", 50);
+  axe.setAttribute("x2", 350);
+  axe.setAttribute("y1", 200);
+  axe.setAttribute("y2", 200);
+  axe.setAttribute("stroke", "black");
+  svg.appendChild(axe);
+
+  // Graduations
+  for (let i=-5; i<=5; i++) {
+    const x = 200 + i*25;
+    const tick = document.createElementNS(svgNS, "line");
+    tick.setAttribute("x1", x);
+    tick.setAttribute("x2", x);
+    tick.setAttribute("y1", 195);
+    tick.setAttribute("y2", 205);
+    tick.setAttribute("stroke", "black");
+    svg.appendChild(tick);
+
+    const label = document.createElementNS(svgNS, "text");
+    label.setAttribute("x", x);
+    label.setAttribute("y", 220);
+    label.setAttribute("text-anchor", "middle");
+    label.textContent = i;
+    svg.appendChild(label);
+  }
+
+  const xA = 200 + a*25;
+
+  // Segment coloré
+  const segment = document.createElementNS(svgNS, "line");
+  segment.setAttribute("y1", 200);
+  segment.setAttribute("y2", 200);
+  segment.setAttribute("stroke", "red");
+  segment.setAttribute("stroke-width", 4);
+
+  if (sens === ">=") {
+    segment.setAttribute("x1", xA);
+    segment.setAttribute("x2", 350);
+  } else {
+    segment.setAttribute("x1", 50);
+    segment.setAttribute("x2", xA);
+  }
+  svg.appendChild(segment);
+
+  // Point
+  const point = document.createElementNS(svgNS, "circle");
+  point.setAttribute("cx", xA);
+  point.setAttribute("cy", 200);
+  point.setAttribute("r", 5);
+  point.setAttribute("fill", "red");
+  svg.appendChild(point);
+
+  reponseCorrecte = `${sens}${a}`;
+}
+
+function effacerGraphique() {
+  document.getElementById("graph-container").innerHTML =
+    `<svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>`;
+}
+
+// =========================
+// QCM
+// =========================
+function genererQCM(a, sens) {
+  const qcm = document.getElementById("qcm");
+  qcm.innerHTML = "";
+
+  const propositions = [];
+
+  propositions.push({val:`>=${a}`, txt:`\\([${a};+∞[\\)`});
+  propositions.push({val:`<=${a}`, txt:`\\(]-∞;${a}]\\)`});
+  propositions.push({val:`>=${a+1}`, txt:`\\([${a+1};+∞[\\)`});
+  propositions.push({val:`<=${a-1}`, txt:`\\(]-∞;${a-1}]\\)`});
+
+  melanger(propositions);
+
+  propositions.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "qcm-card";
+    div.innerHTML = p.txt;
+    div.onclick = () => verifier(p.val, div);
+    qcm.appendChild(div);
+  });
+
+  MathJax.typeset();
+}
+
+function melanger(tab) {
+  for (let i = tab.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [tab[i], tab[j]] = [tab[j], tab[i]];
+  }
+}
+
+// =========================
+// Vérification
+// =========================
+function verifier(rep, element) {
+  const cartes = document.querySelectorAll(".qcm-card");
+  cartes.forEach(c => c.classList.remove("correct","faux"));
+
+  if (rep === reponseCorrecte) {
+    element.classList.add("correct");
+    document.getElementById("feedback").textContent = "✔ Bonne réponse";
+  } else {
+    element.classList.add("faux");
+    document.getElementById("feedback").textContent = "✘ Mauvaise réponse";
+  }
+}
 
 
 
