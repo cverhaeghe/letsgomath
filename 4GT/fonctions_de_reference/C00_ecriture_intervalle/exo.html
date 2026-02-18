@@ -206,7 +206,6 @@ dernierTypeEnonce = typeEnonce;
   }
 
 // Choix d’un type différent pour le QCM
-const types = ["intervalle", "phrase", "droite"];
 const typesPossibles = types.filter(t => t !== typeEnonce);
 const typeQCM = typesPossibles[Math.floor(Math.random()*typesPossibles.length)];
 
