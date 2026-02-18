@@ -271,41 +271,42 @@ function afficherDroite(a, sens) {
 
   const container = document.getElementById("graph-container");
 
-  // Ligne flex : axe + signifie
   container.innerHTML = `
     <div style="
       display:flex;
       align-items:center;
       justify-content:center;
-      gap:12px;
+      gap:18px;
+      width:100%;
     ">
-      <svg id="graph" width="360" height="90" viewBox="0 0 400 120"></svg>
+      <svg id="graph" width="420" height="100" viewBox="0 0 420 120"></svg>
       <div style="font-size:20px;">signifie</div>
     </div>
   `;
 
   const svg = document.getElementById("graph");
 
-  const y = 40;
+  const y = 50;
 
-  // Axe
+  // Axe long
   const axe = document.createElementNS(svgNS, "line");
-  axe.setAttribute("x1", 50);
-  axe.setAttribute("x2", 350);
+  axe.setAttribute("x1", 30);
+  axe.setAttribute("x2", 390);
   axe.setAttribute("y1", y);
   axe.setAttribute("y2", y);
   axe.setAttribute("stroke", "black");
+  axe.setAttribute("stroke-width", 2);
   svg.appendChild(axe);
 
   // Graduations
   for (let i = -5; i <= 5; i++) {
-    const x = 200 + i * 25;
+    const x = 210 + i * 30;
 
     const tick = document.createElementNS(svgNS, "line");
     tick.setAttribute("x1", x);
     tick.setAttribute("x2", x);
-    tick.setAttribute("y1", y - 5);
-    tick.setAttribute("y2", y + 5);
+    tick.setAttribute("y1", y - 6);
+    tick.setAttribute("y2", y + 6);
     tick.setAttribute("stroke", "black");
     svg.appendChild(tick);
 
@@ -313,12 +314,12 @@ function afficherDroite(a, sens) {
     label.setAttribute("x", x);
     label.setAttribute("y", y + 25);
     label.setAttribute("text-anchor", "middle");
-    label.setAttribute("font-size", "12");
+    label.setAttribute("font-size", "13");
     label.textContent = i;
     svg.appendChild(label);
   }
 
-  const xA = 200 + a * 25;
+  const xA = 210 + a * 30;
 
   // Segment orange
   const segment = document.createElementNS(svgNS, "line");
@@ -329,9 +330,9 @@ function afficherDroite(a, sens) {
 
   if (sens === ">=" || sens === ">") {
     segment.setAttribute("x1", xA);
-    segment.setAttribute("x2", 350);
+    segment.setAttribute("x2", 390);
   } else {
-    segment.setAttribute("x1", 50);
+    segment.setAttribute("x1", 30);
     segment.setAttribute("x2", xA);
   }
   svg.appendChild(segment);
@@ -340,7 +341,7 @@ function afficherDroite(a, sens) {
   const point = document.createElementNS(svgNS, "circle");
   point.setAttribute("cx", xA);
   point.setAttribute("cy", y);
-  point.setAttribute("r", 5);
+  point.setAttribute("r", 6);
 
   if (sens === ">=" || sens === "<=") {
     point.setAttribute("fill", "#ff8800");
