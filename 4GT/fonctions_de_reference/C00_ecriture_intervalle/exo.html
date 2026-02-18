@@ -419,7 +419,12 @@ function verifier(rep, element) {
   // Si exercice verrouillé → plus aucun clic
   if (exerciceVerrouille) return;
 
-  if (rep === reponseCorrecte) {
+  // Normalisation (sécurité)
+  const r1 = String(rep).trim();
+  const r2 = String(reponseCorrecte).trim();
+
+  if (r1 === r2) {
+
     element.classList.remove("faux");
     element.classList.add("correct");
     document.getElementById("feedback").textContent = "✔ Bonne réponse";
@@ -427,16 +432,19 @@ function verifier(rep, element) {
     // 🔒 verrouillage
     exerciceVerrouille = true;
 
-    // (option visuelle) désactiver le curseur
+    // Désactiver tous les boutons
     document.querySelectorAll(".qcm-card").forEach(c => {
       c.style.cursor = "default";
+      c.style.pointerEvents = "none";
     });
 
   } else {
+
     element.classList.add("faux");
     document.getElementById("feedback").textContent = "✘ Mauvaise réponse";
   }
 }
+
 
 
 
