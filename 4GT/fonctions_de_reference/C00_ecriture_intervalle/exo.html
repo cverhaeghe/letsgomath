@@ -411,10 +411,12 @@ function melanger(tab) {
 // ========================= Vérification =========================
   
 function verifier(rep, element) {
-  const cartes = document.querySelectorAll(".qcm-card");
-  cartes.forEach(c => c.classList.remove("correct","faux"));
+
+  // Si déjà correct → on ne change plus rien
+  if (element.classList.contains("correct")) return;
 
   if (rep === reponseCorrecte) {
+    element.classList.remove("faux");
     element.classList.add("correct");
     document.getElementById("feedback").textContent = "✔ Bonne réponse";
   } else {
@@ -422,6 +424,7 @@ function verifier(rep, element) {
     document.getElementById("feedback").textContent = "✘ Mauvaise réponse";
   }
 }
+
 
 
 
