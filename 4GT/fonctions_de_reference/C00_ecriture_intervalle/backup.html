@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MathJax v3 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+
+  <!-- GRAPHIQUE -->
+<div id="graph-container"
+     style="position:relative; display:flex; justify-content:center; margin-bottom:5px;">
+</div>
+<div id="qcm" class="qcm-grid qcm-4"></div>
+
+<div class="center-button">
+  <button onclick="genererEquation()">Nouvel exercice</button>
+</div>
+
+
+
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_fonctions.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+
+// ========================= Paramètres =========================
+
+const svgNS = "http://www.w3.org/2000/svg";
+
+let reponseCorrecte = "";
+let exerciceVerrouille = false;
+let erreursConsecutives = 0;
+let dernierTypeEnonce = null;
+
+  
+// ========================= Fonctions =========================
+  
+function ecrireIntervalle(a, sens) {
+  if (sens === ">=") return `\\([${a};+∞[\\)`;
+  if (sens === ">")  return `\\(]${a};+∞[\\)`;
+  if (sens === "<=") return `\\(]-∞;${a}]\\)`;
+  if (sens === "<")  return `\\(]-∞;${a}[\\)`;
+}
+
+  function ecrirePhraseDepuisRep(rep) {
+  const a = parseInt(rep.replace(/[<>=]/g, ""));
+
+  if (rep.startsWith(">=")) return `Tous les nombres supérieurs ou égaux à ${a}.`;
+  if (rep.startsWith(">"))  return `Tous les nombres strictement supérieurs à ${a}.`;
+  if (rep.startsWith("<=")) return `Tous les nombres inférieurs ou égaux à ${a}.`;
+  return `Tous les nombres strictement inférieures à ${a}.`;
+}
+
+  
+function dessinerMiniDroite(svg, rep) {
+
+  /* ===== PARAMÈTRES VISUELS ===== */
+const y = 22;
+const largeurSVG = 260;
+const x0 = 20;                     // marge gauche
+const x1 = largeurSVG - 20;        // marge droite
+const centre = (x0 + x1) / 2;      // vrai centre
+
+  const pas = 18;          // ← PLUS ESPACÉ
+  const epaisseurAxe = 2.5;
+  const epaisseurSegment = 4;
+
+  const a = parseInt(rep.replace(/[<>=]/g, ""));
+
+  /* ===== AXE ===== */
+  const axe = document.createElementNS(svgNS, "line");
+  axe.setAttribute("x1", x0);
+  axe.setAttribute("x2", x1);
+  axe.setAttribute("y1", y);
+  axe.setAttribute("y2", y);
+  axe.setAttribute("stroke", "#333");
+  axe.setAttribute("stroke-width", epaisseurAxe);
+  svg.appendChild(axe);
+
+  /* ===== GRADUATIONS + CHIFFRES ===== */
+  for (let i = -5; i <= 5; i++) {
+    const x = centre + i * pas;
+
+    // graduation
+    const tick = document.createElementNS(svgNS, "line");
+    tick.setAttribute("x1", x);
+    tick.setAttribute("x2", x);
+    tick.setAttribute("y1", y - 6);
+    tick.setAttribute("y2", y + 6);
+    tick.setAttribute("stroke", "#333");
+    tick.setAttribute("stroke-width", 2);
+    svg.appendChild(tick);
+
+    // chiffre
+    const label = document.createElementNS(svgNS, "text");
+    label.setAttribute("x", x);
+    label.setAttribute("y", y + 22);
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("font-size", "12");
+    label.textContent = i;
+    svg.appendChild(label);
+  }
+
+  /* ===== POSITION DE a ===== */
+  const xA = centre + a * pas;
+
+  /* ===== SEGMENT ORANGE ===== */
+  const segment = document.createElementNS(svgNS, "line");
+  segment.setAttribute("y1", y);
+  segment.setAttribute("y2", y);
+  segment.setAttribute("stroke", "#ff8800");
+  segment.setAttribute("stroke-width", epaisseurSegment);
+
+  if (rep.includes(">")) {
+    segment.setAttribute("x1", xA);
+    segment.setAttribute("x2", x1);
+  } else {
+    segment.setAttribute("x1", x0);
+    segment.setAttribute("x2", xA);
+  }
+
+  svg.appendChild(segment);
+
+  /* ===== POINT OUVERT / FERMÉ ===== */
+  const point = document.createElementNS(svgNS, "circle");
+  point.setAttribute("cx", xA);
+  point.setAttribute("cy", y);
+  point.setAttribute("r", 6);
+
+  if (rep.includes("=")) {
+    point.setAttribute("fill", "#ff8800"); // fermé
+  } else {
+    point.setAttribute("fill", "white");
+    point.setAttribute("stroke", "#ff8800");
+    point.setAttribute("stroke-width", 3);
+  }
+
+  svg.appendChild(point);
+}
+
+
+  
+// ========================= Génération exercice =========================
+  
+function genererEquation(){
+
+exerciceVerrouille = false;
+erreursConsecutives = 0;
+
+// Tirage équilibré sans répétition
+const types = ["droite", "intervalle", "phrase"];
+
+// On enlève le dernier type utilisé
+let possibles = types.filter(t => t !== dernierTypeEnonce);
+
+// Tirage parmi les restants
+let typeEnonce = possibles[Math.floor(Math.random() * possibles.length)];
+
+// On mémorise pour le prochain exercice
+dernierTypeEnonce = typeEnonce;
+
+
+  const a = Math.floor(Math.random()*9) - 4;   // a entre -4 et +4
+  const sensPossibles = [">=", "<=", ">", "<"];
+  const sens = sensPossibles[Math.floor(Math.random()*4)];
+
+  if (typeEnonce === "phrase") {
+    afficherPhrase(a, sens);
+  }
+  else if (typeEnonce === "intervalle") {
+    afficherIntervalle(a, sens);
+  }
+  else {
+    afficherDroite(a, sens);
+  }
+
+// Choix d’un type différent pour le QCM
+const typesQCM = ["intervalle", "phrase", "droite"];  
+const typesPossibles = typesQCM.filter(t => t !== typeEnonce);
+const typeQCM = typesPossibles[Math.floor(Math.random()*typesPossibles.length)];
+
+genererQCM(a, sens, typeEnonce, typeQCM);
+  document.getElementById("feedback").textContent = "";
+}
+
+
+// ========================= ENONCÉS =========================
+  
+function afficherPhrase(a, sens) {
+  effacerGraphique();
+
+  let texte;
+
+  if (sens === ">=") {
+    texte = `"Tous les nombres supérieurs ou égaux à ${a}"`;
+  }
+  else if (sens === ">") {
+    texte = `"Tous les nombres strictement supérieurs à ${a}"`;
+  }
+  else if (sens === "<=") {
+    texte = `"Tous les nombres inférieurs ou égaux à ${a}"`;
+  }
+  else {
+    texte = `"Tous les nombres strictement inférieurs à ${a}"`;
+  }
+
+  document.getElementById("graph-container").innerHTML = `
+    <div style="text-align:center; font-size:20px; margin-bottom:18px;">
+      ${texte} signifie&nbsp;<br><br>
+    </div>
+  `;
+
+  reponseCorrecte = `${sens}${a}`;
+}
+
+
+function afficherIntervalle(a, sens) {
+  effacerGraphique();
+
+  let intervalle;
+
+  if (sens === ">=") intervalle = `[${a} ; +∞[`;
+  if (sens === ">")  intervalle = `]${a} ; +∞[`;
+  if (sens === "<=") intervalle = `]-∞ ; ${a}]`;
+  if (sens === "<")  intervalle = `]-∞ ; ${a}[`;
+
+  document.getElementById("graph-container").innerHTML = `
+    <div style="text-align:center; font-size:22px; margin-bottom:18px;">
+      \\(${intervalle}\\) signifie&nbsp;<br><br>
+    </div>
+  `;
+
+  MathJax.typeset();
+  reponseCorrecte = `${sens}${a}`;
+}
+
+
+function afficherDroite(a, sens) {
+  effacerGraphique();
+
+  const container = document.getElementById("graph-container");
+
+  container.innerHTML = `
+    <div style="
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      width:100%;
+    ">
+      <svg id="graph" width="420" height="100" viewBox="0 0 420 120"></svg>
+      <div style="font-size:20px;">signifie</div>
+    </div>
+  `;
+
+  const svg = document.getElementById("graph");
+
+  const y = 50;
+
+  // Axe long
+  const axe = document.createElementNS(svgNS, "line");
+  axe.setAttribute("x1", 30);
+  axe.setAttribute("x2", 390);
+  axe.setAttribute("y1", y);
+  axe.setAttribute("y2", y);
+  axe.setAttribute("stroke", "black");
+  axe.setAttribute("stroke-width", 2);
+  svg.appendChild(axe);
+
+  // Graduations
+  for (let i = -5; i <= 5; i++) {
+    const x = 210 + i * 30;
+
+    const tick = document.createElementNS(svgNS, "line");
+    tick.setAttribute("x1", x);
+    tick.setAttribute("x2", x);
+    tick.setAttribute("y1", y - 6);
+    tick.setAttribute("y2", y + 6);
+    tick.setAttribute("stroke", "black");
+    svg.appendChild(tick);
+
+    const label = document.createElementNS(svgNS, "text");
+    label.setAttribute("x", x);
+    label.setAttribute("y", y + 25);
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("font-size", "13");
+    label.textContent = i;
+    svg.appendChild(label);
+  }
+
+  const xA = 210 + a * 30;
+
+  // Segment orange
+  const segment = document.createElementNS(svgNS, "line");
+  segment.setAttribute("y1", y);
+  segment.setAttribute("y2", y);
+  segment.setAttribute("stroke", "#ff8800");
+  segment.setAttribute("stroke-width", 4);
+
+  if (sens === ">=" || sens === ">") {
+    segment.setAttribute("x1", xA);
+    segment.setAttribute("x2", 390);
+  } else {
+    segment.setAttribute("x1", 30);
+    segment.setAttribute("x2", xA);
+  }
+  svg.appendChild(segment);
+
+  // Rond
+  const point = document.createElementNS(svgNS, "circle");
+  point.setAttribute("cx", xA);
+  point.setAttribute("cy", y);
+  point.setAttribute("r", 6);
+
+  if (sens === ">=" || sens === "<=") {
+    point.setAttribute("fill", "#ff8800");
+  } else {
+    point.setAttribute("fill", "white");
+    point.setAttribute("stroke", "#ff8800");
+    point.setAttribute("stroke-width", 2);
+  }
+
+  svg.appendChild(point);
+
+  reponseCorrecte = `${sens}${a}`;
+}
+
+
+
+function effacerGraphique() {
+  document.getElementById("graph-container").innerHTML =
+    `<svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>`;
+}
+
+// ========================= QCM =========================
+  
+function genererQCM(a, sens, typeEnonce, typeQCM){
+  const qcm = document.getElementById("qcm");
+  qcm.innerHTML = "";
+
+  // Active / désactive le mode mini-droites (pour le CSS responsive)
+qcm.classList.remove("qcm-mini");
+if (typeQCM === "droite") {
+  qcm.classList.add("qcm-mini");
+}
+
+  const propositions = [];
+
+  // ===== CAS 1 : ENONCE = INTERVALLE → PAS D’INTERVALLE DANS LE QCM =====
+  if (typeEnonce === "intervalle") {
+
+// Bonne réponse
+propositions.push({
+  val: `${sens}${a}`,
+  txt: ecrireIntervalle(a, sens)
+});
+
+// ❌ Piège 1 : même borne mais crochet inversé
+let sensCrochetInverse;
+if (sens === ">=") sensCrochetInverse = ">";
+else if (sens === ">") sensCrochetInverse = ">=";
+else if (sens === "<=") sensCrochetInverse = "<";
+else sensCrochetInverse = "<=";
+
+propositions.push({
+  val: `${sensCrochetInverse}${a}`,
+  txt: ecrireIntervalle(a, sensCrochetInverse)
+});
+
+// ❌ Piège 2 : mauvais côté mais même borne
+const sensInverse = {">=":"<=", "<=":">=", ">":"<", "<":">"}[sens];
+propositions.push({
+  val: `${sensInverse}${a}`,
+  txt: ecrireIntervalle(a, sensInverse)
+});
+
+// ❌ Piège 3 : mauvais côté + crochet inversé (toujours même borne)
+let sensDouble;
+if (sens === ">=") sensDouble = "<";
+else if (sens === ">") sensDouble = "<=";
+else if (sens === "<=") sensDouble = ">";
+else sensDouble = ">=";
+
+propositions.push({
+  val: `${sensDouble}${a}`,
+  txt: ecrireIntervalle(a, sensDouble)
+});
+  }
+
+  // ===== AUTRES CAS → INTERVALLES DANS LE QCM =====
+  else {
+
+  // Bonne réponse
+  propositions.push({
+    val: `${sens}${a}`,
+    txt: ecrireIntervalle(a, sens)
+  });
+
+  // ❌ Crochet inversé (même borne)
+  let sensCrochetInverse;
+  if (sens === ">=") sensCrochetInverse = ">";
+  else if (sens === ">") sensCrochetInverse = ">=";
+  else if (sens === "<=") sensCrochetInverse = "<";
+  else sensCrochetInverse = "<=";
+
+  propositions.push({
+    val: `${sensCrochetInverse}${a}`,
+    txt: ecrireIntervalle(a, sensCrochetInverse)
+  });
+
+  // ❌ Mauvais côté (même borne)
+  const sensInverse = {">=":"<=", "<=":">=", ">":"<", "<":">"}[sens];
+
+  propositions.push({
+    val: `${sensInverse}${a}`,
+    txt: ecrireIntervalle(a, sensInverse)
+  });
+
+  // ❌ Mauvais côté + crochet inversé (même borne)
+  let sensDouble;
+  if (sens === ">=") sensDouble = "<";
+  else if (sens === ">") sensDouble = "<=";
+  else if (sens === "<=") sensDouble = ">";
+  else sensDouble = ">=";
+
+  propositions.push({
+    val: `${sensDouble}${a}`,
+    txt: ecrireIntervalle(a, sensDouble)
+  });
+
+}
+
+    // Mélange
+  melanger(propositions);
+
+  // Affichage des cartes
+  propositions.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "qcm-card";
+
+  // ===== QCM EN INTERVALLE =====
+  if (typeQCM === "intervalle") {
+    div.innerHTML = p.txt;
+  }
+
+  // ===== QCM EN PHRASE =====
+  else if (typeQCM === "phrase") {
+    div.textContent = ecrirePhraseDepuisRep(p.val);
+  }
+
+  // ===== QCM EN MINI-DROITE =====
+  else {
+    const mini = document.createElementNS(svgNS, "svg");
+mini.setAttribute("width", 260);
+mini.setAttribute("height", 44);
+mini.setAttribute("viewBox", "0 0 260 44");
+    dessinerMiniDroite(mini, p.val);
+    div.appendChild(mini);
+  }
+
+div.onclick = () => verifier(p.val, div);
+div.setAttribute("data-rep", p.val);   // ← AJOUT
+qcm.appendChild(div);
+
+});
+
+
+  MathJax.typeset();
+
+}
+
+function melanger(tab) {
+  for (let i = tab.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [tab[i], tab[j]] = [tab[j], tab[i]];
+  }
+}
+
+// ========================= Vérification =========================
+  
+function verifier(rep, element) {
+
+  if (exerciceVerrouille) return;
+
+  const r1 = String(rep).trim();
+  const r2 = String(reponseCorrecte).trim();
+
+  const cartes = document.querySelectorAll(".qcm-card");
+
+  if (r1 === r2) {
+    // ✔ Bonne réponse
+    element.classList.remove("incorrect");
+    element.classList.add("correct");
+
+    exerciceVerrouille = true;
+    erreursConsecutives = 0;
+
+    cartes.forEach(c => c.style.pointerEvents = "none");
+  }
+  else {
+    // ❌ Mauvaise réponse
+    element.classList.add("incorrect");
+    erreursConsecutives++;
+
+    // Après 2 erreurs → montrer la bonne réponse
+    if (erreursConsecutives >= 2) {
+
+      cartes.forEach(c => {
+        const repCarte = c.getAttribute("data-rep");
+        if (repCarte && repCarte.trim() === r2) {
+          c.classList.add("correct");
+        }
+        c.style.pointerEvents = "none";
+      });
+
+      exerciceVerrouille = true;
+    }
+  }
+}
+
+
+
+// Générer le premier exercice au chargement
+window.onload = genererEquation;
+</script>
+   
+  <!-- Protection clique droit (commun à tout le site) -->
+  <script src="../../../js/protection.js"></script>
+
+</body>
+</html>
