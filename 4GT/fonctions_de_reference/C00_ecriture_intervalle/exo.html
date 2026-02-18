@@ -73,6 +73,16 @@ function ecrireIntervalle(a, sens) {
   if (sens === "<")  return `\\(]-∞;${a}[\\)`;
 }
 
+  function ecrirePhraseDepuisRep(rep) {
+  const a = parseInt(rep.replace(/[<>=]/g, ""));
+
+  if (rep.startsWith(">=")) return `Tous les nombres ≥ ${a}`;
+  if (rep.startsWith(">"))  return `Tous les nombres > ${a}`;
+  if (rep.startsWith("<=")) return `Tous les nombres ≤ ${a}`;
+  return `Tous les nombres < ${a}`;
+}
+
+  
   function dessinerMiniDroite(svg, rep) {
   const y = 30;
   const x0 = 10;
@@ -153,7 +163,12 @@ function genererEquation() {
     afficherDroite(a, sens);
   }
 
-  genererQCM(a, sens, typeEnonce);
+// Choix d’un type différent pour le QCM
+const types = ["intervalle", "phrase", "droite"];
+const typesPossibles = types.filter(t => t !== typeEnonce);
+const typeQCM = typesPossibles[Math.floor(Math.random()*typesPossibles.length)];
+
+genererQCM(a, sens, typeEnonce, typeQCM);
   document.getElementById("feedback").textContent = "";
 }
 
@@ -288,7 +303,7 @@ function effacerGraphique() {
 
 // ========================= QCM =========================
   
-function genererQCM(a, sens, typeEnonce) {
+function genererQCM(a, sens, typeEnonce, typeQCM){
   const qcm = document.getElementById("qcm");
   qcm.innerHTML = "";
 
@@ -383,25 +398,33 @@ propositions.push({
 
   // Affichage des cartes
   propositions.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "qcm-card";
+  const div = document.createElement("div");
+  div.className = "qcm-card";
 
-    // Si tu veux TEXTE (intervalle)
+  // ===== QCM EN INTERVALLE =====
+  if (typeQCM === "intervalle") {
     div.innerHTML = p.txt;
+  }
 
-    // Si tu veux MINI-DROITE (décommente ces lignes et commente innerHTML)
-    /*
+  // ===== QCM EN PHRASE =====
+  else if (typeQCM === "phrase") {
+    div.textContent = ecrirePhraseDepuisRep(p.val);
+  }
+
+  // ===== QCM EN MINI-DROITE =====
+  else {
     const mini = document.createElementNS(svgNS, "svg");
     mini.setAttribute("width", 140);
     mini.setAttribute("height", 60);
     mini.setAttribute("viewBox", "0 0 140 60");
     dessinerMiniDroite(mini, p.val);
     div.appendChild(mini);
-    */
+  }
 
-    div.onclick = () => verifier(p.val, div);
-    qcm.appendChild(div);
-  });
+  div.onclick = () => verifier(p.val, div);
+  qcm.appendChild(div);
+});
+
 
   MathJax.typeset();
 
