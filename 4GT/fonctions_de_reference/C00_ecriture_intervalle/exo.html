@@ -357,6 +357,34 @@ propositions.push({
   });
 
 }
+
+    // Mélange
+  melanger(propositions);
+
+  // Affichage des cartes
+  propositions.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "qcm-card";
+
+    // Si tu veux TEXTE (intervalle)
+    div.innerHTML = p.txt;
+
+    // Si tu veux MINI-DROITE (décommente ces lignes et commente innerHTML)
+    /*
+    const mini = document.createElementNS(svgNS, "svg");
+    mini.setAttribute("width", 140);
+    mini.setAttribute("height", 60);
+    mini.setAttribute("viewBox", "0 0 140 60");
+    dessinerMiniDroite(mini, p.val);
+    div.appendChild(mini);
+    */
+
+    div.onclick = () => verifier(p.val, div);
+    qcm.appendChild(div);
+  });
+
+  MathJax.typeset();
+
 }
 
 function melanger(tab) {
