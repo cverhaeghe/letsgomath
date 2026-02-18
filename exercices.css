@@ -101,8 +101,7 @@
 .qcm-grid { /* choix entre 4 réponses */
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-row-gap: 20px;     /* espace vertical */
-column-gap: 36px;  /* espace horizontal + large */
+  gap: 20px;   
   justify-items: center; /* centre horizontalement chaque carte */
   max-width: 500xp;      /* largeur totale de la grille  */
   margin: 0 auto 20px;   /* centre la grille dans la page */
