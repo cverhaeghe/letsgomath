@@ -88,10 +88,12 @@ function ecrireIntervalle(a, sens) {
 function dessinerMiniDroite(svg, rep) {
 
   /* ===== PARAMÈTRES VISUELS ===== */
-  const y = 35;
-  const x0 = 10;
-  const x1 = 230;          // ← AXE PLUS LONG
-  const centre = 120;
+const y = 35;
+const largeurSVG = 260;
+const x0 = 20;                     // marge gauche
+const x1 = largeurSVG - 20;        // marge droite
+const centre = (x0 + x1) / 2;      // vrai centre
+
   const pas = 18;          // ← PLUS ESPACÉ
   const epaisseurAxe = 2.5;
   const epaisseurSegment = 4;
