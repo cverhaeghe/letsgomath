@@ -156,16 +156,30 @@ function genererEquation() {
 // ========================= ENONCÉS =========================
   
 function afficherPhrase(a, sens) {
+function afficherPhrase(a, sens) {
   effacerGraphique();
-  const texte = sens === ">=" ?
-    `Tous les nombres supérieurs ou égaux à ${a}` :
-    `Tous les nombres inférieurs ou égaux à ${a}`;
+
+  let texte;
+
+  if (sens === ">=") {
+    texte = `Tous les nombres supérieurs ou égaux à ${a}`;
+  }
+  else if (sens === ">") {
+    texte = `Tous les nombres strictement supérieurs à ${a}`;
+  }
+  else if (sens === "<=") {
+    texte = `Tous les nombres inférieurs ou égaux à ${a}`;
+  }
+  else {
+    texte = `Tous les nombres strictement inférieurs à ${a}`;
+  }
 
   document.getElementById("graph-container").innerHTML =
     `<p style="font-size:20px">${texte}</p>`;
 
   reponseCorrecte = `${sens}${a}`;
 }
+
 
 function afficherIntervalle(a, sens) {
   effacerGraphique();
