@@ -429,8 +429,6 @@ function verifier(rep, element) {
 
     element.classList.remove("faux");
     element.classList.add("correct");
-    document.getElementById("feedback").textContent = "✔ Bonne réponse";
-
     // 🔒 verrouillage
     exerciceVerrouille = true;
 
@@ -443,7 +441,6 @@ function verifier(rep, element) {
   } else {
 
     element.classList.add("faux");
-    document.getElementById("feedback").textContent = "✘ Mauvaise réponse";
   }
 }
 
