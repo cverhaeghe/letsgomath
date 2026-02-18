@@ -76,7 +76,7 @@ function genererEquation() {
     afficherDroite(a, sens);
   }
 
-  genererQCM(a, sens);
+genererQCM(a, sens, typeEnonce);
   document.getElementById("feedback").textContent = "";
 }
 
@@ -174,16 +174,46 @@ function effacerGraphique() {
 
 // ========================= QCM =========================
   
-function genererQCM(a, sens) {
+function genererQCM(a, sens, typeEnonce) {
   const qcm = document.getElementById("qcm");
   qcm.innerHTML = "";
 
   const propositions = [];
 
-  propositions.push({val:`>=${a}`, txt:`\\([${a};+∞[\\)`});
-  propositions.push({val:`<=${a}`, txt:`\\(]-∞;${a}]\\)`});
-  propositions.push({val:`>=${a+1}`, txt:`\\([${a+1};+∞[\\)`});
-  propositions.push({val:`<=${a-1}`, txt:`\\(]-∞;${a-1}]\\)`});
+  // ===== CAS 1 : ENONCE = INTERVALLE → PAS D’INTERVALLE DANS LE QCM =====
+  if (typeEnonce === "intervalle") {
+
+    propositions.push({
+      val: `>=${a}`,
+      txt: `Tous les nombres supérieurs ou égaux à ${a}`
+    });
+
+    propositions.push({
+      val: `<=${a}`,
+      txt: `Tous les nombres inférieurs ou égaux à ${a}`
+    });
+
+    propositions.push({
+      val: `>=${a+1}`,
+      txt: `Tous les nombres supérieurs ou égaux à ${a+1}`
+    });
+
+    propositions.push({
+      val: `<=${a-1}`,
+      txt: `Tous les nombres inférieurs ou égaux à ${a-1}`
+    });
+
+  }
+
+  // ===== AUTRES CAS → INTERVALLES DANS LE QCM =====
+  else {
+
+    propositions.push({val:`>=${a}`, txt:`\\([${a};+∞[\\)`});
+    propositions.push({val:`<=${a}`, txt:`\\(]-∞;${a}]\\)`});
+    propositions.push({val:`>=${a+1}`, txt:`\\([${a+1};+∞[\\)`});
+    propositions.push({val:`<=${a-1}`, txt:`\\(]-∞;${a-1}]\\)`});
+
+  }
 
   melanger(propositions);
 
@@ -197,6 +227,7 @@ function genererQCM(a, sens) {
 
   MathJax.typeset();
 }
+
 
 function melanger(tab) {
   for (let i = tab.length - 1; i > 0; i--) {
