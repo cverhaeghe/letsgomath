@@ -84,9 +84,12 @@ function ecrireIntervalle(a, sens) {
 
   
   function dessinerMiniDroite(svg, rep) {
+
   const y = 30;
   const x0 = 10;
   const x1 = 130;
+  const centre = 70;
+  const pas = 10;   // espacement entre graduations
 
   // Axe
   const axe = document.createElementNS(svgNS, "line");
@@ -97,11 +100,24 @@ function ecrireIntervalle(a, sens) {
   axe.setAttribute("stroke", "black");
   svg.appendChild(axe);
 
-  // Borne a
-  const a = parseInt(rep.replace(/[<>=]/g, ""));
-  const xA = 70 + a * 6;   // position simplifiée
+  // ===== Graduations =====
+  for (let i = -3; i <= 3; i++) {
+    const x = centre + i * pas;
 
-  // Segment rouge
+    const tick = document.createElementNS(svgNS, "line");
+    tick.setAttribute("x1", x);
+    tick.setAttribute("x2", x);
+    tick.setAttribute("y1", y - 4);
+    tick.setAttribute("y2", y + 4);
+    tick.setAttribute("stroke", "black");
+    svg.appendChild(tick);
+  }
+
+  // ===== Position de la borne a =====
+  const a = parseInt(rep.replace(/[<>=]/g, ""));
+  const xA = centre + a * pas;
+
+  // ===== Segment rouge =====
   const segment = document.createElementNS(svgNS, "line");
   segment.setAttribute("y1", y);
   segment.setAttribute("y2", y);
@@ -117,7 +133,7 @@ function ecrireIntervalle(a, sens) {
   }
   svg.appendChild(segment);
 
-  // Rond ouvert / fermé
+  // ===== Rond ouvert / fermé =====
   const point = document.createElementNS(svgNS, "circle");
   point.setAttribute("cx", xA);
   point.setAttribute("cy", y);
@@ -133,6 +149,7 @@ function ecrireIntervalle(a, sens) {
 
   svg.appendChild(point);
 }
+
 
   
 // ========================= Génération exercice =========================
