@@ -126,7 +126,7 @@ let interieur = `${toLatex(s)}(x${h>=0?"-"+h:"+"+(-h)})`;
 
 let fonctionTransformee = appliquerFonction(f.latex, interieur);
 
-let expr = `${toLatex(k)}\\,${fonctionTransformee}${v!==0? (v>0?`+${v}`:`${v}`):""}`;
+let expr = `f(x) = ${toLatex(k)}\\,${fonctionTransformee}${v!==0? (v>0?`+${v}`:`${v}`):""}`;
 
   document.getElementById("equation").innerHTML =
     `Détermine l'ordre des transformations qu'a subit la fonction de référence :<br><br>
