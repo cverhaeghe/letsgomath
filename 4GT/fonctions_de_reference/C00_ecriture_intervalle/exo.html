@@ -245,11 +245,11 @@ function afficherDroite(a, sens) {
 
   const xA = 200 + a * 25;
 
-  // Segment rouge
+  // Segment orange
   const segment = document.createElementNS(svgNS, "line");
   segment.setAttribute("y1", y);
   segment.setAttribute("y2", y);
-  segment.setAttribute("stroke", "red");
+  segment.setAttribute("stroke", "#ff8800");
   segment.setAttribute("stroke-width", 4);
 
   if (sens === ">=" || sens === ">") {
@@ -268,10 +268,10 @@ function afficherDroite(a, sens) {
   point.setAttribute("r", 5);
 
   if (sens === ">=" || sens === "<=") {
-    point.setAttribute("fill", "red");   // fermé
+    point.setAttribute("fill", "#ff8800");   // fermé
   } else {
     point.setAttribute("fill", "white"); // ouvert
-    point.setAttribute("stroke", "red");
+    point.setAttribute("stroke", "#ff8800");
     point.setAttribute("stroke-width", 2);
   }
 
