@@ -62,6 +62,26 @@ const fonctions = [
   {nom:"inverse", latex:"f(x)=\\frac{1}{x}"}
 ];
 
+  function appliquerFonction(flatex, interieur){
+  if(flatex.includes("x^2"))
+    return `(${interieur})^2`;
+
+  if(flatex.includes("x^3"))
+    return `(${interieur})^3`;
+
+  if(flatex.includes("\\sqrt{x}"))
+    return `\\sqrt{${interieur}}`;
+
+  if(flatex.includes("\\sqrt[3]{x}"))
+    return `\\sqrt[3]{${interieur}}`;
+
+  if(flatex.includes("|x|"))
+    return `\\left|${interieur}\\right|`;
+
+  if(flatex.includes("\\frac{1}{x}"))
+    return `\\frac{1}{${interieur}}`;
+}
+
 
 /* ========================= Génération fractions ========================= */
 
@@ -106,11 +126,14 @@ function genererEquation(){
   if(k===0) k=1;
 
   /* Expression latex */
-  let expr = `g(x)=${toLatex(k)}\\,f(${toLatex(s)}(x${h>=0?"-"+h:"+"+(-h)}))+${v}`;
+let interieur = `${toLatex(s)}(x${h>=0?"-"+h:"+"+(-h)})`;
+
+let fonctionTransformee = appliquerFonction(f.latex, interieur);
+
+let expr = `${toLatex(k)}\\,${fonctionTransformee}${v!==0? (v>0?`+${v}`:`${v}`):""}`;
 
   document.getElementById("equation").innerHTML =
-    `Fonction de référence : \\(${f.latex}\\)<br>
-     Déterminer l'ordre des transformations pour obtenir :<br><br>
+    `Détermine l'ordre des transformations qu'a subit la fonction de référence :<br><br>
      \\(${expr}\\)`;
 
   MathJax.typeset();
