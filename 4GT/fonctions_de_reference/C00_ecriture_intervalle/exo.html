@@ -123,8 +123,8 @@ function afficherDroite(a, sens) {
   const axe = document.createElementNS(svgNS, "line");
   axe.setAttribute("x1", 50);
   axe.setAttribute("x2", 350);
-  axe.setAttribute("y1", 200);
-  axe.setAttribute("y2", 200);
+  axe.setAttribute("y1", 70);
+  axe.setAttribute("y2", 70);
   axe.setAttribute("stroke", "black");
   svg.appendChild(axe);
 
@@ -134,14 +134,14 @@ function afficherDroite(a, sens) {
     const tick = document.createElementNS(svgNS, "line");
     tick.setAttribute("x1", x);
     tick.setAttribute("x2", x);
-    tick.setAttribute("y1", 195);
-    tick.setAttribute("y2", 205);
+    tick.setAttribute("y1", 70);
+    tick.setAttribute("y2", 70);
     tick.setAttribute("stroke", "black");
     svg.appendChild(tick);
 
     const label = document.createElementNS(svgNS, "text");
     label.setAttribute("x", x);
-    label.setAttribute("y", 220);
+    label.setAttribute("y", 70);
     label.setAttribute("text-anchor", "middle");
     label.textContent = i;
     svg.appendChild(label);
@@ -152,7 +152,7 @@ function afficherDroite(a, sens) {
   // Segment coloré
   const segment = document.createElementNS(svgNS, "line");
   segment.setAttribute("y1", 200);
-  segment.setAttribute("y2", 200);
+  segment.setAttribute("y2", 70);
   segment.setAttribute("stroke", "red");
   segment.setAttribute("stroke-width", 4);
 
