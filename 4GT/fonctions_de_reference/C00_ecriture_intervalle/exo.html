@@ -235,10 +235,12 @@ function afficherPhrase(a, sens) {
     texte = `"Tous les nombres strictement inférieurs à ${a}"`;
   }
 
-document.getElementById("graph-container").innerHTML =
-<div style="text-align:center; font-size:20px; margin-bottom:18px;">
-  ${texte} signifie&nbsp;
-</div>
+document.getElementById("graph-container").innerHTML = `
+  <div style="text-align:center; font-size:20px; margin-bottom:18px;">
+    ${texte} signifie&nbsp;<br><br>
+  </div>
+`;
+
 
 
 
@@ -259,7 +261,7 @@ document.getElementById("graph-container").innerHTML =
 <div style="text-align:center; font-size:22px; margin-bottom:18px;">
   \\(${intervalle}\\) signifie&nbsp;
 </div>
-
+`;
 
 
   MathJax.typeset();
