@@ -104,7 +104,7 @@
 row-gap: 20px;     /* espace vertical */
 column-gap: 36px;  /* espace horizontal + large */
   justify-items: center; /* centre horizontalement chaque carte */
-  max-width: 700xp;      /* largeur totale de la grille  */
+  max-width: 500xp;      /* largeur totale de la grille  */
   margin: 0 auto 20px;   /* centre la grille dans la page */
 }
 
