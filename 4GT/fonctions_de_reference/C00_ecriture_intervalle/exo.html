@@ -185,72 +185,82 @@ if (sens === "<")  intervalle = `]-∞ ; ${a}[`;
 }
 
 function afficherDroite(a, sens) {
+  effacerGraphique();
+
   const svg = document.getElementById("graph");
+  svg.setAttribute("height", 120);
+  svg.setAttribute("viewBox", "0 0 400 120");
   svg.innerHTML = "";
 
-  // Axe
+  const y = 60;
+
+  // Axe horizontal
   const axe = document.createElementNS(svgNS, "line");
   axe.setAttribute("x1", 50);
   axe.setAttribute("x2", 350);
-  axe.setAttribute("y1", 65);
-  axe.setAttribute("y2", 70);
+  axe.setAttribute("y1", y);
+  axe.setAttribute("y2", y);
   axe.setAttribute("stroke", "black");
   svg.appendChild(axe);
 
-  // Graduations
-  for (let i=-5; i<=5; i++) {
-    const x = 200 + i*25;
+  // Graduations + nombres
+  for (let i = -5; i <= 5; i++) {
+    const x = 200 + i * 25;
+
+    // Petit trait
     const tick = document.createElementNS(svgNS, "line");
     tick.setAttribute("x1", x);
     tick.setAttribute("x2", x);
-    tick.setAttribute("y1", 65);
-    tick.setAttribute("y2", 70);
+    tick.setAttribute("y1", y - 5);
+    tick.setAttribute("y2", y + 5);
     tick.setAttribute("stroke", "black");
     svg.appendChild(tick);
 
+    // Nombre
     const label = document.createElementNS(svgNS, "text");
     label.setAttribute("x", x);
-    label.setAttribute("y", 95);
+    label.setAttribute("y", y + 25);
     label.setAttribute("text-anchor", "middle");
+    label.setAttribute("font-size", "12");
     label.textContent = i;
     svg.appendChild(label);
   }
 
-  const xA = 200 + a*25;
+  const xA = 200 + a * 25;
 
-// Segment coloré
-const segment = document.createElementNS(svgNS, "line");
-segment.setAttribute("y1", 65);
-segment.setAttribute("y2", 70);
-segment.setAttribute("stroke", "red");
-segment.setAttribute("stroke-width", 4);
+  // Segment rouge
+  const segment = document.createElementNS(svgNS, "line");
+  segment.setAttribute("y1", y);
+  segment.setAttribute("y2", y);
+  segment.setAttribute("stroke", "red");
+  segment.setAttribute("stroke-width", 4);
 
-if (sens === ">=") {
-  segment.setAttribute("x1", xA);
-  segment.setAttribute("x2", 350);
-} else {
-  segment.setAttribute("x1", 50);
-  segment.setAttribute("x2", xA);
+  if (sens === ">=" || sens === ">") {
+    segment.setAttribute("x1", xA);
+    segment.setAttribute("x2", 350);
+  } else {
+    segment.setAttribute("x1", 50);
+    segment.setAttribute("x2", xA);
+  }
+  svg.appendChild(segment);
+
+  // Rond ouvert / fermé
+  const point = document.createElementNS(svgNS, "circle");
+  point.setAttribute("cx", xA);
+  point.setAttribute("cy", y);
+  point.setAttribute("r", 5);
+
+  if (sens === ">=" || sens === "<=") {
+    point.setAttribute("fill", "red");   // fermé
+  } else {
+    point.setAttribute("fill", "white"); // ouvert
+    point.setAttribute("stroke", "red");
+    point.setAttribute("stroke-width", 2);
+  }
+
+  svg.appendChild(point);
 }
-svg.appendChild(segment);
 
-
-// Point ouvert / fermé
-const point = document.createElementNS(svgNS, "circle");
-point.setAttribute("cx", xA);
-point.setAttribute("cy", 70);
-point.setAttribute("r", 5);
-
-if (sens === ">=" || sens === "<=") {
-  point.setAttribute("fill", "red");      // fermé
-} else {
-  point.setAttribute("fill", "white");    // ouvert
-  point.setAttribute("stroke", "red");
-  point.setAttribute("stroke-width", 2);
-}
-
-svg.appendChild(point);
-}
 
 function effacerGraphique() {
   document.getElementById("graph-container").innerHTML =
