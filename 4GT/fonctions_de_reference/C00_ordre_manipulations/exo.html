@@ -578,45 +578,44 @@ function verifier(){
     return false;
 
   /* comparaison stricte */
-  if(propositions.join() === attendu.join())
+  if(JSON.stringify(propositions) === JSON.stringify(attendu))
     return true;
 
-  /* tolérance symétrie <-> dilatation */
+  /* ================= TOLÉRANCES ================= */
 
   for(let i=0; i<attendu.length-1; i++){
 
     let a1 = attendu[i];
     let a2 = attendu[i+1];
 
-    /* si symétrie + déformation verticale */
+    /* ----- Vertical ----- */
     if(
       (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("verticale")) ||
       (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("verticale"))
     ){
-
       let copie = [...attendu];
       [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
 
-      if(propositions.join() === copie.join())
+      if(JSON.stringify(propositions) === JSON.stringify(copie))
         return true;
     }
 
-    /* idem horizontal */
+    /* ----- Horizontal ----- */
     if(
       (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("horizontal")) ||
       (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("horizontal"))
     ){
-
       let copie = [...attendu];
       [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
 
-      if(propositions.join() === copie.join())
+      if(JSON.stringify(propositions) === JSON.stringify(copie))
         return true;
     }
   }
 
   return false;
 }
+
 
 
 function afficherCorrectionAutomatique(){
