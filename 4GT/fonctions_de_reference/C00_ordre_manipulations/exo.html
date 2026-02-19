@@ -58,40 +58,44 @@ const fonctions = [
   {nom:"inverse", latex:"f(x)=\\frac{1}{x}"}
 ];
 
-  function appliquerFonction(flatex, interieur){
+ function appliquerFonction(flatex, interieur){
+
+  /* PUISSANCES → parenthèses nécessaires */
   if(flatex.includes("x^2"))
     return `(${interieur})^2`;
 
   if(flatex.includes("x^3"))
     return `(${interieur})^3`;
 
+  /* RACINE CARRÉE */
   if(flatex.includes("\\sqrt{x}")){
-  /* si l'intérieur est déjà une fraction, pas de parenthèses */
-  if(interieur.startsWith("\\frac"))
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
     return `\\sqrt{${interieur}}`;
-  else
-    return `\\sqrt{${interieur}}`;
-}
-
-  if(flatex.includes("\\sqrt[3]{x}"))
-    return `\\sqrt[3]{${interieur}}`;
-
-  if(flatex.includes("|x|"))
-    return `\\left|${interieur}\\right|`;
-
-if(flatex.includes("\\frac{1}{x}")){
-  /* enlever une paire de parenthèses inutiles */
-  let clean = interieur;
-
-  if(clean.startsWith("(") && clean.endsWith(")")){
-    clean = clean.slice(1,-1);
   }
 
-  return `\\frac{1}{${clean}}`;
+  /* RACINE CUBIQUE */
+  if(flatex.includes("\\sqrt[3]{x}")){
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
+    return `\\sqrt[3]{${interieur}}`;
+  }
+
+  /* VALEUR ABSOLUE */
+  if(flatex.includes("|x|")){
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
+    return `\\left|${interieur}\\right|`;
+  }
+
+  /* INVERSE */
+  if(flatex.includes("\\frac{1}{x}")){
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
+    return `\\frac{1}{${interieur}}`;
+  }
 }
 
-
-}
 
 
 /* ========================= Génération fractions ========================= */
