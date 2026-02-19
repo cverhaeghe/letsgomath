@@ -374,3 +374,24 @@ a {
         margin-top: 60px;
     }
 }
+
+/* ===================================== */
+/*   TAP MOBILE = ORANGE VIF FORCÉ       */
+/* ===================================== */
+
+/* supprime le gris iOS / Android */
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* compétence au tap */
+.liste-competences li a:active {
+  background-color: var(--peps) !important;
+  color: white !important;
+}
+
+/* pour Safari iOS */
+.liste-competences li a:focus {
+  background-color: var(--peps) !important;
+  color: white !important;
+}
