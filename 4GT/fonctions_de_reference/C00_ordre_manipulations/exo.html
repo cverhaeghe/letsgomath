@@ -136,6 +136,8 @@ let bonneReponse = [];
 
 function genererEquation(){
 
+  document.getElementById("zone-propositions").innerHTML = "";
+
   const f = randomChoice(fonctions);
 
   let h = Math.floor(Math.random()*6)-3;
@@ -337,6 +339,11 @@ if(k !== 1){
   /* Mélange */
   liste.sort(()=>Math.random()-0.5);
 
+  /* sécurité : s'il n'y a aucune transformation, on en met au moins une */
+if(liste.length === 0){
+  liste.push("Aucune transformation");
+}
+
   afficherChoix(liste);
 }
 
@@ -346,19 +353,31 @@ if(k !== 1){
 function afficherChoix(liste){
 
   const zone = document.getElementById("zone-propositions");
+
+  /* sécurité : si la zone n'existe pas */
+  if(!zone) return;
+
+  /* vider complètement */
   zone.innerHTML = "";
 
+  /* si aucune transformation (cas rare) */
+  if(liste.length === 0){
+    zone.innerHTML = "<i>Aucune transformation</i>";
+    return;
+  }
+
+  /* recréer toutes les cartes */
   liste.forEach((texte,i)=>{
     const div = document.createElement("div");
     div.className = "order-item";
     div.draggable = true;
-    div.dataset.index = i;
     div.textContent = texte;
     zone.appendChild(div);
   });
 
   activerDragDrop();
 }
+
 
 function activerDragDrop(){
 
