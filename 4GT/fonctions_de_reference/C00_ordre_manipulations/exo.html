@@ -493,13 +493,21 @@ function enableMobileSwap(){
     item.addEventListener("click", function(){
 
   /* 1er tap → sélection (orange vif) */
-  if(!selected){
-    selected = item;
-    item.classList.add("dragging");
-    item.style.backgroundColor = "var(--peps)";  // orange vif
-    item.style.color = "white";
-    return;
-  }
+if(!selected){
+
+  /* reset visuel de toutes les cartes */
+  document.querySelectorAll(".order-item").forEach(i=>{
+    i.style.backgroundColor = "";
+    i.style.color = "";
+  });
+
+  selected = item;
+  item.classList.add("dragging");
+  item.style.backgroundColor = "var(--peps)";   // ORANGE VIF
+  item.style.color = "white";
+  return;
+}
+
 
   /* 2e tap → échange */
   if(selected !== item){
