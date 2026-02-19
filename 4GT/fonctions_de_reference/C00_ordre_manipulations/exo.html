@@ -466,12 +466,11 @@ function activerDragDrop(){
 
   });
 
-  /* ===============================
-   DRAG TACTILE LONG PRESS (GSM)
-=============================== */
+  /* =============================== DRAG TACTILE LONG PRESS (GSM) =============================== */
 
 let touchTimer = null;
 let touchItem = null;
+let longPressActive = false;
 let offsetY = 0;
 
 document.addEventListener("touchstart", function(e){
@@ -480,9 +479,11 @@ document.addEventListener("touchstart", function(e){
   if(!target) return;
 
   touchItem = target;
+  longPressActive = false;
 
   touchTimer = setTimeout(()=>{
-    /* long press activé */
+    longPressActive = true;
+
     target.classList.add("dragging");
     target.style.backgroundColor = "var(--peps)";
     target.style.color = "white";
@@ -490,18 +491,25 @@ document.addEventListener("touchstart", function(e){
     const rect = target.getBoundingClientRect();
     offsetY = e.touches[0].clientY - rect.top;
 
-  }, 600);   // durée long press (ms)
+  }, 2000);   // 🔥 2 secondes
 
-}, {passive:false});
+}, {passive:true});
 
 
 document.addEventListener("touchmove", function(e){
 
-  if(!touchItem || !touchItem.classList.contains("dragging")) return;
+  if(!touchItem) return;
 
-  e.preventDefault();
+  /* si pas encore long press → on laisse scroller */
+  if(!longPressActive){
+    clearTimeout(touchTimer);
+    return;
+  }
+
+  e.preventDefault();   // bloque scroll uniquement APRES activation
 
   const y = e.touches[0].clientY - offsetY;
+
   touchItem.style.position = "fixed";
   touchItem.style.left = "50%";
   touchItem.style.transform = "translateX(-50%)";
@@ -517,7 +525,7 @@ document.addEventListener("touchend", function(e){
 
   if(!touchItem) return;
 
-  if(touchItem.classList.contains("dragging")){
+  if(longPressActive){
 
     const items = [...document.querySelectorAll(".order-item")];
     const touchY = e.changedTouches[0].clientY;
@@ -541,7 +549,7 @@ document.addEventListener("touchend", function(e){
     }
   }
 
-  /* reset */
+  /* reset visuel */
   if(touchItem){
     touchItem.classList.remove("dragging");
     touchItem.style.position = "";
@@ -554,8 +562,10 @@ document.addEventListener("touchend", function(e){
   }
 
   touchItem = null;
+  longPressActive = false;
 
-}, {passive:false});
+}, {passive:true});
+
 
   /* ================= MOBILE (tap → swap) ================= */
 
