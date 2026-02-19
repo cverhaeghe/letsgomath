@@ -195,28 +195,40 @@ if(historiqueFonctions.length > 2)
   let h = Math.floor(Math.random()*6)-3;
   let v = Math.floor(Math.random()*6)-3;
 
-  let k, s;
+ let k, s;
 
-/* choisir le type de transformation */
-if(Math.random() < 0.5){
-  /* cas transformation verticale */
-  k = randomK();
-  s = randomSign();   // ±1
-}
-else{
-  /* cas transformation horizontale */
+/* CAS FONCTION INVERSE */
+if(f.latex.includes("\\dfrac{1}{x}")){
 
-  if(f.latex.includes("\\dfrac{1}{x}")){
-    /* fonction inverse → pas de déformations horizontales */
-    const valeurs = [1,2,3];
-    s = randomSign() * randomChoice(valeurs);
+  const valeursKS = [1,2,3];
+
+  if(Math.random() < 0.5){
+    // transformation verticale
+    k = randomSign() * randomChoice(valeursKS);
+    s = randomSign();  // seulement ±1
   }
   else{
-    s = randomS();  // normal
+    // transformation horizontale
+    s = randomSign() * randomChoice(valeursKS);
+    k = randomSign();  // seulement ±1
   }
 
-  k = randomSign();   // ±1
 }
+
+/* CAS AUTRES FONCTIONS */
+else{
+
+  if(Math.random() < 0.5){
+    k = randomK();        // peut être 1/2, 1/3, 2, 3
+    s = randomSign();     // ±1
+  }
+  else{
+    s = randomS();        // peut être 1/2, 1/3, 2, 3
+    k = randomSign();     // ±1
+  }
+
+}
+
 
 
   if(s===0) s=1;
