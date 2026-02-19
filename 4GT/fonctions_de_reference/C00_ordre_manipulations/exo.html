@@ -188,12 +188,17 @@ let fonctionTransformee = appliquerFonction(f.latex, interieur);
 
 let expr = "";
 
+/* k = 1 → on n'affiche rien */
 if(k === 1){
   expr = `f(x)=${fonctionTransformee}`;
 }
+
+/* k = -1 → seulement le signe - */
 else if(k === -1){
   expr = `f(x)=-${fonctionTransformee}`;
 }
+
+/* fractions verticales */
 else if(k === 1/2){
   expr = `f(x)=\\frac{${fonctionTransformee}}{2}`;
 }
@@ -206,30 +211,17 @@ else if(k === 1/3){
 else if(k === -1/3){
   expr = `f(x)=-\\frac{${fonctionTransformee}}{3}`;
 }
+
+/* autres cas : 2 ou 3 */
 else{
   expr = `f(x)=${toLatex(k)}${fonctionTransformee}`;
-}
-
-if(k === 1/2){
-  expr = `f(x)=\\frac{${fonctionTransformee}}{2}`;
-}
-else if(k === -1/2){
-  expr = `f(x)=-\\frac{${fonctionTransformee}}{2}`;
-}
-else if(k === 1/3){
-  expr = `f(x)=\\frac{${fonctionTransformee}}{3}`;
-}
-else if(k === -1/3){
-  expr = `f(x)=-\\frac{${fonctionTransformee}}{3}`;
-}
-else{
-  expr = `f(x)=${toLatex(k)}\\,${fonctionTransformee}`;
 }
 
 /* translation verticale */
 if(v !== 0){
   expr += v>0 ? `+${v}` : `${v}`;
 }
+
 
 
 
