@@ -220,6 +220,18 @@
    =============================== */
 @media (max-width: 600px) {
 
+   @media (hover: hover) {
+  .competence-item:hover {
+    background-color: var(--peps);
+  }
+}
+
+   @media (hover: none) {
+  .competence-item:hover {
+    background: inherit !important;
+  }
+}
+
   .order-item:hover{
     background-color: var(--peps);
     color: white;
