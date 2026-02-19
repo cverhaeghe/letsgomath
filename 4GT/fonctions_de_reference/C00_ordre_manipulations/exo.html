@@ -56,7 +56,7 @@ const fonctions = [
   {nom:"racine carrée", latex:"f(x)=\\sqrt{x}"},
   {nom:"racine cubique", latex:"f(x)=\\sqrt[3]{x}"},
   {nom:"valeur absolue", latex:"f(x)=|x|"},
-  {nom:"inverse", latex:"f(x)=\\frac{1}{x}"}
+  {nom:"inverse", latex:"f(x)=\\dfrac{1}{x}"}
 ];
 
  function appliquerFonction(flatex, interieur){
@@ -93,7 +93,7 @@ const fonctions = [
   if(flatex.includes("\\dfrac{1}{x}")){
     if(interieur.startsWith("(") && interieur.endsWith(")"))
       interieur = interieur.slice(1,-1);
-    return `\\frac{1}{${interieur}}`;
+    return `\\dfrac{1}{${interieur}}`;
   }
 }
 
@@ -249,7 +249,7 @@ else{
       .replace("\\dfrac{1}{","")
       .slice(0,-1);   // enlève l'accolade finale
 
-    expr = `f(x)=\\frac{${toLatex(k)}}{${denom}}`;
+    expr = `f(x)=\\dfrac{${toLatex(k)}}{${denom}}`;
   }
   else{
     expr = `f(x)=${toLatex(k)}${fonctionTransformee}`;
