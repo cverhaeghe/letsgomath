@@ -526,20 +526,27 @@ function enableMobileSwap(){
 function verifier(){
 
   const items = document.querySelectorAll(".order-item");
-  items.forEach(i=>i.classList.remove("correct","wrong"));
+
+  /* reset couleurs */
+  items.forEach(i=>{
+    i.classList.remove("correct","wrong");
+  });
 
   let propositions = Array.from(items).map(i => i.textContent);
   let attendu = [...bonneReponse];
 
   let correct = comparerListes(propositions, attendu);
 
+  /* ================= BONNE RÉPONSE ================= */
   if(correct){
     items.forEach(i=>i.classList.add("correct"));
     return;
   }
 
+  /* ================= MAUVAISE RÉPONSE ================= */
   tentatives++;
 
+  /* coloration mais SANS bloquer le déplacement */
   items.forEach((item,i)=>{
     if(item.textContent === attendu[i])
       item.classList.add("correct");
@@ -547,10 +554,12 @@ function verifier(){
       item.classList.add("wrong");
   });
 
+  /* ================= 2e tentative → correction auto ================= */
   if(tentatives >= 2){
-    afficherCorrectionAutomatique();
+    setTimeout(afficherCorrectionAutomatique, 600);
   }
 }
+
 
   function comparerListes(propositions, attendu){
 
