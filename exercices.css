@@ -161,6 +161,46 @@
 }
 
 
+
+/* ===============================
+   Exercices : remettre dans l'ordre
+=============================== */
+
+.order-container{
+  max-width: 520px;
+  margin: 20px auto;
+}
+
+.order-item{
+  background: #f4f6fb;
+  border: 2px solid #cfd6ea;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 8px 0;
+  cursor: grab;
+  user-select: none;
+  transition: 0.15s;
+  font-weight: 500;
+}
+
+.order-item:hover{
+  background: #e8edfb;
+}
+
+.order-item.dragging{
+  opacity: 0.5;
+}
+
+.order-item.correct{
+  border-color: #2e7d32;
+  background: #e8f5e9;
+}
+
+.order-item.wrong{
+  border-color: #c62828;
+  background: #ffebee;
+}
+
 /* ===============================
    Ajustements GSM (petits écrans)
    =============================== */
