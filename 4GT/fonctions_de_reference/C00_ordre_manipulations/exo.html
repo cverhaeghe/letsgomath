@@ -50,6 +50,7 @@
 <script>
 /* ========================= Fonctions de référence ========================= */
 let tentatives = 0;
+let historiqueFonctions = [];
 
 const fonctions = [
   {nom:"carrée", latex:"f(x)=x^2"},
@@ -172,7 +173,24 @@ function genererEquation(){
 
   document.getElementById("zone-propositions").innerHTML = "";
 
-  const f = randomChoice(fonctions);
+let f;
+
+/* empêcher répétition sur 3 exos */
+do{
+  f = randomChoice(fonctions);
+}
+while(
+  historiqueFonctions.length >= 2 &&
+  (f.nom === historiqueFonctions[historiqueFonctions.length-1] ||
+   f.nom === historiqueFonctions[historiqueFonctions.length-2])
+);
+
+/* mémoriser */
+historiqueFonctions.push(f.nom);
+
+/* garder seulement les 2 dernières */
+if(historiqueFonctions.length > 2)
+  historiqueFonctions.shift();
 
   let h = Math.floor(Math.random()*6)-3;
   let v = Math.floor(Math.random()*6)-3;
