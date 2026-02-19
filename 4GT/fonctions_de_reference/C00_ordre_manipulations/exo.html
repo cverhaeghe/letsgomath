@@ -285,12 +285,15 @@ function genererTransformations(k,s,h,v){
   let liste = [];
 
   if(h!==0){
-    liste.push(
-      h>0 ?
-      `Translation horizontale de ${h} unités vers la droite`
-      :
-      `Translation horizontale de ${-h} unités vers la gauche`
-    );
+const hval = Math.abs(h);
+const uniteH = hval === 1 ? "unité" : "unités";
+
+liste.push(
+  h>0 ?
+  `Translation horizontale de ${hval} ${uniteH} vers la droite`
+  :
+  `Translation horizontale de ${hval} ${uniteH} vers la gauche`
+);
   }
 
 if(s !== 1){
@@ -329,12 +332,15 @@ if(k !== 1){
 
 
   if(v!==0){
-    liste.push(
-      v>0 ?
-      `Translation verticale de ${v} unités vers le haut`
-      :
-      `Translation verticale de ${-v} unités vers le bas`
-    );
+const vval = Math.abs(v);
+const uniteV = vval === 1 ? "unité" : "unités";
+
+liste.push(
+  v>0 ?
+  `Translation verticale de ${vval} ${uniteV} vers le haut`
+  :
+  `Translation verticale de ${vval} ${uniteV} vers le bas`
+);
   }
 
   bonneReponse = [...liste];
