@@ -466,31 +466,78 @@ function echanger(a, b){
 function verifier(){
 
   const items = document.querySelectorAll(".order-item");
-
   items.forEach(i=>i.classList.remove("correct","wrong"));
 
-  let correct = true;
+  let propositions = Array.from(items).map(i => i.textContent);
+  let attendu = [...bonneReponse];
 
-  items.forEach((item,i)=>{
-    if(item.textContent === bonneReponse[i])
-      item.classList.add("correct");
-    else{
-      item.classList.add("wrong");
-      correct = false;
-    }
-  });
+  let correct = comparerListes(propositions, attendu);
 
   if(correct){
+    items.forEach(i=>i.classList.add("correct"));
     return;
   }
 
   tentatives++;
 
-  /* après 2 erreurs → correction automatique */
+  items.forEach((item,i)=>{
+    if(item.textContent === attendu[i])
+      item.classList.add("correct");
+    else
+      item.classList.add("wrong");
+  });
+
   if(tentatives >= 2){
     afficherCorrectionAutomatique();
   }
 }
+
+  function comparerListes(propositions, attendu){
+
+  if(propositions.length !== attendu.length)
+    return false;
+
+  /* comparaison stricte */
+  if(propositions.join() === attendu.join())
+    return true;
+
+  /* tolérance symétrie <-> dilatation */
+
+  for(let i=0; i<attendu.length-1; i++){
+
+    let a1 = attendu[i];
+    let a2 = attendu[i+1];
+
+    /* si symétrie + déformation verticale */
+    if(
+      (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("verticale")) ||
+      (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("verticale"))
+    ){
+
+      let copie = [...attendu];
+      [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
+
+      if(propositions.join() === copie.join())
+        return true;
+    }
+
+    /* idem horizontal */
+    if(
+      (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("horizontal")) ||
+      (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("horizontal"))
+    ){
+
+      let copie = [...attendu];
+      [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
+
+      if(propositions.join() === copie.join())
+        return true;
+    }
+  }
+
+  return false;
+}
+
 
 function afficherCorrectionAutomatique(){
 
