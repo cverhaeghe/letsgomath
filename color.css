@@ -58,34 +58,13 @@ h1{
 
 
 /* ===============================
-   HOVER UNIQUEMENT SUR PC
+   HOVER (PC + GSM)
    =============================== */
 
-@media (hover: hover){
-
-  .qcm-card:hover,
-  .order-item:hover,
-  .competence-item:hover,
-  button:hover{
-    background-color: var(--peps) !important;
-    color: white !important;
-  }
-
-}
-
-
-/* ===============================
-   PAS DE HOVER SUR GSM
-   =============================== */
-
-@media (hover: none){
-
-  .qcm-card:hover,
-  .order-item:hover,
-  .competence-item:hover,
-  button:hover{
-    background: inherit !important;
-    color: inherit !important;
-  }
-
+.qcm-card:hover,
+.order-item:hover,
+.competence-item:hover,
+button:hover{
+  background-color: var(--peps);
+  color: white;
 }
