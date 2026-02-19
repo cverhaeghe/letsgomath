@@ -265,6 +265,22 @@ footer {
 }
 
 
+/* =============================== */
+/*   TAP / CLICK MOBILE = ORANGE   */
+/* =============================== */
+
+/* Supprime le gris mobile par défaut */
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Quand on touche / clique un lien (GSM) */
+.liste-competences li a:active,
+.liste-competences li a:focus {
+  background-color: var(--peps);
+  color: white;
+}
+
 
 /* ============================= */
 /*           Responsive          */
