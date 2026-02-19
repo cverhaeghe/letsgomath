@@ -301,12 +301,11 @@ if(s !== 1){
     if(svaleur === 2 || svaleur === 3){
         liste.push(`Compression horizontale de facteur ${svaleur}`);
     }
-    else if(valeur === 1/2 || valeur === 1/3){
-        liste.push(`Étirement horizontal de facteur ${svaleur}`);
-    }
+    else if(svaleur === 0.5 || svaleur === 1/3){
+    const sfacteur = 1 / svaleur;   // inverse
+    liste.push(`Étirement horizontal de facteur ${sfacteur}`);
 }
-
-
+}
   
 if(k !== 1){
 
@@ -319,8 +318,9 @@ if(k !== 1){
     if(kvaleur === 2 || kvaleur === 3){
         liste.push(`Étirement vertical de facteur ${kvaleur}`);
     }
-    else if(kvaleur === 1/2 || kvaleur === 1/3){
-        liste.push(`Compression verticale de facteur ${kvaleur}`);
+    else if(kvaleur === 0.5 || kvaleur === 1/3){
+        const kfacteur = 1 / kvaleur;   // inverse
+        liste.push(`Compression verticale de facteur ${kfacteur}`);
     }
 }
 
