@@ -449,14 +449,10 @@ function afficherChoix(liste){
     zone.appendChild(div);
   });
 
-  activerDragDrop();
+  enableMobileSwap();
+
 }
 
-
-function activerDragDrop(){
-
-  const items = document.querySelectorAll(".order-item");
-  let dragged = null;
 
 
   /* =============================== MODE MOBILE : TAP → SWAP =============================== */
