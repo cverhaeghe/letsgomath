@@ -170,7 +170,7 @@ let bonneReponse = [];
 function genererEquation(){
 
   tentatives = 0;
-
+  document.querySelector(".center-button button").disabled = false;
   document.getElementById("zone-propositions").innerHTML = "";
 
 let f;
@@ -457,6 +457,17 @@ function afficherChoix(liste){
 
   /* =============================== MODE MOBILE : TAP → SWAP =============================== */
 
+function echanger(a, b){
+
+  const parent = a.parentNode;
+
+  const aNext = a.nextSibling === b ? a : a.nextSibling;
+
+  parent.insertBefore(a, b);
+  parent.insertBefore(b, aNext);
+}
+
+  
 function enableMobileSwap(){
 
   if (window.matchMedia("(hover: hover)").matches) return;
