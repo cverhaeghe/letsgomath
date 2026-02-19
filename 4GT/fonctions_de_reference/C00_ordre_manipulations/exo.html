@@ -195,8 +195,13 @@ else if(s === -1/3)
 
 
 /* autres cas */
-else
-  interieur = `${toLatex(s)}(${base})`;
+else{
+  if(base === "x")
+    interieur = `${toLatex(s)}x`;
+  else
+    interieur = `${toLatex(s)}${base}`;
+}
+
 
 
 let fonctionTransformee = appliquerFonction(f.latex, interieur);
