@@ -185,6 +185,7 @@
   margin: 10px auto;           /* centré comme QCM */
   border: none;
   transition: background-color 0.2s ease, transform 0.1s ease;
+  touch-action: none;
 }
 
 
