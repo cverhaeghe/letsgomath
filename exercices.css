@@ -184,8 +184,11 @@
 }
 
 .order-item:hover{
-  background: #e8edfb;
+  background-color: var(--peps);  /* même orange que QCM */
+  color: white;                   /* texte blanc comme QCM */
+  border-color: var(--peps);
 }
+
 
 .order-item.dragging{
   opacity: 0.5;
