@@ -221,9 +221,9 @@
 @media (max-width: 600px) {
 
   .order-item:hover{
-    background: inherit !important;
-    color: inherit !important;
-    border-color: #cfd6ea !important;
+    background-color: var(--peps);
+    color: white;
+    border-color: var(--peps);
   }
 
   /* Énoncé plus compact */
