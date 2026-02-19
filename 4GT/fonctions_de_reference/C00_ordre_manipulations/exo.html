@@ -145,6 +145,27 @@ function toLatex(n){
 
 let bonneReponse = [];
 
+  function compterTransformations(k,s,h,v){
+
+  let count = 0;
+
+  if(h !== 0) count++;
+  if(v !== 0) count++;
+
+  if(s !== 1){
+    count++;                 // déformation horizontale
+    if(s < 0) count++;       // symétrie y
+  }
+
+  if(k !== 1){
+    count++;                 // déformation verticale
+    if(k < 0) count++;       // symétrie x
+  }
+
+  return count;
+}
+
+  
 function genererEquation(){
 
   tentatives = 0;
@@ -183,6 +204,22 @@ else{
   if(s===0) s=1;
   if(k===0) k=1;
 
+/* forcer au moins 2 transformations */
+while(compterTransformations(k,s,h,v) < 2){
+
+  h = Math.floor(Math.random()*6)-3;
+  v = Math.floor(Math.random()*6)-3;
+
+  if(Math.random() < 0.5){
+    k = randomK();
+    s = randomSign();
+  }
+  else{
+    s = randomS();
+    k = randomSign();
+  }
+}
+  
   /* Expression latex */
 let base = "";
 
