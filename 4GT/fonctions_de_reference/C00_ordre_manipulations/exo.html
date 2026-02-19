@@ -146,9 +146,19 @@ if(Math.random() < 0.5){
 }
 else{
   /* cas transformation horizontale */
-  s = randomS();
+
+  if(f.latex.includes("\\frac{1}{x}")){
+    /* fonction inverse → pas de déformations horizontales */
+    const valeurs = [1,2,3];
+    s = randomSign() * randomChoice(valeurs);
+  }
+  else{
+    s = randomS();  // normal
+  }
+
   k = randomSign();   // ±1
 }
+
 
   if(s===0) s=1;
   if(k===0) k=1;
