@@ -62,12 +62,22 @@ const fonctions = [
 
  function appliquerFonction(flatex, interieur){
 
-  /* PUISSANCES → parenthèses nécessaires */
-  if(flatex.includes("x^2"))
+/* PUISSANCE 2 */
+if(flatex.includes("x^2")){
+  if(interieur.startsWith("(") && interieur.endsWith(")"))
+    return `${interieur}^2`;
+  else
     return `(${interieur})^2`;
+}
 
-  if(flatex.includes("x^3"))
+/* PUISSANCE 3 */
+if(flatex.includes("x^3")){
+  if(interieur.startsWith("(") && interieur.endsWith(")"))
+    return `${interieur}^3`;
+  else
     return `(${interieur})^3`;
+}
+
 
   /* RACINE CARRÉE */
   if(flatex.includes("\\sqrt{x}")){
