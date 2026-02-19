@@ -314,40 +314,97 @@ function genererTransformations(k,s,h,v){
 /* =========================   Affichage (ordre à choisir) ========================= */
 
 function afficherChoix(liste){
-  let html = "<ol>";
-  liste.forEach((t,i)=>{
-    html += `<li><input type="text" id="rep${i}" placeholder="Position"> ${t}</li>`;
+
+  const zone = document.getElementById("zone-propositions");
+  zone.innerHTML = "";
+
+  liste.forEach((texte,i)=>{
+    const div = document.createElement("div");
+    div.className = "order-item";
+    div.draggable = true;
+    div.dataset.index = i;
+    div.textContent = texte;
+    zone.appendChild(div);
   });
-  html += "</ol>";
-  document.getElementById("feedback").innerHTML = html;
+
+  activerDragDrop();
+}
+
+function activerDragDrop(){
+
+  const items = document.querySelectorAll(".order-item");
+  let dragged = null;
+
+  items.forEach(item=>{
+
+    item.addEventListener("dragstart", ()=>{
+      dragged = item;
+      item.classList.add("dragging");
+    });
+
+    item.addEventListener("dragend", ()=>{
+      item.classList.remove("dragging");
+    });
+
+    item.addEventListener("dragover", e=>{
+      e.preventDefault();
+    });
+
+    item.addEventListener("drop", e=>{
+      e.preventDefault();
+      if(dragged !== item){
+        const parent = item.parentNode;
+        const children = Array.from(parent.children);
+        const draggedIndex = children.indexOf(dragged);
+        const targetIndex = children.indexOf(item);
+
+        if(draggedIndex < targetIndex)
+          parent.insertBefore(dragged, item.nextSibling);
+        else
+          parent.insertBefore(dragged, item);
+      }
+    });
+  });
 }
 
 
 /* ========================= Vérification ========================= */
 
 function verifier(){
+
+  const items = document.querySelectorAll(".order-item");
+
+  items.forEach(i=>i.classList.remove("correct","wrong"));
+
   let correct = true;
 
-  for(let i=0;i<bonneReponse.length;i++){
-    let pos = document.getElementById("rep"+i).value;
-    if(bonneReponse[pos-1] !== bonneReponse[i]){
-      correct=false;
+  items.forEach((item,i)=>{
+    if(item.textContent === bonneReponse[i])
+      item.classList.add("correct");
+    else{
+      item.classList.add("wrong");
+      correct = false;
     }
-  }
+  });
 }
+
 
 
 /* ========================= Solution ========================= */
 
 function corriger(){
-  let html = "<br><b>Ordre correct :</b><ol>";
-  bonneReponse.forEach(t=>{
-    html += `<li>${t}</li>`;
-  });
-  html += "</ol>";
 
-  document.getElementById("feedback").innerHTML += html;
+  const zone = document.getElementById("zone-propositions");
+  zone.innerHTML = "";
+
+  bonneReponse.forEach(t=>{
+    const div = document.createElement("div");
+    div.className = "order-item correct";
+    div.textContent = t;
+    zone.appendChild(div);
+  });
 }
+
 
 
 /* ======================== Génération initiale ========================= */
