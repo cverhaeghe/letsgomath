@@ -450,6 +450,8 @@ function afficherChoix(liste){
   });
 
   activerDragDrop();
+  enableTouchDrag();
+
 }
 
 
@@ -486,103 +488,98 @@ function activerDragDrop(){
 
   /* =============================== DRAG TACTILE LONG PRESS (GSM) =============================== */
 
-let touchTimer = null;
-let touchItem = null;
-let longPressActive = false;
-let offsetY = 0;
+/* ======================================
+   DRAG & DROP TACTILE STABLE (GSM)
+====================================== */
 
-document.addEventListener("touchstart", function(e){
+let activeItem = null;
+let startY = 0;
+let currentY = 0;
+let longPressTimer = null;
+let isDragging = false;
 
-  const target = e.target.closest(".order-item");
-  if(!target) return;
+function enableTouchDrag() {
 
-  touchItem = target;
-  longPressActive = false;
+  const items = document.querySelectorAll(".order-item");
 
-  touchTimer = setTimeout(()=>{
-    longPressActive = true;
+  items.forEach(item => {
 
-    target.classList.add("dragging");
-    target.style.backgroundColor = "var(--peps)";
-    target.style.color = "white";
+    item.addEventListener("touchstart", (e) => {
 
-    const rect = target.getBoundingClientRect();
-    offsetY = e.touches[0].clientY - rect.top;
+      if (isDragging) return;
 
-  }, 2000);   // 🔥 2 secondes
+      activeItem = item;
+      startY = e.touches[0].clientY;
 
-}, {passive:true});
+      longPressTimer = setTimeout(() => {
+        isDragging = true;
+        item.classList.add("dragging");
+        item.style.backgroundColor = "var(--peps)";
+        item.style.color = "white";
+        item.style.position = "relative";
+        item.style.zIndex = "1000";
+      }, 800);   // ⬅ 800ms = naturel mobile
 
+    }, { passive: true });
 
-document.addEventListener("touchmove", function(e){
+  });
 
-  if(!touchItem) return;
+  document.addEventListener("touchmove", (e) => {
 
-  /* si pas encore long press → on laisse scroller */
-  if(!longPressActive){
-    clearTimeout(touchTimer);
-    return;
-  }
+    if (!isDragging || !activeItem) return;
 
-  e.preventDefault();   // bloque scroll uniquement APRES activation
+    e.preventDefault();
 
-  const y = e.touches[0].clientY - offsetY;
+    currentY = e.touches[0].clientY;
+    let delta = currentY - startY;
 
-  touchItem.style.position = "fixed";
-  touchItem.style.left = "50%";
-  touchItem.style.transform = "translateX(-50%)";
-  touchItem.style.top = y + "px";
-  touchItem.style.zIndex = 1000;
+    activeItem.style.transform = `translateY(${delta}px)`;
 
-}, {passive:false});
+  }, { passive: false });
 
+  document.addEventListener("touchend", (e) => {
 
-document.addEventListener("touchend", function(e){
+    clearTimeout(longPressTimer);
 
-  clearTimeout(touchTimer);
-
-  if(!touchItem) return;
-
-  if(longPressActive){
+    if (!isDragging || !activeItem) {
+      activeItem = null;
+      return;
+    }
 
     const items = [...document.querySelectorAll(".order-item")];
-    const touchY = e.changedTouches[0].clientY;
 
     let closest = null;
-    let minDist = Infinity;
+    let minDistance = Infinity;
 
-    items.forEach(item=>{
-      if(item === touchItem) return;
+    items.forEach(item => {
+      if (item === activeItem) return;
+
       const rect = item.getBoundingClientRect();
-      const center = rect.top + rect.height/2;
-      const dist = Math.abs(center - touchY);
-      if(dist < minDist){
-        minDist = dist;
+      const center = rect.top + rect.height / 2;
+      const distance = Math.abs(center - currentY);
+
+      if (distance < minDistance) {
+        minDistance = distance;
         closest = item;
       }
     });
 
-    if(closest){
-      echanger(touchItem, closest);
+    if (closest) {
+      echanger(activeItem, closest);
     }
-  }
 
-  /* reset visuel */
-  if(touchItem){
-    touchItem.classList.remove("dragging");
-    touchItem.style.position = "";
-    touchItem.style.top = "";
-    touchItem.style.left = "";
-    touchItem.style.transform = "";
-    touchItem.style.zIndex = "";
-    touchItem.style.backgroundColor = "";
-    touchItem.style.color = "";
-  }
+    /* reset */
+    activeItem.classList.remove("dragging");
+    activeItem.style.transform = "";
+    activeItem.style.backgroundColor = "";
+    activeItem.style.color = "";
+    activeItem.style.zIndex = "";
+    activeItem = null;
+    isDragging = false;
 
-  touchItem = null;
-  longPressActive = false;
+  }, { passive: true });
+}
 
-}, {passive:true});
 
 
   /* ================= MOBILE (tap → swap) ================= */
