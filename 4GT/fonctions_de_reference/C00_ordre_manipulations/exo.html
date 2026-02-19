@@ -492,26 +492,27 @@ function enableMobileSwap(){
 
     item.addEventListener("click", function(){
 
-      /* 1er tap */
-      if(!selected){
-        selected = item;
-        item.classList.add("dragging");
-        item.style.backgroundColor = "var(--peps)";
-        item.style.color = "white";
-        return;
-      }
+  /* 1er tap → sélection (orange vif) */
+  if(!selected){
+    selected = item;
+    item.classList.add("dragging");
+    item.style.backgroundColor = "var(--peps)";  // orange vif
+    item.style.color = "white";
+    return;
+  }
 
-      /* 2e tap */
-      if(selected !== item){
-        echanger(selected, item);
-      }
+  /* 2e tap → échange */
+  if(selected !== item){
+    echanger(selected, item);
+  }
 
-      /* reset */
-      selected.classList.remove("dragging");
-      selected.style.backgroundColor = "";
-      selected.style.color = "";
-      selected = null;
-    });
+  /* reset → retour au bleu */
+  selected.classList.remove("dragging");
+  selected.style.backgroundColor = "";   // 🔥 supprime orange
+  selected.style.color = "";
+  selected = null;
+});
+
 
   });
 }
