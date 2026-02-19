@@ -419,6 +419,97 @@ function activerDragDrop(){
 
   });
 
+  /* ===============================
+   DRAG TACTILE LONG PRESS (GSM)
+=============================== */
+
+let touchTimer = null;
+let touchItem = null;
+let offsetY = 0;
+
+document.addEventListener("touchstart", function(e){
+
+  const target = e.target.closest(".order-item");
+  if(!target) return;
+
+  touchItem = target;
+
+  touchTimer = setTimeout(()=>{
+    /* long press activé */
+    target.classList.add("dragging");
+    target.style.backgroundColor = "var(--peps)";
+    target.style.color = "white";
+
+    const rect = target.getBoundingClientRect();
+    offsetY = e.touches[0].clientY - rect.top;
+
+  }, 600);   // durée long press (ms)
+
+}, {passive:false});
+
+
+document.addEventListener("touchmove", function(e){
+
+  if(!touchItem || !touchItem.classList.contains("dragging")) return;
+
+  e.preventDefault();
+
+  const y = e.touches[0].clientY - offsetY;
+  touchItem.style.position = "fixed";
+  touchItem.style.left = "50%";
+  touchItem.style.transform = "translateX(-50%)";
+  touchItem.style.top = y + "px";
+  touchItem.style.zIndex = 1000;
+
+}, {passive:false});
+
+
+document.addEventListener("touchend", function(e){
+
+  clearTimeout(touchTimer);
+
+  if(!touchItem) return;
+
+  if(touchItem.classList.contains("dragging")){
+
+    const items = [...document.querySelectorAll(".order-item")];
+    const touchY = e.changedTouches[0].clientY;
+
+    let closest = null;
+    let minDist = Infinity;
+
+    items.forEach(item=>{
+      if(item === touchItem) return;
+      const rect = item.getBoundingClientRect();
+      const center = rect.top + rect.height/2;
+      const dist = Math.abs(center - touchY);
+      if(dist < minDist){
+        minDist = dist;
+        closest = item;
+      }
+    });
+
+    if(closest){
+      echanger(touchItem, closest);
+    }
+  }
+
+  /* reset */
+  if(touchItem){
+    touchItem.classList.remove("dragging");
+    touchItem.style.position = "";
+    touchItem.style.top = "";
+    touchItem.style.left = "";
+    touchItem.style.transform = "";
+    touchItem.style.zIndex = "";
+    touchItem.style.backgroundColor = "";
+    touchItem.style.color = "";
+  }
+
+  touchItem = null;
+
+}, {passive:false});
+
   /* ================= MOBILE (tap → swap) ================= */
 
   let selected = null;
