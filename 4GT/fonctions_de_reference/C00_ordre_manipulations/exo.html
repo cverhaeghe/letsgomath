@@ -64,19 +64,14 @@ const fonctions = [
 
 /* PUISSANCE 2 */
 if(flatex.includes("x^2")){
-  if(interieur.startsWith("(") && interieur.endsWith(")"))
-    return `${interieur}^2`;
-  else
-    return `(${interieur})^2`;
+  return `\\left(${interieur}\\right)^2`;
 }
 
 /* PUISSANCE 3 */
 if(flatex.includes("x^3")){
-  if(interieur.startsWith("(") && interieur.endsWith(")"))
-    return `${interieur}^3`;
-  else
-    return `(${interieur})^3`;
+  return `\\left(${interieur}\\right)^3`;
 }
+
 
 
   /* RACINE CARRÉE */
