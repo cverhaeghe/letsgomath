@@ -581,9 +581,12 @@ function verifier(){
   const items = document.querySelectorAll(".order-item");
 
   /* reset couleurs */
-  items.forEach(i=>{
-    i.classList.remove("correct","wrong");
-  });
+items.forEach(i=>{
+  i.classList.remove("correct","wrong","dragging");
+  i.style.backgroundColor = "";
+  i.style.color = "";
+});
+
 
   let propositions = Array.from(items).map(i => i.textContent);
   let attendu = [...bonneReponse];
