@@ -464,7 +464,8 @@ function afficherChoix(liste){
     zone.appendChild(div);
   });
 
-  enableMobileSwap();
+enableMobileSwap();
+enableDesktopDragDrop();
 
 }
 
@@ -529,6 +530,47 @@ if(!selected){
 }
 
 
+/* =============================== DRAG & DROP PC =============================== */
+
+function enableDesktopDragDrop(){
+
+  if (!window.matchMedia("(hover: hover)").matches) return;
+  // uniquement PC (souris)
+
+  const items = document.querySelectorAll(".order-item");
+  let dragged = null;
+
+  items.forEach(item=>{
+
+    item.addEventListener("dragstart", ()=>{
+      dragged = item;
+      item.classList.add("dragging");
+    });
+
+    item.addEventListener("dragend", ()=>{
+      item.classList.remove("dragging");
+    });
+
+    item.addEventListener("dragover", e=>{
+      e.preventDefault();
+    });
+
+    item.addEventListener("drop", e=>{
+      e.preventDefault();
+      if(dragged !== item){
+        const parent = item.parentNode;
+        const children = Array.from(parent.children);
+        const draggedIndex = children.indexOf(dragged);
+        const targetIndex = children.indexOf(item);
+
+        if(draggedIndex < targetIndex)
+          parent.insertBefore(dragged, item.nextSibling);
+        else
+          parent.insertBefore(dragged, item);
+      }
+    });
+  });
+}
 
 
 
