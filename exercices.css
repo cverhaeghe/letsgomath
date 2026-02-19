@@ -220,6 +220,13 @@
    =============================== */
 @media (max-width: 600px) {
 
+  .order-item:hover{
+    background-color: var(--peps);
+    color: white;
+    border-color: var(--peps);
+  }
+
+
   /* Énoncé plus compact */
   #enonce {
     margin-bottom: 6px;
