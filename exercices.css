@@ -172,16 +172,21 @@
 }
 
 .order-item{
-  background: #f4f6fb;
-  border: 2px solid #cfd6ea;
-  border-radius: 10px;
-  padding: 10px 14px;
-  margin: 8px 0;
+  background-color: #dce6f9;   /* même fond que QCM */
+  color: #3a4a7a;              /* même texte */
+  padding: 30px 25px;          /* même taille carte */
+  font-size: 1.2rem;           /* même texte */
+  font-weight: normal;
+  border-radius: 15px;         /* même arrondi */
+  text-align: center;
   cursor: grab;
-  user-select: none;
-  transition: 0.15s;
-  font-weight: 500;
+  width: 100%;
+  max-width: 320px;            /* même largeur */
+  margin: 10px auto;           /* centré comme QCM */
+  border: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
+
 
 .order-item:hover{
   background-color: var(--peps);  /* même orange que QCM */
