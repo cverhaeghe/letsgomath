@@ -199,15 +199,20 @@
   opacity: 0.5;
 }
 
+/* mêmes couleurs que QCM */
+
 .order-item.correct{
-  border-color: #2e7d32;
-  background: #e8f5e9;
+  background-color: #b9e6b9;   /* même vert QCM */
+  color: #2e3b30;
+  border: none;
 }
 
 .order-item.wrong{
-  border-color: #c62828;
-  background: #ffebee;
+  background-color: #f7b0b0;   /* même rouge QCM */
+  color: #6b1a1a;
+  border: none;
 }
+
 
 /* ===============================
    Ajustements GSM (petits écrans)
