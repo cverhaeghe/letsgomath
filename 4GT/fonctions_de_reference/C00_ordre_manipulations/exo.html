@@ -49,6 +49,7 @@
 
 <script>
 /* ========================= Fonctions de référence ========================= */
+let tentatives = 0;
 
 const fonctions = [
   {nom:"carrée", latex:"f(x)=x^2"},
@@ -135,6 +136,8 @@ function toLatex(n){
 let bonneReponse = [];
 
 function genererEquation(){
+
+  tentatives = 0;
 
   document.getElementById("zone-propositions").innerHTML = "";
 
@@ -470,6 +473,34 @@ function verifier(){
       correct = false;
     }
   });
+
+  if(correct){
+    return;
+  }
+
+  tentatives++;
+
+  /* après 2 erreurs → correction automatique */
+  if(tentatives >= 2){
+    afficherCorrectionAutomatique();
+  }
+}
+
+function afficherCorrectionAutomatique(){
+
+  const zone = document.getElementById("zone-propositions");
+  zone.innerHTML = "";
+
+  bonneReponse.forEach(t=>{
+    const div = document.createElement("div");
+    div.className = "order-item correct";
+    div.textContent = t;
+    zone.appendChild(div);
+  });
+
+  /* désactiver le bouton Valider */
+  const boutons = document.querySelectorAll(".center-button button");
+  boutons[0].disabled = true; // bouton Valider
 }
 
 
