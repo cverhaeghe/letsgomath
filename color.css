@@ -68,3 +68,13 @@ button:hover{
   background-color: var(--peps);
   color: white;
 }
+
+/* Effet tactile (clic / tap) */
+.order-item:active,
+.qcm-card:active,
+.competence-item:active,
+button:active{
+  background-color: var(--peps);
+  color: white;
+}
+
