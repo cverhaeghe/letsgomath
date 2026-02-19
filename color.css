@@ -1,29 +1,91 @@
-html{
-    background-color:white;
+/* ===============================
+   COULEURS GLOBALES – LET'S GO MATH
+   =============================== */
+
+/* Couleur principale du site */
+:root{
+  --peps: #f36f21;          /* ORANGE OFFICIEL */
+  --bleu-site: #6b78b8;
+  --fond-clair: whitesmoke;
+  --texte-fonce: #3a4a7a;
+  --vert-ok: #b9e6b9;
+  --rouge-ko: #f7b0b0;
 }
 
-header {
-    background-color: whitesmoke;
-    }
+/* Supprime le flash orange/bleu tactile sur GSM */
+*{
+  -webkit-tap-highlight-color: transparent;
+}
 
-.math{
-    color:rgb(220, 193, 143);
+
+/* ===============================
+   BASE PAGE
+   =============================== */
+
+html{
+  background-color: white;
+}
+
+header{
+  background-color: var(--fond-clair);
 }
 
 nav{
-    background-color: whitesmoke;
-    }
-
-
-.couleur-claire{color:#c9ecdf;}
-.couleur-fonce{color: cadetblue}
-
-h1 {        
-    color: cadetblue;
-    background-color: whitesmoke;
+  background-color: var(--fond-clair);
 }
 
 footer{
-    color:grey;
-    padding: 1px;
+  color: grey;
+  padding: 1px;
+}
+
+
+/* ===============================
+   TEXTE & TITRES
+   =============================== */
+
+h1{
+  color: cadetblue;
+  background-color: var(--fond-clair);
+}
+
+.math{
+  color: rgb(220,193,143);
+}
+
+.couleur-claire{ color:#c9ecdf; }
+.couleur-fonce{ color: cadetblue; }
+
+
+/* ===============================
+   HOVER UNIQUEMENT SUR PC
+   =============================== */
+
+@media (hover: hover){
+
+  .qcm-card:hover,
+  .order-item:hover,
+  .competence-item:hover,
+  button:hover{
+    background-color: var(--peps) !important;
+    color: white !important;
+  }
+
+}
+
+
+/* ===============================
+   PAS DE HOVER SUR GSM
+   =============================== */
+
+@media (hover: none){
+
+  .qcm-card:hover,
+  .order-item:hover,
+  .competence-item:hover,
+  button:hover{
+    background: inherit !important;
+    color: inherit !important;
+  }
+
 }
