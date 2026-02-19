@@ -384,6 +384,8 @@ function activerDragDrop(){
   const items = document.querySelectorAll(".order-item");
   let dragged = null;
 
+  /* ================= DESKTOP (drag classique) ================= */
+
   items.forEach(item=>{
 
     item.addEventListener("dragstart", ()=>{
@@ -402,19 +404,52 @@ function activerDragDrop(){
     item.addEventListener("drop", e=>{
       e.preventDefault();
       if(dragged !== item){
-        const parent = item.parentNode;
-        const children = Array.from(parent.children);
-        const draggedIndex = children.indexOf(dragged);
-        const targetIndex = children.indexOf(item);
-
-        if(draggedIndex < targetIndex)
-          parent.insertBefore(dragged, item.nextSibling);
-        else
-          parent.insertBefore(dragged, item);
+        echanger(dragged, item);
       }
     });
+
+  });
+
+  /* ================= MOBILE (tap → swap) ================= */
+
+  let selected = null;
+
+  items.forEach(item=>{
+
+    item.addEventListener("click", ()=>{
+
+      /* premier tap */
+      if(!selected){
+        selected = item;
+        item.style.backgroundColor = "var(--peps)";
+        item.style.color = "white";
+        return;
+      }
+
+      /* deuxième tap → échange */
+      if(selected !== item){
+        echanger(selected, item);
+      }
+
+      /* reset */
+      selected.style.backgroundColor = "";
+      selected.style.color = "";
+      selected = null;
+
+    });
+
   });
 }
+
+
+/* échange de deux cartes */
+function echanger(a, b){
+  const parent = a.parentNode;
+  const aNext = a.nextSibling === b ? a : a.nextSibling;
+  parent.insertBefore(a, b);
+  parent.insertBefore(b, aNext);
+}
+
 
 
 /* ========================= Vérification ========================= */
