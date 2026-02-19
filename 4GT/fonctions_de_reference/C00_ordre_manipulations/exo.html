@@ -90,7 +90,7 @@ const fonctions = [
   }
 
   /* INVERSE */
-  if(flatex.includes("\\frac{1}{x}")){
+  if(flatex.includes("\\dfrac{1}{x}")){
     if(interieur.startsWith("(") && interieur.endsWith(")"))
       interieur = interieur.slice(1,-1);
     return `\\frac{1}{${interieur}}`;
@@ -124,8 +124,8 @@ function toLatex(n){
   if(n===0) return "0";
   if(n===1) return "1";
   if(n===-1) return "-1";
-  if(Math.abs(n)===0.5) return (n<0?"-":"")+"\\frac{1}{2}";
-  if(Math.abs(n)===1/3) return (n<0?"-":"")+"\\frac{1}{3}";
+  if(Math.abs(n)===0.5) return (n<0?"-":"")+"\\dfrac{1}{2}";
+  if(Math.abs(n)===1/3) return (n<0?"-":"")+"\\dfrac{1}{3}";
   return n.toString();
 }
 
@@ -152,7 +152,7 @@ if(Math.random() < 0.5){
 else{
   /* cas transformation horizontale */
 
-  if(f.latex.includes("\\frac{1}{x}")){
+  if(f.latex.includes("\\dfrac{1}{x}")){
     /* fonction inverse → pas de déformations horizontales */
     const valeurs = [1,2,3];
     s = randomSign() * randomChoice(valeurs);
@@ -187,16 +187,16 @@ else if(s === -1)
 
 /* cas fractions horizontales sans parenthèses inutiles */
 else if(s === 1/2)
-  interieur = `\\frac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
+  interieur = `\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
 
 else if(s === -1/2)
-  interieur = `-\\frac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
+  interieur = `-\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
 
 else if(s === 1/3)
-  interieur = `\\frac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
+  interieur = `\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
 
 else if(s === -1/3)
-  interieur = `-\\frac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
+  interieur = `-\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
 
 
 /* autres cas */
@@ -225,26 +225,26 @@ else if(k === -1){
 
 /* fractions verticales */
 else if(k === 1/2){
-  expr = `f(x)=\\frac{${fonctionTransformee}}{2}`;
+  expr = `f(x)=\\dfrac{${fonctionTransformee}}{2}`;
 }
 else if(k === -1/2){
-  expr = `f(x)=-\\frac{${fonctionTransformee}}{2}`;
+  expr = `f(x)=-\\dfrac{${fonctionTransformee}}{2}`;
 }
 else if(k === 1/3){
-  expr = `f(x)=\\frac{${fonctionTransformee}}{3}`;
+  expr = `f(x)=\\dfrac{${fonctionTransformee}}{3}`;
 }
 else if(k === -1/3){
-  expr = `f(x)=-\\frac{${fonctionTransformee}}{3}`;
+  expr = `f(x)=-\\dfrac{${fonctionTransformee}}{3}`;
 }
 
 /* cas k = 2 ou 3 */
 else{
 
   /* écriture spéciale pour la fonction inverse */
-  if(f.latex.includes("\\frac{1}{x}")){
+  if(f.latex.includes("\\dfrac{1}{x}")){
     
     let denom = fonctionTransformee
-      .replace("\\frac{1}{","")
+      .replace("\\dfrac{1}{","")
       .slice(0,-1);   // enlève l'accolade finale
 
     expr = `f(x)=\\frac{${toLatex(k)}}{${denom}}`;
@@ -282,36 +282,53 @@ function genererTransformations(k,s,h,v){
   if(h!==0){
     liste.push(
       h>0 ?
-      `Translation horizontale de ${h} vers la droite`
+      `Translation horizontale de ${h} unités vers la droite`
       :
-      `Translation horizontale de ${-h} vers la gauche`
+      `Translation horizontale de ${-h} unités vers la gauche`
     );
   }
 
-  if(s!==1){
-    if(s>0){
-      liste.push(`Dilatation horizontale de facteur ${1/Math.abs(s)}`);
-    }else{
-      liste.push(`Symétrie par rapport à l'axe des ordonnées`);
-      liste.push(`Dilatation horizontale de facteur ${1/Math.abs(s)}`);
-    }
-  }
+if(s !== 1){
 
-  if(k!==1){
-    if(k>0){
-      liste.push(`Dilatation verticale de facteur ${Math.abs(k)}`);
-    }else{
-      liste.push(`Symétrie par rapport à l'axe des abscisses`);
-      liste.push(`Dilatation verticale de facteur ${Math.abs(k)}`);
+    if(s < 0){
+        liste.push(`Symétrie orthogonale d'axe y`);
     }
-  }
+
+    const svaleur = Math.abs(s);
+
+    if(svaleur === 2 || svaleur === 3){
+        liste.push(`Compression horizontale de facteur ${svaleur}`);
+    }
+    else if(valeur === 0.5 || valeur === 1/3){
+        liste.push(`Étirement horizontal de facteur ${svaleur}`);
+    }
+}
+
+
+  
+if(k !== 1){
+
+    if(k < 0){
+        liste.push(`Symétrie orthogonale d'axe x`);
+    }
+
+    const kvaleur = Math.abs(k);
+
+    if(kvaleur === 2 || kvaleur === 3){
+        liste.push(`Étirement vertical de facteur ${kvaleur}`);
+    }
+    else if(valeur === 0.5 || valeur === 1/3){
+        liste.push(`Compression verticale de facteur ${kvaleur}`);
+    }
+}
+
 
   if(v!==0){
     liste.push(
       v>0 ?
-      `Translation verticale de ${v} vers le haut`
+      `Translation verticale de ${v} unités vers le haut`
       :
-      `Translation verticale de ${-v} vers le bas`
+      `Translation verticale de ${-v} unités vers le bas`
     );
   }
 
