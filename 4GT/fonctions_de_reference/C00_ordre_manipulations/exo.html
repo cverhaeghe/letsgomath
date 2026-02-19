@@ -122,10 +122,42 @@ function genererEquation(){
   if(k===0) k=1;
 
   /* Expression latex */
-let interieur = `${toLatex(s)}(x${h>=0?"-"+h:"+"+(-h)})`;
+let interieur = "";
+
+if(s === 1)
+  interieur = `(x${h>=0?"-"+h:"+"+(-h)})`;
+
+else if(s === -1)
+  interieur = `-(x${h>=0?"-"+h:"+"+(-h)})`;
+
+else
+  interieur = `${toLatex(s)}(x${h>=0?"-"+h:"+"+(-h)})`;
+
 let fonctionTransformee = appliquerFonction(f.latex, interieur);
 
 let expr = "";
+
+if(k === 1){
+  expr = `g(x)=${fonctionTransformee}`;
+}
+else if(k === -1){
+  expr = `g(x)=-${fonctionTransformee}`;
+}
+else if(k === 1/2){
+  expr = `g(x)=\\frac{${fonctionTransformee}}{2}`;
+}
+else if(k === -1/2){
+  expr = `g(x)=-\\frac{${fonctionTransformee}}{2}`;
+}
+else if(k === 1/3){
+  expr = `g(x)=\\frac{${fonctionTransformee}}{3}`;
+}
+else if(k === -1/3){
+  expr = `g(x)=-\\frac{${fonctionTransformee}}{3}`;
+}
+else{
+  expr = `g(x)=${toLatex(k)}${fonctionTransformee}`;
+}
 
 if(k === 1/2){
   expr = `g(x)=\\frac{${fonctionTransformee}}{2}`;
