@@ -80,11 +80,16 @@ const fonctions = [
     return `\\left|${interieur}\\right|`;
 
 if(flatex.includes("\\frac{1}{x}")){
-  if(interieur === "x")
-    return `\\frac{1}{x}`;
-  else
-    return `\\frac{1}{${interieur}}`;
+  /* enlever une paire de parenthèses inutiles */
+  let clean = interieur;
+
+  if(clean.startsWith("(") && clean.endsWith(")")){
+    clean = clean.slice(1,-1);
+  }
+
+  return `\\frac{1}{${clean}}`;
 }
+
 
 }
 
