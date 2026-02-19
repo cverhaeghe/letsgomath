@@ -450,8 +450,6 @@ function afficherChoix(liste){
   });
 
   activerDragDrop();
-  enableTouchDrag();
-
 }
 
 
@@ -460,167 +458,46 @@ function activerDragDrop(){
   const items = document.querySelectorAll(".order-item");
   let dragged = null;
 
-  /* ================= DESKTOP (drag classique) ================= */
 
-  items.forEach(item=>{
+  /* =============================== MODE MOBILE : TAP → SWAP =============================== */
 
-    item.addEventListener("dragstart", ()=>{
-      dragged = item;
-      item.classList.add("dragging");
-    });
+function enableMobileSwap(){
 
-    item.addEventListener("dragend", ()=>{
-      item.classList.remove("dragging");
-    });
-
-    item.addEventListener("dragover", e=>{
-      e.preventDefault();
-    });
-
-    item.addEventListener("drop", e=>{
-      e.preventDefault();
-      if(dragged !== item){
-        echanger(dragged, item);
-      }
-    });
-
-  });
-
-  /* =============================== DRAG TACTILE LONG PRESS (GSM) =============================== */
-
-/* ======================================
-   DRAG & DROP TACTILE STABLE (GSM)
-====================================== */
-
-let activeItem = null;
-let startY = 0;
-let currentY = 0;
-let longPressTimer = null;
-let isDragging = false;
-
-function enableTouchDrag() {
+  if (window.matchMedia("(hover: hover)").matches) return;
+  // uniquement mobile (pas souris)
 
   const items = document.querySelectorAll(".order-item");
+  let selected = null;
 
   items.forEach(item => {
 
-    item.addEventListener("touchstart", (e) => {
+    item.addEventListener("click", function(){
 
-      if (isDragging) return;
-
-      activeItem = item;
-      startY = e.touches[0].clientY;
-
-      longPressTimer = setTimeout(() => {
-        isDragging = true;
-        item.classList.add("dragging");
-        item.style.backgroundColor = "var(--peps)";
-        item.style.color = "white";
-        item.style.position = "relative";
-        item.style.zIndex = "1000";
-      }, 800);   // ⬅ 800ms = naturel mobile
-
-    }, { passive: true });
-
-  });
-
-  document.addEventListener("touchmove", (e) => {
-
-    if (!isDragging || !activeItem) return;
-
-    e.preventDefault();
-
-    currentY = e.touches[0].clientY;
-    let delta = currentY - startY;
-
-    activeItem.style.transform = `translateY(${delta}px)`;
-
-  }, { passive: false });
-
-  document.addEventListener("touchend", (e) => {
-
-    clearTimeout(longPressTimer);
-
-    if (!isDragging || !activeItem) {
-      activeItem = null;
-      return;
-    }
-
-    const items = [...document.querySelectorAll(".order-item")];
-
-    let closest = null;
-    let minDistance = Infinity;
-
-    items.forEach(item => {
-      if (item === activeItem) return;
-
-      const rect = item.getBoundingClientRect();
-      const center = rect.top + rect.height / 2;
-      const distance = Math.abs(center - currentY);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        closest = item;
-      }
-    });
-
-    if (closest) {
-      echanger(activeItem, closest);
-    }
-
-    /* reset */
-    activeItem.classList.remove("dragging");
-    activeItem.style.transform = "";
-    activeItem.style.backgroundColor = "";
-    activeItem.style.color = "";
-    activeItem.style.zIndex = "";
-    activeItem = null;
-    isDragging = false;
-
-  }, { passive: true });
-}
-
-
-
-  /* ================= MOBILE (tap → swap) ================= */
-
-  let selected = null;
-
-  items.forEach(item=>{
-
-    item.addEventListener("click", ()=>{
-
-      /* premier tap */
+      /* 1er tap */
       if(!selected){
         selected = item;
+        item.classList.add("dragging");
         item.style.backgroundColor = "var(--peps)";
         item.style.color = "white";
         return;
       }
 
-      /* deuxième tap → échange */
+      /* 2e tap */
       if(selected !== item){
         echanger(selected, item);
       }
 
       /* reset */
+      selected.classList.remove("dragging");
       selected.style.backgroundColor = "";
       selected.style.color = "";
       selected = null;
-
     });
 
   });
 }
 
 
-/* échange de deux cartes */
-function echanger(a, b){
-  const parent = a.parentNode;
-  const aNext = a.nextSibling === b ? a : a.nextSibling;
-  parent.insertBefore(a, b);
-  parent.insertBefore(b, aNext);
-}
 
 
 
