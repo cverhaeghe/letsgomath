@@ -361,17 +361,7 @@ function genererTransformations(k,s,h,v){
 
   let liste = [];
 
-  if(h!==0){
-const hval = Math.abs(h);
-const uniteH = hval === 1 ? "unité" : "unités";
 
-liste.push(
-  h>0 ?
-  `Translation horizontale de ${hval} ${uniteH} vers la droite`
-  :
-  `Translation horizontale de ${hval} ${uniteH} vers la gauche`
-);
-  }
 
 if(s !== 1){
 
@@ -389,6 +379,19 @@ if(s !== 1){
     liste.push(`Étirement horizontal de facteur ${sfacteur}`);
 }
 }
+
+if(h!==0){
+const hval = Math.abs(h);
+const uniteH = hval === 1 ? "unité" : "unités";
+
+liste.push(
+  h>0 ?
+  `Translation horizontale de ${hval} ${uniteH} vers la droite`
+  :
+  `Translation horizontale de ${hval} ${uniteH} vers la gauche`
+);
+  }
+
   
 if(k !== 1){
 
