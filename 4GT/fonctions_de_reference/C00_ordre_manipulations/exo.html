@@ -122,16 +122,33 @@ function genererEquation(){
   if(k===0) k=1;
 
   /* Expression latex */
+let base = `(x${h>=0?"-"+h:"+"+(-h)})`;
 let interieur = "";
 
+/* cas s = 1 ou -1 */
 if(s === 1)
-  interieur = `(x${h>=0?"-"+h:"+"+(-h)})`;
+  interieur = base;
 
 else if(s === -1)
-  interieur = `-(x${h>=0?"-"+h:"+"+(-h)})`;
+  interieur = `-${base}`;
 
+/* cas fractions horizontales */
+else if(s === 1/2)
+  interieur = `\\frac{${base}}{2}`;
+
+else if(s === -1/2)
+  interieur = `-\\frac{${base}}{2}`;
+
+else if(s === 1/3)
+  interieur = `\\frac{${base}}{3}`;
+
+else if(s === -1/3)
+  interieur = `-\\frac{${base}}{3}`;
+
+/* autres cas */
 else
-  interieur = `${toLatex(s)}(x${h>=0?"-"+h:"+"+(-h)})`;
+  interieur = `${toLatex(s)}${base}`;
+
 
 let fonctionTransformee = appliquerFonction(f.latex, interieur);
 
