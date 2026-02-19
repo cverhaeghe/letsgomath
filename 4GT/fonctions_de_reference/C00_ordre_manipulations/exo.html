@@ -74,8 +74,13 @@ const fonctions = [
   if(flatex.includes("|x|"))
     return `\\left|${interieur}\\right|`;
 
-  if(flatex.includes("\\frac{1}{x}"))
+if(flatex.includes("\\frac{1}{x}")){
+  if(interieur === "x")
+    return `\\frac{1}{x}`;
+  else
     return `\\frac{1}{${interieur}}`;
+}
+
 }
 
 
@@ -122,7 +127,13 @@ function genererEquation(){
   if(k===0) k=1;
 
   /* Expression latex */
-let base = `x${h>=0?"-"+h:"+"+(-h)}`;
+let base = "";
+
+if(h === 0)
+  base = "x";
+else
+  base = `(x${h>0?"-"+h:"+"+(-h)})`;
+
 let interieur = "";
 
 /* cas s = 1 ou -1 */
@@ -196,6 +207,7 @@ else{
 if(v !== 0){
   expr += v>0 ? `+${v}` : `${v}`;
 }
+
 
 
   document.getElementById("equation").innerHTML =
