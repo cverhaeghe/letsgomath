@@ -249,18 +249,19 @@ if (typeEquation === "absolue") {
     if (Math.random() < 0.5) {
 
       const nonZero = entiers.filter(x => x !== 0);
-      const b = nonZero[Math.floor(Math.random()*nonZero.length)];
-      const oao = a*Math.abs(x - r);
+    const b = nonZero[Math.floor(Math.random()*nonZero.length)];
+const oao = a*Math.abs(r) + b;
 
 if (
   oao >= -3 && oao <= 3 &&
   oao !== r
-) {        return {
-          f: x => a*Math.abs(x - r),
-          racines: [],
-          oao: oao
-        };
-      }
+) {        
+  return {
+    f: x => a*Math.abs(x - r) + b,
+    racines: [],
+    oao: oao
+  };
+}
 
     } else {
 
