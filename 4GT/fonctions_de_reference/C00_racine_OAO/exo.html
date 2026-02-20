@@ -175,39 +175,62 @@ function tirerTypeQuestion() {
 
 
 
-  
+  function genererFonction() {
 
-function genererQCMCarree(h, v) {
+  const entiers = [-3,-2,-1,1,2,3];
 
-  const propositions = [
-    { label: `\\mathbb{R}`, correct: false },
-    { label: `\\left[ ${h}, +\\infty \\right[`, correct: false },
-    { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
-    { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
-    { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
-  ];
+  // ---------- QUADRATIQUE ----------
+  if (typeEquation === "quadratique") {
 
-// -------- Bonne réponse --------
-let bonne;
+    const a  = entiers[Math.floor(Math.random()*entiers.length)];
+    const r1 = entiers[Math.floor(Math.random()*entiers.length)];
+    const r2 = entiers[Math.floor(Math.random()*entiers.length)];
 
-if (typeQuestion === "racine") {
-  bonne = `\\mathbb{R}`;
-} else {
-  bonne = ky === 1
-    ? `\\left[ ${v}, +\\infty \\right[`
-    : `\\left] -\\infty, ${v} \\right]`;
+    return {
+      f: x => a*(x-r1)*(x-r2),
+      racines: [r1, r2],
+      oao: a*r1*r2
+    };
+  }
+
+  // ---------- CUBIQUE ----------
+  if (typeEquation === "cubique") {
+
+    const a = entiers[Math.floor(Math.random()*entiers.length)];
+    const r = entiers[Math.floor(Math.random()*entiers.length)];
+
+    return {
+      f: x => a*(x-r)*(x*x+1),
+      racines: [r],
+      oao: -a*r
+    };
+  }
+
+  // ---------- VALEUR ABSOLUE ----------
+  if (typeEquation === "absolue") {
+
+    const a = entiers[Math.floor(Math.random()*entiers.length)];
+    const r = entiers[Math.floor(Math.random()*entiers.length)];
+
+    // Si question RACINE → on force b=0
+    if (typeQuestion === "racine") {
+      return {
+        f: x => a*Math.abs(x-r),
+        racines: [r],
+        oao: a*Math.abs(r)
+      };
+    }
+
+    // Sinon b quelconque entier
+    const b = entiers[Math.floor(Math.random()*entiers.length)];
+
+    return {
+      f: x => a*Math.abs(x-r)+b,
+      racines: [],
+      oao: a*Math.abs(r)+b
+    };
+  }
 }
-
-const bonneProp = propositions.find(p => p.label === bonne);
-if (bonneProp) bonneProp.correct = true;
-
-
-
-  return melanger(propositions);
-}
-
-
-
 
 
 
@@ -283,144 +306,20 @@ qcm.appendChild(card);
 
 MathJax.typesetPromise();
 }
+
   
 function genererQCM(type, h, v) {
-  switch (type) {
-    case "carrée":
-      return genererQCMCarree(h, v);
-    case "racine":
-      return genererQCMRacine(h, v);
-    case "inverse":
-      return genererQCMInverse(h, v);
-    default:
-      return [];
-  }
+typeEquation = tirerTypeFonction();
+
+const obj = genererFonction();
+const f = obj.f;
+
+tracerCourbe(f);
 }
 
 
 
 
-function surlignerAxe(borne, axe, typeFonction) {
-
-  // ---- CAS INVERSE : racine = R \ {h} ----
-  if (axe === "x" && typeFonction === "inverse") {
-    svg.innerHTML += `
-      <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
-            x2="${xToPx(xmax)}" y2="${yToPx(0)}"
-            stroke="#2b6cff" stroke-width="5"/>
-      <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
-              r="6" fill="white"
-              stroke="#2b6cff" stroke-width="3"/>
-    `;
-    return;
-  }
-
-if (axe === "y" && typeFonction === "inverse") {
-
-  // axe y entier
-  svg.innerHTML += `
-    <line x1="${xToPx(0)}" y1="${yToPx(ymin)}"
-          x2="${xToPx(0)}" y2="${yToPx(ymax)}"
-          stroke="#2b6cff" stroke-width="5"/>
-  `;
-
-  // point creux en y = v
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
-            r="6"
-            fill="white"
-            stroke="#2b6cff"
-            stroke-width="3"/>
-  `;
-  return;
-}
-
- // 🔧 REMPLACER ENTIÈREMENT LE CAS "carrée" DANS surlignerAxe PAR CE QUI SUIT
-
-// ---- CARRÉE : DOMAINE = ℝ ----
-if (axe === "x" && typeFonction === "carrée") {
-
-  svg.innerHTML += `
-    <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
-          x2="${xToPx(xmax)}" y2="${yToPx(0)}"
-          stroke="#2b6cff" stroke-width="5"/>
-  `;
-  return;
-}
-
-// ---- CARRÉE : IMAGE ----
-if (axe === "y" && typeFonction === "carrée") {
-
-  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymin);
-  const y2 = ky === 1 ? yToPx(ymax)  : yToPx(borne);
-
-  svg.innerHTML += `
-    <line x1="${xToPx(0)}" y1="${y1}"
-          x2="${xToPx(0)}" y2="${y2}"
-          stroke="#2b6cff" stroke-width="5"/>
-  `;
-
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
-            r="6"
-            fill="#2b6cff"
-            stroke="#2b6cff"
-            stroke-width="3"/>
-  `;
-  return;
-}
-
-  
-  // ---- CAS RACINE  ----
-
-if (axe === "x" && typeFonction === "racine") {
-
-  const x1 = ky === 1 ? xToPx(borne) : xToPx(xmin);
-  const x2 = ky === 1 ? xToPx(xmax)  : xToPx(borne);
-
-  // segment bleu sur l’axe des x
-  svg.innerHTML += `
-    <line x1="${x1}" y1="${yToPx(0)}"
-          x2="${x2}" y2="${yToPx(0)}"
-          stroke="#2b6cff" stroke-width="5"/>
-  `;
-
-  // boule pleine en x = h
-  svg.innerHTML += `
-    <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
-            r="6"
-            fill="#2b6cff"
-            stroke="#2b6cff"
-            stroke-width="3"/>
-  `;
-  return;
-}
-
-if (axe === "y" && typeFonction === "racine") {
-
-  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymin);
-  const y2 = ky === 1 ? yToPx(ymax)  : yToPx(borne);
-
-  // segment bleu correct sur l’axe y
-  svg.innerHTML += `
-    <line x1="${xToPx(0)}" y1="${y1}"
-          x2="${xToPx(0)}" y2="${y2}"
-          stroke="#2b6cff" stroke-width="5"/>
-  `;
-
-  // boule pleine en y = v
-  svg.innerHTML += `
-    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
-            r="6"
-            fill="#2b6cff"
-            stroke="#2b6cff"
-            stroke-width="3"/>
-  `;
-  return;
-}
-
-
-}
 
 
 
@@ -453,35 +352,12 @@ tirerKxKy();
 let qcm; // ✅ UNE SEULE DÉCLARATION
 
 
-switch (typeEquation) {
+typeEquation = tirerTypeFonction();
 
+const obj = genererFonction();
+const f = obj.f;
 
-case "carrée":
-svg.innerHTML += `
-<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
-`;
-tracerCourbe(fonctionTranslatee(x => x * x));
-break;
-
-
-case "racine":
-const fRacine = fonctionTranslatee(Math.sqrt);
-tracerCourbe(x => {
-  return ky * (x - h) >= 0 ? fRacine(x) : NaN;
-});
-tracerPoint(h,v);    
-break;
-
-
-case "inverse":
-tracerAsymptotesInverse(h, v);
-const fInverse = fonctionTranslatee(x => 1 / x);
-tracerCourbe(x =>
-  Math.abs(x - h) < 0.1 ? NaN : fInverse(x)
-);
-
-break;
-}
+tracerCourbe(f);
 
 
 // ✅ QCM généré UNE FOIS, APRÈS le switch
@@ -492,7 +368,20 @@ afficherQCM(qcm);
 
 /* ====================== VERIFICATION ====================== */
 
+function calculerReponse(obj) {
 
+  if (typeQuestion === "oao")
+    return obj.oao;
+
+  if (typeQuestion === "racine") {
+
+    // si plusieurs racines → on peut en choisir une
+    if (obj.racines.length > 0)
+      return obj.racines[Math.floor(Math.random()*obj.racines.length)];
+
+    return "aucune";
+  }
+}
 
 
 // Générer le premier exercice au chargement
