@@ -256,7 +256,7 @@ if (
   oao >= -3 && oao <= 3 &&
   oao !== r
 ) {        return {
-          f: x => a*Math.abs(x - r) + b,
+          f: x => a*Math.abs(x - r),
           racines: [],
           oao: oao
         };
@@ -272,8 +272,8 @@ if (
   oao !== r
 ) {
   return {
-    f: x => a*Math.abs(x - r) + b,
-    racines: [],
+    f: x => a*Math.abs(x - r),
+    racines: [r],
     oao: oao
   };
 }
