@@ -367,41 +367,38 @@ const nbBonnes = (typeQuestion === "racine")
 function genererQCM(obj) {
 
   const reponses = [];
+  const valeurs = [-3, -2, -1, 0, 1, 2, 3];
 
-  let bonne = "none";
+  // 🔒 Toutes les bonnes réponses (racines distinctes)
+  let bonnes = [];
 
-  // ---------- OAO ----------
   if (typeQuestion === "oao") {
     if (isFinite(obj.oao) && obj.oao >= -3 && obj.oao <= 3) {
-      bonne = obj.oao;
+      bonnes = [obj.oao];
     }
   }
 
-  // ---------- RACINES ----------
   else if (typeQuestion === "racine") {
-    if (obj.racines.length > 0) {
-      bonne = obj.racines[0];
-    }
+    bonnes = [...new Set(obj.racines)]
+      .filter(r => r >= -3 && r <= 3);
   }
-
-  // Valeurs proposées
-  const valeurs = [-3, -2, -1, 0, 1, 2, 3];
 
   valeurs.forEach(v => {
     reponses.push({
       label: v,
-      correct: v === bonne
+      correct: bonnes.includes(v)
     });
   });
 
-  // Toujours afficher "Y en a pas"
   reponses.push({
     label: "\\text{Y en a pas}",
-    correct: bonne === "none"
+    correct: bonnes.length === 0
   });
 
   return reponses;
 }
+
+    
   
 /* ====================== GENERATION ====================== */
 
