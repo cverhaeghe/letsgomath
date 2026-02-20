@@ -303,17 +303,13 @@ function genererQCM(obj) {
   const reponses = [];
 
   let bonne;
-  let aucuneRacine = false;
 
   if (typeQuestion === "oao") {
     bonne = obj.oao;
   } else {
-    if (obj.racines.length === 0) {
-      bonne = "none";
-      aucuneRacine = true;
-    } else {
-      bonne = obj.racines[0];
-    }
+    bonne = obj.racines.length > 0
+      ? obj.racines[0]
+      : "none";
   }
 
   const valeurs = [-3, -2, -1, 0, 1, 2, 3];
@@ -325,18 +321,16 @@ function genererQCM(obj) {
     });
   });
 
-  // ➕ "Y en a pas" seulement si nécessaire
-  if (typeQuestion === "racine" && aucuneRacine) {
+  // ✅ Toujours afficher "Y en a pas" pour question racine
+  if (typeQuestion === "racine") {
     reponses.push({
       label: "\\text{Y en a pas}",
-      correct: true
+      correct: bonne === "none"
     });
   }
 
   return reponses;
 }
-
-
 
   
 /* ====================== GENERATION ====================== */
