@@ -83,6 +83,9 @@ if(flatex.includes("x^2")){
   if(expr.startsWith("((") && expr.endsWith("))"))
     expr = expr.slice(1,-1);
 
+  if(expr.startsWith("(") && expr.endsWith(")"))
+  expr = expr.slice(1,-1);
+  
   return `\\left(${expr}\\right)^2`;
 }
 
@@ -94,6 +97,9 @@ if(flatex.includes("x^3")){
   if(expr.startsWith("((") && expr.endsWith("))"))
     expr = expr.slice(1,-1);
 
+  if(expr.startsWith("(") && expr.endsWith(")"))
+  expr = expr.slice(1,-1);
+  
   return `\\left(${expr}\\right)^3`;
 }
 
