@@ -264,16 +264,19 @@ if (
 
     } else {
 
-      // 50% : UNE racine
-      const oao = a*Math.abs(r);
+// 50% : UNE racine
+const oao = a*Math.abs(r);
 
-      if (oao >= -3 && oao <= 3) {
-        return {
-          f: x => a*Math.abs(x - r),
-          racines: [r],
-          oao: oao
-        };
-      }
+if (
+  oao >= -3 && oao <= 3 &&
+  oao !== r
+) {
+  return {
+    f: x => a*Math.abs(x - r) + b,
+    racines: [],
+    oao: oao
+  };
+}
     }
   }
 
