@@ -190,64 +190,81 @@ function tirerTypeQuestion() {
 }
 
 
-
-  function genererFonction() {
+function genererFonction() {
 
   const entiers = [-3,-2,-1,1,2,3];
 
-  // ---------- QUADRATIQUE ----------
-  if (typeEquation === "quadratique") {
+  while (true) {
 
-    const a  = entiers[Math.floor(Math.random()*entiers.length)];
-    const r1 = entiers[Math.floor(Math.random()*entiers.length)];
-    const r2 = entiers[Math.floor(Math.random()*entiers.length)];
+    // ---------- QUADRATIQUE ----------
+    if (typeEquation === "quadratique") {
 
-    return {
-      f: x => a*(x-r1)*(x-r2),
-      racines: [r1, r2],
-      oao: a*r1*r2
-    };
-  }
+      const a  = entiers[Math.floor(Math.random()*entiers.length)];
+      const r1 = entiers[Math.floor(Math.random()*entiers.length)];
+      const r2 = entiers[Math.floor(Math.random()*entiers.length)];
 
-  // ---------- CUBIQUE ----------
-  if (typeEquation === "cubique") {
+      const oao = a*r1*r2;
 
-    const a = entiers[Math.floor(Math.random()*entiers.length)];
-    const r = entiers[Math.floor(Math.random()*entiers.length)];
-
-    return {
-      f: x => a*(x-r)*(x*x+1),
-      racines: [r],
-      oao: -a*r
-    };
-  }
-
-  // ---------- VALEUR ABSOLUE ----------
-  if (typeEquation === "absolue") {
-
-    const a = entiers[Math.floor(Math.random()*entiers.length)];
-    const r = entiers[Math.floor(Math.random()*entiers.length)];
-
-    // Si question RACINE → on force b=0
-    if (typeQuestion === "racine") {
-      return {
-        f: x => a*Math.abs(x-r),
-        racines: [r],
-        oao: a*Math.abs(r)
-      };
+      if (oao >= -3 && oao <= 3) {
+        return {
+          f: x => a*(x-r1)*(x-r2),
+          racines: [r1, r2],
+          oao: oao
+        };
+      }
     }
 
-    // Sinon b quelconque entier
-    const b = entiers[Math.floor(Math.random()*entiers.length)];
+    // ---------- CUBIQUE ----------
+    if (typeEquation === "cubique") {
 
-    return {
-      f: x => a*Math.abs(x-r)+b,
-      racines: [],
-      oao: a*Math.abs(r)+b
-    };
+      const a = entiers[Math.floor(Math.random()*entiers.length)];
+      const r = entiers[Math.floor(Math.random()*entiers.length)];
+
+      const oao = -a*r;
+
+      if (oao >= -3 && oao <= 3) {
+        return {
+          f: x => a*(x-r)*(x*x+1),
+          racines: [r],
+          oao: oao
+        };
+      }
+    }
+
+    // ---------- VALEUR ABSOLUE ----------
+    if (typeEquation === "absolue") {
+
+      const a = entiers[Math.floor(Math.random()*entiers.length)];
+      const r = entiers[Math.floor(Math.random()*entiers.length)];
+
+      // RACINE
+      if (typeQuestion === "racine") {
+        const oao = a*Math.abs(r);
+        if (oao >= -3 && oao <= 3) {
+          return {
+            f: x => a*Math.abs(x-r),
+            racines: [r],
+            oao: oao
+          };
+        }
+      }
+
+      // OAO
+      else {
+        const b = entiers[Math.floor(Math.random()*entiers.length)];
+        const oao = a*Math.abs(r)+b;
+
+        if (oao >= -3 && oao <= 3) {
+          return {
+            f: x => a*Math.abs(x-r)+b,
+            racines: [],
+            oao: oao
+          };
+        }
+      }
+    }
   }
 }
-
 
 function afficherQCM(propositions, obj) {
 
