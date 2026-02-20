@@ -271,8 +271,11 @@ function afficherQCM(propositions, obj) {
   const qcm = document.getElementById("qcm");
   qcm.innerHTML = "";
 
-  let dejaClique = false;
-  let bonneCarte = null;
+  const nbBonnes = (typeQuestion === "racine") ? obj.racines.length : 1;
+
+  let bonnesCartes = [];
+  let bonnesCliquees = 0;
+  let fini = false;
 
   propositions.forEach(p => {
 
@@ -280,38 +283,52 @@ function afficherQCM(propositions, obj) {
     card.className = "qcm-card";
     card.innerHTML = `\\(${p.label}\\)`;
 
-    if (p.correct) {
-      bonneCarte = card;
-    }
+    if (p.correct) bonnesCartes.push(card);
 
     card.onclick = () => {
 
-      if (dejaClique) return;
-      dejaClique = true;
+      if (fini) return;
 
-      // ---------- BONNE RÉPONSE ----------
+      // ---------- BONNE ----------
       if (p.correct) {
-        card.classList.add("correct");
 
-        // 👉 Afficher racines + OAO
-        afficherPointsImportants(obj);
-      }
+        // déjà cliquée → rien
+        if (card.classList.contains("temp-correct")) return;
 
-      // ---------- MAUVAISE RÉPONSE ----------
-      else {
-        card.classList.add("incorrect");
+        card.classList.add("temp-correct"); // orange provisoire
+        bonnesCliquees++;
 
-        if (bonneCarte) {
-          bonneCarte.classList.add("correct");
+        // Toutes trouvées
+        if (bonnesCliquees === nbBonnes) {
 
-          // 👉 Afficher racines + OAO
+          bonnesCartes.forEach(c => {
+            c.classList.remove("temp-correct");
+            c.classList.add("correct"); // vert final
+          });
+
           afficherPointsImportants(obj);
+          fini = true;
         }
       }
 
-      // 🚫 blocage total
-      document.querySelectorAll(".qcm-card")
-        .forEach(c => c.style.pointerEvents = "none");
+      // ---------- MAUVAISE ----------
+      else {
+
+        card.classList.add("incorrect");
+
+        bonnesCartes.forEach(c => {
+          c.classList.remove("temp-correct");
+          c.classList.add("correct");
+        });
+
+        afficherPointsImportants(obj);
+        fini = true;
+      }
+
+      if (fini) {
+        document.querySelectorAll(".qcm-card")
+          .forEach(c => c.style.pointerEvents = "none");
+      }
     };
 
     qcm.appendChild(card);
