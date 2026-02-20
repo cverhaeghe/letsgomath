@@ -273,9 +273,10 @@ function afficherQCM(propositions, obj) {
 
   const nbBonnes = (typeQuestion === "racine") ? obj.racines.length : 1;
 
-  let bonnesCartes = [];
   let bonnesCliquees = 0;
   let fini = false;
+
+  let bonnesCartes = [];
 
   propositions.forEach(p => {
 
@@ -283,19 +284,27 @@ function afficherQCM(propositions, obj) {
     card.className = "qcm-card";
     card.innerHTML = `\\(${p.label}\\)`;
 
-    if (p.correct) bonnesCartes.push(card);
+    // 🔒 On stocke l'info directement sur la carte
+    if (p.correct) {
+      card.dataset.correct = "1";
+      bonnesCartes.push(card);
+    } else {
+      card.dataset.correct = "0";
+    }
 
     card.onclick = () => {
 
       if (fini) return;
 
+      const estBonne = card.dataset.correct === "1";
+
       // ---------- BONNE ----------
-      if (p.correct) {
+      if (estBonne) {
 
-        // déjà cliquée → rien
-        if (card.classList.contains("temp-correct")) return;
+        if (card.classList.contains("temp-correct") ||
+            card.classList.contains("correct")) return;
 
-        card.classList.add("temp-correct"); // orange provisoire
+        card.classList.add("temp-correct");
         bonnesCliquees++;
 
         // Toutes trouvées
@@ -303,7 +312,7 @@ function afficherQCM(propositions, obj) {
 
           bonnesCartes.forEach(c => {
             c.classList.remove("temp-correct");
-            c.classList.add("correct"); // vert final
+            c.classList.add("correct");
           });
 
           afficherPointsImportants(obj);
@@ -336,7 +345,6 @@ function afficherQCM(propositions, obj) {
 
   MathJax.typesetPromise();
 }
-  
   
 function genererQCM(obj) {
 
