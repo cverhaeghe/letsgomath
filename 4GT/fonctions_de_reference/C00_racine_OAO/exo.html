@@ -265,12 +265,20 @@ if (
     } else {
 
 // 50% : UNE racine
-const oao = a*Math.abs(r);
+let aValide = false;
 
-if (
-  oao >= -3 && oao <= 3 &&
-  oao !== r
-) {
+while (!aValide) {
+  a = entiers[Math.floor(Math.random()*entiers.length)];
+
+  // on refuse les cas où OAO = racine
+  if (a * Math.abs(r) !== r) {
+    aValide = true;
+  }
+}
+
+const oao = a * Math.abs(r);
+
+if (oao >= -3 && oao <= 3) {
   return {
     f: x => a*Math.abs(x - r),
     racines: [r],
