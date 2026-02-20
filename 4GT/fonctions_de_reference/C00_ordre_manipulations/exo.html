@@ -668,12 +668,39 @@ function verifier(){
 
   /* ================= MAUVAISE RÉPONSE ================= */
 
-  items.forEach((item,i)=>{
-    if(item.textContent === attendu[i])
-      item.classList.add("correct");
-    else
-      item.classList.add("wrong");
+items.forEach((item)=>{
+
+  const txt = item.textContent;
+
+  if(!bonneReponse.includes(txt)){
+    item.classList.add("wrong");
+    return;
+  }
+
+  // Déterminer le bloc
+  function bloc(t){
+    if(t.includes("axe y") || (t.includes("horizontal") && !t.includes("Translation"))) return 1;
+    if(t.includes("Translation horizontale")) return 2;
+    if(t.includes("axe x") || (t.includes("vertical") && !t.includes("Translation"))) return 3;
+    if(t.includes("Translation verticale")) return 4;
+    return 0;
+  }
+
+  // Vérifier si l'ordre global est respecté
+  let ordreOK = true;
+  let prev = 0;
+
+  document.querySelectorAll(".order-item").forEach(el=>{
+    const b = bloc(el.textContent);
+    if(b < prev) ordreOK = false;
+    prev = b;
   });
+
+  if(ordreOK)
+    item.classList.add("correct");
+  else
+    item.classList.add("wrong");
+});
 
   /* 🔹 PAS de limite → PAS de correction auto */
 }
