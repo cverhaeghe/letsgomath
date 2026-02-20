@@ -286,8 +286,10 @@ if (
     const b = entiers[Math.floor(Math.random()*entiers.length)];
     const oao = a*Math.abs(r) + b;
 
-    if (oao >= -3 && oao <= 3) {
-      return {
+if (
+  oao >= -3 && oao <= 3 &&
+  oao !== r
+) {      return {
         f: x => a*Math.abs(x - r) + b,
         racines: [],
         oao: oao
