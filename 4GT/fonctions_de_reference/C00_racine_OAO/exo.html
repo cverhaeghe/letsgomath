@@ -107,15 +107,18 @@ function tracerPoint(a, b) {
 
 function afficherPointsImportants(obj) {
 
-  // ---------- OAO ----------
-  if (isFinite(obj.oao)) {
-    tracerPoint(0, obj.oao);
+  // ---------- QUESTION : RACINES ----------
+  if (typeQuestion === "racine") {
+    obj.racines.forEach(r => {
+      if (isFinite(r)) tracerPoint(r, 0);
+    });
+    return;
   }
 
-  // ---------- RACINES ----------
-  obj.racines.forEach(r => {
-    tracerPoint(r, 0);
-  });
+  // ---------- QUESTION : OAO ----------
+  if (typeQuestion === "oao") {
+    if (isFinite(obj.oao)) tracerPoint(0, obj.oao);
+  }
 }
 
   
@@ -246,7 +249,7 @@ function tirerTypeQuestion() {
 }
 
 
-function afficherQCM(propositions) {
+function afficherQCM(propositions, obj) {
 
   const qcm = document.getElementById("qcm");
   qcm.innerHTML = "";
@@ -266,27 +269,30 @@ function afficherQCM(propositions) {
 
     card.onclick = () => {
 
-      // 🚫 si déjà répondu → on bloque
       if (dejaClique) return;
-
       dejaClique = true;
 
-      // ---- BONNE RÉPONSE ----
+      // ---------- BONNE RÉPONSE ----------
       if (p.correct) {
         card.classList.add("correct");
+
+        // 👉 Afficher racines + OAO
+        afficherPointsImportants(obj);
       }
 
-      // ---- MAUVAISE RÉPONSE ----
+      // ---------- MAUVAISE RÉPONSE ----------
       else {
         card.classList.add("incorrect");
 
-        // On révèle la bonne
         if (bonneCarte) {
           bonneCarte.classList.add("correct");
+
+          // 👉 Afficher racines + OAO
+          afficherPointsImportants(obj);
         }
       }
 
-      // 🚫 On bloque tous les clics
+      // 🚫 blocage total
       document.querySelectorAll(".qcm-card")
         .forEach(c => c.style.pointerEvents = "none");
     };
@@ -296,7 +302,7 @@ function afficherQCM(propositions) {
 
   MathJax.typesetPromise();
 }
-
+  
   
 function genererQCM(obj) {
 
@@ -357,7 +363,7 @@ function genererQCM(obj) {
 
   // ---------- QCM cohérent ----------
   const qcm = genererQCM(obj);
-  afficherQCM(qcm);
+  afficherQCM(qcm,obj);
 }
   
 
@@ -365,7 +371,6 @@ function genererQCM(obj) {
 
 function calculerReponse(obj) {
 
-  afficherPointsImportants(obj);
   
   if (typeQuestion === "oao")
     return obj.oao;
