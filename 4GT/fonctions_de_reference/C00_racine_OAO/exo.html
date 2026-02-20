@@ -309,7 +309,7 @@ MathJax.typesetPromise();
 
   
 function genererQCM(obj) {
-  // exemple simple : réponses entières -5 → 5
+
   const reponses = [];
 
   const bonne =
@@ -319,16 +319,18 @@ function genererQCM(obj) {
         ? obj.racines[0]
         : "aucune";
 
-  for (let i = -5; i <= 5; i++) {
+  // Valeurs autorisées (sans -5, -4 et 5)
+  const valeurs = [-3, -2, -1, 0, 1, 2, 3, 4];
+
+  valeurs.forEach(v => {
     reponses.push({
-      label: i,
-      correct: i === bonne
+      label: v,
+      correct: v === bonne
     });
-  }
+  });
 
   return reponses;
 }
-
 
 
 
