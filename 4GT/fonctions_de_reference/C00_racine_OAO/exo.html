@@ -485,6 +485,17 @@ else if (typeQuestion === "racine") {
   typeEquation = tirerTypeFonction();
   const obj = genererFonction();
 
+  // Sécurité : au moins un point visible
+let testVisible = false;
+for (let x = xmin; x <= xmax; x += 0.5) {
+  const y = obj.f(x);
+  if (isFinite(y) && y >= ymin && y <= ymax) {
+    testVisible = true;
+    break;
+  }
+}
+if (!testVisible) return genererEquation();
+    
   tracerCourbe(obj.f);
 
   // ---------- QCM cohérent ----------
