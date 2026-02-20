@@ -15,6 +15,18 @@
 
 <!-- MathJax v3 -->
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MathJax stable sur GSM -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']] },
+  svg: { fontCache: 'global' },
+  options: { renderActions: { addMenu: [] } }
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  
 </head>
 
 <body>
@@ -342,7 +354,9 @@ if(v !== 0){
     `Détermine l'ordre des transformations qu'a subit la fonction de référence :<br><br>
      \\(${expr}\\)`;
 
-  MathJax.typeset();
+MathJax.typesetPromise().then(() => {
+  window.dispatchEvent(new Event("resize"));
+});
 
   genererTransformations(k,s,h,v);
 }
