@@ -384,10 +384,18 @@ function genererQCM(obj) {
     }
   }
 
-  else if (typeQuestion === "racine") {
-    bonnes = [...new Set(obj.racines)]
-      .filter(r => r >= -3 && r <= 3);
+else if (typeQuestion === "racine") {
+
+  bonnes = [...new Set(obj.racines)]
+    .filter(r =>
+      Number.isInteger(r) && r >= -3 && r <= 3
+    );
+
+  // 🔒 Si aucune racine entière dans le QCM → on considère qu'il n'y en a pas
+  if (bonnes.length === 0) {
+    bonnes = [];
   }
+}
 
   valeurs.forEach(v => {
     reponses.push({
