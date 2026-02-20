@@ -276,35 +276,44 @@ while(compterTransformations(k,s,h,v) < 2){
   
   /* Expression latex */
 
-/* ================= Construction correcte horizontale ================= */
+/* Expression latex */
+let base = "";
 
-let variable = "x";
+if(h === 0)
+  base = "x";
+else
+  base = `(x${h>0?"-"+h:"+"+(-h)})`;
 
-/* 1️⃣ Symétrie horizontale */
-if(s < 0){
-  variable = "-x";
+let interieur = "";
+
+/* cas s = 1 ou -1 */
+if(s === 1)
+  interieur = base;
+
+else if(s === -1)
+  interieur = `-${base}`;
+
+/* cas fractions horizontales sans parenthèses inutiles */
+else if(s === 1/2)
+  interieur = `\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
+
+else if(s === -1/2)
+  interieur = `-\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
+
+else if(s === 1/3)
+  interieur = `\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
+
+else if(s === -1/3)
+  interieur = `-\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
+
+
+/* autres cas */
+else{
+  if(base === "x")
+    interieur = `${toLatex(s)}x`;
+  else
+    interieur = `${toLatex(s)}${base}`;
 }
-
-/* 2️⃣ Déformation horizontale */
-const absS = Math.abs(s);
-
-if(absS === 2 || absS === 3){
-  variable = `${absS}(${variable})`;
-}
-else if(absS === 0.5){
-  variable = `\\dfrac{${variable}}{2}`;
-}
-else if(absS === 1/3){
-  variable = `\\dfrac{${variable}}{3}`;
-}
-
-/* 3️⃣ Translation horizontale */
-if(h !== 0){
-  variable = `(${variable}${h>0 ? "-" + h : "+" + (-h)})`;
-}
-
-
-let interieur = variable;
 
 
 
@@ -312,32 +321,46 @@ let fonctionTransformee = appliquerFonction(f.latex, interieur);
 
 let expr = "";
 
-/* ================= Construction verticale correcte ================= */
-
-const absK = Math.abs(k);
-
-/* 1️⃣ Déformation verticale */
-if(absK === 1){
-  expr = `${fonctionTransformee}`;
-}
-else if(absK === 2 || absK === 3){
-  expr = `${absK}${fonctionTransformee}`;
-}
-else if(absK === 0.5){
-  expr = `\\dfrac{${fonctionTransformee}}{2}`;
-}
-else if(absK === 1/3){
-  expr = `\\dfrac{${fonctionTransformee}}{3}`;
+/* k = 1 → on n'affiche rien */
+if(k === 1){
+  expr = `f(x)=${fonctionTransformee}`;
 }
 
-/* 2️⃣ Symétrie axe x → MINUS DEVANT TOUT */
-if(k < 0){
-  expr = `-${expr}`;
+/* k = -1 → seulement le signe - */
+else if(k === -1){
+  expr = `f(x)=-${fonctionTransformee}`;
 }
 
-/* 3️⃣ Ajout f(x)= */
-expr = `f(x)=${expr}`;
+/* fractions verticales */
+else if(k === 1/2){
+  expr = `f(x)=\\dfrac{${fonctionTransformee}}{2}`;
+}
+else if(k === -1/2){
+  expr = `f(x)=-\\dfrac{${fonctionTransformee}}{2}`;
+}
+else if(k === 1/3){
+  expr = `f(x)=\\dfrac{${fonctionTransformee}}{3}`;
+}
+else if(k === -1/3){
+  expr = `f(x)=-\\dfrac{${fonctionTransformee}}{3}`;
+}
 
+/* cas k = 2 ou 3 */
+else{
+
+  /* écriture spéciale pour la fonction inverse */
+  if(f.latex.includes("\\dfrac{1}{x}")){
+    
+    let denom = fonctionTransformee
+      .replace("\\dfrac{1}{","")
+      .slice(0,-1);   // enlève l'accolade finale
+
+    expr = `f(x)=\\dfrac{${toLatex(k)}}{${denom}}`;
+  }
+  else{
+    expr = `f(x)=${toLatex(k)}${fonctionTransformee}`;
+  }
+}
 
 
 /* translation verticale */
