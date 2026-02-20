@@ -160,7 +160,10 @@
   color: #6b1a1a; /* texte rouge doux */
 }
 
-
+.qcm-card.temp-correct {
+  background-color: #f0ad4e; /* orange */
+  color: white;
+}
 
 /* ===============================
    Exercices : remettre dans l'ordre
