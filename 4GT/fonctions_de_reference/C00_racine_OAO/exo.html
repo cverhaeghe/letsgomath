@@ -325,16 +325,23 @@ function genererQCM(obj) {
 
   const reponses = [];
 
-  let bonne;
+  let bonne = "none";
 
+  // ---------- OAO ----------
   if (typeQuestion === "oao") {
-    bonne = obj.oao;
-  } else {
-    bonne = obj.racines.length > 0
-      ? obj.racines[0]
-      : "none";
+    if (isFinite(obj.oao) && obj.oao >= -3 && obj.oao <= 3) {
+      bonne = obj.oao;
+    }
   }
 
+  // ---------- RACINES ----------
+  else if (typeQuestion === "racine") {
+    if (obj.racines.length > 0) {
+      bonne = obj.racines[0];
+    }
+  }
+
+  // Valeurs proposées
   const valeurs = [-3, -2, -1, 0, 1, 2, 3];
 
   valeurs.forEach(v => {
@@ -344,17 +351,14 @@ function genererQCM(obj) {
     });
   });
 
-  // ✅ Toujours afficher "Y en a pas" pour question racine
-  if (typeQuestion === "racine") {
-    reponses.push({
-      label: "\\text{Y en a pas}",
-      correct: bonne === "none"
-    });
-  }
+  // Toujours afficher "Y en a pas"
+  reponses.push({
+    label: "\\text{Y en a pas}",
+    correct: bonne === "none"
+  });
 
   return reponses;
 }
-
   
 /* ====================== GENERATION ====================== */
 
