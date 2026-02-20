@@ -81,8 +81,27 @@ if(flatex.includes("x^2")){
 
 /* PUISSANCE 3 */
 if(flatex.includes("x^3")){
-  return `\\left(${interieur}\\right)^3`;
+
+  // enlève une paire inutile : (( ... )) → ( ... )
+  while(
+    interieur.startsWith("((") &&
+    interieur.endsWith("))")
+  ){
+    interieur = interieur.slice(1,-1);
+  }
+
+  // si forme -(...) → ne PAS rajouter de parenthèse
+  if(interieur.startsWith("-(") && interieur.endsWith(")"))
+    return `${interieur}^3`;
+
+  // si déjà ( ... ) → OK
+  if(interieur.startsWith("(") && interieur.endsWith(")"))
+    return `${interieur}^3`;
+
+  // sinon → parenthèse nécessaire
+  return `(${interieur})^3`;
 }
+
 
 
 
