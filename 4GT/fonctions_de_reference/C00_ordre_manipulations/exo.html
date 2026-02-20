@@ -679,58 +679,58 @@ function verifier(){
 }
 
 
-
-  function comparerListes(propositions, attendu){
+function comparerListes(propositions, attendu){
 
   if(propositions.length !== attendu.length)
     return false;
 
-  /* comparaison stricte */
-  if(JSON.stringify(propositions) === JSON.stringify(attendu))
-    return true;
+  // Séparer les blocs
+  const vertical = attendu.filter(t =>
+    t.includes("vertical") || t.includes("axe x")
+  );
 
-  /* ================= TOLÉRANCES ================= */
+  const horizontal = attendu.filter(t =>
+    t.includes("horizontal") || t.includes("axe y")
+  );
 
-  for(let i=0; i<attendu.length-1; i++){
+  const translations = attendu.filter(t =>
+    t.includes("Translation")
+  );
 
-    let a1 = attendu[i];
-    let a2 = attendu[i+1];
-
-/* ----- Vertical : uniquement déformation + symétrie ----- */
-if(
-  (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("Étirement vertical")) ||
-  (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("Compression verticale")) ||
-  (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("Étirement vertical")) ||
-  (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("Compression verticale"))
-){
-  let copie = [...attendu];
-  [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
-
-  if(JSON.stringify(propositions) === JSON.stringify(copie))
-    return true;
-}
-
-
-/* ----- Horizontal : uniquement déformation + symétrie ----- */
-if(
-  (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("Étirement horizontal")) ||
-  (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("Compression horizontale")) ||
-  (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("Étirement horizontal")) ||
-  (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("Compression horizontale"))
-){
-  let copie = [...attendu];
-  [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
-
-  if(JSON.stringify(propositions) === JSON.stringify(copie))
-    return true;
-}
-  
-
-  return false;
-}
-
+  // Vérifier que toutes les propositions sont présentes
+  for(let p of propositions){
+    if(!attendu.includes(p))
+      return false;
   }
 
+  // Vérifier que les éléments verticaux sont groupés (ordre libre)
+  const verticalUser = propositions.filter(t =>
+    t.includes("vertical") || t.includes("axe x")
+  );
+
+  if(verticalUser.length === vertical.length){
+
+    const sameVertical =
+      verticalUser.every(v => vertical.includes(v));
+
+    if(!sameVertical) return false;
+  }
+
+  // Vérifier que les horizontaux sont corrects
+  const horizontalUser = propositions.filter(t =>
+    t.includes("horizontal") || t.includes("axe y")
+  );
+
+  if(horizontalUser.length === horizontal.length){
+
+    const sameHorizontal =
+      horizontalUser.every(h => horizontal.includes(h));
+
+    if(!sameHorizontal) return false;
+  }
+
+  return true;
+}
 
 
 /* ========================= Solution ========================= */
