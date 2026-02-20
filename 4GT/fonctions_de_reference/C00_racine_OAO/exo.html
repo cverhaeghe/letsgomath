@@ -308,13 +308,25 @@ MathJax.typesetPromise();
 }
 
   
-function genererQCM(type, h, v) {
-typeEquation = tirerTypeFonction();
+function genererQCM(obj) {
+  // exemple simple : réponses entières -5 → 5
+  const reponses = [];
 
-const obj = genererFonction();
-const f = obj.f;
+  const bonne =
+    typeQuestion === "oao"
+      ? obj.oao
+      : obj.racines.length > 0
+        ? obj.racines[0]
+        : "aucune";
 
-tracerCourbe(f);
+  for (let i = -5; i <= 5; i++) {
+    reponses.push({
+      label: i,
+      correct: i === bonne
+    });
+  }
+
+  return reponses;
 }
 
 
@@ -325,46 +337,32 @@ tracerCourbe(f);
 
   
 /* ====================== GENERATION ====================== */
-function genererEquation() {
+
+  function genererEquation() {
+
   document.getElementById("feedback").innerHTML = "";
 
-  const cards = document.querySelectorAll('.qcm-card');
-  cards.forEach(card => {
-    card.classList.remove('correct', 'incorrect');
-    card.style.pointerEvents = "auto";
-  });
+  tirerTypeQuestion();
 
-  nbEssaisFaux = 0;
+  const enonce = document.getElementById("enonce");
+  enonce.innerHTML =
+    typeQuestion === "racine"
+      ? "Quelles sont les éventuelles <strong>racines</strong> de la fonction ?"
+      : "Quelle est l’<strong>ordonnée à l'origine</strong> ?";
 
-tirerTypeQuestion();
-const enonce = document.getElementById("enonce");
-enonce.innerHTML =
-  typeQuestion === "racine"
-    ? "Quelles sont les éventuelles <strong>racines</strong> de la fonction ?"
-    : "Quel est l’<strong>ordonnée à l'origine</strong> de la fonction ?";
-  
-dessinerRepere();
+  dessinerRepere();
 
-typeEquation = tirerFonctionSansABA();
-tirerHV();
-tirerKxKy();  
+  // ---------- UNE SEULE FONCTION ----------
+  typeEquation = tirerTypeFonction();
+  const obj = genererFonction();
 
-let qcm; // ✅ UNE SEULE DÉCLARATION
+  tracerCourbe(obj.f);
 
-
-typeEquation = tirerTypeFonction();
-
-const obj = genererFonction();
-const f = obj.f;
-
-tracerCourbe(f);
-
-
-// ✅ QCM généré UNE FOIS, APRÈS le switch
-qcm = genererQCM(typeEquation, h, v);
-afficherQCM(qcm);
+  // ---------- QCM cohérent ----------
+  const qcm = genererQCM(obj);
+  afficherQCM(qcm);
 }
-
+  
 
 /* ====================== VERIFICATION ====================== */
 
