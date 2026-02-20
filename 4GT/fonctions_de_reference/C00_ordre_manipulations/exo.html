@@ -667,30 +667,35 @@ function verifier(){
     let a1 = attendu[i];
     let a2 = attendu[i+1];
 
-    /* ----- Vertical ----- */
-    if(
-      (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("verticale")) ||
-      (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("verticale"))
-    ){
-      let copie = [...attendu];
-      [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
+/* ----- Vertical : uniquement déformation + symétrie ----- */
+if(
+  (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("Étirement vertical")) ||
+  (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("Compression verticale")) ||
+  (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("Étirement vertical")) ||
+  (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("Compression verticale"))
+){
+  let copie = [...attendu];
+  [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
 
-      if(JSON.stringify(propositions) === JSON.stringify(copie))
-        return true;
-    }
+  if(JSON.stringify(propositions) === JSON.stringify(copie))
+    return true;
+}
 
-    /* ----- Horizontal ----- */
-    if(
-      (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("horizontal")) ||
-      (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("horizontal"))
-    ){
-      let copie = [...attendu];
-      [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
 
-      if(JSON.stringify(propositions) === JSON.stringify(copie))
-        return true;
-    }
-  }
+/* ----- Horizontal : uniquement déformation + symétrie ----- */
+if(
+  (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("Étirement horizontal")) ||
+  (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("Compression horizontale")) ||
+  (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("Étirement horizontal")) ||
+  (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("Compression horizontale"))
+){
+  let copie = [...attendu];
+  [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
+
+  if(JSON.stringify(propositions) === JSON.stringify(copie))
+    return true;
+}
+
 
   return false;
 }
