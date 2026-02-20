@@ -66,11 +66,6 @@ const ymin = -5, ymax = 5;
 let typeEquation = "";
 let dernieresFonctions = [];
 let nbEssaisFaux = 0;
-let translationType = ""; // "horizontale" ou "verticale"
-let h = 0;
-let v = 0;
-let kx = 1;
-let ky = 1;
 let typeQuestion = "racine"; // ou "oao"
 let dernieresQuestions = [];
 
@@ -149,49 +144,9 @@ if (
 
 
 
-function tirerFonctionSansABA() {
-  const toutes = ["carrée", "racine", "inverse"];
-
-  // On exclut STRICTEMENT les deux dernières fonctions
-  const candidates = toutes.filter(f => !dernieresFonctions.includes(f));
-
-  // Sécurité : si jamais on arrive à moins de 1 (théoriquement impossible ici)
-  if (candidates.length === 0) {
-    console.warn("Reset historique fonctions");
-    dernieresFonctions = [];
-    return tirerFonctionSansABA();
-  }
-
-  const choix = candidates[Math.floor(Math.random() * candidates.length)];
-
-  // Mise à jour de l'historique
-  dernieresFonctions.push(choix);
-  if (dernieresFonctions.length > 2) {
-    dernieresFonctions.shift(); // on garde seulement les 2 dernières
-  }
-
-  return choix;
-}
-
-
-function tirerHV() {
-  const valeurs = [-3, -2, -1, 1, 2, 3];
-  do {
-    h = valeurs[Math.floor(Math.random() * valeurs.length)];
-    v = valeurs[Math.floor(Math.random() * valeurs.length)];
-  } while (Math.abs(h) === Math.abs(v));
-}
-
-function tirerKxKy() {
-  const valeurs = [-1,1];
-    kx = valeurs[Math.floor(Math.random() * valeurs.length)];
-    ky = valeurs[Math.floor(Math.random() * valeurs.length)];
-}  
-  
-function fonctionTranslatee(f) {
-  return function (x) {
-    return ky*f(ky*(x - h)) + v;
-  };
+function tirerTypeFonction() {
+  const types = ["quadratique","cubique","absolue"];
+  return types[Math.floor(Math.random()*types.length)];
 }
 
 function tirerTypeQuestion() {
@@ -220,33 +175,7 @@ function tirerTypeQuestion() {
 
 
 
-  function tracerAsymptotesInverse(h, v) {
-  // asymptote verticale x = h
-  svg.innerHTML += `
-    <line x1="${xToPx(h)}" y1="0"
-          x2="${xToPx(h)}" y2="${height}"
-          stroke="var(--peps)"
-          stroke-width="2.5"
-          stroke-dasharray="4,4"/>
-  `;
-
-  // asymptote horizontale y = v
-  svg.innerHTML += `
-    <line x1="0" y1="${yToPx(v)}"
-          x2="${width}" y2="${yToPx(v)}"
-          stroke="var(--peps)"
-          stroke-width="2.5"
-          stroke-dasharray="4,4"/>
-  `;
-}
-
-  function melanger(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
+  
 
 function genererQCMCarree(h, v) {
 
@@ -280,69 +209,6 @@ if (bonneProp) bonneProp.correct = true;
 
 
 
-  
-
-function genererQCMRacine(h, v) {
-
-  const propositions = [
-    { label: `\\mathbb{R}`, correct: false },
-    { label: `\\left[ ${h}, +\\infty \\right[`, correct: false },
-    { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
-    { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
-    { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
-  ];
-
-  // -------- Bonne réponse --------
-let bonne;
-
-if (typeQuestion === "racine") {
-  bonne = ky === 1
-    ? `\\left[ ${h}, +\\infty \\right[`
-    : `\\left] -\\infty, ${h} \\right]`;
-}
- else {
-  bonne = ky === 1
-    ? `\\left[ ${v}, +\\infty \\right[`
-    : `\\left] -\\infty, ${v} \\right]`;
-}
-
-const bonneProp = propositions.find(p => p.label === bonne);
-if (bonneProp) bonneProp.correct = true;
-
-
-  return melanger(propositions);
-}
-
-
-
-
-
-
-function genererQCMInverse(h, v) {
-
-  const propositions = [
-    { label: `\\mathbb{R}`, correct: false },
-    { label: `\\mathbb{R} \\setminus \\{ ${h} \\}`, correct: false },
-    { label: `\\left] -\\infty, ${v} \\right[`, correct: false },
-    { label: `\\left] ${h}, +\\infty \\right[`, correct: false },
-    { label: `\\mathbb{R} \\setminus \\{ ${v} \\}`, correct: false }
-  ];
-
-  // -------- Bonne réponse --------
-let bonne;
-
-if (typeQuestion === "racine") {
-  bonne = `\\mathbb{R} \\setminus \\{ ${h} \\}`;
-} else {
-  bonne = `\\mathbb{R} \\setminus \\{ ${v} \\}`;
-}
-
-const bonneProp = propositions.find(p => p.label === bonne);
-if (bonneProp) bonneProp.correct = true;
-
-return melanger(propositions);
-
-}
 
 
   
