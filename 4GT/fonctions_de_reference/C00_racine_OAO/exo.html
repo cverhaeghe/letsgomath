@@ -265,10 +265,14 @@ const r = entiers[Math.floor(Math.random()*entiers.length)];
     // 50% : PAS de racine
     if (Math.random() < 0.5) {
 
-      const nonZero = entiers.filter(x => x !== 0);
-    const b = nonZero[Math.floor(Math.random()*nonZero.length)];
+const nonZero = entiers.filter(x => x !== 0);
+const b = nonZero[Math.floor(Math.random()*nonZero.length)];
 const oao = a*Math.abs(r) + b;
 
+      // PAS de racine → la fonction doit rester toujours >0 ou <0
+if (a > 0 && a*Math.abs(r)+b > 0) continue;
+if (a < 0 && a*Math.abs(r)+b < 0) continue;
+      
 if (
   oao >= -3 && oao <= 3 &&
   oao !== r
