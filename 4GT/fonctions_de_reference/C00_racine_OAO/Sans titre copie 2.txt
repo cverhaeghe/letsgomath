@@ -1,1 +1,640 @@
-sdgh
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MathJax v3 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+  <!-- GRAPHIQUE -->
+<div id="graph-container"
+     style="position:relative; display:flex; justify-content:center; margin-bottom:20px;">
+  <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
+</div>
+
+<p id="enonce"></p>
+  
+<div id="qcm" class="qcm-grid qcm-8"></div>
+
+<div class="center-button">
+  <button onclick="genererEquation()">Nouvel exercice</button>
+</div>
+
+
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_fonctions.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+/* ====================== PARAMETRES REPERE ====================== */
+const svg = document.getElementById("graph");
+const width = 400, height = 400;
+const unit = 40;
+const xmin = -5, xmax = 5;
+const ymin = -5, ymax = 5;
+
+/* ====================== VARIABLES ====================== */
+let typeEquation = "";
+let dernieresFonctions = [];
+let nbEssaisFaux = 0;
+let translationType = ""; // "horizontale" ou "verticale"
+let h = 0;
+let v = 0;
+let kx = 1;
+let ky = 1;
+let typeQuestion = "domaine"; // ou "image"
+let dernieresQuestions = [];
+
+  
+/* ====================== OUTILS ====================== */
+function xToPx(x){ return width/2 + x*unit; }
+function yToPx(y){ return height/2 - y*unit; }
+
+  
+/* ====================== REPERE ====================== */
+function dessinerRepere(){
+  svg.innerHTML="";
+
+  for(let x=xmin;x<=xmax;x++){
+    svg.innerHTML+=`<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
+  }
+  for(let y=ymin;y<=ymax;y++){
+    svg.innerHTML+=`<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
+  }
+
+  svg.innerHTML+=`
+    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
+    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black" stroke-width="2"/>
+  `;
+
+  for(let x=xmin;x<=xmax;x++) if(x!==0)
+    svg.innerHTML+=`<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
+
+  for(let y=ymin;y<=ymax;y++) if(y!==0)
+    svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
+}
+
+  
+function tracerPoint(a, b) {
+  svg.innerHTML += `
+    <circle cx="${xToPx(a)}" cy="${yToPx(b)}" r="4" fill="orange"/>
+  `;
+}
+
+
+function tracerCourbe(fonction) {
+  let path = "";
+  let first = true;
+
+  for (let x = xmin; x <= xmax; x += 0.005) {
+    let y = fonction(x);
+
+if (
+  !isFinite(y) ||
+  y > ymax || y < ymin
+) {
+  first = true;
+  continue;
+}
+
+
+    const px = xToPx(x);
+    const py = yToPx(y);
+
+    if (first) {
+      path += `M ${px} ${py}`;
+      first = false;
+    } else {
+      path += ` L ${px} ${py}`;
+    }
+  }
+
+  svg.innerHTML += `
+    <path d="${path}" fill="none"
+          stroke="var(--peps)"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  `;
+}
+
+
+
+function tirerFonctionSansABA() {
+  const toutes = ["carrée", "racine", "inverse"];
+
+  // On exclut STRICTEMENT les deux dernières fonctions
+  const candidates = toutes.filter(f => !dernieresFonctions.includes(f));
+
+  // Sécurité : si jamais on arrive à moins de 1 (théoriquement impossible ici)
+  if (candidates.length === 0) {
+    console.warn("Reset historique fonctions");
+    dernieresFonctions = [];
+    return tirerFonctionSansABA();
+  }
+
+  const choix = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Mise à jour de l'historique
+  dernieresFonctions.push(choix);
+  if (dernieresFonctions.length > 2) {
+    dernieresFonctions.shift(); // on garde seulement les 2 dernières
+  }
+
+  return choix;
+}
+
+
+function tirerHV() {
+  const valeurs = [-3, -2, -1, 1, 2, 3];
+  do {
+    h = valeurs[Math.floor(Math.random() * valeurs.length)];
+    v = valeurs[Math.floor(Math.random() * valeurs.length)];
+  } while (Math.abs(h) === Math.abs(v));
+}
+
+function tirerKxKy() {
+  const valeurs = [-1,1];
+    kx = valeurs[Math.floor(Math.random() * valeurs.length)];
+    ky = valeurs[Math.floor(Math.random() * valeurs.length)];
+}  
+  
+function fonctionTranslatee(f) {
+  return function (x) {
+    return ky*f(ky*(x - h)) + v;
+  };
+}
+
+function tirerTypeQuestion() {
+  const toutes = ["domaine", "image"];
+
+  // On exclut la question si elle est déjà sortie 2 fois de suite
+  let candidates = toutes;
+
+  if (
+    dernieresQuestions.length >= 2 &&
+    dernieresQuestions[0] === dernieresQuestions[1]
+  ) {
+    candidates = toutes.filter(q => q !== dernieresQuestions[0]);
+  }
+
+  const choix = candidates[Math.floor(Math.random() * candidates.length)];
+
+  // Mise à jour de l'historique
+  dernieresQuestions.push(choix);
+  if (dernieresQuestions.length > 2) {
+    dernieresQuestions.shift();
+  }
+
+  typeQuestion = choix;
+}
+
+
+
+  function tracerAsymptotesInverse(h, v) {
+  // asymptote verticale x = h
+  svg.innerHTML += `
+    <line x1="${xToPx(h)}" y1="0"
+          x2="${xToPx(h)}" y2="${height}"
+          stroke="var(--peps)"
+          stroke-width="2.5"
+          stroke-dasharray="4,4"/>
+  `;
+
+  // asymptote horizontale y = v
+  svg.innerHTML += `
+    <line x1="0" y1="${yToPx(v)}"
+          x2="${width}" y2="${yToPx(v)}"
+          stroke="var(--peps)"
+          stroke-width="2.5"
+          stroke-dasharray="4,4"/>
+  `;
+}
+
+  function melanger(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+function genererQCMCarree(h, v) {
+
+  const propositions = [
+    { label: `\\mathbb{R}`, correct: false },
+    { label: `\\left[ ${h}, +\\infty \\right[`, correct: false },
+    { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
+    { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
+    { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
+  ];
+
+// -------- Bonne réponse --------
+let bonne;
+
+if (typeQuestion === "domaine") {
+  bonne = `\\mathbb{R}`;
+} else {
+  bonne = ky === 1
+    ? `\\left[ ${v}, +\\infty \\right[`
+    : `\\left] -\\infty, ${v} \\right]`;
+}
+
+const bonneProp = propositions.find(p => p.label === bonne);
+if (bonneProp) bonneProp.correct = true;
+
+
+
+  return melanger(propositions);
+}
+
+
+
+
+  
+
+function genererQCMRacine(h, v) {
+
+  const propositions = [
+    { label: `\\mathbb{R}`, correct: false },
+    { label: `\\left[ ${h}, +\\infty \\right[`, correct: false },
+    { label: `\\left[ ${v}, +\\infty \\right[`, correct: false },
+    { label: `\\left] -\\infty, ${h} \\right]`, correct: false },
+    { label: `\\left] -\\infty, ${v} \\right]`, correct: false }
+  ];
+
+  // -------- Bonne réponse --------
+let bonne;
+
+if (typeQuestion === "domaine") {
+  bonne = ky === 1
+    ? `\\left[ ${h}, +\\infty \\right[`
+    : `\\left] -\\infty, ${h} \\right]`;
+}
+ else {
+  bonne = ky === 1
+    ? `\\left[ ${v}, +\\infty \\right[`
+    : `\\left] -\\infty, ${v} \\right]`;
+}
+
+const bonneProp = propositions.find(p => p.label === bonne);
+if (bonneProp) bonneProp.correct = true;
+
+
+  return melanger(propositions);
+}
+
+
+
+
+
+
+function genererQCMInverse(h, v) {
+
+  const propositions = [
+    { label: `\\mathbb{R}`, correct: false },
+    { label: `\\mathbb{R} \\setminus \\{ ${h} \\}`, correct: false },
+    { label: `\\left] -\\infty, ${v} \\right[`, correct: false },
+    { label: `\\left] ${h}, +\\infty \\right[`, correct: false },
+    { label: `\\mathbb{R} \\setminus \\{ ${v} \\}`, correct: false }
+  ];
+
+  // -------- Bonne réponse --------
+let bonne;
+
+if (typeQuestion === "domaine") {
+  bonne = `\\mathbb{R} \\setminus \\{ ${h} \\}`;
+} else {
+  bonne = `\\mathbb{R} \\setminus \\{ ${v} \\}`;
+}
+
+const bonneProp = propositions.find(p => p.label === bonne);
+if (bonneProp) bonneProp.correct = true;
+
+return melanger(propositions);
+
+}
+
+
+  
+function afficherQCM(propositions) {
+const qcm = document.getElementById("qcm");
+qcm.innerHTML = "";
+
+
+let nbErreurs = 0;
+let bonneCarte = null; // 👈 référence directe
+
+
+propositions.forEach(p => {
+const card = document.createElement("div");
+card.className = "qcm-card";
+card.innerHTML = `\\(${p.label}\\)`;
+
+
+// On mémorise la bonne carte
+if (p.correct) {
+bonneCarte = card;
+}
+
+
+// 🔧 CORRECTION 1 — clic sur la BONNE réponse doit TOUJOURS déclencher l’effet
+// Remplacer ENTIEREMENT le card.onclick par ceci :
+
+card.onclick = () => {
+
+  // ---- BONNE RÉPONSE ----
+  if (p.correct) {
+
+    if (typeQuestion === "domaine") {
+      surlignerAxe(h, "x", typeEquation, ky);
+    } else {
+      surlignerAxe(v, "y", typeEquation, ky);
+    }
+
+    card.classList.add("correct");
+
+    document.querySelectorAll(".qcm-card")
+      .forEach(c => c.style.pointerEvents = "none");
+
+    return;
+  }
+
+  // ---- MAUVAISE RÉPONSE ----
+  card.classList.add("incorrect");
+  card.style.pointerEvents = "none";
+  nbErreurs++;
+
+  // ---- 2e ERREUR : révélation automatique ----
+  if (nbErreurs >= 2 && bonneCarte) {
+
+    bonneCarte.classList.add("correct");
+
+    if (typeQuestion === "domaine") {
+      surlignerAxe(h, "x", typeEquation, ky);
+    } else {
+      surlignerAxe(v, "y", typeEquation, ky);
+    }
+
+    document.querySelectorAll(".qcm-card")
+      .forEach(c => c.style.pointerEvents = "none");
+  }
+};
+
+
+qcm.appendChild(card);
+});
+
+
+MathJax.typesetPromise();
+}
+  
+function genererQCM(type, h, v) {
+  switch (type) {
+    case "carrée":
+      return genererQCMCarree(h, v);
+    case "racine":
+      return genererQCMRacine(h, v);
+    case "inverse":
+      return genererQCMInverse(h, v);
+    default:
+      return [];
+  }
+}
+
+
+
+
+function surlignerAxe(borne, axe, typeFonction) {
+
+  // ---- CAS INVERSE : domaine = R \ {h} ----
+  if (axe === "x" && typeFonction === "inverse") {
+    svg.innerHTML += `
+      <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
+            x2="${xToPx(xmax)}" y2="${yToPx(0)}"
+            stroke="#2b6cff" stroke-width="5"/>
+      <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+              r="6" fill="white"
+              stroke="#2b6cff" stroke-width="3"/>
+    `;
+    return;
+  }
+
+if (axe === "y" && typeFonction === "inverse") {
+
+  // axe y entier
+  svg.innerHTML += `
+    <line x1="${xToPx(0)}" y1="${yToPx(ymin)}"
+          x2="${xToPx(0)}" y2="${yToPx(ymax)}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  // point creux en y = v
+  svg.innerHTML += `
+    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
+            r="6"
+            fill="white"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
+
+ // 🔧 REMPLACER ENTIÈREMENT LE CAS "carrée" DANS surlignerAxe PAR CE QUI SUIT
+
+// ---- CARRÉE : DOMAINE = ℝ ----
+if (axe === "x" && typeFonction === "carrée") {
+
+  svg.innerHTML += `
+    <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
+          x2="${xToPx(xmax)}" y2="${yToPx(0)}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+  return;
+}
+
+// ---- CARRÉE : IMAGE ----
+if (axe === "y" && typeFonction === "carrée") {
+
+  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymin);
+  const y2 = ky === 1 ? yToPx(ymax)  : yToPx(borne);
+
+  svg.innerHTML += `
+    <line x1="${xToPx(0)}" y1="${y1}"
+          x2="${xToPx(0)}" y2="${y2}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  svg.innerHTML += `
+    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
+            r="6"
+            fill="#2b6cff"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
+
+  
+  // ---- CAS RACINE  ----
+
+if (axe === "x" && typeFonction === "racine") {
+
+  const x1 = ky === 1 ? xToPx(borne) : xToPx(xmin);
+  const x2 = ky === 1 ? xToPx(xmax)  : xToPx(borne);
+
+  // segment bleu sur l’axe des x
+  svg.innerHTML += `
+    <line x1="${x1}" y1="${yToPx(0)}"
+          x2="${x2}" y2="${yToPx(0)}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  // boule pleine en x = h
+  svg.innerHTML += `
+    <circle cx="${xToPx(borne)}" cy="${yToPx(0)}"
+            r="6"
+            fill="#2b6cff"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
+
+if (axe === "y" && typeFonction === "racine") {
+
+  const y1 = ky === 1 ? yToPx(borne) : yToPx(ymin);
+  const y2 = ky === 1 ? yToPx(ymax)  : yToPx(borne);
+
+  // segment bleu correct sur l’axe y
+  svg.innerHTML += `
+    <line x1="${xToPx(0)}" y1="${y1}"
+          x2="${xToPx(0)}" y2="${y2}"
+          stroke="#2b6cff" stroke-width="5"/>
+  `;
+
+  // boule pleine en y = v
+  svg.innerHTML += `
+    <circle cx="${xToPx(0)}" cy="${yToPx(borne)}"
+            r="6"
+            fill="#2b6cff"
+            stroke="#2b6cff"
+            stroke-width="3"/>
+  `;
+  return;
+}
+
+
+}
+
+
+
+  
+/* ====================== GENERATION ====================== */
+function genererEquation() {
+  document.getElementById("feedback").innerHTML = "";
+
+  const cards = document.querySelectorAll('.qcm-card');
+  cards.forEach(card => {
+    card.classList.remove('correct', 'incorrect');
+    card.style.pointerEvents = "auto";
+  });
+
+  nbEssaisFaux = 0;
+
+tirerTypeQuestion();
+const enonce = document.getElementById("enonce");
+enonce.innerHTML =
+  typeQuestion === "domaine"
+    ? "Quel est le <strong>domaine</strong> de la fonction ?"
+    : "Quel est l’<strong>ensemble image</strong> de la fonction ?";
+  
+dessinerRepere();
+
+typeEquation = tirerFonctionSansABA();
+tirerHV();
+tirerKxKy();  
+
+let qcm; // ✅ UNE SEULE DÉCLARATION
+
+
+switch (typeEquation) {
+
+
+case "carrée":
+svg.innerHTML += `
+<circle cx="${xToPx(0)}" cy="${yToPx(0)}" r="0.1" fill="var(--lgm-orange)"/>
+`;
+tracerCourbe(fonctionTranslatee(x => x * x));
+break;
+
+
+case "racine":
+const fRacine = fonctionTranslatee(Math.sqrt);
+tracerCourbe(x => {
+  return ky * (x - h) >= 0 ? fRacine(x) : NaN;
+});
+tracerPoint(h,v);    
+break;
+
+
+case "inverse":
+tracerAsymptotesInverse(h, v);
+const fInverse = fonctionTranslatee(x => 1 / x);
+tracerCourbe(x =>
+  Math.abs(x - h) < 0.1 ? NaN : fInverse(x)
+);
+
+break;
+}
+
+
+// ✅ QCM généré UNE FOIS, APRÈS le switch
+qcm = genererQCM(typeEquation, h, v);
+afficherQCM(qcm);
+}
+
+
+/* ====================== VERIFICATION ====================== */
+
+
+
+
+// Générer le premier exercice au chargement
+window.onload = genererEquation;
+</script>
+   
+  <!-- Protection clique droit (commun à tout le site) -->
+  <script src="../../../js/protection.js"></script>
+
+</body>
+</html>
