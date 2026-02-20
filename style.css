@@ -384,10 +384,17 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+
 /* compétence au tap */
-.liste-competences li a:active {
+.liste-competences li a:active{
   background-color: var(--peps) !important;
   color: white !important;
+  transform: scale(0.98);
+}
+
+/* Maintient la couleur orange après le tap (iOS/Safari fix) */
+.liste-competences li a{
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* pour Safari iOS */
