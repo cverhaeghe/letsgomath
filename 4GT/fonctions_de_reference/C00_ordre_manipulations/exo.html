@@ -275,43 +275,35 @@ while(compterTransformations(k,s,h,v) < 2){
 }
   
   /* Expression latex */
-let base = "";
+/* ================= Construction correcte horizontale ================= */
 
-if(h === 0)
-  base = "x";
-else
-  base = `(x${h>0?"-"+h:"+"+(-h)})`;
+let variable = "x";
 
-let interieur = "";
-
-/* cas s = 1 ou -1 */
-if(s === 1)
-  interieur = base;
-
-else if(s === -1)
-  interieur = `-${base}`;
-
-/* cas fractions horizontales sans parenthèses inutiles */
-else if(s === 1/2)
-  interieur = `\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
-
-else if(s === -1/2)
-  interieur = `-\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{2}`;
-
-else if(s === 1/3)
-  interieur = `\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
-
-else if(s === -1/3)
-  interieur = `-\\dfrac{x${h>0?"-"+h:h<0?"+"+(-h):""}}{3}`;
-
-
-/* autres cas */
-else{
-  if(base === "x")
-    interieur = `${toLatex(s)}x`;
-  else
-    interieur = `${toLatex(s)}${base}`;
+/* 1️⃣ Symétrie horizontale */
+if(s < 0){
+  variable = "-x";
 }
+
+/* 2️⃣ Déformation horizontale */
+const absS = Math.abs(s);
+
+if(absS === 2 || absS === 3){
+  variable = `${absS}${variable}`;
+}
+else if(absS === 0.5){
+  variable = `\\dfrac{${variable}}{2}`;
+}
+else if(absS === 1/3){
+  variable = `\\dfrac{${variable}}{3}`;
+}
+
+/* 3️⃣ Translation horizontale */
+if(h !== 0){
+  variable = `(${variable}${h>0?"-"+h:"+"+(-h)})`;
+}
+
+let interieur = variable;
+
 
 
 
