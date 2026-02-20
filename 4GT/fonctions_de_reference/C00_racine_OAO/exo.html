@@ -365,27 +365,34 @@ const nbBonnes = (typeQuestion === "racine")
 
       const estBonne = card.dataset.correct === "1";
 
-      // ---------- BONNE ----------
-      if (estBonne) {
+// ---------- BONNE ----------
+if (estBonne) {
 
-        if (card.classList.contains("temp-correct") ||
-            card.classList.contains("correct")) return;
+  if (card.classList.contains("correct")) return;
 
-        card.classList.add("temp-correct");
-        bonnesCliquees++;
+  bonnesCliquees++;
 
-        // Toutes trouvées
-        if (bonnesCliquees === nbBonnes) {
+  // Si UNE seule bonne réponse → vert direct
+  if (nbBonnes === 1) {
+    card.classList.add("correct");
+    afficherPointsImportants(obj);
+    fini = true;
+  }
 
-          bonnesCartes.forEach(c => {
-            c.classList.remove("temp-correct");
-            c.classList.add("correct");
-          });
+  // Sinon (plusieurs racines) → orange temporaire
+  else {
+    card.classList.add("temp-correct");
 
-          afficherPointsImportants(obj);
-          fini = true;
-        }
-      }
+    if (bonnesCliquees === nbBonnes) {
+      bonnesCartes.forEach(c => {
+        c.classList.remove("temp-correct");
+        c.classList.add("correct");
+      });
+      afficherPointsImportants(obj);
+      fini = true;
+    }
+  }
+}
 
       // ---------- MAUVAISE ----------
       else {
