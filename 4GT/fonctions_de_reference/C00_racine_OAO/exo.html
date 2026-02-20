@@ -205,8 +205,11 @@ function genererFonction() {
 
       const oao = a*r1*r2;
 
-      if (oao >= -3 && oao <= 3) {
-        return {
+if (
+  oao >= -3 && oao <= 3 &&
+  oao !== r1 &&
+  oao !== r2
+) {        return {
           f: x => a*(x-r1)*(x-r2),
           racines: [r1, r2],
           oao: oao
@@ -222,8 +225,10 @@ function genererFonction() {
 
       const oao = -a*r;
 
-      if (oao >= -3 && oao <= 3) {
-        return {
+if (
+  oao >= -3 && oao <= 3 &&
+  oao !== r
+) {        return {
           f: x => a*(x-r)*(x*x+1),
           racines: [r],
           oao: oao
@@ -247,8 +252,10 @@ if (typeEquation === "absolue") {
       const b = nonZero[Math.floor(Math.random()*nonZero.length)];
       const oao = a*Math.abs(r) + b;
 
-      if (oao >= -3 && oao <= 3) {
-        return {
+if (
+  oao >= -3 && oao <= 3 &&
+  oao !== r
+) {        return {
           f: x => a*Math.abs(x - r) + b,
           racines: [],
           oao: oao
