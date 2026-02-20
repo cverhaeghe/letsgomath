@@ -289,7 +289,7 @@ if(s < 0){
 const absS = Math.abs(s);
 
 if(absS === 2 || absS === 3){
-  variable = `${absS}${variable}`;
+  variable = `${absS}(${variable})`;
 }
 else if(absS === 0.5){
   variable = `\\dfrac{${variable}}{2}`;
@@ -300,8 +300,9 @@ else if(absS === 1/3){
 
 /* 3️⃣ Translation horizontale */
 if(h !== 0){
-  variable = `(${variable}${h>0?"-"+h:"+"+(-h)})`;
+  variable = `(${variable}${h>0 ? "-" + h : "+" + (-h)})`;
 }
+
 
 let interieur = variable;
 
