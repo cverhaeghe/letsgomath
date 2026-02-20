@@ -275,6 +275,7 @@ while(compterTransformations(k,s,h,v) < 2){
 }
   
   /* Expression latex */
+
 /* ================= Construction correcte horizontale ================= */
 
 let variable = "x";
@@ -306,51 +307,31 @@ let interieur = variable;
 
 
 
-
 let fonctionTransformee = appliquerFonction(f.latex, interieur);
 
 let expr = "";
 
-/* k = 1 → on n'affiche rien */
-if(k === 1){
+/* ================= Symétrie verticale (axe x) ================= */
+if(k < 0){
+  fonctionTransformee = `-${fonctionTransformee}`;
+}
+
+const absK = Math.abs(k);
+
+/* ================= Déformation verticale ================= */
+if(absK === 1){
   expr = `f(x)=${fonctionTransformee}`;
 }
-
-/* k = -1 → seulement le signe - */
-else if(k === -1){
-  expr = `f(x)=-${fonctionTransformee}`;
+else if(absK === 2 || absK === 3){
+  expr = `f(x)=${absK}${fonctionTransformee}`;
 }
-
-/* fractions verticales */
-else if(k === 1/2){
+else if(absK === 0.5){
   expr = `f(x)=\\dfrac{${fonctionTransformee}}{2}`;
 }
-else if(k === -1/2){
-  expr = `f(x)=-\\dfrac{${fonctionTransformee}}{2}`;
-}
-else if(k === 1/3){
+else if(absK === 1/3){
   expr = `f(x)=\\dfrac{${fonctionTransformee}}{3}`;
 }
-else if(k === -1/3){
-  expr = `f(x)=-\\dfrac{${fonctionTransformee}}{3}`;
-}
 
-/* cas k = 2 ou 3 */
-else{
-
-  /* écriture spéciale pour la fonction inverse */
-  if(f.latex.includes("\\dfrac{1}{x}")){
-    
-    let denom = fonctionTransformee
-      .replace("\\dfrac{1}{","")
-      .slice(0,-1);   // enlève l'accolade finale
-
-    expr = `f(x)=\\dfrac{${toLatex(k)}}{${denom}}`;
-  }
-  else{
-    expr = `f(x)=${toLatex(k)}${fonctionTransformee}`;
-  }
-}
 
 
 /* translation verticale */
