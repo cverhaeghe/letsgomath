@@ -105,7 +105,20 @@ function tracerPoint(a, b) {
   `;
 }
 
+function afficherPointsImportants(obj) {
 
+  // ---------- OAO ----------
+  if (isFinite(obj.oao)) {
+    tracerPoint(0, obj.oao);
+  }
+
+  // ---------- RACINES ----------
+  obj.racines.forEach(r => {
+    tracerPoint(r, 0);
+  });
+}
+
+  
 function tracerCourbe(fonction) {
   let path = "";
   let first = true;
@@ -289,16 +302,20 @@ function genererQCM(obj) {
 
   const reponses = [];
 
-  // ---------- bonne réponse ----------
   let bonne;
+  let aucuneRacine = false;
 
   if (typeQuestion === "oao") {
     bonne = obj.oao;
   } else {
-    bonne = obj.racines.length > 0 ? obj.racines[0] : "none";
+    if (obj.racines.length === 0) {
+      bonne = "none";
+      aucuneRacine = true;
+    } else {
+      bonne = obj.racines[0];
+    }
   }
 
-  // Valeurs autorisées (sans 4)
   const valeurs = [-3, -2, -1, 0, 1, 2, 3];
 
   valeurs.forEach(v => {
@@ -308,16 +325,16 @@ function genererQCM(obj) {
     });
   });
 
-  // ---------- option "Y en a pas" ----------
-  reponses.push({
-    label: "\\text{Y en a pas}",
-    correct: bonne === "none"
-  });
+  // ➕ "Y en a pas" seulement si nécessaire
+  if (typeQuestion === "racine" && aucuneRacine) {
+    reponses.push({
+      label: "\\text{Y en a pas}",
+      correct: true
+    });
+  }
 
   return reponses;
 }
-
-
 
 
 
@@ -354,6 +371,8 @@ function genererQCM(obj) {
 
 function calculerReponse(obj) {
 
+  afficherPointsImportants(obj);
+  
   if (typeQuestion === "oao")
     return obj.oao;
 
