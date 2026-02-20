@@ -233,78 +233,55 @@ function tirerTypeQuestion() {
 }
 
 
-
-  
 function afficherQCM(propositions) {
-const qcm = document.getElementById("qcm");
-qcm.innerHTML = "";
 
+  const qcm = document.getElementById("qcm");
+  qcm.innerHTML = "";
 
-let nbErreurs = 0;
-let bonneCarte = null; // 👈 référence directe
+  let dejaClique = false;
+  let bonneCarte = null;
 
+  propositions.forEach(p => {
 
-propositions.forEach(p => {
-const card = document.createElement("div");
-card.className = "qcm-card";
-card.innerHTML = `\\(${p.label}\\)`;
+    const card = document.createElement("div");
+    card.className = "qcm-card";
+    card.innerHTML = `\\(${p.label}\\)`;
 
-
-// On mémorise la bonne carte
-if (p.correct) {
-bonneCarte = card;
-}
-
-
-// 🔧 CORRECTION 1 — clic sur la BONNE réponse doit TOUJOURS déclencher l’effet
-// Remplacer ENTIEREMENT le card.onclick par ceci :
-
-card.onclick = () => {
-
-  // ---- BONNE RÉPONSE ----
-  if (p.correct) {
-
-    if (typeQuestion === "racine") {
-      surlignerAxe(h, "x", typeEquation, ky);
-    } else {
-      surlignerAxe(v, "y", typeEquation, ky);
+    if (p.correct) {
+      bonneCarte = card;
     }
 
-    card.classList.add("correct");
+    card.onclick = () => {
 
-    document.querySelectorAll(".qcm-card")
-      .forEach(c => c.style.pointerEvents = "none");
+      // 🚫 si déjà répondu → on bloque
+      if (dejaClique) return;
 
-    return;
-  }
+      dejaClique = true;
 
-  // ---- MAUVAISE RÉPONSE ----
-  card.classList.add("incorrect");
-  card.style.pointerEvents = "none";
-  nbErreurs++;
+      // ---- BONNE RÉPONSE ----
+      if (p.correct) {
+        card.classList.add("correct");
+      }
 
-  // ---- 2e ERREUR : révélation automatique ----
-  if (nbErreurs >= 2 && bonneCarte) {
+      // ---- MAUVAISE RÉPONSE ----
+      else {
+        card.classList.add("incorrect");
 
-    bonneCarte.classList.add("correct");
+        // On révèle la bonne
+        if (bonneCarte) {
+          bonneCarte.classList.add("correct");
+        }
+      }
 
-    if (typeQuestion === "racine") {
-      surlignerAxe(h, "x", typeEquation, ky);
-    } else {
-      surlignerAxe(v, "y", typeEquation, ky);
-    }
+      // 🚫 On bloque tous les clics
+      document.querySelectorAll(".qcm-card")
+        .forEach(c => c.style.pointerEvents = "none");
+    };
 
-    document.querySelectorAll(".qcm-card")
-      .forEach(c => c.style.pointerEvents = "none");
-  }
-};
+    qcm.appendChild(card);
+  });
 
-
-qcm.appendChild(card);
-});
-
-
-MathJax.typesetPromise();
+  MathJax.typesetPromise();
 }
 
   
@@ -312,15 +289,17 @@ function genererQCM(obj) {
 
   const reponses = [];
 
-  const bonne =
-    typeQuestion === "oao"
-      ? obj.oao
-      : obj.racines.length > 0
-        ? obj.racines[0]
-        : "aucune";
+  // ---------- bonne réponse ----------
+  let bonne;
 
-  // Valeurs autorisées (sans -5, -4 et 5)
-  const valeurs = [-3, -2, -1, 0, 1, 2, 3, 4];
+  if (typeQuestion === "oao") {
+    bonne = obj.oao;
+  } else {
+    bonne = obj.racines.length > 0 ? obj.racines[0] : "none";
+  }
+
+  // Valeurs autorisées (sans 4)
+  const valeurs = [-3, -2, -1, 0, 1, 2, 3];
 
   valeurs.forEach(v => {
     reponses.push({
@@ -329,9 +308,14 @@ function genererQCM(obj) {
     });
   });
 
+  // ---------- option "Y en a pas" ----------
+  reponses.push({
+    label: "\\text{Y en a pas}",
+    correct: bonne === "none"
+  });
+
   return reponses;
 }
-
 
 
 
