@@ -71,7 +71,7 @@ let h = 0;
 let v = 0;
 let kx = 1;
 let ky = 1;
-let typeQuestion = "domaine"; // ou "image"
+let typeQuestion = "racine"; // ou "oao"
 let dernieresQuestions = [];
 
   
@@ -195,7 +195,7 @@ function fonctionTranslatee(f) {
 }
 
 function tirerTypeQuestion() {
-  const toutes = ["domaine", "image"];
+  const toutes = ["racine", "oao"];
 
   // On exclut la question si elle est déjà sortie 2 fois de suite
   let candidates = toutes;
@@ -261,7 +261,7 @@ function genererQCMCarree(h, v) {
 // -------- Bonne réponse --------
 let bonne;
 
-if (typeQuestion === "domaine") {
+if (typeQuestion === "racine") {
   bonne = `\\mathbb{R}`;
 } else {
   bonne = ky === 1
@@ -295,7 +295,7 @@ function genererQCMRacine(h, v) {
   // -------- Bonne réponse --------
 let bonne;
 
-if (typeQuestion === "domaine") {
+if (typeQuestion === "racine") {
   bonne = ky === 1
     ? `\\left[ ${h}, +\\infty \\right[`
     : `\\left] -\\infty, ${h} \\right]`;
@@ -331,7 +331,7 @@ function genererQCMInverse(h, v) {
   // -------- Bonne réponse --------
 let bonne;
 
-if (typeQuestion === "domaine") {
+if (typeQuestion === "racine") {
   bonne = `\\mathbb{R} \\setminus \\{ ${h} \\}`;
 } else {
   bonne = `\\mathbb{R} \\setminus \\{ ${v} \\}`;
@@ -375,7 +375,7 @@ card.onclick = () => {
   // ---- BONNE RÉPONSE ----
   if (p.correct) {
 
-    if (typeQuestion === "domaine") {
+    if (typeQuestion === "racine") {
       surlignerAxe(h, "x", typeEquation, ky);
     } else {
       surlignerAxe(v, "y", typeEquation, ky);
@@ -399,7 +399,7 @@ card.onclick = () => {
 
     bonneCarte.classList.add("correct");
 
-    if (typeQuestion === "domaine") {
+    if (typeQuestion === "racine") {
       surlignerAxe(h, "x", typeEquation, ky);
     } else {
       surlignerAxe(v, "y", typeEquation, ky);
@@ -436,7 +436,7 @@ function genererQCM(type, h, v) {
 
 function surlignerAxe(borne, axe, typeFonction) {
 
-  // ---- CAS INVERSE : domaine = R \ {h} ----
+  // ---- CAS INVERSE : racine = R \ {h} ----
   if (axe === "x" && typeFonction === "inverse") {
     svg.innerHTML += `
       <line x1="${xToPx(xmin)}" y1="${yToPx(0)}"
@@ -574,9 +574,9 @@ function genererEquation() {
 tirerTypeQuestion();
 const enonce = document.getElementById("enonce");
 enonce.innerHTML =
-  typeQuestion === "domaine"
-    ? "Quel est le <strong>domaine</strong> de la fonction ?"
-    : "Quel est l’<strong>ensemble image</strong> de la fonction ?";
+  typeQuestion === "racine"
+    ? "Quelles sont les éventuelles <strong>racines</strong> de la fonction ?"
+    : "Quel est l’<strong>ordonnée à l'origine</strong> de la fonction ?";
   
 dessinerRepere();
 
