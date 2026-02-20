@@ -161,8 +161,25 @@ if (
 
 
 function tirerTypeFonction() {
+
   const types = ["quadratique","cubique","absolue"];
-  return types[Math.floor(Math.random()*types.length)];
+
+  let candidats = types;
+
+  // ❌ si la même fonction est sortie juste avant → on l'exclut
+  if (dernieresFonctions.length > 0) {
+    candidats = types.filter(t => t !== dernieresFonctions[dernieresFonctions.length - 1]);
+  }
+
+  const choix = candidats[Math.floor(Math.random() * candidats.length)];
+
+  // mémorisation
+  dernieresFonctions.push(choix);
+  if (dernieresFonctions.length > 1) {
+    dernieresFonctions.shift();
+  }
+
+  return choix;
 }
 
 function tirerTypeQuestion() {
