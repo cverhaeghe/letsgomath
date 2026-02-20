@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<!-- MathJax config -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']] },
+  svg: { fontCache: 'global' },
+  options: { renderActions: { addMenu: [] } }
+};
+</script>
+
+<!-- MathJax engine -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+
+  
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+<div class="equation-box" id="equation"></div>
+
+<div id="zone-propositions" class="order-container"></div>
+
+<div class="center-button">
+  <button onclick="verifier()">Valider</button>
+  <button onclick="corriger()">Solution</button>
+  <button onclick="genererEquation()">Nouvel exercice</button>
+</div>
+
+  <div class="exo-links">
+    <a href="../../4GT_fonctions.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+/* ========================= Fonctions de référence ========================= */
+let historiqueFonctions = [];
+
+const fonctions = [
+  {nom:"carrée", latex:"f(x)=x^2"},
+  {nom:"cube", latex:"f(x)=x^3"},
+  {nom:"racine carrée", latex:"f(x)=\\sqrt{x}"},
+  {nom:"racine cubique", latex:"f(x)=\\sqrt[3]{x}"},
+  {nom:"valeur absolue", latex:"f(x)=|x|"},
+  {nom:"inverse", latex:"f(x)=\\dfrac{1}{x}"}
+];
+
+ function appliquerFonction(flatex, interieur){
+
+/* PUISSANCE 2 */
+if(flatex.includes("x^2")){
+
+  let expr = interieur.trim();
+
+  if(expr.startsWith("((") && expr.endsWith("))"))
+    expr = expr.slice(1,-1);
+
+  if(expr.startsWith("(") && expr.endsWith(")"))
+    expr = expr.slice(1,-1);
+
+  return `\\left(${expr}\\right)^2`;
+}
+
+/* PUISSANCE 3 */
+if(flatex.includes("x^3")){
+
+  let expr = interieur.trim();
+
+  if(expr.startsWith("((") && expr.endsWith("))"))
+    expr = expr.slice(1,-1);
+
+  if(expr.startsWith("(") && expr.endsWith(")"))
+    expr = expr.slice(1,-1);
+
+  return `\\left(${expr}\\right)^3`;
+}
+
+
+
+  /* RACINE CARRÉE */
+  if(flatex.includes("\\sqrt{x}")){
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
+    return `\\sqrt{${interieur}}`;
+  }
+
+  /* RACINE CUBIQUE */
+  if(flatex.includes("\\sqrt[3]{x}")){
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
+    return `\\sqrt[3]{${interieur}}`;
+  }
+
+  /* VALEUR ABSOLUE */
+  if(flatex.includes("|x|")){
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
+    return `\\left|${interieur}\\right|`;
+  }
+
+  /* INVERSE */
+  if(flatex.includes("\\dfrac{1}{x}")){
+    if(interieur.startsWith("(") && interieur.endsWith(")"))
+      interieur = interieur.slice(1,-1);
+    return `\\dfrac{1}{${interieur}}`;
+  }
+}
+
+
+
+/* ========================= Génération fractions ========================= */
+
+function randomChoice(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function randomSign(){
+  return Math.random() < 0.5 ? -1 : 1;
+}
+
+function randomK(){
+  const valeurs = [1/2, 1/3, 2, 3];
+  return randomSign() * randomChoice(valeurs);
+}
+
+function randomS(){
+  const valeurs = [1/2, 1/3, 2, 3];
+  return randomSign() * randomChoice(valeurs);
+}
+
+
+function toLatex(n){
+  if(n===0) return "0";
+  if(n===1) return "1";
+  if(n===-1) return "-1";
+  if(Math.abs(n)===0.5) return (n<0?"-":"")+"\\dfrac{1}{2}";
+  if(Math.abs(n)===1/3) return (n<0?"-":"")+"\\dfrac{1}{3}";
+  return n.toString();
+}
+
+
+/* ========================= Génération énoncé ========================= */
+
+let bonneReponse = [];
+
+  function compterTransformations(k,s,h,v){
+
+  let count = 0;
+
+  if(h !== 0) count++;
+  if(v !== 0) count++;
+
+  if(s !== 1){
+    count++;                 // déformation horizontale
+    if(s < 0) count++;       // symétrie y
+  }
+
+  if(k !== 1){
+    count++;                 // déformation verticale
+    if(k < 0) count++;       // symétrie x
+  }
+
+  return count;
+}
+
+  
+function genererEquation(){
+
+  document.querySelector(".center-button button").disabled = false;
+  document.getElementById("zone-propositions").innerHTML = "";
+
+let f;
+
+/* empêcher répétition sur 3 exos */
+do{
+  f = randomChoice(fonctions);
+}
+while(
+  historiqueFonctions.length >= 2 &&
+  (f.nom === historiqueFonctions[historiqueFonctions.length-1] ||
+   f.nom === historiqueFonctions[historiqueFonctions.length-2])
+);
+
+/* mémoriser */
+historiqueFonctions.push(f.nom);
+
+/* garder seulement les 2 dernières */
+if(historiqueFonctions.length > 2)
+  historiqueFonctions.shift();
+
+  let h = Math.floor(Math.random()*6)-3;
+  let v = Math.floor(Math.random()*6)-3;
+
+ let k, s;
+
+/* CAS FONCTION INVERSE */
+if(f.latex.includes("\\dfrac{1}{x}")){
+
+  const valeursKS = [1,2,3];
+
+  if(Math.random() < 0.5){
+    // transformation verticale
+    k = randomSign() * randomChoice(valeursKS);
+    s = randomSign();  // seulement ±1
+  }
+  else{
+    // transformation horizontale
+    s = randomSign() * randomChoice(valeursKS);
+    k = randomSign();  // seulement ±1
+  }
+
+}
+
+/* CAS AUTRES FONCTIONS */
+else{
+
+  if(Math.random() < 0.5){
+    k = randomK();        // peut être 1/2, 1/3, 2, 3
+    s = randomSign();     // ±1
+  }
+  else{
+    s = randomS();        // peut être 1/2, 1/3, 2, 3
+    k = randomSign();     // ±1
+  }
+
+}
+
+
+
+  if(s===0) s=1;
+  if(k===0) k=1;
+
+/* forcer au moins 2 transformations */
+while(compterTransformations(k,s,h,v) < 2){
+
+  h = Math.floor(Math.random()*6)-3;
+  v = Math.floor(Math.random()*6)-3;
+
+  if(Math.random() < 0.5){
+    k = randomK();
+    s = randomSign();
+  }
+  else{
+    s = randomS();
+    k = randomSign();
+  }
+}
+  
+  /* Expression latex */
+
+/* ================= Construction correcte horizontale ================= */
+
+let variable = "x";
+
+/* 1️⃣ Symétrie horizontale */
+if(s < 0){
+  variable = "-x";
+}
+
+/* 2️⃣ Déformation horizontale */
+const absS = Math.abs(s);
+
+if(absS === 2 || absS === 3){
+  variable = `${absS}(${variable})`;
+}
+else if(absS === 0.5){
+  variable = `\\dfrac{${variable}}{2}`;
+}
+else if(absS === 1/3){
+  variable = `\\dfrac{${variable}}{3}`;
+}
+
+/* 3️⃣ Translation horizontale */
+if(h !== 0){
+  variable = `(${variable}${h>0 ? "-" + h : "+" + (-h)})`;
+}
+
+
+let interieur = variable;
+
+
+
+let fonctionTransformee = appliquerFonction(f.latex, interieur);
+
+let expr = "";
+
+/* ================= Construction verticale correcte ================= */
+
+const absK = Math.abs(k);
+
+/* 1️⃣ Déformation verticale */
+if(absK === 1){
+  expr = `${fonctionTransformee}`;
+}
+else if(absK === 2 || absK === 3){
+  expr = `${absK}${fonctionTransformee}`;
+}
+else if(absK === 0.5){
+  expr = `\\dfrac{${fonctionTransformee}}{2}`;
+}
+else if(absK === 1/3){
+  expr = `\\dfrac{${fonctionTransformee}}{3}`;
+}
+
+/* 2️⃣ Symétrie axe x → MINUS DEVANT TOUT */
+if(k < 0){
+  expr = `-${expr}`;
+}
+
+/* 3️⃣ Ajout f(x)= */
+expr = `f(x)=${expr}`;
+
+
+
+/* translation verticale */
+if(v !== 0){
+  expr += v>0 ? `+${v}` : `${v}`;
+}
+
+
+
+
+  document.getElementById("equation").innerHTML =
+    `Détermine l'ordre des transformations qu'a subit la fonction de référence :<br><br>
+     \\(${expr}\\)`;
+
+MathJax.typesetPromise().then(() => {
+  window.dispatchEvent(new Event("resize"));
+});
+
+  genererTransformations(k,s,h,v);
+}
+
+
+/* ========================= Création des transformations ========================= */
+
+function genererTransformations(k,s,h,v){
+
+  let liste = [];
+
+
+
+if(s !== 1){
+
+    if(s < 0){
+        liste.push(`Symétrie orthogonale d'axe y`);
+    }
+
+    const svaleur = Math.abs(s);
+
+    if(svaleur === 2 || svaleur === 3){
+        liste.push(`Compression horizontale de facteur ${svaleur}`);
+    }
+    else if(svaleur === 0.5 || svaleur === 1/3){
+    const sfacteur = 1 / svaleur;   // inverse
+    liste.push(`Étirement horizontal de facteur ${sfacteur}`);
+}
+}
+
+if(h!==0){
+const hval = Math.abs(h);
+const uniteH = hval === 1 ? "unité" : "unités";
+
+liste.push(
+  h>0 ?
+  `Translation horizontale de ${hval} ${uniteH} vers la droite`
+  :
+  `Translation horizontale de ${hval} ${uniteH} vers la gauche`
+);
+  }
+
+  
+if(k !== 1){
+
+    if(k < 0){
+        liste.push(`Symétrie orthogonale d'axe x`);
+    }
+
+    const kvaleur = Math.abs(k);
+
+    if(kvaleur === 2 || kvaleur === 3){
+        liste.push(`Étirement vertical de facteur ${kvaleur}`);
+    }
+    else if(kvaleur === 0.5 || kvaleur === 1/3){
+        const kfacteur = 1 / kvaleur;   // inverse
+        liste.push(`Compression verticale de facteur ${kfacteur}`);
+    }
+}
+
+
+  if(v!==0){
+const vval = Math.abs(v);
+const uniteV = vval === 1 ? "unité" : "unités";
+
+liste.push(
+  v>0 ?
+  `Translation verticale de ${vval} ${uniteV} vers le haut`
+  :
+  `Translation verticale de ${vval} ${uniteV} vers le bas`
+);
+  }
+
+  bonneReponse = [...liste];
+
+  /* Mélange */
+  liste.sort(()=>Math.random()-0.5);
+
+  /* sécurité : s'il n'y a aucune transformation, on en met au moins une */
+if(liste.length === 0){
+  liste.push("Aucune transformation");
+}
+
+  afficherChoix(liste);
+}
+
+
+/* =========================   Affichage (ordre à choisir) ========================= */
+
+function afficherChoix(liste){
+
+  const zone = document.getElementById("zone-propositions");
+
+  /* sécurité : si la zone n'existe pas */
+  if(!zone) return;
+
+  /* vider complètement */
+  zone.innerHTML = "";
+
+  /* si aucune transformation (cas rare) */
+  if(liste.length === 0){
+    zone.innerHTML = "<i>Aucune transformation</i>";
+    return;
+  }
+
+  /* recréer toutes les cartes */
+  liste.forEach((texte,i)=>{
+    const div = document.createElement("div");
+    div.className = "order-item";
+    div.draggable = true;
+    div.textContent = texte;
+    zone.appendChild(div);
+  });
+
+
+enableTouchDrag();
+enableDesktopDragDrop();
+
+}
+
+
+
+  /* =============================== MODE MOBILE : TAP → SWAP =============================== */
+
+function echanger(a, b){
+
+  const parent = a.parentNode;
+
+  const aNext = a.nextSibling === b ? a : a.nextSibling;
+
+  parent.insertBefore(a, b);
+  parent.insertBefore(b, aNext);
+}
+
+  
+function enableTouchDrag(){
+
+  if (window.matchMedia("(hover: hover)").matches) return;
+  // uniquement mobile / tactile
+
+  const container = document.getElementById("zone-propositions");
+  const items = container.querySelectorAll(".order-item");
+
+  let dragged = null;
+  let offsetY = 0;
+
+  items.forEach(item => {
+
+    item.addEventListener("touchstart", e => {
+
+      dragged = item;
+      document.body.style.overflow = "hidden";
+
+      const rect = item.getBoundingClientRect();
+      offsetY = e.touches[0].clientY - rect.top;
+
+      item.classList.add("dragging-touch");
+
+      item.style.top = rect.top + "px";
+      item.style.left = rect.left + "px";
+      item.style.width = rect.width + "px";
+
+    }, { passive: true });
+
+
+item.addEventListener("touchmove", e => {
+
+  if(!dragged) return;
+
+  e.preventDefault();   // 🔥 bloque le scroll écran
+
+  const y = e.touches[0].clientY - offsetY;
+  dragged.style.top = y + "px";
+
+  const afterElement = getDragAfterElement(container, e.touches[0].clientY);
+
+  if(afterElement == null){
+    container.appendChild(dragged);
+  } else {
+    container.insertBefore(dragged, afterElement);
+  }
+
+}, { passive: false }); 
+
+
+
+    item.addEventListener("touchend", () => {
+
+      if(!dragged) return;
+
+      dragged.classList.remove("dragging-touch");
+      dragged.style.top = "";
+      dragged.style.left = "";
+      dragged.style.width = "";
+
+      dragged = null;
+      document.body.style.overflow = "";
+
+    });
+
+  });
+}
+
+function getDragAfterElement(container, y){
+
+  const elements = [...container.querySelectorAll(".order-item:not(.dragging-touch)")];
+
+  return elements.reduce((closest, child) => {
+
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+
+    if(offset < 0 && offset > closest.offset){
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+
+/* =============================== DRAG & DROP PC =============================== */
+
+function enableDesktopDragDrop(){
+
+  if (!window.matchMedia("(hover: hover)").matches) return;
+  // uniquement PC (souris)
+
+  const items = document.querySelectorAll(".order-item");
+  let dragged = null;
+
+  items.forEach(item=>{
+
+    item.addEventListener("dragstart", ()=>{
+      dragged = item;
+      item.classList.add("dragging");
+    });
+
+    item.addEventListener("dragend", ()=>{
+      item.classList.remove("dragging");
+    });
+
+    item.addEventListener("dragover", e=>{
+      e.preventDefault();
+    });
+
+    item.addEventListener("drop", e=>{
+      e.preventDefault();
+      if(dragged !== item){
+        const parent = item.parentNode;
+        const children = Array.from(parent.children);
+        const draggedIndex = children.indexOf(dragged);
+        const targetIndex = children.indexOf(item);
+
+        if(draggedIndex < targetIndex)
+          parent.insertBefore(dragged, item.nextSibling);
+        else
+          parent.insertBefore(dragged, item);
+      }
+    });
+  });
+}
+
+
+
+/* ========================= Vérification ========================= */
+
+function verifier(){
+
+  const items = document.querySelectorAll(".order-item");
+
+  /* reset couleurs */
+  items.forEach(i=>{
+    i.classList.remove("correct","wrong");
+  });
+
+  let propositions = Array.from(items).map(i => i.textContent);
+  let attendu = [...bonneReponse];
+
+  let correct = comparerListes(propositions, attendu);
+
+  /* ================= BONNE RÉPONSE ================= */
+  if(correct){
+    items.forEach(i=>i.classList.add("correct"));
+    return;
+  }
+
+  /* ================= MAUVAISE RÉPONSE ================= */
+
+  items.forEach((item,i)=>{
+    if(item.textContent === attendu[i])
+      item.classList.add("correct");
+    else
+      item.classList.add("wrong");
+  });
+
+  /* 🔹 PAS de limite → PAS de correction auto */
+}
+
+
+
+  function comparerListes(propositions, attendu){
+
+  if(propositions.length !== attendu.length)
+    return false;
+
+  /* comparaison stricte */
+  if(JSON.stringify(propositions) === JSON.stringify(attendu))
+    return true;
+
+  /* ================= TOLÉRANCES ================= */
+
+  for(let i=0; i<attendu.length-1; i++){
+
+    let a1 = attendu[i];
+    let a2 = attendu[i+1];
+
+/* ----- Vertical : uniquement déformation + symétrie ----- */
+if(
+  (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("Étirement vertical")) ||
+  (a1.includes("Symétrie orthogonale d'axe x") && a2.includes("Compression verticale")) ||
+  (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("Étirement vertical")) ||
+  (a2.includes("Symétrie orthogonale d'axe x") && a1.includes("Compression verticale"))
+){
+  let copie = [...attendu];
+  [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
+
+  if(JSON.stringify(propositions) === JSON.stringify(copie))
+    return true;
+}
+
+
+/* ----- Horizontal : uniquement déformation + symétrie ----- */
+if(
+  (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("Étirement horizontal")) ||
+  (a1.includes("Symétrie orthogonale d'axe y") && a2.includes("Compression horizontale")) ||
+  (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("Étirement horizontal")) ||
+  (a2.includes("Symétrie orthogonale d'axe y") && a1.includes("Compression horizontale"))
+){
+  let copie = [...attendu];
+  [copie[i], copie[i+1]] = [copie[i+1], copie[i]];
+
+  if(JSON.stringify(propositions) === JSON.stringify(copie))
+    return true;
+}
+  
+
+  return false;
+}
+
+  }
+
+
+
+/* ========================= Solution ========================= */
+
+function corriger(){
+
+  const zone = document.getElementById("zone-propositions");
+  zone.innerHTML = "";
+
+  bonneReponse.forEach(t=>{
+    const div = document.createElement("div");
+    div.className = "order-item correct";
+    div.textContent = t;
+    zone.appendChild(div);
+  });
+}
+
+
+
+/* ======================== Génération initiale ========================= */
+
+genererEquation();
+</script>
+
+   
+  <!-- Protection clique droit (commun à tout le site) -->
+  <script src="../../../js/protection.js"></script>
+  
+</body>
+</html>
