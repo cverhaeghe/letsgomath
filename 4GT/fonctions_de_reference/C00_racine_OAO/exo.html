@@ -270,8 +270,9 @@ const b = nonZero[Math.floor(Math.random()*nonZero.length)];
 const oao = a*Math.abs(r) + b;
 
 // PAS de racine → le sommet ne doit jamais toucher l'axe
-if (a > 0 && b <= 0) continue;
-if (a < 0 && b >= 0) continue;
+// PAS de racine → aucune solution à a|x-r|+b = 0
+// <=> -b/a < 0
+if (-b / a >= 0) continue;
       
 if (
   oao >= -3 && oao <= 3 &&
