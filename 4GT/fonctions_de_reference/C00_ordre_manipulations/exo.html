@@ -684,49 +684,42 @@ function comparerListes(propositions, attendu){
   if(propositions.length !== attendu.length)
     return false;
 
-  // Séparer les blocs
-  const vertical = attendu.filter(t =>
-    t.includes("vertical") || t.includes("axe x")
-  );
-
-  const horizontal = attendu.filter(t =>
-    t.includes("horizontal") || t.includes("axe y")
-  );
-
-  const translations = attendu.filter(t =>
-    t.includes("Translation")
-  );
-
-  // Vérifier que toutes les propositions sont présentes
+  // mêmes éléments ?
   for(let p of propositions){
     if(!attendu.includes(p))
       return false;
   }
 
-  // Vérifier que les éléments verticaux sont groupés (ordre libre)
-  const verticalUser = propositions.filter(t =>
-    t.includes("vertical") || t.includes("axe x")
-  );
+  // Fonction pour classer chaque transformation
+  function typeTransformation(t){
 
-  if(verticalUser.length === vertical.length){
+    if(t.includes("axe y") || 
+       t.includes("horizontal") && !t.includes("Translation"))
+      return 1;   // bloc 1 : transfo horizontales
 
-    const sameVertical =
-      verticalUser.every(v => vertical.includes(v));
+    if(t.includes("Translation horizontale"))
+      return 2;   // bloc 2
 
-    if(!sameVertical) return false;
+    if(t.includes("axe x") || 
+       t.includes("vertical") && !t.includes("Translation"))
+      return 3;   // bloc 3 : transfo verticales
+
+    if(t.includes("Translation verticale"))
+      return 4;   // bloc 4
+
+    return 0;
   }
 
-  // Vérifier que les horizontaux sont corrects
-  const horizontalUser = propositions.filter(t =>
-    t.includes("horizontal") || t.includes("axe y")
-  );
+  let blocActuel = 0;
 
-  if(horizontalUser.length === horizontal.length){
+  for(let t of propositions){
 
-    const sameHorizontal =
-      horizontalUser.every(h => horizontal.includes(h));
+    let bloc = typeTransformation(t);
 
-    if(!sameHorizontal) return false;
+    if(bloc < blocActuel)
+      return false;
+
+    blocActuel = bloc;
   }
 
   return true;
