@@ -486,7 +486,8 @@ function afficherChoix(liste){
     zone.appendChild(div);
   });
 
-enableMobileSwap();
+
+enableTouchDrag();
 enableDesktopDragDrop();
 
 }
@@ -506,49 +507,84 @@ function echanger(a, b){
 }
 
   
-function enableMobileSwap(){
+function enableTouchDrag(){
 
   if (window.matchMedia("(hover: hover)").matches) return;
-  // uniquement mobile (pas souris)
+  // uniquement mobile / tactile
 
-  const items = document.querySelectorAll(".order-item");
-  let selected = null;
+  const container = document.getElementById("zone-propositions");
+  const items = container.querySelectorAll(".order-item");
+
+  let dragged = null;
+  let offsetY = 0;
 
   items.forEach(item => {
 
-    item.addEventListener("click", function(){
+    item.addEventListener("touchstart", e => {
 
-  /* 1er tap → sélection (orange vif) */
-if(!selected){
+      dragged = item;
 
-  /* reset visuel de toutes les cartes */
-  document.querySelectorAll(".order-item").forEach(i=>{
-    i.style.backgroundColor = "";
-    i.style.color = "";
+      const rect = item.getBoundingClientRect();
+      offsetY = e.touches[0].clientY - rect.top;
+
+      item.classList.add("dragging-touch");
+
+      item.style.top = rect.top + "px";
+      item.style.left = rect.left + "px";
+      item.style.width = rect.width + "px";
+
+    }, { passive: true });
+
+
+    item.addEventListener("touchmove", e => {
+
+      if(!dragged) return;
+
+      const y = e.touches[0].clientY - offsetY;
+      dragged.style.top = y + "px";
+
+      const afterElement = getDragAfterElement(container, e.touches[0].clientY);
+
+      if(afterElement == null){
+        container.appendChild(dragged);
+      } else {
+        container.insertBefore(dragged, afterElement);
+      }
+
+    }, { passive: false });
+
+
+    item.addEventListener("touchend", () => {
+
+      if(!dragged) return;
+
+      dragged.classList.remove("dragging-touch");
+      dragged.style.top = "";
+      dragged.style.left = "";
+      dragged.style.width = "";
+
+      dragged = null;
+    });
+
   });
-
-  selected = item;
-  item.classList.add("dragging");
-  item.style.backgroundColor = "var(--peps)";   // ORANGE VIF
-  item.style.color = "white";
-  return;
 }
 
+function getDragAfterElement(container, y){
 
-  /* 2e tap → échange */
-  if(selected !== item){
-    echanger(selected, item);
-  }
+  const elements = [...container.querySelectorAll(".order-item:not(.dragging-touch)")];
 
-  /* reset → retour au bleu */
-  selected.classList.remove("dragging");
-  selected.style.backgroundColor = "";   // 🔥 supprime orange
-  selected.style.color = "";
-  selected = null;
-});
+  return elements.reduce((closest, child) => {
 
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
 
-  });
+    if(offset < 0 && offset > closest.offset){
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 
