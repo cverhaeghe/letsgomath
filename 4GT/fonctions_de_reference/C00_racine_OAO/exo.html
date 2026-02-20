@@ -250,7 +250,7 @@ if (typeEquation === "absolue") {
 
       const nonZero = entiers.filter(x => x !== 0);
       const b = nonZero[Math.floor(Math.random()*nonZero.length)];
-      const oao = a*Math.abs(r) + b;
+      const oao = a*Math.abs(x - r);
 
 if (
   oao >= -3 && oao <= 3 &&
