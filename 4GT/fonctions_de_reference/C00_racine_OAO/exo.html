@@ -242,39 +242,44 @@ if (typeEquation === "absolue") {
 
     // 50% : PAS de racine
     if (Math.random() < 0.5) {
-      const b = entiers.filter(x => x !== 0)[Math.floor(Math.random()*5)];
+
+      const nonZero = entiers.filter(x => x !== 0);
+      const b = nonZero[Math.floor(Math.random()*nonZero.length)];
       const oao = a*Math.abs(r) + b;
 
       if (oao >= -3 && oao <= 3) {
         return {
-          f: x => a*Math.abs(x-r) + b,
+          f: x => a*Math.abs(x - r) + b,
           racines: [],
           oao: oao
         };
       }
     }
-  }
+
     // 50% : UNE racine
     else {
+
       const oao = a*Math.abs(r);
+
       if (oao >= -3 && oao <= 3) {
         return {
-          f: x => a*Math.abs(x-r),
+          f: x => a*Math.abs(x - r),
           racines: [r],
           oao: oao
         };
       }
     }
-  
+  }
 
   // ---------- QUESTION OAO ----------
   else {
+
     const b = entiers[Math.floor(Math.random()*entiers.length)];
-    const oao = a*Math.abs(r)+b;
+    const oao = a*Math.abs(r) + b;
 
     if (oao >= -3 && oao <= 3) {
       return {
-        f: x => a*Math.abs(x-r)+b,
+        f: x => a*Math.abs(x - r) + b,
         racines: [],
         oao: oao
       };
