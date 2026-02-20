@@ -336,9 +336,10 @@ function afficherQCM(propositions, obj) {
   const qcm = document.getElementById("qcm");
   qcm.innerHTML = "";
 
-const nbBonnes = (typeQuestion === "racine")
-  ? new Set(obj.racines).size
-  : 1;
+const nbBonnes =
+  (typeQuestion === "racine")
+    ? Math.max(1, new Set(obj.racines).size)
+    : 1;
   
   let bonnesCliquees = 0;
   let fini = false;
