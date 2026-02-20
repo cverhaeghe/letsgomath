@@ -527,6 +527,7 @@ function enableTouchDrag(){
     item.addEventListener("touchstart", e => {
 
       dragged = item;
+      document.body.style.overflow = "hidden";
 
       const rect = item.getBoundingClientRect();
       offsetY = e.touches[0].clientY - rect.top;
@@ -540,22 +541,25 @@ function enableTouchDrag(){
     }, { passive: true });
 
 
-    item.addEventListener("touchmove", e => {
+item.addEventListener("touchmove", e => {
 
-      if(!dragged) return;
+  if(!dragged) return;
 
-      const y = e.touches[0].clientY - offsetY;
-      dragged.style.top = y + "px";
+  e.preventDefault();   // 🔥 bloque le scroll écran
 
-      const afterElement = getDragAfterElement(container, e.touches[0].clientY);
+  const y = e.touches[0].clientY - offsetY;
+  dragged.style.top = y + "px";
 
-      if(afterElement == null){
-        container.appendChild(dragged);
-      } else {
-        container.insertBefore(dragged, afterElement);
-      }
+  const afterElement = getDragAfterElement(container, e.touches[0].clientY);
 
-    }, { passive: false });
+  if(afterElement == null){
+    container.appendChild(dragged);
+  } else {
+    container.insertBefore(dragged, afterElement);
+  }
+
+}, { passive: false }); 
+
 
 
     item.addEventListener("touchend", () => {
@@ -568,6 +572,8 @@ function enableTouchDrag(){
       dragged.style.width = "";
 
       dragged = null;
+      document.body.style.overflow = "";
+
     });
 
   });
