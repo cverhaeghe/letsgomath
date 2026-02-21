@@ -111,41 +111,17 @@ function tracerPoint(a, b) {
   svg.appendChild(cercle);
 }
   
-
- function entourerSurAxe(valeur, axe) {
-
-  const cercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-
-  if (axe === "x") {
-    cercle.setAttribute("cx", xToPx(valeur));
-    cercle.setAttribute("cy", yToPx(0));
-  } else {
-    cercle.setAttribute("cx", xToPx(0));
-    cercle.setAttribute("cy", yToPx(valeur));
-  }
-
-  cercle.setAttribute("r", 12);
-  cercle.setAttribute("fill", "none");
-  cercle.setAttribute("stroke", "blue");
-  cercle.setAttribute("stroke-width", "3");
-
-  svg.appendChild(cercle);
-}
-  
-
-function tracerPointCreux(x, y) {
+function tracerPointBleu(a, b) {
 
   const cercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
-  cercle.setAttribute("cx", xToPx(x));
-  cercle.setAttribute("cy", yToPx(y));
-  cercle.setAttribute("r", 6);
-  cercle.setAttribute("fill", "none");        // creux transparent
-  cercle.setAttribute("stroke", "orange");
-  cercle.setAttribute("stroke-width", "2");
+  cercle.setAttribute("cx", xToPx(a));
+  cercle.setAttribute("cy", yToPx(b));
+  cercle.setAttribute("r", 5);
+  cercle.setAttribute("fill", "blue");
 
   svg.appendChild(cercle);
-}
+}  
 
   
 function afficherPointsImportants(obj) {
@@ -170,12 +146,12 @@ function afficherPointsImportants(obj) {
 if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
 
   entourerSurAxe(obj.extremumX, "x");
-  tracerPoint(obj.extremumX, 0);
+  tracerPointBleu(obj.extremumX, 0);
 
 } else {
 
   entourerSurAxe(obj.extremumY, "y");
-  tracerPoint(0, obj.extremumY);
+  tracerPointBleu(0, obj.extremumY);
 }
 
     
