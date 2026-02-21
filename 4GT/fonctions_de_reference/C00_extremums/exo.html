@@ -107,31 +107,24 @@ function tracerPoint(a, b) {
 
 function afficherPointsImportants(obj) {
 
-  if (!isFinite(obj.extremum)) return;
+  if (!obj) return;
 
-  // On cherche x du sommet numériquement
-  let bestX = xmin;
-  let bestY = obj.f(xmin);
+  const demandeMin = (typeQuestion === "min_ou" || typeQuestion === "min_val");
+  const demandeMax = (typeQuestion === "max_ou" || typeQuestion === "max_val");
 
-  for (let x = xmin; x <= xmax; x += 0.01) {
-    const y = obj.f(x);
+  // Si la fonction n’a pas l’extremum demandé → rien à afficher
+  if (
+    (demandeMin && obj.type !== "min") ||
+    (demandeMax && obj.type !== "max")
+  ) return;
 
-    if (typeQuestion === "min_ou" || typeQuestion === "min_val") {
-      if (y < bestY) {
-        bestY = y;
-        bestX = x;
-      }
-    } else if (typeQuestion === "max_ou" || typeQuestion === "max_val") {
-      if (y > bestY) {
-        bestY = y;
-        bestX = x;
-      }
-    }
-  }
+  if (!isFinite(obj.extremumX) || !isFinite(obj.extremumY)) return;
 
-  tracerPoint(bestX, bestY);
+  // ⭐ POINT ORANGE SUR LE SOMMET
+  tracerPoint(obj.extremumX, obj.extremumY);
 }
 
+  
   
 function tracerCourbe(fonction) {
   let path = "";
