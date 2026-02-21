@@ -100,12 +100,19 @@ function dessinerRepere(){
 
   
 function tracerPoint(a, b) {
-  svg.innerHTML += `
-    <circle cx="${xToPx(a)}" cy="${yToPx(b)}" r="5" fill="orange"/>
-  `;
-}
 
-  function entourerValeurAxe(valeur, axe) {
+  const cercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+
+  cercle.setAttribute("cx", xToPx(a));
+  cercle.setAttribute("cy", yToPx(b));
+  cercle.setAttribute("r", 5);
+  cercle.setAttribute("fill", "orange");
+
+  svg.appendChild(cercle);
+}
+  
+
+ function entourerValeurAxe(valeur, axe) {
 
   // Supprimer anciens cercles bleus
   svg.querySelectorAll(".cercle-axe").forEach(e => e.remove());
@@ -129,9 +136,10 @@ function tracerPoint(a, b) {
     cercle.setAttribute("r", r);
     cercle.setAttribute("fill", "none");
     cercle.setAttribute("stroke", "blue");
-    cercle.setAttribute("stroke-width", "2");
+    cercle.setAttribute("stroke-width", "3");
     cercle.classList.add("cercle-axe");
 
+    // ⭐ IMPORTANT : ajouter EN DERNIER pour être au-dessus
     svg.appendChild(cercle);
   });
 }
