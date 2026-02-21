@@ -116,12 +116,12 @@ function afficherPointsImportants(obj) {
   for (let x = xmin; x <= xmax; x += 0.01) {
     const y = obj.f(x);
 
-    if (typeQuestion === "minimum") {
+    if (typeQuestion === "min_ou" || typeQuestion === "min_val") {
       if (y < bestY) {
         bestY = y;
         bestX = x;
       }
-    } else {
+    } else if (typeQuestion === "max_ou" || typeQuestion === "max_val") {
       if (y > bestY) {
         bestY = y;
         bestX = x;
@@ -194,27 +194,14 @@ function tirerTypeFonction() {
 }
 
 function tirerTypeQuestion() {
-  const toutes = ["minimum", "maximum"];
 
-  let candidates = toutes;
+  const r = Math.random();
 
-  if (
-    dernieresQuestions.length >= 2 &&
-    dernieresQuestions[0] === dernieresQuestions[1]
-  ) {
-    candidates = toutes.filter(q => q !== dernieresQuestions[0]);
-  }
-
-  const choix = candidates[Math.floor(Math.random() * candidates.length)];
-
-  dernieresQuestions.push(choix);
-  if (dernieresQuestions.length > 2) {
-    dernieresQuestions.shift();
-  }
-
-  typeQuestion = choix;
+  if (r < 0.30) typeQuestion = "min_ou";       // Où minimum
+  else if (r < 0.60) typeQuestion = "max_ou";  // Où maximum
+  else if (r < 0.80) typeQuestion = "min_val"; // Valeur minimum
+  else typeQuestion = "max_val";               // Valeur maximum
 }
-
 
 function genererFonction() {
 
@@ -483,10 +470,18 @@ else if (typeQuestion === "racine") {
   tirerTypeQuestion();
 
   const enonce = document.getElementById("enonce");
-  enonce.innerHTML =
-typeQuestion === "minimum"
-  ? "Où sont les éventuels <strong>minimums</strong> de la fonction ?"
-  : "Où sont les éventuels <strong>maximums</strong> de la fonction ?";
+
+  if (typeQuestion === "min_ou")
+  enonce.innerHTML = "Où sont les éventuels <strong>minimums</strong> de la fonction ?";
+
+else if (typeQuestion === "max_ou")
+  enonce.innerHTML = "Où sont les éventuels <strong>maximums</strong> de la fonction ?";
+
+else if (typeQuestion === "min_val")
+  enonce.innerHTML = "Quelles sont les valeurs des éventuels <strong>minimums</strong> de la fonction ?";
+
+else
+  enonce.innerHTML = "Quelles sont les valeurs des éventuels <strong>maximums</strong> de la fonction ?";
 
   dessinerRepere();
 
