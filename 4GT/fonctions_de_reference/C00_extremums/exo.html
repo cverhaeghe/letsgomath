@@ -219,12 +219,13 @@ function genererFonction() {
       const xv = (r1 + r2) / 2;
       const yv = a*(xv - r1)*(xv - r2);
 
-      // sommet visible
+      // ❌ Refuse extremum (a ; b) avec a = b
+      if (Math.round(xv) === Math.round(yv)) continue;
+
       if (
         xv >= xmin && xv <= xmax &&
         yv >= ymin && yv <= ymax
       ) {
-
         return {
           f: x => a*(x-r1)*(x-r2),
           extremumX: xv,
@@ -256,13 +257,15 @@ function genererFonction() {
       const b = entiers[Math.floor(Math.random()*entiers.length)];
 
       const xv = r;
-      const yv = a*Math.abs(0) + b;  // valeur au sommet
+      const yv = b;
+
+      // ❌ Refuse extremum (a ; b) avec a = b
+      if (Math.round(xv) === Math.round(yv)) continue;
 
       if (
         xv >= xmin && xv <= xmax &&
         yv >= ymin && yv <= ymax
       ) {
-
         return {
           f: x => a*Math.abs(x-r) + b,
           extremumX: xv,
