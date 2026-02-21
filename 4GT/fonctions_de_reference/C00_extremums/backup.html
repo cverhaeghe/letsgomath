@@ -107,7 +107,6 @@ function tracerPoint(a, b) {
   cercle.setAttribute("cy", yToPx(b));
   cercle.setAttribute("r", 5);
   cercle.setAttribute("fill", "orange");
-
   svg.appendChild(cercle);
 }
   
@@ -119,9 +118,8 @@ function tracerPointBleu(a, b) {
   cercle.setAttribute("cy", yToPx(b));
   cercle.setAttribute("r", 5);
   cercle.setAttribute("fill", "blue");
-
   svg.appendChild(cercle);
-}  
+}
 
   
 function afficherPointsImportants(obj) {
@@ -144,7 +142,7 @@ function afficherPointsImportants(obj) {
 
   // 🔵 Point plein SUR L’AXE
 if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
-  tracerPointBleu(obj.extremumX, 0);
+  tracerPointBleu(obj.extremumX, 1);
 } else {
   tracerPointBleu(0, obj.extremumY);
 }    
