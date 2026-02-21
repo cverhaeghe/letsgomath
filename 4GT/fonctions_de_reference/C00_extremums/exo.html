@@ -386,17 +386,16 @@ function genererQCM(obj) {
 
   let bonnes = [];
 
-  // ================= PAS D’EXTREMUM DU BON TYPE =================
   const demandeMin = (typeQuestion === "min_ou" || typeQuestion === "min_val");
   const demandeMax = (typeQuestion === "max_ou" || typeQuestion === "max_val");
 
+  // ================= PAS D'EXTREMUM DU BON TYPE =================
   if (
     (demandeMin && obj.type !== "min") ||
     (demandeMax && obj.type !== "max")
   ) {
-    bonnes = [];  // => Y en a pas
+    bonnes = [];   // => pas de min / pas de max
   }
-
   else {
 
     // ----- question "où ?" -----
@@ -410,6 +409,7 @@ function genererQCM(obj) {
     }
   }
 
+  // ================= CARTES NUMERIQUES =================
   valeurs.forEach(v => {
     reponses.push({
       label: v,
@@ -417,8 +417,11 @@ function genererQCM(obj) {
     });
   });
 
+  // ================= CARTE "PAS DE MIN / MAX" =================
   reponses.push({
-    label: "\\text{Y en a pas}",
+    label: demandeMin
+      ? "\\text{Pas de min}"
+      : "\\text{Pas de max}",
     correct: bonnes.length === 0
   });
 
