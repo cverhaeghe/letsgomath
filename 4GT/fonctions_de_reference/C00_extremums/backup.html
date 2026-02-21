@@ -170,12 +170,12 @@ function afficherPointsImportants(obj) {
 if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
 
   entourerSurAxe(obj.extremumX, "x");
-  tracerPointCreux(obj.extremumX, 0);
+  tracerPoint(obj.extremumX, 0);
 
 } else {
 
   entourerSurAxe(obj.extremumY, "y");
-  tracerPointCreux(0, obj.extremumY);
+  tracerPoint(0, obj.extremumY);
 }
 
     
