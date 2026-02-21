@@ -419,40 +419,63 @@ else if (typeQuestion === "racine") {
 
   const enonce = document.getElementById("enonce");
 
+  // ================= ENONCE =================
   if (typeQuestion === "min_ou")
-  enonce.innerHTML = "Où sont les éventuels <strong>minimums</strong> de la fonction ?";
+    enonce.innerHTML = "Où sont les éventuels <strong>minimums</strong> de la fonction ?";
 
-else if (typeQuestion === "max_ou")
-  enonce.innerHTML = "Où sont les éventuels <strong>maximums</strong> de la fonction ?";
+  else if (typeQuestion === "max_ou")
+    enonce.innerHTML = "Où sont les éventuels <strong>maximums</strong> de la fonction ?";
 
-else if (typeQuestion === "min_val")
-  enonce.innerHTML = "Quelles sont les valeurs des éventuels <strong>minimums</strong> de la fonction ?";
+  else if (typeQuestion === "min_val")
+    enonce.innerHTML = "Quelles sont les valeurs des éventuels <strong>minimums</strong> de la fonction ?";
 
-else
-  enonce.innerHTML = "Quelles sont les valeurs des éventuels <strong>maximums</strong> de la fonction ?";
+  else
+    enonce.innerHTML = "Quelles sont les valeurs des éventuels <strong>maximums</strong> de la fonction ?";
 
+
+  // ================= GRAPHIQUE =================
   dessinerRepere();
 
-  // ---------- UNE SEULE FONCTION ----------
-  typeEquation = tirerTypeFonction();
-  const obj = genererFonction();
 
-  // Sécurité : au moins un point visible
-let testVisible = false;
-for (let x = xmin; x <= xmax; x += 0.5) {
-  const y = obj.f(x);
-  if (isFinite(y) && y >= ymin && y <= ymax) {
-    testVisible = true;
+  // ================= GENERATION =================
+  let obj;
+
+  while (true) {
+
+    typeEquation = tirerTypeFonction();
+    obj = genererFonction();
+
+    // 1️⃣ Exclure cubiques (pas d’extremum global)
+    if (!obj.type) continue;
+
+    // 2️⃣ Cohérence min / max
+    if (
+      (typeQuestion === "min_ou" || typeQuestion === "min_val")
+      && obj.type !== "min"
+    ) continue;
+
+    if (
+      (typeQuestion === "max_ou" || typeQuestion === "max_val")
+      && obj.type !== "max"
+    ) continue;
+
+    // 3️⃣ Extremum visible dans la fenêtre
+    if (
+      obj.extremumX < xmin || obj.extremumX > xmax ||
+      obj.extremumY < ymin || obj.extremumY > ymax
+    ) continue;
+
     break;
   }
-}
-if (!testVisible) return genererEquation();
-    
+
+
+  // ================= TRACER =================
   tracerCourbe(obj.f);
 
-  // ---------- QCM cohérent ----------
+
+  // ================= QCM =================
   const qcm = genererQCM(obj);
-  afficherQCM(qcm,obj);
+  afficherQCM(qcm, obj);
 }
   
 
