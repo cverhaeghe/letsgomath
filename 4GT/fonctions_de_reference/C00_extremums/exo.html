@@ -129,8 +129,11 @@ function afficherPointsImportants(obj) {
   // ⭐ POINT ORANGE SUR LE SOMMET
   tracerPoint(obj.extremumX, obj.extremumY);
 
-    //  POINT BLEU SUR LE SOMMET
-  tracerPointBlue(obj.extremumX,0);
+  // 🔵 Point plein SUR L’AXE
+if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
+  tracerPointBleu(obj.extremumX, 1);
+} else {
+  tracerPointBleu(0, obj.extremumY);
 }
 
   
