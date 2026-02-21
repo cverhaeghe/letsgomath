@@ -66,7 +66,7 @@ const ymin = -5, ymax = 5;
 let typeEquation = "";
 let dernieresFonctions = [];
 let nbEssaisFaux = 0;
-let typeQuestion = "racine"; // ou "oao"
+let typeQuestion = "extremum"; // min ou max
 let dernieresQuestions = [];
 
   
@@ -107,18 +107,29 @@ function tracerPoint(a, b) {
 
 function afficherPointsImportants(obj) {
 
-  // ---------- QUESTION : RACINES ----------
-  if (typeQuestion === "racine") {
-    obj.racines.forEach(r => {
-      if (isFinite(r)) tracerPoint(r, 0);
-    });
-    return;
+  if (!isFinite(obj.extremum)) return;
+
+  // On cherche x du sommet numériquement
+  let bestX = xmin;
+  let bestY = obj.f(xmin);
+
+  for (let x = xmin; x <= xmax; x += 0.01) {
+    const y = obj.f(x);
+
+    if (typeQuestion === "minimum") {
+      if (y < bestY) {
+        bestY = y;
+        bestX = x;
+      }
+    } else {
+      if (y > bestY) {
+        bestY = y;
+        bestX = x;
+      }
+    }
   }
 
-  // ---------- QUESTION : OAO ----------
-  if (typeQuestion === "oao") {
-    if (isFinite(obj.oao)) tracerPoint(0, obj.oao);
-  }
+  tracerPoint(bestX, bestY);
 }
 
   
@@ -183,9 +194,8 @@ function tirerTypeFonction() {
 }
 
 function tirerTypeQuestion() {
-  const toutes = ["racine", "oao"];
+  const toutes = ["minimum", "maximum"];
 
-  // On exclut la question si elle est déjà sortie 2 fois de suite
   let candidates = toutes;
 
   if (
@@ -197,7 +207,6 @@ function tirerTypeQuestion() {
 
   const choix = candidates[Math.floor(Math.random() * candidates.length)];
 
-  // Mise à jour de l'historique
   dernieresQuestions.push(choix);
   if (dernieresQuestions.length > 2) {
     dernieresQuestions.shift();
@@ -475,9 +484,9 @@ else if (typeQuestion === "racine") {
 
   const enonce = document.getElementById("enonce");
   enonce.innerHTML =
-    typeQuestion === "racine"
-      ? "Quelles sont les éventuelles <strong>racines</strong> de la fonction ?"
-      : "Quelle est l’<strong>ordonnée à l'origine</strong> ?";
+typeQuestion === "minimum"
+  ? "Où sont les éventuels <strong>minimums</strong> de la fonction ?"
+  : "Où sont les éventuels <strong>maximums</strong> de la fonction ?";
 
   dessinerRepere();
 
