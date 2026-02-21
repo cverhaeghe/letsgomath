@@ -462,20 +462,36 @@ function genererQCM(obj) {
 
   while (true) {
 
-    typeEquation = tirerTypeFonction();
-    obj = genererFonction();
+ // ---------- Gestion probabilité piège ----------
+const piege = Math.random() < 0.25;
 
-    // 1️⃣ Exclure cubiques (pas d’extremum global)
-    if (!obj.type) continue;
+// Si PAS piège → on impose cohérence
+if (!piege) {
 
+  if (
+    (typeQuestion === "min_ou" || typeQuestion === "min_val")
+    && obj.type !== "min"
+  ) continue;
 
-    // 3️⃣ Extremum visible dans la fenêtre
-    if (
-      obj.extremumX < xmin || obj.extremumX > xmax ||
-      obj.extremumY < ymin || obj.extremumY > ymax
-    ) continue;
+  if (
+    (typeQuestion === "max_ou" || typeQuestion === "max_val")
+    && obj.type !== "max"
+  ) continue;
+}
 
-    break;
+// Si piège → on impose INcohérence
+else {
+
+  if (
+    (typeQuestion === "min_ou" || typeQuestion === "min_val")
+    && obj.type !== "max"
+  ) continue;
+
+  if (
+    (typeQuestion === "max_ou" || typeQuestion === "max_val")
+    && obj.type !== "min"
+  ) continue;
+}
   }
 
 
