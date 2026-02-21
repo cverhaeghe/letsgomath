@@ -105,6 +105,42 @@ function tracerPoint(a, b) {
   `;
 }
 
+  function entourerValeurAxe(valeur, axe) {
+
+  const texts = svg.querySelectorAll("text");
+
+  texts.forEach(t => {
+
+    if (t.textContent.trim() != valeur) return;
+
+    const x = parseFloat(t.getAttribute("x"));
+    const y = parseFloat(t.getAttribute("y"));
+
+    // Axe X : nombres en bas
+    if (axe === "x" && Math.abs(y - (height/2 + 14)) < 2) {
+
+      svg.innerHTML += `
+        <circle cx="${x+3}" cy="${y-6}" r="10"
+                fill="none"
+                stroke="blue"
+                stroke-width="2"/>
+      `;
+    }
+
+    // Axe Y : nombres à droite
+    if (axe === "y" && Math.abs(x - (width/2 + 6)) < 2) {
+
+      svg.innerHTML += `
+        <circle cx="${x+4}" cy="${y-2}" r="10"
+                fill="none"
+                stroke="blue"
+                stroke-width="2"/>
+      `;
+    }
+  });
+}
+
+  
 function afficherPointsImportants(obj) {
 
   if (!obj) return;
@@ -112,7 +148,7 @@ function afficherPointsImportants(obj) {
   const demandeMin = (typeQuestion === "min_ou" || typeQuestion === "min_val");
   const demandeMax = (typeQuestion === "max_ou" || typeQuestion === "max_val");
 
-  // Si la fonction n’a pas l’extremum demandé → rien à afficher
+  // Pas d’extremum demandé
   if (
     (demandeMin && obj.type !== "min") ||
     (demandeMax && obj.type !== "max")
@@ -120,8 +156,15 @@ function afficherPointsImportants(obj) {
 
   if (!isFinite(obj.extremumX) || !isFinite(obj.extremumY)) return;
 
-  // ⭐ POINT ORANGE SUR LE SOMMET
+  // 🔶 Point orange au sommet
   tracerPoint(obj.extremumX, obj.extremumY);
+
+  // 🔵 Entourer valeur demandée
+  if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
+    entourerValeurAxe(obj.extremumX, "x");
+  } else {
+    entourerValeurAxe(obj.extremumY, "y");
+  }
 }
 
   
