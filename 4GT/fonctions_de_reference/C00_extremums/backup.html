@@ -112,36 +112,24 @@ function tracerPoint(a, b) {
 }
   
 
- function entourerValeurAxe(valeur, axe) {
+ function entourerSurAxe(valeur, axe) {
 
-  // Supprimer anciens cercles bleus
-  svg.querySelectorAll(".cercle-axe").forEach(e => e.remove());
+  const cercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
-  const texts = svg.querySelectorAll("text");
+  if (axe === "x") {
+    cercle.setAttribute("cx", xToPx(valeur));
+    cercle.setAttribute("cy", yToPx(0));
+  } else {
+    cercle.setAttribute("cx", xToPx(0));
+    cercle.setAttribute("cy", yToPx(valeur));
+  }
 
-  texts.forEach(t => {
+  cercle.setAttribute("r", 12);
+  cercle.setAttribute("fill", "none");
+  cercle.setAttribute("stroke", "blue");
+  cercle.setAttribute("stroke-width", "3");
 
-    if (t.textContent.trim() != valeur) return;
-
-    const bbox = t.getBBox();
-
-    const cx = bbox.x + bbox.width / 2;
-    const cy = bbox.y + bbox.height / 2;
-    const r  = Math.max(bbox.width, bbox.height) * 0.9;
-
-    const cercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-
-    cercle.setAttribute("cx", cx);
-    cercle.setAttribute("cy", cy);
-    cercle.setAttribute("r", r);
-    cercle.setAttribute("fill", "none");
-    cercle.setAttribute("stroke", "blue");
-    cercle.setAttribute("stroke-width", "3");
-    cercle.classList.add("cercle-axe");
-
-    // ⭐ IMPORTANT : ajouter EN DERNIER pour être au-dessus
-    svg.appendChild(cercle);
-  });
+  svg.appendChild(cercle);
 }
   
 
@@ -178,21 +166,19 @@ function afficherPointsImportants(obj) {
   // 🔶 Point plein au sommet
   tracerPoint(obj.extremumX, obj.extremumY);
 
-  // 🔵 Entourer axe demandé
-  if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
+// 🔵 Entourer valeur demandée SUR L’AXE
+if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
 
-    entourerValeurAxe(obj.extremumX, "x");
+  entourerSurAxe(obj.extremumX, "x");
+  tracerPointCreux(obj.extremumX, 0);
 
-    // ⭐ Point creux en (a ; 0)
-    tracerPointCreux(obj.extremumX, 0);
+} else {
 
-  } else {
+  entourerSurAxe(obj.extremumY, "y");
+  tracerPointCreux(0, obj.extremumY);
+}
 
-    entourerValeurAxe(obj.extremumY, "y");
-
-    // ⭐ Point creux en (0 ; b)
-    tracerPointCreux(0, obj.extremumY);
-  }
+    
 }
 
   
