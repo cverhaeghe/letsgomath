@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MathJax v3 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+  <!-- GRAPHIQUE -->
+<div id="graph-container"
+     style="position:relative; display:flex; justify-content:center; margin-bottom:20px;">
+  <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
+</div>
+
+<p id="enonce"></p>
+  
+<div id="qcm" class="qcm-grid qcm-8"></div>
+
+<div class="center-button">
+  <button onclick="genererEquation()">Nouvel exercice</button>
+</div>
+
+
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_fonctions.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+/* ====================== PARAMETRES REPERE ====================== */
+const svg = document.getElementById("graph");
+const width = 400, height = 400;
+const unit = 40;
+const xmin = -5, xmax = 5;
+const ymin = -5, ymax = 5;
+
+/* ====================== VARIABLES ====================== */
+let typeEquation = "";
+let dernieresFonctions = [];
+let nbEssaisFaux = 0;
+let typeQuestion = "extremum"; // min ou max
+let dernieresQuestions = [];
+
+  
+/* ====================== OUTILS ====================== */
+function xToPx(x){ return width/2 + x*unit; }
+function yToPx(y){ return height/2 - y*unit; }
+
+  
+/* ====================== REPERE ====================== */
+function dessinerRepere(){
+  svg.innerHTML="";
+
+  for(let x=xmin;x<=xmax;x++){
+    svg.innerHTML+=`<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
+  }
+  for(let y=ymin;y<=ymax;y++){
+    svg.innerHTML+=`<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
+  }
+
+  svg.innerHTML+=`
+    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
+    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black" stroke-width="2"/>
+  `;
+
+  for(let x=xmin;x<=xmax;x++) if(x!==0)
+    svg.innerHTML+=`<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
+
+  for(let y=ymin;y<=ymax;y++) if(y!==0)
+    svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
+}
+
+  
+function tracerPoint(a, b) {
+  svg.innerHTML += `
+    <circle cx="${xToPx(a)}" cy="${yToPx(b)}" r="5" fill="orange"/>
+  `;
+}
+
+function afficherPointsImportants(obj) {
+
+  if (!isFinite(obj.extremum)) return;
+
+  // On cherche x du sommet numériquement
+  let bestX = xmin;
+  let bestY = obj.f(xmin);
+
+  for (let x = xmin; x <= xmax; x += 0.01) {
+    const y = obj.f(x);
+
+    if (typeQuestion === "min_ou" || typeQuestion === "min_val") {
+      if (y < bestY) {
+        bestY = y;
+        bestX = x;
+      }
+    } else if (typeQuestion === "max_ou" || typeQuestion === "max_val") {
+      if (y > bestY) {
+        bestY = y;
+        bestX = x;
+      }
+    }
+  }
+
+  tracerPoint(bestX, bestY);
+}
+
+  
+function tracerCourbe(fonction) {
+  let path = "";
+  let first = true;
+
+  for (let x = xmin; x <= xmax; x += 0.005) {
+    let y = fonction(x);
+
+if (
+  !isFinite(y) ||
+  y > ymax || y < ymin
+) {
+  first = true;
+  continue;
+}
+
+
+    const px = xToPx(x);
+    const py = yToPx(y);
+
+    if (first) {
+      path += `M ${px} ${py}`;
+      first = false;
+    } else {
+      path += ` L ${px} ${py}`;
+    }
+  }
+
+  svg.innerHTML += `
+    <path d="${path}" fill="none"
+          stroke="var(--peps)"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  `;
+}
+
+
+
+function tirerTypeFonction() {
+
+  const types = ["quadratique","cubique","absolue"];
+
+  let candidats = types;
+
+  // ❌ si la même fonction est sortie juste avant → on l'exclut
+  if (dernieresFonctions.length > 0) {
+    candidats = types.filter(t => t !== dernieresFonctions[dernieresFonctions.length - 1]);
+  }
+
+  const choix = candidats[Math.floor(Math.random() * candidats.length)];
+
+  // mémorisation
+  dernieresFonctions.push(choix);
+  if (dernieresFonctions.length > 1) {
+    dernieresFonctions.shift();
+  }
+
+  return choix;
+}
+
+function tirerTypeQuestion() {
+
+  const r = Math.random();
+
+  if (r < 0.30) typeQuestion = "min_ou";       // Où minimum
+  else if (r < 0.60) typeQuestion = "max_ou";  // Où maximum
+  else if (r < 0.80) typeQuestion = "min_val"; // Valeur minimum
+  else typeQuestion = "max_val";               // Valeur maximum
+}
+
+function genererFonction() {
+
+  const entiers = [-3,-2,-1,1,2,3];
+
+  while (true) {
+
+// ================= QUADRATIQUE =================
+if (typeEquation === "quadratique") {
+
+  const a  = entiers[Math.floor(Math.random()*entiers.length)];
+
+  let r1, r2, xv, yv;
+
+  while (true) {
+
+    r1 = entiers[Math.floor(Math.random()*entiers.length)];
+    r2 = entiers[Math.floor(Math.random()*entiers.length)];
+
+    // 🔒 même parité → sommet entier garanti
+    if ((r1 + r2) % 2 !== 0) continue;
+
+    xv = (r1 + r2) / 2;
+    yv = a*(xv - r1)*(xv - r2);
+
+    // contraintes sommet
+    if (
+      !Number.isInteger(yv) ||
+      xv < -3 || xv > 3 ||
+      yv < -3 || yv > 3 ||
+      xv === yv
+    ) continue;
+
+    break;
+  }
+
+  return {
+    f: x => a*(x-r1)*(x-r2),
+    extremumX: xv,
+    extremumY: yv,
+    type: a > 0 ? "min" : "max"
+  };
+}
+
+    // ================= CUBIQUE =================
+    if (typeEquation === "cubique") {
+
+      const a = entiers[Math.floor(Math.random()*entiers.length)];
+      const r = entiers[Math.floor(Math.random()*entiers.length)];
+
+      return {
+        f: x => a*(x-r)*(x*x+1),
+        extremumX: null,
+        extremumY: null,
+        type: null
+      };
+    }
+
+    // ================= VALEUR ABSOLUE =================
+    if (typeEquation === "absolue") {
+
+      const a = entiers[Math.floor(Math.random()*entiers.length)];
+      const r = entiers[Math.floor(Math.random()*entiers.length)];
+      const b = entiers[Math.floor(Math.random()*entiers.length)];
+
+      const xv = r;
+      const yv = b;
+
+      // ❌ Refuse extremum (a ; b) avec a = b
+      if (Math.round(xv) === Math.round(yv)) continue;
+
+      if (
+        xv >= xmin && xv <= xmax &&
+        yv >= ymin && yv <= ymax
+      ) {
+        return {
+          f: x => a*Math.abs(x-r) + b,
+          extremumX: xv,
+          extremumY: yv,
+          type: a > 0 ? "min" : "max"
+        };
+      }
+    }
+  }
+}
+  
+
+function afficherQCM(propositions, obj) {
+
+  const qcm = document.getElementById("qcm");
+  qcm.innerHTML = "";
+
+const nbBonnes =
+  (typeQuestion === "racine")
+    ? Math.max(1, new Set(obj.racines).size)
+    : 1;
+  
+  let bonnesCliquees = 0;
+  let fini = false;
+
+  let bonnesCartes = [];
+
+  propositions.forEach(p => {
+
+    const card = document.createElement("div");
+    card.className = "qcm-card";
+    card.innerHTML = `\\(${p.label}\\)`;
+
+    // 🔒 On stocke l'info directement sur la carte
+    if (p.correct) {
+      card.dataset.correct = "1";
+      bonnesCartes.push(card);
+    } else {
+      card.dataset.correct = "0";
+    }
+
+    card.onclick = () => {
+
+      if (fini) return;
+
+      const estBonne = card.dataset.correct === "1";
+
+// ---------- BONNE ----------
+if (estBonne) {
+
+  if (card.classList.contains("correct")) return;
+
+  bonnesCliquees++;
+
+  // Si UNE seule bonne réponse → vert direct
+  if (nbBonnes === 1) {
+    card.classList.add("correct");
+    afficherPointsImportants(obj);
+    fini = true;
+  }
+
+  // Sinon (plusieurs racines) → orange temporaire
+  else {
+    card.classList.add("temp-correct");
+
+    if (bonnesCliquees === nbBonnes) {
+      bonnesCartes.forEach(c => {
+        c.classList.remove("temp-correct");
+        c.classList.add("correct");
+      });
+      afficherPointsImportants(obj);
+      fini = true;
+    }
+  }
+}
+
+      // ---------- MAUVAISE ----------
+      else {
+
+        card.classList.add("incorrect");
+
+        bonnesCartes.forEach(c => {
+          c.classList.remove("temp-correct");
+          c.classList.add("correct");
+        });
+
+        afficherPointsImportants(obj);
+        fini = true;
+      }
+
+      if (fini) {
+        document.querySelectorAll(".qcm-card")
+          .forEach(c => c.style.pointerEvents = "none");
+      }
+    };
+
+    qcm.appendChild(card);
+  });
+
+  MathJax.typesetPromise();
+}
+  
+function genererQCM(obj) {
+
+  const reponses = [];
+  const valeurs = [-3,-2,-1,0,1,2,3];
+
+  let bonnes = [];
+
+  const demandeMin = (typeQuestion === "min_ou" || typeQuestion === "min_val");
+  const demandeMax = (typeQuestion === "max_ou" || typeQuestion === "max_val");
+
+  // ================= PAS D'EXTREMUM DU BON TYPE =================
+  if (
+    (demandeMin && obj.type !== "min") ||
+    (demandeMax && obj.type !== "max")
+  ) {
+    bonnes = [];   // => pas de min / pas de max
+  }
+  else {
+
+    // ----- question "où ?" -----
+    if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
+      bonnes = [obj.extremumX];
+    }
+
+    // ----- question "valeur ?" -----
+    else {
+      bonnes = [obj.extremumY];
+    }
+  }
+
+  // ================= CARTES NUMERIQUES =================
+  valeurs.forEach(v => {
+    reponses.push({
+      label: v,
+      correct: bonnes.includes(v)
+    });
+  });
+
+  // ================= CARTE "PAS DE MIN / MAX" =================
+  reponses.push({
+    label: demandeMin
+      ? "\\text{Pas de min}"
+      : "\\text{Pas de max}",
+    correct: bonnes.length === 0
+  });
+
+  return reponses;
+}
+    
+  
+/* ====================== GENERATION ====================== */
+
+  function genererEquation() {
+
+  document.getElementById("feedback").innerHTML = "";
+
+  tirerTypeQuestion();
+
+  const enonce = document.getElementById("enonce");
+
+  // ================= ENONCE =================
+  if (typeQuestion === "min_ou")
+    enonce.innerHTML = "Où est l'éventuel <strong>minimum</strong> de la fonction ?";
+
+  else if (typeQuestion === "max_ou")
+    enonce.innerHTML = "Où est l'éventuel <strong>maximum</strong> de la fonction ?";
+
+  else if (typeQuestion === "min_val")
+    enonce.innerHTML = "Quelle est la valeur de l'éventuel <strong>minimum</strong> de la fonction ?";
+
+  else
+    enonce.innerHTML = "Quelle est la valeur de l'éventuel <strong>maximum</strong> de la fonction ?";
+
+
+  // ================= GRAPHIQUE =================
+  dessinerRepere();
+
+
+  // ================= GENERATION =================
+  let obj;
+
+  while (true) {
+
+ // ---------- Gestion probabilité piège ----------
+const piege = Math.random() < 0.25;
+
+// Si PAS piège → on impose cohérence
+if (!piege) {
+
+  if (
+    (typeQuestion === "min_ou" || typeQuestion === "min_val")
+    && obj.type !== "min"
+  ) continue;
+
+  if (
+    (typeQuestion === "max_ou" || typeQuestion === "max_val")
+    && obj.type !== "max"
+  ) continue;
+}
+
+// Si piège → on impose INcohérence
+else {
+
+  if (
+    (typeQuestion === "min_ou" || typeQuestion === "min_val")
+    && obj.type !== "max"
+  ) continue;
+
+  if (
+    (typeQuestion === "max_ou" || typeQuestion === "max_val")
+    && obj.type !== "min"
+  ) continue;
+}
+  }
+
+
+  // ================= TRACER =================
+  tracerCourbe(obj.f);
+
+
+  // ================= QCM =================
+  const qcm = genererQCM(obj);
+  afficherQCM(qcm, obj);
+}
+  
+
+/* ====================== VERIFICATION ====================== */
+
+function calculerReponse(obj) {
+
+  
+  if (typeQuestion === "oao")
+    return obj.oao;
+
+  if (typeQuestion === "racine") {
+
+    // si plusieurs racines → on peut en choisir une
+    if (obj.racines.length > 0)
+      return obj.racines[Math.floor(Math.random()*obj.racines.length)];
+
+    return "aucune";
+  }
+}
+
+
+// Générer le premier exercice au chargement
+window.onload = genererEquation;
+</script>
+   
+  <!-- Protection clique droit (commun à tout le site) -->
+  <script src="../../../js/protection.js"></script>
+
+</body>
+</html>
