@@ -107,38 +107,35 @@ function tracerPoint(a, b) {
 
   function entourerValeurAxe(valeur, axe) {
 
+  // Supprimer anciens cercles bleus
+  svg.querySelectorAll(".cercle-axe").forEach(e => e.remove());
+
   const texts = svg.querySelectorAll("text");
 
   texts.forEach(t => {
 
     if (t.textContent.trim() != valeur) return;
 
-    const x = parseFloat(t.getAttribute("x"));
-    const y = parseFloat(t.getAttribute("y"));
+    const bbox = t.getBBox();
 
-    // Axe X : nombres en bas
-    if (axe === "x" && Math.abs(y - (height/2 + 14)) < 2) {
+    const cx = bbox.x + bbox.width / 2;
+    const cy = bbox.y + bbox.height / 2;
+    const r  = Math.max(bbox.width, bbox.height) * 0.9;
 
-      svg.innerHTML += `
-        <circle cx="${x+3}" cy="${y-6}" r="10"
-                fill="none"
-                stroke="blue"
-                stroke-width="2"/>
-      `;
-    }
+    const cercle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
 
-    // Axe Y : nombres à droite
-    if (axe === "y" && Math.abs(x - (width/2 + 6)) < 2) {
+    cercle.setAttribute("cx", cx);
+    cercle.setAttribute("cy", cy);
+    cercle.setAttribute("r", r);
+    cercle.setAttribute("fill", "none");
+    cercle.setAttribute("stroke", "blue");
+    cercle.setAttribute("stroke-width", "2");
+    cercle.classList.add("cercle-axe");
 
-      svg.innerHTML += `
-        <circle cx="${x+4}" cy="${y-2}" r="10"
-                fill="none"
-                stroke="blue"
-                stroke-width="2"/>
-      `;
-    }
+    svg.appendChild(cercle);
   });
 }
+  
 
 function tracerPointCreux(x, y) {
 
