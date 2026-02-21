@@ -144,17 +144,10 @@ function afficherPointsImportants(obj) {
 
   // 🔵 Point plein SUR L’AXE
 if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
-
-  entourerSurAxe(obj.extremumX, "x");
   tracerPointBleu(obj.extremumX, 0);
-
 } else {
-
-  entourerSurAxe(obj.extremumY, "y");
   tracerPointBleu(0, obj.extremumY);
-}
-
-    
+}    
 }
 
   
