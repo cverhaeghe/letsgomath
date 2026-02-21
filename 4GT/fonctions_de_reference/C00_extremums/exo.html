@@ -79,29 +79,12 @@ function yToPx(y){ return height/2 - y*unit; }
 function dessinerRepere(){
   svg.innerHTML="";
 
-// ---------- NOMBRES AXE X ----------
-for(let x=xmin;x<=xmax;x++) {
-  if(x!==0)
-    svg.innerHTML+=`
-      <text id="axeX-${x}" 
-            x="${xToPx(x)+2}" 
-            y="${height/2+14}" 
-            font-size="12">
-        ${x}
-      </text>`;
-}
-
-// ---------- NOMBRES AXE Y ----------
-for(let y=ymin;y<=ymax;y++) {
-  if(y!==0)
-    svg.innerHTML+=`
-      <text id="axeY-${y}" 
-            x="${width/2+6}" 
-            y="${yToPx(y)+4}" 
-            font-size="12">
-        ${y}
-      </text>`;
-}
+  for(let x=xmin;x<=xmax;x++){
+    svg.innerHTML+=`<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
+  }
+  for(let y=ymin;y<=ymax;y++){
+    svg.innerHTML+=`<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
+  }
 
   svg.innerHTML+=`
     <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
@@ -115,29 +98,6 @@ for(let y=ymin;y<=ymax;y++) {
     svg.innerHTML+=`<text x="${width/2+6}" y="${yToPx(y)+4}" font-size="12">${y}</text>`;
 }
 
-function entourerAxe(valeur, axe) {
-
-  const id = axe === "x"
-    ? `axeX-${valeur}`
-    : `axeY-${valeur}`;
-
-  const texte = document.getElementById(id);
-  if (!texte) return;
-
-  const bbox = texte.getBBox();
-
-  svg.innerHTML += `
-    <circle
-      cx="${bbox.x + bbox.width/2}"
-      cy="${bbox.y + bbox.height/2}"
-      r="${Math.max(bbox.width, bbox.height)/1.2}"
-      fill="none"
-      stroke="orange"
-      stroke-width="2"
-    />
-  `;
-}
-
   
 function tracerPoint(a, b) {
   svg.innerHTML += `
@@ -147,27 +107,29 @@ function tracerPoint(a, b) {
 
 function afficherPointsImportants(obj) {
 
-  // Pas d’extremum du bon type
-  const demandeMin = (typeQuestion === "min_ou" || typeQuestion === "min_val");
-  const demandeMax = (typeQuestion === "max_ou" || typeQuestion === "max_val");
+  if (!isFinite(obj.extremum)) return;
 
-  if (
-    (demandeMin && obj.type !== "min") ||
-    (demandeMax && obj.type !== "max")
-  ) return;
+  // On cherche x du sommet numériquement
+  let bestX = xmin;
+  let bestY = obj.f(xmin);
 
-  if (!isFinite(obj.extremumX) || !isFinite(obj.extremumY)) return;
+  for (let x = xmin; x <= xmax; x += 0.01) {
+    const y = obj.f(x);
 
-  // 🔶 1️⃣ Point orange au sommet
-  tracerPoint(obj.extremumX, obj.extremumY);
-
-  // 🔵 2️⃣ Entourer axe correspondant
-  if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
-    entourerAxe(obj.extremumX, "x");
+    if (typeQuestion === "min_ou" || typeQuestion === "min_val") {
+      if (y < bestY) {
+        bestY = y;
+        bestX = x;
+      }
+    } else if (typeQuestion === "max_ou" || typeQuestion === "max_val") {
+      if (y > bestY) {
+        bestY = y;
+        bestX = x;
+      }
+    }
   }
-  else {
-    entourerAxe(obj.extremumY, "y");
-  }
+
+  tracerPoint(bestX, bestY);
 }
 
   
