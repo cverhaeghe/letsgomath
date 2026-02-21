@@ -431,7 +431,7 @@ function genererQCM(obj) {
   
 /* ====================== GENERATION ====================== */
 
-  function genererEquation() {
+function genererEquation() {
 
   document.getElementById("feedback").innerHTML = "";
 
@@ -462,36 +462,37 @@ function genererQCM(obj) {
 
   while (true) {
 
- // ---------- Gestion probabilité piège ----------
-const piege = Math.random() < 0.25;
+    typeEquation = tirerTypeFonction();
+    obj = genererFonction();   // ⭐ LIGNE MANQUANTE
 
-// Si PAS piège → on impose cohérence
-if (!piege) {
+    if (!obj) continue;
 
-  if (
-    (typeQuestion === "min_ou" || typeQuestion === "min_val")
-    && obj.type !== "min"
-  ) continue;
+    const piege = Math.random() < 0.25;
 
-  if (
-    (typeQuestion === "max_ou" || typeQuestion === "max_val")
-    && obj.type !== "max"
-  ) continue;
-}
+    if (!piege) {
+      if (
+        (typeQuestion === "min_ou" || typeQuestion === "min_val") &&
+        obj.type !== "min"
+      ) continue;
 
-// Si piège → on impose INcohérence
-else {
+      if (
+        (typeQuestion === "max_ou" || typeQuestion === "max_val") &&
+        obj.type !== "max"
+      ) continue;
+    }
+    else {
+      if (
+        (typeQuestion === "min_ou" || typeQuestion === "min_val") &&
+        obj.type !== "max"
+      ) continue;
 
-  if (
-    (typeQuestion === "min_ou" || typeQuestion === "min_val")
-    && obj.type !== "max"
-  ) continue;
+      if (
+        (typeQuestion === "max_ou" || typeQuestion === "max_val") &&
+        obj.type !== "min"
+      ) continue;
+    }
 
-  if (
-    (typeQuestion === "max_ou" || typeQuestion === "max_val")
-    && obj.type !== "min"
-  ) continue;
-}
+    break;
   }
 
 
@@ -503,6 +504,7 @@ else {
   const qcm = genererQCM(obj);
   afficherQCM(qcm, obj);
 }
+
   
 
 /* ====================== VERIFICATION ====================== */
