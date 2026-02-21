@@ -370,28 +370,34 @@ function genererQCM(obj) {
   const reponses = [];
   const valeurs = [-3, -2, -1, 0, 1, 2, 3];
 
-  // 🔒 Toutes les bonnes réponses (racines distinctes)
   let bonnes = [];
 
-  if (typeQuestion === "oao") {
-    if (isFinite(obj.oao) && obj.oao >= -3 && obj.oao <= 3) {
-      bonnes = [obj.oao];
+  // ================= PAS D'EXTREMUM GLOBAL =================
+  if (!isFinite(obj.extremumX) || !isFinite(obj.extremumY)) {
+    bonnes = [];
+  }
+
+  // ================= QUESTIONS "OU ?" → ABSCISSE =================
+  else if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
+
+    const x = Math.round(obj.extremumX);
+
+    if (Number.isInteger(x) && x >= -3 && x <= 3) {
+      bonnes = [x];
     }
   }
 
-else if (typeQuestion === "racine") {
+  // ================= QUESTIONS "VALEUR ?" → ORDONNÉE =================
+  else {
 
-  bonnes = [...new Set(obj.racines)]
-    .filter(r =>
-      Number.isInteger(r) && r >= -3 && r <= 3
-    );
+    const y = Math.round(obj.extremumY);
 
-  // 🔒 Si aucune racine entière dans le QCM → on considère qu'il n'y en a pas
-  if (bonnes.length === 0) {
-    bonnes = [];
+    if (Number.isInteger(y) && y >= -3 && y <= 3) {
+      bonnes = [y];
+    }
   }
-}
 
+  // ================= CARTES NUMÉRIQUES =================
   valeurs.forEach(v => {
     reponses.push({
       label: v,
@@ -399,6 +405,7 @@ else if (typeQuestion === "racine") {
     });
   });
 
+  // ================= CARTE "Y EN A PAS" =================
   reponses.push({
     label: "\\text{Y en a pas}",
     correct: bonnes.length === 0
@@ -406,7 +413,6 @@ else if (typeQuestion === "racine") {
 
   return reponses;
 }
-
     
   
 /* ====================== GENERATION ====================== */
