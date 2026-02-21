@@ -105,6 +105,12 @@ function tracerPoint(a, b) {
   `;
 }
 
+function tracerPointBlue(a, b) {
+  svg.innerHTML += `
+    <circle cx="${xToPx(a)}" cy="${yToPx(b)}" r="5" fill="blue"/>
+  `;
+}  
+
 function afficherPointsImportants(obj) {
 
   if (!obj) return;
@@ -122,6 +128,9 @@ function afficherPointsImportants(obj) {
 
   // ⭐ POINT ORANGE SUR LE SOMMET
   tracerPoint(obj.extremumX, obj.extremumY);
+
+    //  POINT BLEU SUR LE SOMMET
+  tracerPointBlue(obj.extremumX,0);
 }
 
   
