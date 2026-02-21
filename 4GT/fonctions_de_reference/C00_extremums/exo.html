@@ -209,31 +209,42 @@ function genererFonction() {
 
   while (true) {
 
-    // ================= QUADRATIQUE =================
-    if (typeEquation === "quadratique") {
+// ================= QUADRATIQUE =================
+if (typeEquation === "quadratique") {
 
-      const a  = entiers[Math.floor(Math.random()*entiers.length)];
-      const r1 = entiers[Math.floor(Math.random()*entiers.length)];
-      const r2 = entiers[Math.floor(Math.random()*entiers.length)];
+  const a  = entiers[Math.floor(Math.random()*entiers.length)];
 
-      const xv = (r1 + r2) / 2;
-      const yv = a*(xv - r1)*(xv - r2);
+  let r1, r2, xv, yv;
 
-      // ❌ Refuse extremum (a ; b) avec a = b
-      if (Math.round(xv) === Math.round(yv)) continue;
+  while (true) {
 
-      if (
-        xv >= xmin && xv <= xmax &&
-        yv >= ymin && yv <= ymax
-      ) {
-        return {
-          f: x => a*(x-r1)*(x-r2),
-          extremumX: xv,
-          extremumY: yv,
-          type: a > 0 ? "min" : "max"
-        };
-      }
-    }
+    r1 = entiers[Math.floor(Math.random()*entiers.length)];
+    r2 = entiers[Math.floor(Math.random()*entiers.length)];
+
+    // 🔒 même parité → sommet entier garanti
+    if ((r1 + r2) % 2 !== 0) continue;
+
+    xv = (r1 + r2) / 2;
+    yv = a*(xv - r1)*(xv - r2);
+
+    // contraintes sommet
+    if (
+      !Number.isInteger(yv) ||
+      xv < -3 || xv > 3 ||
+      yv < -3 || yv > 3 ||
+      xv === yv
+    ) continue;
+
+    break;
+  }
+
+  return {
+    f: x => a*(x-r1)*(x-r2),
+    extremumX: xv,
+    extremumY: yv,
+    type: a > 0 ? "min" : "max"
+  };
+}
 
     // ================= CUBIQUE =================
     if (typeEquation === "cubique") {
