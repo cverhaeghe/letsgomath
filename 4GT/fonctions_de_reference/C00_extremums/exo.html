@@ -371,36 +371,34 @@ if (estBonne) {
 function genererQCM(obj) {
 
   const reponses = [];
-  const valeurs = [-3, -2, -1, 0, 1, 2, 3];
+  const valeurs = [-3,-2,-1,0,1,2,3];
 
   let bonnes = [];
 
-  // ================= PAS D'EXTREMUM GLOBAL =================
-  if (!isFinite(obj.extremumX) || !isFinite(obj.extremumY)) {
-    bonnes = [];
+  // ================= PAS D’EXTREMUM DU BON TYPE =================
+  const demandeMin = (typeQuestion === "min_ou" || typeQuestion === "min_val");
+  const demandeMax = (typeQuestion === "max_ou" || typeQuestion === "max_val");
+
+  if (
+    (demandeMin && obj.type !== "min") ||
+    (demandeMax && obj.type !== "max")
+  ) {
+    bonnes = [];  // => Y en a pas
   }
 
-  // ================= QUESTIONS "OU ?" → ABSCISSE =================
-  else if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
-
-    const x = Math.round(obj.extremumX);
-
-    if (Number.isInteger(x) && x >= -3 && x <= 3) {
-      bonnes = [x];
-    }
-  }
-
-  // ================= QUESTIONS "VALEUR ?" → ORDONNÉE =================
   else {
 
-    const y = Math.round(obj.extremumY);
+    // ----- question "où ?" -----
+    if (typeQuestion === "min_ou" || typeQuestion === "max_ou") {
+      bonnes = [obj.extremumX];
+    }
 
-    if (Number.isInteger(y) && y >= -3 && y <= 3) {
-      bonnes = [y];
+    // ----- question "valeur ?" -----
+    else {
+      bonnes = [obj.extremumY];
     }
   }
 
-  // ================= CARTES NUMÉRIQUES =================
   valeurs.forEach(v => {
     reponses.push({
       label: v,
@@ -408,7 +406,6 @@ function genererQCM(obj) {
     });
   });
 
-  // ================= CARTE "Y EN A PAS" =================
   reponses.push({
     label: "\\text{Y en a pas}",
     correct: bonnes.length === 0
@@ -457,16 +454,6 @@ function genererQCM(obj) {
     // 1️⃣ Exclure cubiques (pas d’extremum global)
     if (!obj.type) continue;
 
-    // 2️⃣ Cohérence min / max
-    if (
-      (typeQuestion === "min_ou" || typeQuestion === "min_val")
-      && obj.type !== "min"
-    ) continue;
-
-    if (
-      (typeQuestion === "max_ou" || typeQuestion === "max_val")
-      && obj.type !== "max"
-    ) continue;
 
     // 3️⃣ Extremum visible dans la fenêtre
     if (
