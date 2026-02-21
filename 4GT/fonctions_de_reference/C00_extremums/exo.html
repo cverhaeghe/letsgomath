@@ -209,123 +209,71 @@ function genererFonction() {
 
   while (true) {
 
-    // ---------- QUADRATIQUE ----------
+    // ================= QUADRATIQUE =================
     if (typeEquation === "quadratique") {
 
       const a  = entiers[Math.floor(Math.random()*entiers.length)];
       const r1 = entiers[Math.floor(Math.random()*entiers.length)];
       const r2 = entiers[Math.floor(Math.random()*entiers.length)];
 
-      const oao = a*r1*r2;
+      const xv = (r1 + r2) / 2;
+      const yv = a*(xv - r1)*(xv - r2);
 
-if (
-  oao >= -3 && oao <= 3 &&
-  oao !== r1 &&
-  oao !== r2
-) {        return {
+      // sommet visible
+      if (
+        xv >= xmin && xv <= xmax &&
+        yv >= ymin && yv <= ymax
+      ) {
+
+        return {
           f: x => a*(x-r1)*(x-r2),
-          racines: [r1, r2],
-          oao: oao
+          extremumX: xv,
+          extremumY: yv,
+          type: a > 0 ? "min" : "max"
         };
       }
     }
 
-    // ---------- CUBIQUE ----------
+    // ================= CUBIQUE =================
     if (typeEquation === "cubique") {
 
       const a = entiers[Math.floor(Math.random()*entiers.length)];
       const r = entiers[Math.floor(Math.random()*entiers.length)];
 
-      const oao = -a*r;
+      return {
+        f: x => a*(x-r)*(x*x+1),
+        extremumX: null,
+        extremumY: null,
+        type: null
+      };
+    }
 
-if (
-  oao >= -3 && oao <= 3 &&
-  oao !== r
-) {        return {
-          f: x => a*(x-r)*(x*x+1),
-          racines: [r],
-          oao: oao
+    // ================= VALEUR ABSOLUE =================
+    if (typeEquation === "absolue") {
+
+      const a = entiers[Math.floor(Math.random()*entiers.length)];
+      const r = entiers[Math.floor(Math.random()*entiers.length)];
+      const b = entiers[Math.floor(Math.random()*entiers.length)];
+
+      const xv = r;
+      const yv = a*Math.abs(0) + b;  // valeur au sommet
+
+      if (
+        xv >= xmin && xv <= xmax &&
+        yv >= ymin && yv <= ymax
+      ) {
+
+        return {
+          f: x => a*Math.abs(x-r) + b,
+          extremumX: xv,
+          extremumY: yv,
+          type: a > 0 ? "min" : "max"
         };
       }
     }
-
-// ---------- VALEUR ABSOLUE ----------
-if (typeEquation === "absolue") {
-
-let a = entiers[Math.floor(Math.random()*entiers.length)];
-const r = entiers[Math.floor(Math.random()*entiers.length)];
-
-  // ---------- QUESTION RACINE ----------
-  if (typeQuestion === "racine") {
-
-    // 50% : PAS de racine
-    if (Math.random() < 0.5) {
-
-const nonZero = entiers.filter(x => x !== 0);
-const b = nonZero[Math.floor(Math.random()*nonZero.length)];
-const oao = a*Math.abs(r) + b;
-
-// PAS de racine → le sommet ne doit jamais toucher l'axe
-// PAS de racine → aucune solution à a|x-r|+b = 0
-// <=> -b/a < 0
-if (-b / a >= 0) continue;
-      
-if (
-  oao >= -3 && oao <= 3 &&
-  oao !== r
-) {        
-  return {
-    f: x => a*Math.abs(x - r) + b,
-    racines: [],
-    oao: oao
-  };
-}
-
-    } else {
-
-// 50% : UNE racine
-let aValide = false;
-
-while (!aValide) {
-  a = entiers[Math.floor(Math.random()*entiers.length)];
-
-  // on refuse les cas où OAO = racine
-  if (a * Math.abs(r) !== r) {
-    aValide = true;
   }
 }
-
-const oao = a * Math.abs(r);
-
-if (oao >= -3 && oao <= 3) {
-  return {
-    f: x => a*Math.abs(x - r),
-    racines: [r],
-    oao: oao
-  };
-}
-    }
-  }
-
-  // ---------- QUESTION OAO ----------
-  else {
-
-    const b = entiers[Math.floor(Math.random()*entiers.length)];
-    const oao = a*Math.abs(r) + b;
-
-if (
-  oao >= -3 && oao <= 3 &&
-  oao !== r
-) {      return {
-        f: x => a*Math.abs(x - r) + b,
-        racines: [],
-        oao: oao
-      };
-    }
-  }
-}
-}
-}   
+  
 
 function afficherQCM(propositions, obj) {
 
