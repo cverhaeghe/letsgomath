@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<title>Let's go Math !</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="../../../style.css">
+<link rel="stylesheet" href="../../../exercices.css">
+
+<!-- Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav class="lgm-navbar">
+  <ul class="nav-liste">
+    <li><a href="../../../index.html">Accueil</a></li>
+    <li><a href="../../../index.html#dia2">4GT</a></li>
+    <li><a href="../../../index.html#dia3">5GT 6h</a></li>
+    <li><a href="../../../index.html#dia4">6GT 6h</a></li>
+  </ul>
+</nav>
+
+<div class="exo-container">
+  <h1>Exercice</h1>
+
+<p id="enonce"></p>
+
+  <!-- GRAPHIQUE -->
+<div id="graph-container"
+     style="position:relative; display:flex; justify-content:center;">
+    <svg id="graph" width="400" height="400" viewBox="0 0 400 400"></svg>
+  </div>
+
+<div class="center-button">
+  <button onclick="verifierExercice()">Valider</button>
+  <button onclick="afficherCorrection()">Solution</button>
+  <button onclick="effacerTrace()">Effacer</button>
+  <button onclick="nouvelExercice()">Nouvel exercice</button>
+</div>
+
+
+  <p id="feedback" class="feedback"></p>
+
+  <div class="exo-links">
+    <a href="../../4GT_fonctions.html">Retour au menu</a>
+  </div>
+</div>
+
+<script>
+/* ================= REPERE ================= */
+const svg = document.getElementById("graph");
+const width=400, height=400;
+const xmin=-6,xmax=6,ymin=-6,ymax=6;
+const unit = width / (xmax - xmin);
+
+
+function xToPx(x){return width/2+x*unit;}
+function yToPx(y){return height/2-y*unit;}
+
+function dessinerRepere(){
+  svg.innerHTML = "";
+
+  /* Grille */
+  for(let x=xmin;x<=xmax;x++){
+    svg.innerHTML += `<line x1="${xToPx(x)}" y1="0" x2="${xToPx(x)}" y2="${height}" stroke="#ddd"/>`;
+  }
+  for(let y=ymin;y<=ymax;y++){
+    svg.innerHTML += `<line x1="0" y1="${yToPx(y)}" x2="${width}" y2="${yToPx(y)}" stroke="#ddd"/>`;
+  }
+
+  /* Axes */
+  svg.innerHTML += `
+    <line x1="0" y1="${height/2}" x2="${width}" y2="${height/2}" stroke="black" stroke-width="2"/>
+    <line x1="${width/2}" y1="0" x2="${width/2}" y2="${height}" stroke="black" stroke-width="2"/>
+  `;
+
+  /* Chiffres axe X (sans tirets, décalés à droite) */
+  for(let x=xmin;x<=xmax;x++){
+    if(x!==0)
+      svg.innerHTML += `<text x="${xToPx(x)+2}" y="${height/2+14}" font-size="12">${x}</text>`;
+  }
+
+/* Chiffres axe Y (sans tirets, une seule fois) */
+for(let y=ymin;y<=ymax;y++){
+  if(y!==0)
+    svg.innerHTML += `
+      <text x="${width/2+2}" y="${yToPx(y)+4}"
+            font-size="12">${y}</text>
+    `;
+}
+
+}
+
+
+/* ================= FONCTION DE BASE ================= */
+let dernierType = "";
+let solutionPts = [];
+let elevePts = [];
+let basePoints = [];
+let derniersIndex = [];
+
+const fonctionsBase = [
+
+  /* Fonction 1 */
+  [
+    [-5,3],
+    [-4,1],
+    [-2,4],
+    [0,0]
+  ],
+
+  /* Fonction 2 */
+  [
+    [-4,2],
+    [-3,-2],
+    [-1,1],
+    [0,0]
+  ],
+
+  /* Fonction 3 */
+  [
+    [5,-2],
+    [4,-4],
+    [1,2],
+    [0,1]
+  ],
+
+  /* Fonction 4 */
+  [
+    [4,-1],
+    [3,-3],
+    [1,-2],
+    [0,-4]
+  ]
+
+];
+
+  function tracerFonctionBase(){
+
+  let path = "";
+
+  basePoints.forEach((p,i)=>{
+    path += (i ? "L" : "M") + ` ${xToPx(p[0])} ${yToPx(p[1])}`;
+  });
+
+  svg.innerHTML += `
+    <path d="${path}" fill="none"
+          stroke="black" stroke-width="3"/>
+  `;
+
+  /* Boules noires et creuses */
+basePoints.forEach(p=>{
+  const creux = (p[0] === 0 && p[1] !== 0);
+
+  svg.innerHTML += `
+    <circle cx="${xToPx(p[0])}"
+            cy="${yToPx(p[1])}"
+            r="4"
+            fill="${creux ? 'white' : 'black'}"
+            stroke="black"
+            stroke-width="2"/>
+  `;
+});
+
+
+
+}
+
+
+
+  function coefAffichage(a, variable="") {
+  if (a === 1) return variable;      // 1x → x
+  if (a === -1) return "-" + variable; // -1x → -x
+  return a + variable;
+}
+
+  function nouvelExercice(){
+  document.getElementById("feedback").innerHTML = "";
+  genererExercice();
+}
+
+  function arrondi05(x){
+  return Math.round(x*2)/2;
+}
+
+  
+  function texKfx(k){
+
+  if(k === 1) return "f(x)";
+  if(k === -1) return "-f(x)";
+
+  if(k === 0.5) return "\\frac{f(x)}{2}";
+  if(k === -0.5) return "-\\frac{f(x)}{2}";
+
+  if(k === 1/3) return "\\frac{f(x)}{3}";
+  if(k === -1/3) return "-\\frac{f(x)}{3}";
+
+  return `${k}f(x)`;
+}
+
+  function texFsx(s){
+
+  if(s === 1) return "f(x)";
+  if(s === -1) return "f(-x)";
+
+  if(s === 0.5) return "f\\left(\\frac{x}{2}\\right)";
+  if(s === -0.5) return "f\\left(-\\frac{x}{2}\\right)";
+
+  if(s === 1/3) return "f\\left(\\frac{x}{3}\\right)";
+  if(s === -1/3) return "f\\left(-\\frac{x}{3}\\right)";
+
+  return `f(${s}x)`;
+}
+
+  
+/* ================= TRACE CORRIGE ================= */
+
+function tracerCorrection(){
+
+  let path = "";
+
+  basePoints.forEach(([x,y],i)=>{
+
+    let X,Y;
+
+    if(type==="paire"){
+      X = -x;
+      Y = y;
+    }
+
+    if(type==="impaire"){
+      X = -x;
+      Y = -y;
+    }
+
+    path += (i?"L":"M")+` ${xToPx(X)} ${yToPx(Y)}`;
+  });
+
+  svg.innerHTML += `
+    <path d="${path}" fill="none" stroke="red" stroke-width="3"/>
+  `;
+
+  /* Points (avec creux si x=0 et y≠0) */
+  basePoints.forEach(([x,y])=>{
+
+    let X,Y;
+
+    if(type==="paire"){
+      X = -x;
+      Y = y;
+    }
+
+    if(type==="impaire"){
+      X = -x;
+      Y = -y;
+    }
+
+    const creux = (X === 0 && Y !== 0);
+
+    svg.innerHTML += `
+      <circle cx="${xToPx(X)}"
+              cy="${yToPx(Y)}"
+              r="4"
+              fill="${creux ? 'white' : 'red'}"
+              stroke="red"
+              stroke-width="2"/>
+    `;
+  });
+}
+
+
+/* ================= TRACE ELEVE ================= */
+
+svg.addEventListener("click", e => {
+
+  const rect = svg.getBoundingClientRect();
+  let px = e.clientX - rect.left;
+  let py = e.clientY - rect.top;
+
+let x = arrondi05((px - width/2)/unit);
+let y = arrondi05((height/2 - py)/unit);
+
+
+  if (x<xmin||x>xmax||y<ymin||y>ymax) return;
+
+  /* Cherche si le point existe déjà */
+  const index = elevePts.findIndex(p => p[0]===x && p[1]===y);
+
+  /* ================= SUPPRESSION ================= */
+  if(index !== -1){
+    elevePts.splice(index,1);
+
+    /* redessine proprement */
+    dessinerRepere();
+    tracerFonctionBase();
+
+    /* redessine les autres points élève */
+    elevePts.forEach(p=>{
+      svg.innerHTML += `
+        <circle cx="${xToPx(p[0])}" cy="${yToPx(p[1])}"
+                r="4" fill="orange" class="eleve-point"/>
+      `;
+    });
+
+    return;
+  }
+
+  /* ================= AJOUT ================= */
+if (elevePts.length >= solutionPts.length) {
+  console.log("Limite atteinte :", elevePts.length, "/", solutionPts.length);
+  return;
+}
+
+  elevePts.push([x,y]);
+
+  svg.innerHTML += `
+    <circle cx="${xToPx(x)}" cy="${yToPx(y)}"
+            r="4" fill="orange" class="eleve-point"/>
+  `;
+});
+
+
+function effacerTrace(){
+
+  /* Garde uniquement les bons points */
+  elevePts = elevePts.filter(p =>
+    solutionPts.some(s => s[0] === p[0] && s[1] === p[1])
+  );
+
+  /* Redessine tout propre */
+  dessinerRepere();
+  tracerFonctionBase();
+
+  /* Redessine les bons points élève */
+  elevePts.forEach(([x,y])=>{
+    svg.innerHTML += `
+      <circle cx="${xToPx(x)}"
+              cy="${yToPx(y)}"
+              r="4"
+              fill="orange"
+              class="eleve-point"/>
+    `;
+  });
+
+  /* Message */
+  if(elevePts.length === 0){
+    document.getElementById("feedback").innerHTML =
+      "Tous les points faux ont été effacés.";
+  }else{
+    document.getElementById("feedback").innerHTML =
+      "Les points incorrects ont été effacés.";
+  }
+}
+
+
+
+/* ================= GENERATION ================= */
+
+  function pointsUniques(tab){
+  const vus = new Set();
+  return tab.filter(p=>{
+    const k = p[0]+","+p[1];
+    if(vus.has(k)) return false;
+    vus.add(k);
+    return true;
+  });
+}
+
+   
+function genererExercice(){
+
+/* RESET COMPLET */
+elevePts = [];
+solutionPts = [];
+document.getElementById("feedback").innerHTML = "";
+svg.querySelectorAll(".eleve-point").forEach(e=>e.remove());
+  
+let index;
+
+/* Tire un index différent des 3 derniers */
+do{
+  index = Math.floor(Math.random()*fonctionsBase.length);
+}while(derniersIndex.includes(index));
+
+/* Ajoute l’index à l’historique */
+derniersIndex.push(index);
+
+/* Garde seulement les 3 derniers */
+if(derniersIndex.length > 3) derniersIndex.shift();
+
+basePoints = fonctionsBase[index];
+
+  
+dessinerRepere();
+tracerFonctionBase();
+
+/* ================= TYPE PAIRE / IMPAIRE ================= */
+
+let txt = "";
+let tirage = Math.random();
+
+if (tirage < 0.35) {
+  type = "paire";
+  txt = `Complète le graphique afin que la fonction représentée soit <strong> paire </strong>.`;
+} else {
+  type = "impaire";
+  txt = `Complète le graphique afin que la fonction représentée soit <strong> impaire </strong>.`;
+}
+
+/* ================= SOLUTION ================= */
+
+solutionPts = [];
+
+basePoints.forEach(([x,y]) => {
+
+  if(type === "paire"){
+    solutionPts.push([arrondi05(-x), arrondi05(y)]);
+  }
+
+  if(type === "impaire"){
+    solutionPts.push([arrondi05(-x), arrondi05(-y)]);
+  }
+
+});
+
+/* Garde seulement les points distincts */
+solutionPts = pointsUniques(solutionPts);
+
+
+
+
+
+document.getElementById("enonce").innerHTML = txt;
+MathJax.typesetPromise();
+
+
+}
+/* ================= VERIFICATION ================= */
+
+function verifierExercice(){
+
+  if(elevePts.length !== solutionPts.length){
+    document.getElementById("feedback").innerHTML =
+      `Place les ${solutionPts.length} points avant de valider.`;
+    return;
+  }
+
+  let bons = 0;
+  const cercles = document.querySelectorAll(".eleve-point");
+
+  elevePts.forEach((p,i)=>{
+
+    const correct = solutionPts.some(
+      s => s[0]===p[0] && s[1]===p[1]
+    );
+
+    if(correct){
+      bons++;
+    }else{
+      cercles[i].setAttribute("fill","red");
+    }
+
+  });
+
+  if(bons === solutionPts.length){
+
+    document.getElementById("feedback").innerHTML = "Bonne réponse !";
+
+/* Trace la courbe solution */
+let path = "";
+solutionPts.forEach((p,i)=>{
+  path += (i?"L":"M")+` ${xToPx(p[0])} ${yToPx(p[1])}`;
+});
+
+svg.innerHTML += `
+  <path d="${path}" fill="none"
+        stroke="orange" stroke-width="3"/>
+`;
+
+/* Points ORANGE (avec creux si x=0 et y≠0) */
+solutionPts.forEach(([x,y])=>{
+
+  const creux = (x === 0 && y !== 0);
+
+  svg.innerHTML += `
+    <circle cx="${xToPx(x)}"
+            cy="${yToPx(y)}"
+            r="4"
+            fill="${creux ? 'white' : 'orange'}"
+            stroke="orange"
+            stroke-width="2"/>
+  `;
+});
+
+
+  }else{
+    document.getElementById("feedback").innerHTML =
+      `${bons} / ${solutionPts.length} points corrects.`;
+  }
+}
+
+
+
+  
+function afficherCorrection(){
+tracerCorrection();
+}
+
+window.onload=genererExercice;
+</script>
+
+</body>
+</html>
