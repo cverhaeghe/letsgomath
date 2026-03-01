@@ -294,37 +294,52 @@ function tracerCorrection(){
 }
 
   
-svg.addEventListener("click", e => {
+svg.addEventListener("click", function(e){
 
-  const { x: px, y: py } = getSVGCoordinates(e);
+  const rect = svg.getBoundingClientRect();
 
-let x = arrondi05((px - width/2)/unit);
-let y = arrondi05((height/2 - py)/unit);
+  const scaleX = svg.viewBox.baseVal.width / rect.width;
+  const scaleY = svg.viewBox.baseVal.height / rect.height;
 
+  const px = (e.clientX - rect.left) * scaleX;
+  const py = (e.clientY - rect.top) * scaleY;
+
+  let x = arrondi05((px - width/2)/unit);
+  let y = arrondi05((height/2 - py)/unit);
 
   if (x<xmin||x>xmax||y<ymin||y>ymax) return;
 
-  /* Cherche si le point existe déjà */
   const index = elevePts.findIndex(p => p[0]===x && p[1]===y);
 
-  /* ================= SUPPRESSION ================= */
   if(index !== -1){
     elevePts.splice(index,1);
-
-    /* redessine proprement */
     dessinerRepere();
     tracerFonctionBase();
 
-    /* redessine les autres points élève */
     elevePts.forEach(p=>{
       svg.innerHTML += `
-        <circle cx="${xToPx(p[0])}" cy="${yToPx(p[1])}"
-                r="4" fill="orange" class="eleve-point"/>
+        <circle cx="${xToPx(p[0])}"
+                cy="${yToPx(p[1])}"
+                r="4"
+                fill="orange"
+                class="eleve-point"/>
       `;
     });
-
     return;
   }
+
+  if (elevePts.length >= solutionPts.length) return;
+
+  elevePts.push([x,y]);
+
+  svg.innerHTML += `
+    <circle cx="${xToPx(x)}"
+            cy="${yToPx(y)}"
+            r="4"
+            fill="orange"
+            class="eleve-point"/>
+  `;
+});
 
   /* ================= AJOUT ================= */
 if (elevePts.length >= solutionPts.length) {
