@@ -98,7 +98,53 @@ for(let y=ymin;y<=ymax;y++){
 
 }
 
+/* ================= COORDONNEES UNIVERSELLES SVG ================= */
 
+function getMathCoordinates(evt, svg, width, height, unit, xmin, xmax, ymin, ymax, snapFunction){
+
+  const rect = svg.getBoundingClientRect();
+
+  const scaleX = svg.viewBox.baseVal.width / rect.width;
+  const scaleY = svg.viewBox.baseVal.height / rect.height;
+
+  let clientX, clientY;
+
+  if (evt.touches && evt.touches.length > 0) {
+    clientX = evt.touches[0].clientX;
+    clientY = evt.touches[0].clientY;
+  } else {
+    clientX = evt.clientX;
+    clientY = evt.clientY;
+  }
+
+  const px = (clientX - rect.left) * scaleX;
+  const py = (clientY - rect.top) * scaleY;
+
+  let x = (px - width/2) / unit;
+  let y = (height/2 - py) / unit;
+
+  if (snapFunction) {
+    x = snapFunction(x);
+    y = snapFunction(y);
+  }
+
+  if (x < xmin || x > xmax || y < ymin || y > ymax) return null;
+
+  return { x, y };
+}
+
+  
+function activerClicSVG(svg, callback){
+  function handler(e){
+    e.preventDefault();
+    callback(e);
+  }
+
+  svg.addEventListener("click", handler);
+  svg.addEventListener("touchstart", handler, { passive:false });
+}
+
+  
 /* ================= FONCTION DE BASE ================= */
 let dernierType = "";
 let solutionPts = [];
@@ -294,20 +340,21 @@ function tracerCorrection(){
 }
 
   
-svg.addEventListener("click", function(e){
+activerClicSVG(svg, function(e){
 
-  const rect = svg.getBoundingClientRect();
+  const coords = getMathCoordinates(
+    e, svg,
+    width, height,
+    unit,
+    xmin, xmax,
+    ymin, ymax,
+    arrondi05
+  );
 
-  const scaleX = svg.viewBox.baseVal.width / rect.width;
-  const scaleY = svg.viewBox.baseVal.height / rect.height;
+  if (!coords) return;
 
-  const px = (e.clientX - rect.left) * scaleX;
-  const py = (e.clientY - rect.top) * scaleY;
-
-  let x = arrondi05((px - width/2)/unit);
-  let y = arrondi05((height/2 - py)/unit);
-
-  if (x<xmin||x>xmax||y<ymin||y>ymax) return;
+  const x = coords.x;
+  const y = coords.y;
 
   const index = elevePts.findIndex(p => p[0]===x && p[1]===y);
 
@@ -340,17 +387,10 @@ svg.addEventListener("click", function(e){
             class="eleve-point"/>
   `;
 });
-
  
 
   
-svg.addEventListener("touchstart", function(e){
-  e.preventDefault();
-  svg.dispatchEvent(new MouseEvent("click", {
-    clientX: e.touches[0].clientX,
-    clientY: e.touches[0].clientY
-  }));
-});
+
 
   
 function effacerTrace(){
