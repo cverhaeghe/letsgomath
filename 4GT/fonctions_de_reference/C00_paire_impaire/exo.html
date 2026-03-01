@@ -332,7 +332,7 @@ activerClicSVG(svg, function(e){
     unit,
     xmin, xmax,
     ymin, ymax,
-    arrondi05
+    Math.round  // arrondi05 à la place si je veux des demis
   );
 
   if (!coords) return;
